@@ -323,8 +323,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
     router.push("/");
   }
 
-  const inputCls = "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)] transition-colors";
-  const labelCls = "block text-sm font-medium text-[var(--text-body)] mb-1.5";
+  const inputCls = "ea-input";
+  const labelCls = "ea-label";
 
   const hasDemoContent = demoSessionCount > 0 || demoCatchCount > 0;
 
@@ -345,15 +345,15 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
+    <div className="min-h-screen bg-[var(--paper)]">
       {cropSrc && <AvatarCropModal imageSrc={cropSrc} onSave={handleCropSave} onCancel={() => setCropSrc(null)} />}
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-16">
+      <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Welcome banner */}
         {showWelcome && (
-          <div className="bg-gradient-to-r from-[var(--action)] to-[#D4782A] text-white rounded-xl p-4 mb-8 flex items-center justify-between">
-            <p className="font-medium">Welcome to Executive Angler! Set up your profile below to get started.</p>
-            <button onClick={() => setShowWelcome(false)} className="text-white/80 hover:text-white transition-colors ml-4 flex-shrink-0">
+          <div className="rounded-[var(--radius-md)] border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-4 py-3 mb-8 flex items-center justify-between">
+            <p className="text-sm font-medium text-[var(--accent)]">Welcome to Executive Angler! Set up your profile below to get started.</p>
+            <button onClick={() => setShowWelcome(false)} className="text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors ml-4 flex-shrink-0" aria-label="Dismiss welcome message">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -362,14 +362,14 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
         {/* ─── Profile header (full width) ─── */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8">
           <label className="cursor-pointer group relative flex-shrink-0">
-            <div className="h-20 w-20 rounded-2xl overflow-hidden bg-[var(--action)]/10 border-2 border-[var(--border-rule)] shadow-lg flex items-center justify-center">
+            <div className="h-20 w-20 rounded-[var(--radius-card)] overflow-hidden bg-[var(--accent-soft)] border border-[var(--border)] flex items-center justify-center">
               {avatarUrl ? (
-                <Image src={avatarUrl} alt="Avatar" width={80} height={80} className="object-cover w-full h-full" />
+                <Image src={avatarUrl} alt="Avatar" width={80} height={80} className="ea-photo object-cover w-full h-full" />
               ) : (
-                <span className="text-3xl font-bold text-[var(--action)]">{(displayName || user.email)[0].toUpperCase()}</span>
+                <span className="font-display text-2xl font-semibold text-[var(--accent)]">{(displayName || user.email)[0].toUpperCase()}</span>
               )}
             </div>
-            <div className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div className="absolute inset-0 rounded-[var(--radius-card)] bg-[var(--ink)]/45 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               {avatarUploading ? (
                 <div className="h-5 w-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
               ) : (
@@ -381,24 +381,24 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3">
-              <h1 className="font-heading text-2xl font-bold text-[var(--text-primary)] truncate">{displayName || "Angler"}</h1>
-              {username && <span className="text-sm text-[var(--text-body)] font-mono">@{username}</span>}
+              <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] truncate">{displayName || "Angler"}</h1>
+              {username && <span className="text-sm text-[var(--text-3)]">@{username}</span>}
             </div>
-            <p className="text-sm text-[var(--text-meta)] mt-0.5">{user.email}</p>
+            <p className="text-sm text-[var(--text-3)] mt-0.5">{user.email}</p>
             {socialCounts && (
               <div className="flex items-center gap-4 mt-2">
-                <span className="flex items-center gap-1.5 text-sm text-[var(--text-body)]">
-                  <span className="font-semibold text-[var(--text-primary)]">{socialCounts.followers}</span> follower{socialCounts.followers !== 1 ? "s" : ""}
+                <span className="flex items-center gap-1.5 text-sm text-[var(--text-2)]">
+                  <span className="font-semibold text-[var(--text-1)] num">{socialCounts.followers}</span> follower{socialCounts.followers !== 1 ? "s" : ""}
                 </span>
-                <span className="text-[var(--text-meta)]">·</span>
-                <span className="flex items-center gap-1.5 text-sm text-[var(--text-body)]">
-                  <span className="font-semibold text-[var(--text-primary)]">{socialCounts.following}</span> following
+                <span className="text-[var(--text-3)]">·</span>
+                <span className="flex items-center gap-1.5 text-sm text-[var(--text-2)]">
+                  <span className="font-semibold text-[var(--text-1)] num">{socialCounts.following}</span> following
                 </span>
               </div>
             )}
           </div>
 
-          <button onClick={handleSignOut} className="hidden sm:inline-flex items-center gap-2 text-sm text-[var(--text-meta)] hover:text-red-400 transition-colors border border-[var(--border-rule)] rounded-lg px-4 py-2 hover:border-red-800">
+          <button onClick={handleSignOut} className="hidden sm:inline-flex ea-btn ea-btn-secondary ea-btn-sm">
             <LogOut className="h-4 w-4" /> Sign Out
           </button>
         </div>
@@ -412,10 +412,10 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                 <button
                   key={key}
                   onClick={() => navigateSection(key)}
-                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-[var(--radius-md)] border text-sm font-medium whitespace-nowrap transition-colors duration-150 ease-standard ${
                     activeSection === key
-                      ? "bg-[var(--action)]/10 text-[var(--action)] border border-[var(--action)]/20"
-                      : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)]"
+                      ? "bg-[var(--accent-soft)] text-[var(--accent)] border-[var(--accent)]/40"
+                      : "border-transparent text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)]"
                   }`}
                 >
                   <Icon className="h-4 w-4 flex-shrink-0" />
@@ -426,10 +426,10 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
               {/* Admin link — only visible to admins */}
               {isAdmin && (
                 <>
-                  <div className="h-px bg-[var(--border-rule)] my-2" />
+                  <div className="h-px bg-[var(--border)] my-2" />
                   <Link
                     href="/admin"
-                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap text-red-400 hover:text-red-300 hover:bg-red-950/30 transition-colors"
+                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-[var(--radius-md)] text-sm font-medium whitespace-nowrap text-[var(--danger)] hover:bg-[var(--danger)]/10 transition-colors duration-150 ease-standard"
                   >
                     <Shield className="h-4 w-4 flex-shrink-0" />
                     Admin Dashboard
@@ -443,8 +443,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
           <main className="flex-1 min-w-0">
             {/* ═══════ EDIT PROFILE ═══════ */}
             {activeSection === "profile" && (
-              <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-6">Edit Profile</h2>
+              <div className="ea-card">
+                <h2 className="font-display text-xl font-semibold text-[var(--text-1)] mb-6">Edit Profile</h2>
                 <form onSubmit={handleSaveProfile} className="space-y-5">
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
@@ -454,9 +454,9 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <div>
                       <label className={labelCls}>Username</label>
                       <div className="relative flex items-center">
-                        <span className="absolute left-4 text-[var(--text-meta)] pointer-events-none select-none">@</span>
+                        <span className="absolute left-3 text-[var(--text-3)] pointer-events-none select-none">@</span>
                         <input
-                          className={inputCls + " pl-8 pr-10"}
+                          className={inputCls + " pl-7 pr-10"}
                           value={username}
                           onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "").toLowerCase())}
                           placeholder="yourhandle"
@@ -464,18 +464,18 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                         />
                         {username.length >= 3 && (
                           <span className="absolute right-3 text-sm pointer-events-none">
-                            {usernameChecking ? <span className="text-[var(--text-body)]">…</span> : usernameAvailable === true ? <span className="text-green-500">✓</span> : usernameAvailable === false ? <span className="text-red-500">✗</span> : null}
+                            {usernameChecking ? <span className="text-[var(--text-3)]">…</span> : usernameAvailable === true ? <span className="text-[var(--success)]">✓</span> : usernameAvailable === false ? <span className="text-[var(--danger)]">✗</span> : null}
                           </span>
                         )}
                       </div>
-                      {username.length >= 3 && usernameAvailable === false && <p className="text-xs text-red-500 mt-1">Taken.</p>}
+                      {username.length >= 3 && usernameAvailable === false && <p className="ea-field-error">Taken.</p>}
                     </div>
                   </div>
 
                   <div>
                     <label className={labelCls}>Bio</label>
                     <textarea className={inputCls + " resize-none"} rows={3} maxLength={160} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Tell other anglers about yourself…" />
-                    <p className="text-xs text-[var(--text-meta)] mt-1 text-right">{bio.length}/160</p>
+                    <p className="ea-field-helper text-right">{bio.length}/160</p>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-5">
@@ -485,19 +485,19 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     </div>
                     <div>
                       <label className={labelCls}>Email</label>
-                      <input className={inputCls + " opacity-50 cursor-not-allowed"} value={email} disabled />
+                      <input className={inputCls} value={email} disabled />
                     </div>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label className={labelCls}>Profile Visibility</label>
-                      <p className="text-xs text-[var(--text-meta)] mb-2 -mt-1">
+                      <p className="text-xs text-[var(--text-3)] mb-2 -mt-1">
                         {profileVisibility === "public" && "Anyone can see your session feed."}
                         {profileVisibility === "followers_only" && "Only accepted followers see your session feed."}
                         {profileVisibility === "private" && "Only you can see your session feed and sessions."}
                       </p>
-                      <div className="flex gap-1.5">
+                      <div className="ea-segmented w-full">
                         {(["public", "followers_only", "private"] as const).map((v) => {
                           const labels = { public: "Public", followers_only: "Followers", private: "Private" };
                           return (
@@ -505,11 +505,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                               key={v}
                               type="button"
                               onClick={() => setProfileVisibility(v)}
-                              className={`flex-1 rounded-lg border py-2 text-xs font-medium transition-colors ${
-                                profileVisibility === v
-                                  ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]"
-                                  : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"
-                              }`}
+                              aria-pressed={profileVisibility === v}
+                              className="ea-segment flex-1"
                             >
                               {labels[v]}
                             </button>
@@ -519,13 +516,15 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     </div>
                     <div>
                       <label className={labelCls}>Journal Feed Display</label>
-                      <div className="flex gap-2">
+                      <div className="ea-segmented w-full">
                         <button type="button" onClick={() => setFeedDisplay("collage")}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "collage" ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]" : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"}`}>
+                          aria-pressed={feedDisplay === "collage"}
+                          className="ea-segment flex-1">
                           Collage
                         </button>
                         <button type="button" onClick={() => setFeedDisplay("map")}
-                          className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${feedDisplay === "map" ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]" : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"}`}>
+                          aria-pressed={feedDisplay === "map"}
+                          className="ea-segment flex-1">
                           Map
                         </button>
                       </div>
@@ -539,15 +538,15 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   <div>
                     <label className={labelCls}>Search &amp; Discovery</label>
                     <div
-                      className={`flex items-center justify-between rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-4 py-3 ${
+                      className={`flex items-center justify-between py-1 ${
                         profileVisibility !== "public" ? "opacity-60" : ""
                       }`}
                     >
                       <div className="min-w-0 pr-4">
-                        <p className="text-sm font-medium text-[var(--text-primary)]">
+                        <p className="text-sm font-medium text-[var(--text-1)]">
                           Show my profile in search results
                         </p>
-                        <p className="text-xs text-[var(--text-meta)] mt-0.5">
+                        <p className="text-xs text-[var(--text-3)] mt-0.5">
                           {profileVisibility !== "public"
                             ? "Non-public profiles are never indexed by search engines."
                             : "Allow search engines to index your profile and include you in Executive Angler\u2019s angler search."}
@@ -557,14 +556,15 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                         type="button"
                         onClick={() => profileVisibility === "public" && setSearchable(!searchable)}
                         disabled={profileVisibility !== "public"}
-                        aria-pressed={profileVisibility === "public" && searchable}
+                        role="switch"
+                        aria-checked={profileVisibility === "public" && searchable}
                         aria-label="Show my profile in search results"
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 disabled:cursor-not-allowed ${
-                          profileVisibility === "public" && searchable ? "bg-[var(--action)]" : "bg-[var(--border-rule)]"
+                        className={`relative inline-flex h-6 w-11 items-center rounded-[var(--radius-md)] transition-colors duration-150 ease-standard flex-shrink-0 disabled:cursor-not-allowed ${
+                          profileVisibility === "public" && searchable ? "bg-[var(--accent)]" : "bg-[var(--border-strong)]"
                         }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                          className={`inline-block h-4 w-4 rounded-[var(--radius-sm)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-150 ease-standard ${
                             profileVisibility === "public" && searchable ? "translate-x-6" : "translate-x-1"
                           }`}
                         />
@@ -574,14 +574,16 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
                   <div>
                     <label className={labelCls}>Fly Tying Workbench</label>
-                    <p className="text-xs text-[var(--text-meta)] mb-2">Hide the workbench and tie-next tabs if you don&apos;t tie your own flies. Your fly box and shared patterns still work normally.</p>
-                    <div className="flex gap-2">
+                    <p className="text-xs text-[var(--text-3)] mb-2">Hide the workbench and tie-next tabs if you don&apos;t tie your own flies. Your fly box and shared patterns still work normally.</p>
+                    <div className="ea-segmented w-full">
                       <button type="button" onClick={() => setTiesOwnFlies(true)}
-                        className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${tiesOwnFlies ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]" : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"}`}>
+                        aria-pressed={tiesOwnFlies}
+                        className="ea-segment flex-1 whitespace-normal">
                         I tie my own flies
                       </button>
                       <button type="button" onClick={() => setTiesOwnFlies(false)}
-                        className={`flex-1 rounded-lg border py-2.5 text-sm font-medium transition-colors ${!tiesOwnFlies ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)]" : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"}`}>
+                        aria-pressed={!tiesOwnFlies}
+                        className="ea-segment flex-1 whitespace-normal">
                         I buy my flies
                       </button>
                     </div>
@@ -606,47 +608,47 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
             {/* ═══════ NOTIFICATIONS ═══════ */}
             {activeSection === "notifications" && (
-              <div id="notifications" className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6 scroll-mt-24">
-                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Email Notifications</h2>
-                <p className="text-sm text-[var(--text-body)] mb-6">Choose what emails you receive from Executive Angler.</p>
+              <div id="notifications" className="ea-card scroll-mt-24">
+                <h2 className="font-display text-xl font-semibold text-[var(--text-1)] mb-2">Email Notifications</h2>
+                <p className="text-sm text-[var(--text-2)] mb-6">Choose what emails you receive from Executive Angler.</p>
 
                 <div className="space-y-1">
                   {/* Activity section */}
-                  <p className="text-xs font-semibold text-[var(--text-body)] uppercase tracking-wider mb-3">Activity</p>
+                  <p className="ea-overline mb-3">Activity</p>
 
                   {[
                     { label: "New followers", desc: "When someone starts following you", value: notifyFollows, set: setNotifyFollows },
                     { label: "Session comments", desc: "When someone comments on your session", value: notifyComments, set: setNotifyComments },
                     { label: "Session kudos", desc: "When someone gives kudos on your session", value: notifyLikes, set: setNotifyLikes },
                   ].map(({ label, desc, value, set }) => (
-                    <div key={label} className="flex items-center justify-between py-3 border-b border-[var(--border-rule)] last:border-0">
+                    <div key={label} className="flex items-center justify-between py-3 border-b border-[var(--border)] last:border-0">
                       <div>
-                        <p className="text-sm font-medium text-[var(--text-primary)]">{label}</p>
-                        <p className="text-xs text-[var(--text-meta)]">{desc}</p>
+                        <p className="text-sm font-medium text-[var(--text-1)]">{label}</p>
+                        <p className="text-xs text-[var(--text-3)]">{desc}</p>
                       </div>
                       <button type="button" onClick={() => set(!value)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${value ? "bg-[var(--action)]" : "bg-[var(--border-rule)]"}`}>
-                        <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${value ? "translate-x-6" : "translate-x-1"}`} />
+                        role="switch"
+                        aria-checked={value}
+                        aria-label={label}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-[var(--radius-md)] transition-colors duration-150 ease-standard flex-shrink-0 ${value ? "bg-[var(--accent)]" : "bg-[var(--border-strong)]"}`}>
+                        <span className={`inline-block h-4 w-4 rounded-[var(--radius-sm)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-150 ease-standard ${value ? "translate-x-6" : "translate-x-1"}`} />
                       </button>
                     </div>
                   ))}
 
                   {/* Digest section */}
                   <div className="pt-4 mt-4">
-                    <p className="text-xs font-semibold text-[var(--text-body)] uppercase tracking-wider mb-3">Digest</p>
+                    <p className="ea-overline mb-3">Digest</p>
                     <div className="flex items-center justify-between py-3">
                       <div>
-                        <p className="text-sm font-medium text-[var(--text-primary)]">Activity digest</p>
-                        <p className="text-xs text-[var(--text-meta)]">Summary of activity on your profile</p>
+                        <p className="text-sm font-medium text-[var(--text-1)]">Activity digest</p>
+                        <p className="text-xs text-[var(--text-3)]">Summary of activity on your profile</p>
                       </div>
-                      <div className="flex gap-1.5">
+                      <div className="ea-segmented">
                         {(["none", "daily", "weekly"] as const).map((freq) => (
                           <button key={freq} type="button" onClick={() => setDigestFrequency(freq)}
-                            className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors capitalize ${
-                              digestFrequency === freq
-                                ? "bg-[var(--action)] text-white"
-                                : "bg-[var(--surface-page)] border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40"
-                            }`}>
+                            aria-pressed={digestFrequency === freq}
+                            className="ea-segment capitalize">
                             {freq}
                           </button>
                         ))}
@@ -655,7 +657,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                   </div>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-[var(--border-rule)]">
+                <div className="mt-6 pt-4 border-t border-[var(--border)]">
                   <Button
                     type="button"
                     onClick={handleSaveNotifications}
@@ -674,8 +676,8 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
             {/* ═══════ SECURITY ═══════ */}
             {activeSection === "security" && (
-              <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-6">Change Password</h2>
+              <div className="ea-card">
+                <h2 className="font-display text-xl font-semibold text-[var(--text-1)] mb-6">Change Password</h2>
                 <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
                   <div>
                     <label className={labelCls}>New Password</label>
@@ -685,7 +687,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                     <label className={labelCls}>Confirm Password</label>
                     <input type="password" className={inputCls} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Re-enter password" />
                   </div>
-                  {pwError && <p className="text-sm text-red-500">{pwError}</p>}
+                  {pwError && <p className="ea-field-error">{pwError}</p>}
                   <Button type="submit" variant="outline" size="md" icon={Shield}>
                     {pwSaved ? "Updated ✓" : "Update Password"}
                   </Button>
@@ -695,10 +697,10 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
             {/* ═══════ CONNECTED ACCOUNTS ═══════ */}
             {activeSection === "connected" && (
-              <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-6">Connected Accounts</h2>
+              <div className="ea-card">
+                <h2 className="font-display text-xl font-semibold text-[var(--text-1)] mb-6">Connected Accounts</h2>
 
-                <div className="rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] p-4 flex items-center justify-between">
+                <div className="flex items-center justify-between py-2">
                   <div className="flex items-center gap-3">
                     <svg className="h-5 w-5" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -707,17 +709,17 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
                     <div>
-                      <p className="text-sm font-medium text-[var(--text-primary)]">Google</p>
-                      <p className="text-xs text-[var(--text-meta)]">{googleLinked ? "Connected" : "Not connected"}</p>
+                      <p className="text-sm font-medium text-[var(--text-1)]">Google</p>
+                      <p className="text-xs text-[var(--text-3)]">{googleLinked ? "Connected" : "Not connected"}</p>
                     </div>
                   </div>
                   {!googleLinked ? (
                     <button type="button" onClick={handleLinkGoogle} disabled={googleLinking}
-                      className="text-sm font-medium text-[var(--action)] hover:text-[#D4782A] transition-colors disabled:opacity-50">
+                      className="text-sm font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors duration-150 ease-standard disabled:opacity-50">
                       {googleLinking ? "Connecting…" : "Connect"}
                     </button>
                   ) : (
-                    <span className="text-sm text-green-500 font-medium">Connected ✓</span>
+                    <span className="text-sm text-[var(--success)] font-medium">Connected ✓</span>
                   )}
                 </div>
               </div>
@@ -725,34 +727,34 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
 
             {/* ═══════ DATA ═══════ */}
             {activeSection === "data" && (
-              <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Data</h2>
-                <p className="text-sm text-[var(--text-body)] mb-6">Manage sample content added to your account during onboarding.</p>
+              <div className="ea-card">
+                <h2 className="font-display text-xl font-semibold text-[var(--text-1)] mb-2">Data</h2>
+                <p className="text-sm text-[var(--text-2)] mb-6">Manage sample content added to your account during onboarding.</p>
 
                 {demoProbed && !hasDemoContent ? (
-                  <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-4 text-sm text-[var(--text-body)]">
+                  <p className="text-sm text-[var(--text-2)]">
                     No demo content on your account. Your journal is clean.
-                  </div>
+                  </p>
                 ) : (
-                  <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-5">
+                  <div>
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="h-10 w-10 rounded-lg bg-[var(--action)]/10 flex items-center justify-center flex-shrink-0">
-                        <Database className="h-5 w-5 text-[var(--action)]" />
+                      <div className="h-10 w-10 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center flex-shrink-0">
+                        <Database className="h-5 w-5 text-[var(--accent)]" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold text-[var(--text-primary)]">Sample sessions</p>
-                        <p className="text-xs text-[var(--text-body)] mt-0.5">
+                        <p className="text-sm font-semibold text-[var(--text-1)]">Sample sessions</p>
+                        <p className="text-xs text-[var(--text-2)] mt-0.5">
                           {demoProbed
                             ? `${demoSessionCount} session${demoSessionCount === 1 ? "" : "s"} · ${demoCatchCount} catch${demoCatchCount === 1 ? "" : "es"} were added to your journal to help you explore the app.`
                             : "Checking for demo content…"}
                         </p>
-                        <p className="text-xs text-[var(--text-meta)] mt-1">
+                        <p className="text-xs text-[var(--text-3)] mt-1">
                           Clearing won&apos;t touch any sessions you logged yourself.
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 pt-2 border-t border-[var(--border-rule)]">
+                    <div className="flex items-center gap-3 pt-4 border-t border-[var(--border)]">
                       <Button
                         type="button"
                         onClick={handleClearDemoContent}
@@ -765,7 +767,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
                         {demoClearing ? "Clearing…" : demoCleared ? "Cleared ✓" : "Clear Demo Content"}
                       </Button>
                       {demoCleared && (
-                        <span className="text-xs text-[var(--state-positive)]">Your journal is empty and ready.</span>
+                        <span className="text-xs text-[var(--success)]">Your journal is empty and ready.</span>
                       )}
                     </div>
                   </div>
@@ -774,7 +776,7 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
             )}
 
             {/* Mobile sign out */}
-            <button onClick={handleSignOut} className="sm:hidden w-full mt-6 flex items-center justify-center gap-2 rounded-lg border border-red-800/40 text-red-400 px-5 py-3 text-sm font-medium hover:bg-red-900/10 transition-colors">
+            <button onClick={handleSignOut} className="sm:hidden w-full mt-6 flex items-center justify-center gap-2 rounded-[var(--radius-md)] border border-[var(--border)] text-[var(--danger)] px-5 py-3 text-sm font-medium hover:bg-[var(--danger)]/10 transition-colors duration-150 ease-standard">
               <LogOut className="h-4 w-4" /> Sign Out
             </button>
           </main>
