@@ -70,6 +70,29 @@ describe("public chrome locks", () => {
     assert.match(house, /label: "Terms", href: "\/terms"/);
   });
 
+  it("keeps house and login headings charcoal Fraunces, not copper", () => {
+    for (const rel of [
+      "src/app/about/page.tsx",
+      "src/app/privacy/page.tsx",
+      "src/app/terms/page.tsx",
+      "src/app/contact/page.tsx",
+      "src/app/login/page.tsx",
+    ]) {
+      const src = readFileSync(join(root, rel), "utf8");
+      assert.match(src, /desk-sheet/);
+      assert.equal(
+        /<h1[^>]*text-\[var\(--action\)\]/.test(src),
+        false,
+        `${rel} paints h1 copper`,
+      );
+      assert.equal(
+        /<h2[^>]*text-\[var\(--action\)\]/.test(src),
+        false,
+        `${rel} paints h2 copper`,
+      );
+    }
+  });
+
   it("puts the long 600ms ease on every public card", () => {
     for (const file of CARD_FILES) {
       const src = readFileSync(join(root, file), "utf8");

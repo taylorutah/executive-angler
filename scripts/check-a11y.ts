@@ -32,6 +32,7 @@ export const PUBLIC_ROUTES = [
   "/rivers",
   "/rivers/madison-river",
   "/flies/library",
+  "/flies/comparadun",
   "/flies/pheasant-tail",
   "/destinations",
   "/destinations/new-zealand",

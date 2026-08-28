@@ -23,24 +23,25 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const counts = await catalogCounts();
   return (
-    <div className="bg-[var(--surface-page)] pb-20 pt-14">
-      <div className="mx-auto max-w-3xl px-5 sm:px-8 xl:px-20">
-        <p className="font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--text-meta)]">
+    <div className="bg-[var(--surface-page)]">
+      <div className="desk-sheet">
+        <div className="house-measure">
+        <p className="desk-eyebrow">
           House
         </p>
         <h1
-          className="mt-4 mb-6 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
+          className="mt-4 mb-4 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
           style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
         >
           About {SITE_NAME}
         </h1>
+        <p className="desk-dek-ui">
+          {SITE_NAME} is the definitive fly fishing resource, built to connect
+          anglers with the world&apos;s finest waters, lodges, guides, and expert
+          instruction.
+        </p>
 
-        <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
-          <p className="text-xl text-[var(--text-body)] leading-relaxed">
-            {SITE_NAME} is the definitive fly fishing resource, built to connect
-            anglers with the world&apos;s finest waters, lodges, guides, and expert
-            instruction.
-          </p>
+        <div className="prose mt-8 space-y-6">
 
           <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             Our Mission
@@ -145,6 +146,7 @@ export default async function AboutPage() {
             stewardship issues that matter most to the future of our sport and the
             ecosystems it depends on.
           </p>
+        </div>
         </div>
       </div>
     </div>

@@ -73,9 +73,10 @@ function ContactPageInner() {
 
   return (
     <>
-      <div className="bg-[var(--surface-page)] pb-20 pt-14">
-        <div className="mx-auto max-w-2xl px-5 sm:px-8 xl:px-20">
-          <p className="font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--text-meta)]">
+      <div className="min-h-screen bg-[var(--surface-page)]">
+        <div className="desk-sheet">
+        <div className="desk-form">
+          <p className="desk-eyebrow">
             House
           </p>
           <h1
@@ -84,7 +85,7 @@ function ContactPageInner() {
           >
             Contact
           </h1>
-          <p className="prose mb-10 text-[16px] leading-6 text-[var(--text-body)] sm:text-[18px] sm:leading-7">
+          <p className="desk-dek-ui mb-10">
             Have a question, suggestion, or want to partner with {SITE_NAME}?
             We&apos;d love to hear from you.
           </p>
@@ -202,6 +203,7 @@ function ContactPageInner() {
               </div>
             </form>
           )}
+        </div>
         </div>
       </div>
     </>

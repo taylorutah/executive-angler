@@ -1,9 +1,10 @@
 "use client";
 
 /**
- * Dusk variant table — the one public workbench module on a fly page.
+ * Variant spec on the fly sheet — same measure as Recipe and Fishing now.
  * Public HTML is the size/bead/body spec. Stock and "add to box" hydrate
  * after auth so the cached page never contains another angler's counts.
+ * Table scrolls at 390 only.
  */
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -13,7 +14,7 @@ import {
   normalizeSizeKey,
   type PublicVariantRow,
 } from "@/lib/flies/variant-rows";
-import InstrumentWell, { InstrumentWellFrame } from "@/components/desk/InstrumentWell";
+import InstrumentWell from "@/components/desk/InstrumentWell";
 
 type BoxOption = { id: string; name: string; tier: string; is_default?: boolean };
 
@@ -170,25 +171,19 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
   }
 
   return (
-    <InstrumentWellFrame>
-      <InstrumentWell label={`Variants — ${flyName}`} className="p-5 sm:p-6">
-        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-meta)]">
-              Workbench
-            </p>
-            <h2
-              id="fly-variants-heading"
-              className="font-heading text-2xl text-[var(--text-primary)] sm:text-3xl"
-            >
-              Variants
-            </h2>
-          </div>
+    <section aria-labelledby="fly-variants-heading">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <h2
+            id="fly-variants-heading"
+            className="font-heading text-2xl text-[var(--text-primary)]"
+          >
+            Variants
+          </h2>
           {!user && (
-            <p className="text-[13px] text-[var(--text-body)]">
+            <p className="font-ui text-[13px] text-[var(--text-body)]">
               <Link
                 href={loginHref}
-                className="text-[var(--action)] underline-offset-4 hover:underline"
+                className="hover-copper text-[var(--action)] underline-offset-4 hover:underline"
               >
                 Sign in
               </Link>{" "}
@@ -197,8 +192,8 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
           )}
         </div>
 
-        <div className="overflow-x-auto border border-[var(--border-rule)]">
-          <table className="w-full min-w-[32rem] text-left text-[13px] leading-[1.35]">
+        <div className="desk-table-wrap border border-[var(--border-rule)]">
+          <table className="desk-table text-[13px] leading-[1.35]">
             <thead>
               <tr className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
                 <th className="px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--text-meta)]">
@@ -339,7 +334,6 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
             </div>
           </div>
         )}
-      </InstrumentWell>
-    </InstrumentWellFrame>
+    </section>
   );
 }

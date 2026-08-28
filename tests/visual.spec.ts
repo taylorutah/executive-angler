@@ -12,6 +12,7 @@ const PUBLIC_ROUTES = [
   "/rivers",
   "/rivers/madison-river",
   "/flies/library",
+  "/flies/comparadun",
   "/flies/pheasant-tail",
   "/destinations/new-zealand",
   "/articles",
@@ -144,6 +145,13 @@ async function capture(page: Page, route: string, vp: Viewport) {
       timeout: 15_000,
     });
     await page.getByText("Soft Hackle Carrot").waitFor({ timeout: 15_000 });
+  }
+  if (route.startsWith("/login")) {
+    await page.getByRole("heading", { name: "Sign in" }).waitFor({ timeout: 15_000 });
+    await page.getByLabel("Email").waitFor({ timeout: 15_000 });
+  }
+  if (route.startsWith("/flies/comparadun") || route.startsWith("/flies/pheasant-tail")) {
+    await page.getByRole("heading", { name: "Recipe" }).waitFor({ timeout: 15_000 });
   }
   console.log(
     `[visual] ${route} @${vp.name} warmup ${warm.needed ? "needed" : "not-needed"} ${warm.durationMs}ms idle=${warm.idle} images=${warm.census.loaded}/${warm.census.visible}; settle ${settled.durationMs}ms images=${settled.census.loaded}/${settled.census.visible}`,

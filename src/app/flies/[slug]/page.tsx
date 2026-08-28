@@ -1,7 +1,9 @@
 /**
- * /flies/[slug] — specimen-first fly pattern template (Water Desk §2.3).
+ * /flies/[slug] — one 12-col Water Desk sheet.
  *
- * Order: macro on Paper → name + spec → RecipeStrip → InstrumentWell variant table.
+ * 1440: 5-col photo | 7-col name. Recipe, Variants, Fishing now share
+ * that left rail. One gutter, one measure.
+ * 390: photo full width of the content column, then name, spec, recipe.
  *
  * Public HTML stays cookie-free so the page remains CDN-cacheable.
  * Stock counts hydrate in the variant table after auth.
@@ -108,7 +110,7 @@ export default async function FlyDetail({ params }: Props) {
         }}
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-3">
+      <article className="desk-sheet">
         <Breadcrumbs
           items={[
             { label: "Flies", href: "/flies" },
@@ -116,20 +118,15 @@ export default async function FlyDetail({ params }: Props) {
             { label: fly.name },
           ]}
         />
-      </div>
 
-      {pendingBanner && (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4">
-          <p className="border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-2 text-[13px] text-[var(--text-body)]">
+        {pendingBanner && (
+          <p className="mt-4 border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-2 text-[13px] text-[var(--text-body)]">
             {pendingBanner}
           </p>
-        </div>
-      )}
+        )}
 
-      {/* Specimen — macro at ~50vw on Paper, name in Fraunces, spec block */}
-      <header className="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6 sm:pt-8 lg:px-8">
-        <div className="mx-auto w-full md:w-[50vw] md:max-w-xl">
-          <div className="relative aspect-square w-full overflow-hidden bg-[var(--surface-page)]">
+        <header className="desk-sheet-grid mt-6">
+          <div className="desk-sheet-photo">
             <SafeEntityImage
               src={fly.hero_image_url}
               alt={fly.name}
@@ -137,66 +134,61 @@ export default async function FlyDetail({ params }: Props) {
               meta={[fly.category, sizes].filter(Boolean).join(" · ") || undefined}
               contain
               priority
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 1023px) 100vw, 42vw"
             />
           </div>
+
+          <div className="desk-sheet-name">
+            <p className="desk-eyebrow">{fly.category ?? "Fly pattern"}</p>
+            <h1
+              className="font-heading mt-1 text-4xl leading-[1.05] text-[var(--text-primary)] sm:text-5xl"
+              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+            >
+              {fly.name}
+            </h1>
+
+            {(sizes || imitation || fly.origin_credit) && (
+              <dl className="desk-spec mt-6">
+                {sizes && (
+                  <>
+                    <dt>Sizes</dt>
+                    <dd className="num">{sizes}</dd>
+                  </>
+                )}
+                {imitation && (
+                  <>
+                    <dt>Imitates</dt>
+                    <dd>{imitation}</dd>
+                  </>
+                )}
+                {fly.origin_credit && (
+                  <>
+                    <dt>Origin</dt>
+                    <dd>{fly.origin_credit}</dd>
+                  </>
+                )}
+              </dl>
+            )}
+
+            {fly.description && (
+              <p className="desk-dek mt-6">{fly.description}</p>
+            )}
+          </div>
+        </header>
+
+        <div className="mt-12">
+          <RecipeStrip materials={linkedMaterials} notes={fly.recipe_notes} />
         </div>
 
-        <div className="mx-auto mt-8 w-full md:w-[50vw] md:max-w-xl">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-body)]">
-            {fly.category ?? "Fly pattern"}
-          </p>
-          <h1 className="font-heading mt-1 text-4xl leading-[1.05] text-[var(--text-primary)] sm:text-5xl">
-            {fly.name}
-          </h1>
-
-          <dl className="mt-6 border-t border-[var(--border-rule)] pt-4">
-            {sizes && (
-              <div className="flex items-baseline gap-4 py-1.5">
-                <dt className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-body)]">
-                  Sizes
-                </dt>
-                <dd className="num text-[15px] text-[var(--text-primary)]">{sizes}</dd>
-              </div>
-            )}
-            {imitation && (
-              <div className="flex items-baseline gap-4 py-1.5">
-                <dt className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-body)]">
-                  Imitates
-                </dt>
-                <dd className="text-[15px] text-[var(--text-primary)]">{imitation}</dd>
-              </div>
-            )}
-            {fly.origin_credit && (
-              <div className="flex items-baseline gap-4 py-1.5">
-                <dt className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-body)]">
-                  Origin
-                </dt>
-                <dd className="text-[15px] text-[var(--text-body)]">{fly.origin_credit}</dd>
-              </div>
-            )}
-          </dl>
-
-          {fly.description && (
-            <div className="prose mt-6">
-              <p>{fly.description}</p>
-            </div>
-          )}
+        <div className="mt-12">
+          <FlyVariantTable
+            flyId={fly.id}
+            flySlug={fly.slug}
+            flyName={fly.name}
+            publicRows={variantRows}
+          />
         </div>
-      </header>
 
-      <div className="pb-12">
-        <RecipeStrip materials={linkedMaterials} notes={fly.recipe_notes} />
-      </div>
-
-      <FlyVariantTable
-        flyId={fly.id}
-        flySlug={fly.slug}
-        flyName={fly.name}
-        publicRows={variantRows}
-      />
-
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         {fly.tying_overview && (
           <section className="prose mt-12">
             <h2>At the vise</h2>
@@ -209,7 +201,7 @@ export default async function FlyDetail({ params }: Props) {
             <h2 id="tying-video-heading" className="font-heading text-2xl text-[var(--text-primary)]">
               Tying video
             </h2>
-            <div className="relative mt-4 aspect-video w-full max-w-3xl overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-raised)]">
+            <div className="relative mt-4 aspect-video w-full overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-raised)]">
               <iframe
                 src={videoEmbed}
                 title={`${fly.name} tying video`}
@@ -225,16 +217,16 @@ export default async function FlyDetail({ params }: Props) {
           <h2 id="fishing-now-heading" className="font-heading text-2xl text-[var(--text-primary)]">
             Fishing now on
           </h2>
-          <p className="mt-1 max-w-[68ch] text-[13px] text-[var(--text-body)]">
+          <p className="desk-dek-ui mt-1">
             Rivers whose hatch chart names this pattern this month. Names and sizes only.
           </p>
           {fishingNow.length > 0 ? (
-            <ul className="mt-4 max-w-xl divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+            <ul className="desk-rule-list mt-4">
               {fishingNow.map((river) => (
-                <li key={river.slug} className="flex items-baseline justify-between gap-4 py-2.5">
+                <li key={river.slug}>
                   <Link
                     href={`/rivers/${river.slug}`}
-                    className="text-[15px] text-[var(--text-primary)] underline-offset-4 hover:text-[var(--action)] hover:underline"
+                    className="hover-copper text-[15px] text-[var(--text-primary)] underline-offset-4 hover:text-[var(--action)] hover:underline"
                   >
                     {river.name}
                   </Link>
@@ -245,7 +237,7 @@ export default async function FlyDetail({ params }: Props) {
               ))}
             </ul>
           ) : (
-            <p className="mt-3 max-w-[68ch] text-[15px] text-[var(--text-body)]">
+            <p className="mt-3 font-ui text-[15px] text-[var(--text-body)]">
               Not named on this month&apos;s hatch charts.
             </p>
           )}
@@ -270,12 +262,12 @@ export default async function FlyDetail({ params }: Props) {
         <p className="mt-12">
           <Link
             href="/flies"
-            className="text-[14px] text-[var(--action)] underline-offset-4 hover:underline"
+            className="hover-copper text-[14px] text-[var(--action)] underline-offset-4 hover:underline"
           >
             All patterns
           </Link>
         </p>
-      </div>
+      </article>
     </div>
   );
 }

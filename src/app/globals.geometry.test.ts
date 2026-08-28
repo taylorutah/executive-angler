@@ -46,6 +46,15 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /\.card-hover[\s\S]*?var\(--hover-duration\)/);
   });
 
+  it("ships one 12-col desk sheet and 7em spec labels", () => {
+    assert.match(css, /\.desk-sheet \{/);
+    assert.match(css, /padding-inline:\s*var\(--gutter\)/);
+    assert.match(css, /grid-template-columns:\s*repeat\(12, minmax\(0, 1fr\)\)/);
+    assert.match(css, /grid-template-columns:\s*7em minmax\(0, 1fr\)/);
+    assert.match(css, /\.desk-sheet-photo \{[\s\S]*?grid-column:\s*1 \/ span 5/);
+    assert.match(css, /\.desk-sheet-name \{[\s\S]*?grid-column:\s*6 \/ span 7/);
+  });
+
   it("squares Mapbox attribution to --radius-instrument", () => {
     assert.match(
       css,

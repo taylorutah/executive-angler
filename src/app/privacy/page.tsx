@@ -8,23 +8,24 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="bg-[var(--surface-page)] pt-8 pb-20">
-      <div className="mx-auto max-w-3xl px-5 sm:px-8 xl:px-20">
+    <div className="bg-[var(--surface-page)]">
+      <div className="desk-sheet">
+        <div className="house-measure">
         <h1
           className="mb-2 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
           style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
         >
           Privacy Policy
         </h1>
-        <p className="text-sm text-[var(--text-body)] mb-10">
+        <p className="desk-dek-ui mb-10">
           Last updated: March 31, 2026
         </p>
 
-        <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
+        <div className="prose space-y-6">
           <p>
             {SITE_NAME} (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;)
             operates the website at{" "}
-            <a href={SITE_URL} className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href={SITE_URL} className="text-[var(--action)] hover:underline">
               {SITE_URL}
             </a>
             . This Privacy Policy explains how we collect, use, and protect your
@@ -175,7 +176,7 @@ export default function PrivacyPage() {
           </ul>
           <p>
             To exercise any of these rights, please contact us through our{" "}
-            <a href="/contact" className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href="/contact" className="text-[var(--action)] hover:underline">
               contact form
             </a>
             .
@@ -207,11 +208,12 @@ export default function PrivacyPage() {
           <p>
             If you have questions about this Privacy Policy, please reach out
             through our{" "}
-            <a href="/contact" className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href="/contact" className="text-[var(--action)] hover:underline">
               contact form
             </a>
             .
           </p>
+        </div>
         </div>
       </div>
     </div>

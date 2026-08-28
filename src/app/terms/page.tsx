@@ -8,22 +8,23 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="bg-[var(--surface-page)] pt-8 pb-20">
-      <div className="mx-auto max-w-3xl px-5 sm:px-8 xl:px-20">
+    <div className="bg-[var(--surface-page)]">
+      <div className="desk-sheet">
+        <div className="house-measure">
         <h1
           className="mb-2 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
           style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
         >
           Terms of Service
         </h1>
-        <p className="text-sm text-[var(--text-body)] mb-10">
+        <p className="desk-dek-ui mb-10">
           Last updated: May 25, 2026
         </p>
 
-        <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
+        <div className="prose space-y-6">
           <p>
             Welcome to {SITE_NAME}. By accessing or using our website at{" "}
-            <a href={SITE_URL} className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href={SITE_URL} className="text-[var(--action)] hover:underline">
               {SITE_URL}
             </a>
             , you agree to be bound by these Terms of Service. If you do not agree,
@@ -172,11 +173,12 @@ export default function TermsPage() {
           <p>
             If you have questions about these Terms of Service, please reach out
             through our{" "}
-            <a href="/contact" className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href="/contact" className="text-[var(--action)] hover:underline">
               contact form
             </a>
             .
           </p>
+        </div>
         </div>
       </div>
     </div>
