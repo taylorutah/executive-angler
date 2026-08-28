@@ -35,10 +35,8 @@ const FLY_TYPES = [
 const FLY_SOURCES = ["tied", "bought", "gifted"] as const;
 type FlySource = (typeof FLY_SOURCES)[number];
 
-const inputClass =
-  "w-full h-9 bg-[var(--surface-page)] border border-[var(--border-strong)] rounded-md px-2.5 text-[13px] text-[var(--text-primary)] placeholder-[#6E7681] outline-none focus:border-[var(--action)] transition-colors";
-const labelClass =
-  "block text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)] mb-1";
+const inputClass = "ea-input";
+const labelClass = "ea-label";
 
 export interface FlyPatternFormInitial {
   name?: string;
@@ -246,41 +244,35 @@ export default function FlyPatternForm({
   const backLabel = isCanonical ? "Back to library" : "Fly Patterns";
 
   return (
-    <div className={`min-h-screen pt-4 pb-32 ${isCanonical ? "bg-[#1a1208]" : "bg-[var(--surface-page)]"}`}>
+    <div className="min-h-screen pt-4 pb-32 bg-[var(--paper)]">
       {isCanonical && (
-        <div className="bg-[var(--action)] text-[var(--surface-page)] border-b-2 border-[#D17D28]">
-          <div className="mx-auto max-w-6xl px-4 lg:px-6 py-2 flex items-center gap-2">
+        <div className="bg-[var(--accent)] text-[var(--on-action)] border-b border-[var(--accent-hover)]">
+          <div className="mx-auto max-w-[var(--container)] px-4 lg:px-6 py-2 flex items-center gap-2">
             <BookOpen className="w-4 h-4 shrink-0" />
-            <p className="text-[12px] font-semibold uppercase tracking-wider">
+            <p className="text-[12px] font-medium uppercase tracking-[0.06em]">
               Library entry — visible to every angler
             </p>
-            <span className="ml-auto text-[11px] font-medium opacity-80">
+            <span className="ml-auto text-xs font-medium opacity-80">
               Admin · Canonical fly
             </span>
           </div>
         </div>
       )}
-      <div className="mx-auto max-w-6xl px-4 lg:px-6">
+      <div className="mx-auto max-w-[var(--container)] px-4 lg:px-6">
         {/* Top bar */}
         <div className="flex items-center justify-between mb-3 mt-2">
           <Link
             href={cancelHref}
-            className="inline-flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--action)] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--text-2)] hover:text-[var(--accent)] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             {backLabel}
           </Link>
-          <span
-            className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest ${
-              isCanonical
-                ? "text-[var(--action)]"
-                : "text-[var(--signal-live)]"
-            }`}
-          >
+          <span className="ea-overline inline-flex items-center gap-1.5 text-[var(--accent)]">
             {isCanonical ? (
-              <BookOpen className="w-3 h-3" />
+              <BookOpen className="w-3.5 h-3.5" />
             ) : mode === "edit" ? (
-              <User className="w-3 h-3" />
+              <User className="w-3.5 h-3.5" />
             ) : null}
             {isCanonical
               ? "Library Entry"
@@ -291,16 +283,12 @@ export default function FlyPatternForm({
         </div>
 
         {/* Title row */}
-        <div
-          className={`flex items-end justify-between pb-3 mb-4 gap-3 border-b-2 ${
-            isCanonical ? "border-[var(--action)]/40" : "border-[var(--border-rule)]"
-          }`}
-        >
+        <div className="flex items-end justify-between pb-3 mb-4 gap-3 border-b border-[var(--border)]">
           <div className="min-w-0">
-            <h1 className="font-heading text-2xl text-[var(--text-primary)] leading-tight">
+            <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] leading-tight lg:text-3xl">
               {titleText}
             </h1>
-            <p className="text-[12px] text-[var(--text-meta)] mt-0.5">
+            <p className="text-[13px] text-[var(--text-3)] mt-0.5">
               {subtitleText}
             </p>
           </div>
@@ -314,7 +302,7 @@ export default function FlyPatternForm({
             ref={errorRef}
             role="alert"
             aria-live="assertive"
-            className="bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-2 rounded-md mb-3 text-[13px]"
+            className="bg-[var(--danger)]/10 border border-[var(--danger)]/30 text-[var(--danger)] px-3 py-2 rounded-[var(--radius-md)] mb-3 text-[13px]"
           >
             <span className="font-semibold">Save failed.</span> {error}
           </div>
@@ -325,16 +313,16 @@ export default function FlyPatternForm({
         <form id={formId} onSubmit={handleSubmit} className="space-y-3">
           <div className="space-y-3">
               {/* Pattern Info */}
-              <section className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)]">
-                <header className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-1.5">
-                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)]">
+              <section className="border border-[var(--border)] rounded-[var(--radius-card)] bg-[var(--surface)]">
+                <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--paper-deep)] px-4 py-2.5 rounded-t-[var(--radius-card)]">
+                  <h2 className="ea-overline">
                     Pattern Info
                   </h2>
                 </header>
                 <div className="p-3 grid grid-cols-12 gap-3">
                   <div className="col-span-12 md:col-span-6">
                     <label htmlFor="name" className={labelClass}>
-                      Name <span className="text-red-400">*</span>
+                      Name <span className="text-[var(--danger)]">*</span>
                     </label>
                     <input
                       type="text"
@@ -348,7 +336,7 @@ export default function FlyPatternForm({
                   </div>
                   <div className="col-span-6 md:col-span-3">
                     <label htmlFor="type" className={labelClass}>
-                      Type <span className="text-red-400">*</span>
+                      Type <span className="text-[var(--danger)]">*</span>
                     </label>
                     <div className="relative">
                       <select
@@ -389,17 +377,14 @@ export default function FlyPatternForm({
                   {!isCanonical && (
                     <div className="col-span-12 md:col-span-6">
                       <label className={labelClass}>Source</label>
-                      <div className="flex gap-1">
+                      <div className="ea-segmented">
                         {FLY_SOURCES.map((s) => (
                           <button
                             key={s}
                             type="button"
                             onClick={() => setSource(s)}
-                            className={`px-3 h-7 rounded-md text-[12px] font-medium transition-colors capitalize ${
-                              source === s
-                                ? "bg-[var(--action)] text-white"
-                                : "bg-[var(--surface-page)] border border-[var(--border-strong)] text-[var(--text-body)] hover:border-[var(--action)]/60"
-                            }`}
+                            aria-pressed={source === s}
+                            className="ea-segment capitalize"
                           >
                             {s}
                           </button>
@@ -437,13 +422,13 @@ export default function FlyPatternForm({
               </section>
 
               {/* Tying Recipe */}
-              <section className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)]">
-                <header className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-1.5">
+              <section className="border border-[var(--border)] rounded-[var(--radius-card)] bg-[var(--surface)]">
+                <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--paper-deep)] px-4 py-2.5 rounded-t-[var(--radius-card)]">
                   <div className="flex items-baseline gap-2">
-                    <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)]">
+                    <h2 className="ea-overline">
                       Tying Recipe
                     </h2>
-                    <span className="text-[11px] text-[var(--text-meta)]">
+                    <span className="text-xs text-[var(--text-3)]">
                       {useSimpleMode
                         ? "Free-text materials list"
                         : "Search 500+ materials by name or brand"}
@@ -452,7 +437,7 @@ export default function FlyPatternForm({
                   <button
                     type="button"
                     onClick={() => setUseSimpleMode(!useSimpleMode)}
-                    className="text-[11px] text-[var(--text-body)] hover:text-[var(--action)] transition-colors px-2 h-6 rounded border border-[var(--border-strong)] hover:border-[var(--action)]/40"
+                    className="ea-btn ea-btn-secondary ea-btn-sm"
                   >
                     {useSimpleMode ? "Use recipe builder" : "Use simple text"}
                   </button>
@@ -474,7 +459,7 @@ export default function FlyPatternForm({
                           className={`${inputClass} h-auto py-2 resize-none`}
                         />
                         {initial?.materials && (
-                          <p className="mt-1 text-[10px] text-[var(--text-meta)]">
+                          <p className="ea-field-helper">
                             Legacy materials notes are preserved here. Switch to
                             the recipe builder to upgrade to structured rows.
                           </p>
@@ -491,9 +476,9 @@ export default function FlyPatternForm({
               </section>
 
               {/* Details */}
-              <section className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)]">
-                <header className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-1.5">
-                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)]">
+              <section className="border border-[var(--border)] rounded-[var(--radius-card)] bg-[var(--surface)]">
+                <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--paper-deep)] px-4 py-2.5 rounded-t-[var(--radius-card)]">
+                  <h2 className="ea-overline">
                     Details
                   </h2>
                 </header>
@@ -529,9 +514,9 @@ export default function FlyPatternForm({
 
               {/* Photo — full-width section, uploader constrained so the 1:1
                   dropzone doesn't dominate the layout. */}
-              <section className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)]">
-                <header className="flex items-center justify-between border-b border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-1.5">
-                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-body)]">
+              <section className="border border-[var(--border)] rounded-[var(--radius-card)] bg-[var(--surface)]">
+                <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--paper-deep)] px-4 py-2.5 rounded-t-[var(--radius-card)]">
+                  <h2 className="ea-overline">
                     Photo
                   </h2>
                 </header>
@@ -550,16 +535,16 @@ export default function FlyPatternForm({
               </section>
 
               {initial?.parentCanonical && (
-                <section className="border border-[var(--signal-live)]/30 bg-[var(--signal-live)]/5 rounded-md">
-                  <header className="border-b border-[var(--signal-live)]/20 bg-[var(--signal-live)]/5 px-3 py-1.5">
-                    <h2 className="text-[10px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
+                <section className="border border-[var(--accent)]/30 bg-[var(--accent-soft)] rounded-[var(--radius-card)]">
+                  <header className="border-b border-[var(--accent)]/20 px-4 py-2.5">
+                    <h2 className="ea-overline text-[var(--accent)]">
                       Library Lineage
                     </h2>
                   </header>
                   <div className="p-3 flex items-center justify-between gap-3">
-                    <p className="text-[12px] text-[var(--text-body)] leading-snug">
+                    <p className="text-[13px] text-[var(--text-2)] leading-snug">
                       Forked from{" "}
-                      <span className="font-semibold text-[var(--text-primary)]">
+                      <span className="font-semibold text-[var(--text-1)]">
                         {initial.parentCanonical.name}
                       </span>
                     </p>
@@ -567,7 +552,7 @@ export default function FlyPatternForm({
                       href={`/flies/${initial.parentCanonical.slug}`}
                       target="_blank"
                       rel="noopener"
-                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[var(--signal-live)] hover:text-[#3FBED7] transition-colors shrink-0"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors shrink-0"
                     >
                       <ExternalLink className="w-3 h-3" /> View library reference
                     </Link>
@@ -596,8 +581,8 @@ export default function FlyPatternForm({
                   opacity: 0,
                 }}
               />
-              <div className="border border-[var(--border-strong)] rounded-md bg-[var(--surface-raised)] p-3">
-                <p className="text-[11px] text-[var(--text-body)] mb-2">
+              <div className="border border-[var(--border)] rounded-[var(--radius-card)] bg-[var(--surface)] p-4">
+                <p className="text-xs text-[var(--text-2)] mb-2">
                   Patterns submitted by community members go through a quick
                   review before joining the public library. Your personal copy
                   stays in your box right away.
@@ -613,17 +598,11 @@ export default function FlyPatternForm({
         </form>
 
         {/* Sticky save bar */}
-        <div
-          className={`fixed bottom-0 left-0 right-0 z-40 border-t-2 ${
-            isCanonical
-              ? "bg-[#1a1208] border-[var(--action)]"
-              : "bg-[var(--surface-page)] border-[var(--border-rule)]"
-          }`}
-        >
-          <div className="mx-auto max-w-6xl px-3 py-2 flex items-center gap-2">
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--border)] bg-[var(--surface)]">
+          <div className="mx-auto max-w-[var(--container)] px-3 py-2 flex items-center gap-2">
             {isCanonical && (
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-[var(--action)]/15 border border-[var(--action)]/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--action)]">
-                <BookOpen className="w-3 h-3" />
+              <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-3 py-1 text-[12px] font-medium text-[var(--accent)]">
+                <BookOpen className="w-3.5 h-3.5" />
                 Editing library entry
               </span>
             )}
@@ -632,7 +611,7 @@ export default function FlyPatternForm({
                 type="button"
                 onClick={handleDelete}
                 disabled={deleting}
-                className="flex items-center justify-center rounded-md border border-red-500/30 px-3 h-9 text-[12px] font-medium text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                className="ea-btn px-3 border-[var(--danger)]/40 text-[var(--danger)] hover:bg-[var(--danger)]/10"
                 aria-label="Delete pattern"
               >
                 {deleting ? "…" : <Trash2 className="h-4 w-4" />}
@@ -640,7 +619,7 @@ export default function FlyPatternForm({
             ) : (
               <Link
                 href={cancelHref}
-                className="px-3 h-9 inline-flex items-center text-[12px] text-[var(--text-body)] hover:text-[var(--text-primary)] border border-[var(--border-strong)] rounded-md hover:border-[var(--action)]/40 transition-colors"
+                className="ea-btn ea-btn-secondary"
               >
                 Cancel
               </Link>
@@ -652,7 +631,7 @@ export default function FlyPatternForm({
                 busy ||
                 (showCaptcha && captchaAvailable && !turnstileToken)
               }
-              className="ml-auto h-9 px-4 inline-flex items-center bg-[var(--action)] text-white text-[12px] font-semibold rounded-md hover:bg-[#d17d28] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="ea-btn ea-btn-primary ml-auto"
               title={
                 showCaptcha && captchaAvailable && !turnstileToken
                   ? "Complete the captcha to continue"

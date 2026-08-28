@@ -79,7 +79,7 @@ export default function FlyImageUploader({
     <div className="space-y-3">
       {previewUrl ? (
         <div className="space-y-3">
-          <div className="relative aspect-square w-full rounded-xl overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-page)]">
+          <div className="relative aspect-square w-full rounded-[var(--radius-card)] overflow-hidden border border-[var(--border)] bg-[var(--paper-deep)]">
             <Image
               src={previewUrl}
               alt="Fly preview"
@@ -93,7 +93,7 @@ export default function FlyImageUploader({
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="px-2.5 py-1 bg-black/70 text-white rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors flex items-center gap-1"
+                className="px-2.5 py-1 bg-black/70 text-white rounded-[var(--radius-md)] text-xs font-medium hover:bg-black/90 transition-colors flex items-center gap-1"
               >
                 <Crop className="h-3 w-3" />
                 Replace & Crop
@@ -101,7 +101,7 @@ export default function FlyImageUploader({
               <button
                 type="button"
                 onClick={handleRemove}
-                className="px-2.5 py-1 bg-red-900/70 text-red-200 rounded-lg text-xs font-semibold hover:bg-red-900/90 transition-colors"
+                className="px-2.5 py-1 bg-black/70 text-white rounded-[var(--radius-md)] text-xs font-medium hover:bg-black/90 transition-colors"
                 aria-label="Remove photo"
               >
                 <X className="h-3 w-3" />
@@ -113,26 +113,26 @@ export default function FlyImageUploader({
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="flex flex-col items-center justify-center w-full aspect-square bg-[var(--surface-page)] border-2 border-dashed border-[var(--border-rule)] rounded-xl cursor-pointer hover:border-[var(--action)]/40 transition-colors"
+          className="flex flex-col items-center justify-center w-full aspect-square bg-[var(--paper-deep)] border-2 border-dashed border-[var(--border)] rounded-[var(--radius-card)] cursor-pointer hover:border-[var(--accent)] transition-colors"
           onDragOver={(e) => {
             e.preventDefault();
-            e.currentTarget.classList.add("border-[var(--action)]");
+            e.currentTarget.classList.add("border-[var(--accent)]");
           }}
           onDragLeave={(e) => {
-            e.currentTarget.classList.remove("border-[var(--action)]");
+            e.currentTarget.classList.remove("border-[var(--accent)]");
           }}
           onDrop={(e) => {
             e.preventDefault();
-            e.currentTarget.classList.remove("border-[var(--action)]");
+            e.currentTarget.classList.remove("border-[var(--accent)]");
             const f = e.dataTransfer.files[0];
             if (f) handleFileSelect(f);
           }}
         >
-          <Camera className="h-8 w-8 text-[var(--text-meta)] mb-2" />
-          <span className="text-sm text-[var(--text-body)] font-medium">
+          <Camera className="h-6 w-6 text-[var(--text-3)] mb-2" />
+          <span className="text-sm text-[var(--text-1)] font-medium">
             Drop photo here or click to browse
           </span>
-          <span className="text-[10px] text-[var(--text-meta)] mt-1">
+          <span className="text-xs text-[var(--text-3)] mt-1">
             Crop · zoom · rotate · 1:1 · JPEG/PNG/WebP · 15 MB max
           </span>
         </button>
@@ -151,13 +151,13 @@ export default function FlyImageUploader({
       />
 
       {error ? (
-        <div className="px-3 py-2 bg-red-950/30 border border-red-800 rounded-lg text-xs text-red-400">
+        <div className="px-3 py-2 bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] text-xs text-[var(--danger)]">
           {error}
         </div>
       ) : null}
 
       {!previewUrl && !error ? (
-        <p className="text-[10px] text-[var(--text-meta)] flex items-center gap-1">
+        <p className="text-xs text-[var(--text-3)] flex items-center gap-1">
           <Upload className="h-3 w-3" /> 1:1 looks best in the fly box
         </p>
       ) : null}
