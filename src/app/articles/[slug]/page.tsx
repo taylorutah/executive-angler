@@ -104,6 +104,11 @@ export default async function ArticlePage({ params }: Props) {
   const categoryLabel = article.category ? article.category.charAt(0).toUpperCase() + article.category.slice(1) : "Guide";
   const faqs = extractFaqsFromHtml(article.content);
 
+  // The house byline carries no visible attribution — it's assumed (client
+  // ruling 2026-08-28). Real named authors keep theirs. JSON-LD and
+  // metadata keep the resolved author either way.
+  const showByline = article.author.trim() !== "Executive Angler Staff";
+
   const [rivers, flies] = await Promise.all([getAllRivers(), getAllCanonicalFlies()]);
   const subjectRivers = deriveSubjectRivers(article, rivers);
   const subjectFlies = deriveSubjectFlies(article, flies);
@@ -263,13 +268,17 @@ export default async function ArticlePage({ params }: Props) {
                 </p>
               )}
               <div className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-[var(--text-13)] text-[var(--text-3)]">
-                <Link
-                  href={`/authors/${author.slug}`}
-                  className="text-[var(--text-2)] hover:text-[var(--accent)] transition-colors"
-                >
-                  {author.name}
-                </Link>
-                <span aria-hidden="true">·</span>
+                {showByline && (
+                  <>
+                    <Link
+                      href={`/authors/${author.slug}`}
+                      className="text-[var(--text-2)] hover:text-[var(--accent)] transition-colors"
+                    >
+                      {author.name}
+                    </Link>
+                    <span aria-hidden="true">·</span>
+                  </>
+                )}
                 <span>{article.readingTimeMinutes} min read</span>
                 <span aria-hidden="true">·</span>
                 <time dateTime={article.publishedAt}>
