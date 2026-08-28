@@ -166,8 +166,8 @@ export default async function DestinationPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <div className="bg-[var(--paper)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <Breadcrumbs
               items={[
@@ -181,12 +181,12 @@ export default async function DestinationPage({ params }: Props) {
       </div>
 
       {destRivers.length > 0 && (
-        <section className="bg-[var(--surface-page)] pb-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-3xl text-[var(--text-primary)]">
+        <section className="bg-[var(--paper)] pb-16">
+          <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
               Rivers of this place
             </h2>
-            <p className="mt-2 mb-8 text-sm text-[var(--text-body)]">
+            <p className="mt-2 mb-8 text-sm text-[var(--text-2)]">
               {destRivers.length} {destRivers.length === 1 ? "river" : "rivers"} documented here.
             </p>
             <PlaceRiverGrid
@@ -205,51 +205,51 @@ export default async function DestinationPage({ params }: Props) {
         </section>
       )}
 
-      <section className="bg-[var(--surface-page)] pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--paper)] pb-10">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <SeasonalChart placeName={dest.name} bestMonths={dest.bestMonths || []} />
         </div>
       </section>
 
-      <section className="bg-[var(--surface-page)] pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--paper)] pb-16">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <PlaceEssay description={dest.description} images={essayImages} />
 
           {(dest.licenseInfo || dest.elevationRange || dest.climateNotes || dest.regulationsSummary) && (
-            <dl className="mt-10 grid grid-cols-1 gap-6 border-t border-[var(--border-rule)] pt-8 sm:grid-cols-2">
+            <dl className="mt-10 grid grid-cols-1 gap-6 border-t border-[var(--border)] pt-8 sm:grid-cols-2">
               {dest.elevationRange ? (
                 <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
+                  <dt className="ea-overline">
                     Elevation
                   </dt>
-                  <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.elevationRange}</dd>
+                  <dd className="mt-1 text-sm text-[var(--text-2)]">{dest.elevationRange}</dd>
                 </div>
               ) : null}
               {dest.licenseInfo ? (
                 <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
+                  <dt className="ea-overline">
                     License
                   </dt>
-                  <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.licenseInfo}</dd>
+                  <dd className="mt-1 text-sm text-[var(--text-2)]">{dest.licenseInfo}</dd>
                 </div>
               ) : null}
               {dest.climateNotes ? (
                 <div className="sm:col-span-2">
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
+                  <dt className="ea-overline">
                     Climate
                   </dt>
-                  <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.climateNotes}</dd>
+                  <dd className="mt-1 text-sm text-[var(--text-2)]">{dest.climateNotes}</dd>
                 </div>
               ) : null}
               {dest.regulationsSummary ? (
                 <div className="sm:col-span-2">
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
+                  <dt className="ea-overline">
                     Regulations
-                    <span className="ml-2 font-normal normal-case tracking-normal text-[var(--text-body)]">
+                    <span className="ml-2 font-normal normal-case tracking-normal text-[var(--text-2)]">
                       check current rules before you go
                     </span>
                   </dt>
-                  <dd className="mt-1 text-sm text-[var(--text-body)]">{dest.regulationsSummary}</dd>
+                  <dd className="mt-1 text-sm text-[var(--text-2)]">{dest.regulationsSummary}</dd>
                 </div>
               ) : null}
             </dl>
@@ -258,27 +258,27 @@ export default async function DestinationPage({ params }: Props) {
       </section>
 
       {dest.slug === "belize" && (
-        <section className="bg-[var(--surface-page)] pb-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="prose max-w-[68ch]">
-              <h2 className="font-heading text-2xl text-[var(--text-primary)]">
+        <section className="bg-[var(--paper)] pb-16">
+          <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+            <div className="prose max-w-[var(--prose)]">
+              <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                 Permit, bonefish, and tarpon
               </h2>
               <p>
                 Belize is permit country that also holds bonefish and tarpon. Plan a week around tides and a guide, not around a morning that has to be a grand slam. Species pages for{" "}
-                <Link href="/species/permit" className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] hover:text-[var(--action)]">
+                <Link href="/species/permit" className="text-[var(--text-1)] underline decoration-[var(--border)] hover:text-[var(--accent)]">
                   permit
                 </Link>
                 ,{" "}
-                <Link href="/species/bonefish" className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] hover:text-[var(--action)]">
+                <Link href="/species/bonefish" className="text-[var(--text-1)] underline decoration-[var(--border)] hover:text-[var(--accent)]">
                   bonefish
                 </Link>
                 , and{" "}
-                <Link href="/species/tarpon" className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] hover:text-[var(--action)]">
+                <Link href="/species/tarpon" className="text-[var(--text-1)] underline decoration-[var(--border)] hover:text-[var(--accent)]">
                   tarpon
                 </Link>
                 {" "}sit next to the{" "}
-                <Link href="/articles/belize-permit-bonefish-tarpon-flats" className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] hover:text-[var(--action)]">
+                <Link href="/articles/belize-permit-bonefish-tarpon-flats" className="text-[var(--text-1)] underline decoration-[var(--border)] hover:text-[var(--accent)]">
                   Belize flats guide
                 </Link>
                 . We do not publish other anglers&apos; fish or GPS.
@@ -289,12 +289,12 @@ export default async function DestinationPage({ params }: Props) {
       )}
 
       {mapMarkers.length > 0 && (
-        <section className="bg-[var(--surface-page)] pb-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="mb-4 font-heading text-2xl text-[var(--text-primary)]">
+        <section className="bg-[var(--paper)] pb-24">
+          <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+            <h2 className="mb-4 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
               Map
             </h2>
-            <p className="mb-3 text-sm text-[var(--text-body)]">
+            <p className="mb-3 text-sm text-[var(--text-2)]">
               Rivers and lodges for this place. Vellum land and Teal water — a desk chart, not a satellite.
             </p>
             <LazyMapView
@@ -303,7 +303,7 @@ export default async function DestinationPage({ params }: Props) {
               zoom={7}
               markers={mapMarkers}
               tone="desk"
-              className="h-[450px] w-full overflow-hidden border border-[var(--border-rule)]"
+              className="h-[450px] w-full overflow-hidden border border-[var(--border)]"
             />
           </div>
         </section>
@@ -317,8 +317,8 @@ export default async function DestinationPage({ params }: Props) {
         flyShops={destFlyShops}
       />
 
-      <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--paper)] pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <CommunityPhotos entityType="destination" entityId={dest.id} />
           <PhotoSubmissionForm entityType="destination" entityId={dest.id} entityName={dest.name} />
         </div>

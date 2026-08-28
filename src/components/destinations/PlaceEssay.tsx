@@ -25,8 +25,8 @@ export default function PlaceEssay({ description, images = [] }: PlaceEssayProps
         <div key={i}>
           <p>{paragraph}</p>
           {i === 0 && quote ? (
-            <blockquote className="my-10 border-l-2 border-[var(--action)] pl-6 not-italic">
-              <p className="font-heading text-2xl font-semibold leading-snug text-[var(--text-primary)]">
+            <blockquote className="my-10 border-l-2 border-[var(--accent)] pl-6 not-italic">
+              <p className="font-heading text-2xl font-semibold leading-snug text-[var(--text-1)]">
                 {quote}
               </p>
             </blockquote>
@@ -42,7 +42,7 @@ export default function PlaceEssay({ description, images = [] }: PlaceEssayProps
 function InlinePhoto({ image }: { image: PlaceEssayImage }) {
   return (
     <figure className="my-10">
-      <div className="relative aspect-[3/2] overflow-hidden bg-[var(--surface-card)]">
+      <div className="relative aspect-[3/2] overflow-hidden bg-[var(--paper-deep)]">
         <SafeEntityImage
           src={image.src}
           alt={image.alt}
@@ -52,7 +52,7 @@ function InlinePhoto({ image }: { image: PlaceEssayImage }) {
         />
       </div>
       {image.caption ? (
-        <figcaption className="mt-2 font-sans text-[13px] text-[var(--text-body)]">
+        <figcaption className="mt-2 text-[13px] text-[var(--text-2)]">
           {image.caption}
         </figcaption>
       ) : null}

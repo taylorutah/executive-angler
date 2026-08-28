@@ -92,17 +92,17 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
   return (
     <div>
       {showFishedLine ? (
-        <p className="mb-6 text-sm text-[var(--text-body)]">
+        <p className="mb-6 text-sm text-[var(--text-2)]">
           You&apos;ve fished{" "}
-          <span className="num text-[var(--text-primary)]">{fishedCount}</span> of
-          these <span className="num text-[var(--text-primary)]">{total}</span>{" "}
+          <span className="num text-[var(--text-1)]">{fishedCount}</span> of
+          these <span className="num text-[var(--text-1)]">{total}</span>{" "}
           rivers.
         </p>
       ) : (
-        <p className="mb-6 text-sm text-[var(--text-body)]">
+        <p className="mb-6 text-sm text-[var(--text-2)]">
           <Link
             href="/login"
-            className="font-semibold text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+            className="font-semibold text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
           >
             Sign in
           </Link>{" "}
@@ -117,7 +117,7 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
           return (
             <div
               key={river.id}
-              className={`relative ${fished ? "ring-2 ring-[var(--action)]" : ""}`}
+              className={`relative ${fished ? "ring-2 ring-[var(--accent)]" : ""}`}
             >
               <EntityCard
                 href={`/rivers/${river.slug}`}
@@ -129,7 +129,7 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
                 badges={[river.wadingType]}
               />
               {fished ? (
-                <span className="absolute top-3 right-3 z-10 bg-[var(--action)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--on-action)]">
+                <span className="absolute top-3 right-3 z-10 bg-[var(--accent)] px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--on-action)]">
                   Fished
                 </span>
               ) : null}

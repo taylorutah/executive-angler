@@ -62,13 +62,13 @@ export default function PlaceRiverDirectories({
   }
 
   return (
-    <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl space-y-14 px-4 sm:px-6 lg:px-8">
+    <section className="bg-[var(--paper-deep)] border-t border-[var(--border)] py-16 sm:py-24">
+      <div className="mx-auto max-w-[var(--container)] space-y-12 px-4 sm:px-6 lg:px-8">
         <div>
-          <h2 className="font-heading text-2xl text-[var(--text-primary)]">
+          <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
             On the ground
           </h2>
-          <p className="mt-2 text-sm text-[var(--text-body)]">
+          <p className="mt-2 text-sm text-[var(--text-2)]">
             Reached from the water, not as a directory.
           </p>
         </div>
@@ -77,21 +77,21 @@ export default function PlaceRiverDirectories({
           <div key={river.id} className="space-y-8">
             {riverLodges.length > 0 && (
               <div>
-                <h3 className="font-heading text-lg text-[var(--text-primary)]">
+                <h3 className="font-heading text-lg font-semibold text-[var(--text-1)]">
                   Lodges on the {river.name}
                 </h3>
-                <ul className="mt-4 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+                <ul className="mt-4 divide-y divide-[var(--border)] border-y border-[var(--border)]">
                   {riverLodges.map((lodge) => (
                     <li key={lodge.id}>
                       <Link
                         href={`/lodges/${lodge.slug}`}
-                        className="flex items-baseline justify-between gap-4 py-3 text-[15px] hover:text-[var(--action)]"
+                        className="flex items-baseline justify-between gap-4 py-3 text-base hover:text-[var(--accent)]"
                       >
-                        <span className="font-medium text-[var(--text-primary)]">
+                        <span className="font-medium text-[var(--text-1)]">
                           {lodge.name}
                         </span>
                         {lodge.priceRange && (
-                          <span className="shrink-0 text-[13px] text-[var(--text-body)]">
+                          <span className="shrink-0 text-[13px] text-[var(--text-2)]">
                             {lodge.priceRange}
                           </span>
                         )}
@@ -104,21 +104,21 @@ export default function PlaceRiverDirectories({
 
             {riverGuides.length > 0 && (
               <div>
-                <h3 className="font-heading text-lg text-[var(--text-primary)]">
+                <h3 className="font-heading text-lg font-semibold text-[var(--text-1)]">
                   Guides on the {river.name}
                 </h3>
-                <ul className="mt-4 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+                <ul className="mt-4 divide-y divide-[var(--border)] border-y border-[var(--border)]">
                   {riverGuides.map((guide) => (
                     <li key={guide.id}>
                       <Link
                         href={`/guides/${guide.slug}`}
-                        className="block py-3 hover:text-[var(--action)]"
+                        className="block py-3 hover:text-[var(--accent)]"
                       >
-                        <span className="font-medium text-[var(--text-primary)]">
+                        <span className="font-medium text-[var(--text-1)]">
                           {guide.name}
                         </span>
                         {(guide.specialties ?? []).length > 0 && (
-                          <p className="mt-0.5 text-[13px] text-[var(--text-body)]">
+                          <p className="mt-0.5 text-[13px] text-[var(--text-2)]">
                             {(guide.specialties ?? []).slice(0, 3).join(" · ")}
                           </p>
                         )}
@@ -133,21 +133,21 @@ export default function PlaceRiverDirectories({
 
         {unassignedLodges.length > 0 && (
           <div>
-            <h3 className="font-heading text-lg text-[var(--text-primary)]">
+            <h3 className="font-heading text-lg font-semibold text-[var(--text-1)]">
               Lodges in {placeName}
             </h3>
-            <ul className="mt-4 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+            <ul className="mt-4 divide-y divide-[var(--border)] border-y border-[var(--border)]">
               {unassignedLodges.map((lodge) => (
                 <li key={lodge.id}>
                   <Link
                     href={`/lodges/${lodge.slug}`}
-                    className="flex items-baseline justify-between gap-4 py-3 text-[15px]"
+                    className="flex items-baseline justify-between gap-4 py-3 text-base"
                   >
-                    <span className="font-medium text-[var(--text-primary)]">
+                    <span className="font-medium text-[var(--text-1)]">
                       {lodge.name}
                     </span>
                     {lodge.priceRange && (
-                      <span className="shrink-0 text-[13px] text-[var(--text-body)]">
+                      <span className="shrink-0 text-[13px] text-[var(--text-2)]">
                         {lodge.priceRange}
                       </span>
                     )}
@@ -160,17 +160,17 @@ export default function PlaceRiverDirectories({
 
         {unassignedGuides.length > 0 && (
           <div>
-            <h3 className="font-heading text-lg text-[var(--text-primary)]">
+            <h3 className="font-heading text-lg font-semibold text-[var(--text-1)]">
               Guides in {placeName}
             </h3>
-            <ul className="mt-4 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+            <ul className="mt-4 divide-y divide-[var(--border)] border-y border-[var(--border)]">
               {unassignedGuides.map((guide) => (
                 <li key={guide.id}>
                   <Link
                     href={`/guides/${guide.slug}`}
                     className="block py-3"
                   >
-                    <span className="font-medium text-[var(--text-primary)]">
+                    <span className="font-medium text-[var(--text-1)]">
                       {guide.name}
                     </span>
                   </Link>
@@ -182,20 +182,20 @@ export default function PlaceRiverDirectories({
 
         {flyShops.length > 0 && (
           <div>
-            <h3 className="font-heading text-lg text-[var(--text-primary)]">
+            <h3 className="font-heading text-lg font-semibold text-[var(--text-1)]">
               Fly shops in {placeName}
             </h3>
-            <ul className="mt-4 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+            <ul className="mt-4 divide-y divide-[var(--border)] border-y border-[var(--border)]">
               {flyShops.map((shop) => (
                 <li key={shop.id}>
                   <Link
                     href={`/fly-shops/${shop.slug}`}
                     className="block py-3"
                   >
-                    <span className="font-medium text-[var(--text-primary)]">
+                    <span className="font-medium text-[var(--text-1)]">
                       {shop.name}
                     </span>
-                    <p className="mt-0.5 text-[13px] text-[var(--text-body)]">
+                    <p className="mt-0.5 text-[13px] text-[var(--text-2)]">
                       {shop.address}
                     </p>
                   </Link>

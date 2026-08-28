@@ -18,27 +18,27 @@ export default function SeasonalChart({
 
   return (
     <section aria-labelledby="place-season-heading">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-body)]">
+      <p className="ea-overline">
         Season
       </p>
       <h2
         id="place-season-heading"
-        className="mt-2 font-heading text-2xl font-bold text-[var(--text-primary)]"
+        className="mt-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]"
       >
         Best months
       </h2>
       {span ? (
-        <p className="mt-2 text-sm text-[var(--text-body)]">
+        <p className="mt-2 text-sm text-[var(--text-2)]">
           {placeName}: {span}
           {marked.length > 0 ? (
-            <span className="text-[var(--text-body)]">
+            <span className="text-[var(--text-2)]">
               {" "}
               · {marked.length} of 12 months
             </span>
           ) : null}
         </p>
       ) : (
-        <p className="mt-2 text-sm text-[var(--text-body)]">
+        <p className="mt-2 text-sm text-[var(--text-2)]">
           Best months are not listed for this place yet.
         </p>
       )}
@@ -49,22 +49,22 @@ export default function SeasonalChart({
           return (
             <li key={month.short} className="flex flex-col items-center gap-2">
               <div
-                className="flex h-20 w-full items-end bg-[var(--surface-card)] sm:h-24"
+                className="flex h-20 w-full items-end bg-[var(--paper-deep)] sm:h-24"
                 aria-hidden="true"
               >
                 <div
                   className={`w-full ${
                     best
-                      ? "h-full bg-[var(--text-primary)]"
-                      : "h-[18%] bg-[var(--border-rule)]"
+                      ? "h-full bg-[var(--text-1)]"
+                      : "h-[18%] bg-[var(--border)]"
                   }`}
                 />
               </div>
               <span
-                className={`text-[10px] font-medium uppercase tracking-wider ${
+                className={`text-xs font-medium uppercase tracking-[0.06em] ${
                   best
-                    ? "text-[var(--text-primary)]"
-                    : "text-[var(--text-body)]"
+                    ? "text-[var(--text-1)]"
+                    : "text-[var(--text-2)]"
                 }`}
               >
                 {month.short}
