@@ -118,7 +118,7 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
     return `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
   };
 
-  // Fish intensity for heat coloring (0-1 scale based on max fish in visible month)
+  // Fish intensity for heat coloring (share of max fish in visible month)
   const maxFishInMonth = useMemo(() => {
     let max = 0;
     for (let d = 1; d <= daysInMonth; d++) {
@@ -130,46 +130,58 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
   }, [sessionsByDate, daysInMonth, currentYear, currentMonth]);
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       {/* Calendar header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
-          <button onClick={handlePrevMonth} className="rounded-lg p-2 hover:bg-[var(--surface-card)] transition-colors" aria-label="Previous month">
-            <ChevronLeftIcon className="h-5 w-5 text-[var(--text-body)]" />
+          <button
+            type="button"
+            onClick={handlePrevMonth}
+            className="rounded-surface p-2 text-[var(--text-2)] transition-colors hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)]"
+            aria-label="Previous month"
+          >
+            <ChevronLeftIcon size={20} />
           </button>
-          <div className="min-w-[200px] text-center">
-            <h2 className="font-serif text-2xl text-[var(--action)]">{monthName} {currentYear}</h2>
+          <div className="min-w-52 text-center">
+            <h2 className="font-display text-2xl font-semibold text-[var(--text-1)]">{monthName} {currentYear}</h2>
             {monthSessionCount > 0 && (
-              <p className="text-xs text-[var(--text-body)] mt-0.5">
+              <p className="mt-1 text-13 text-[var(--text-2)] num">
                 {monthSessionCount} session{monthSessionCount !== 1 ? "s" : ""} &middot; {monthFishCount} fish
               </p>
             )}
           </div>
-          <button onClick={handleNextMonth} className="rounded-lg p-2 hover:bg-[var(--surface-card)] transition-colors" aria-label="Next month">
-            <ChevronRightIcon className="h-5 w-5 text-[var(--text-body)]" />
+          <button
+            type="button"
+            onClick={handleNextMonth}
+            className="rounded-surface p-2 text-[var(--text-2)] transition-colors hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)]"
+            aria-label="Next month"
+          >
+            <ChevronRightIcon size={20} />
           </button>
         </div>
 
-        {/* Year pills */}
-        <div className="flex gap-2 flex-wrap">
+        {/* Year toggles */}
+        <div className="flex flex-wrap gap-2">
           {availableYears.map((year) => (
             <button
               key={year}
+              type="button"
               onClick={() => handleYearClick(year)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+              aria-pressed={year === currentYear}
+              className={`ea-chip transition-colors ${
                 year === currentYear
-                  ? "bg-[var(--action)] text-white"
-                  : "bg-[var(--surface-card)] text-[var(--text-body)] hover:bg-[var(--border-rule)]"
+                  ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+                  : "hover:text-[var(--text-1)]"
               }`}
             >
-              {year}
+              <span className="num">{year}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Month navigation dots — show which months have sessions */}
-      <div className="flex items-center justify-center gap-1.5">
+      {/* Month shortcuts — which months hold sessions */}
+      <div className="flex items-center justify-center gap-1">
         {Array.from({ length: 12 }, (_, i) => {
           const monthAbbr = new Date(currentYear, i, 1).toLocaleDateString("en-US", { month: "short" });
           const hasSession = monthsWithSessions.has(i);
@@ -177,13 +189,15 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
           return (
             <button
               key={i}
+              type="button"
               onClick={() => { setCurrentMonth(i); setExpandedDate(null); }}
-              className={`text-[10px] px-1.5 py-0.5 rounded transition-colors ${
+              aria-pressed={isCurrent}
+              className={`rounded-instrument px-1 py-1 text-xs transition-colors ${
                 isCurrent
-                  ? "bg-[var(--action)] text-white font-semibold"
+                  ? "bg-[var(--accent-soft)] font-semibold text-[var(--accent)]"
                   : hasSession
-                    ? "text-[var(--signal-live)] hover:bg-[var(--surface-card)] font-medium"
-                    : "text-[var(--text-meta)] hover:bg-[var(--surface-card)]"
+                    ? "font-medium text-[var(--text-1)] hover:bg-[var(--paper-deep)]"
+                    : "text-[var(--text-3)] hover:bg-[var(--paper-deep)]"
               }`}
               title={`${monthAbbr} ${currentYear}`}
             >
@@ -194,11 +208,11 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
       </div>
 
       {/* Calendar grid */}
-      <div className="overflow-hidden rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)]">
+      <div className="overflow-hidden rounded-card border border-[var(--border)] bg-[var(--surface)]">
         {/* Day headers */}
-        <div className="grid grid-cols-7 border-b border-[var(--border-rule)] bg-[var(--surface-page)]">
+        <div className="grid grid-cols-7 border-b border-[var(--border)] bg-[var(--paper)]">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="p-2 text-center text-[10px] font-bold uppercase tracking-wider text-[var(--text-body)]">
+            <div key={day} className="ea-overline p-2 text-center">
               {day}
             </div>
           ))}
@@ -207,10 +221,10 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
         {/* Calendar weeks */}
         {weeks.map((week, weekIdx) => (
           <div key={weekIdx}>
-            <div className="grid grid-cols-7 border-b border-[var(--border-rule)] last:border-b-0">
+            <div className="grid grid-cols-7 border-b border-[var(--border)] last:border-b-0">
               {week.map((day, dayIdx) => {
                 if (day === null) {
-                  return <div key={dayIdx} className="border-r border-[var(--border-rule)] last:border-r-0 p-2 min-h-[90px] bg-[var(--surface-page)]/30" />;
+                  return <div key={dayIdx} className="min-h-24 border-r border-[var(--border)] p-2 last:border-r-0 bg-[var(--paper)]" />;
                 }
 
                 const dateKey = getDateKey(day);
@@ -222,55 +236,56 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                 // Get unique river names for the day
                 const rivers = [...new Set(daySessions.map(ds => ds.session.river_name).filter(Boolean))];
 
-                // Intensity for background
-                const intensity = hasSession && maxFishInMonth > 0
-                  ? Math.max(0.08, totalFish / maxFishInMonth * 0.25)
+                // Heat: flat accent tint per cell, 10–30% by share of the month's best day
+                const heatPct = hasSession && maxFishInMonth > 0
+                  ? Math.max(10, Math.round((totalFish / maxFishInMonth) * 30))
                   : 0;
 
                 return (
                   <button
                     key={dayIdx}
+                    type="button"
                     onClick={() => hasSession && setExpandedDate(isExpanded ? null : dateKey)}
-                    className={`border-r border-[var(--border-rule)] last:border-r-0 p-1.5 sm:p-2 min-h-[90px] text-left transition-all relative ${
-                      hasSession ? "cursor-pointer hover:bg-[var(--surface-page)]" : "cursor-default"
-                    } ${isToday(day) ? "ring-2 ring-inset ring-[var(--signal-live)]/40" : ""} ${
-                      isExpanded ? "bg-[var(--surface-page)] border-b-2 border-b-[var(--action)]" : ""
+                    className={`relative min-h-24 border-r border-[var(--border)] p-2 text-left last:border-r-0 transition-colors ${
+                      hasSession ? "cursor-pointer hover:bg-[var(--paper-deep)]" : "cursor-default"
+                    } ${isToday(day) ? "ring-2 ring-inset ring-[var(--accent)]" : ""} ${
+                      isExpanded ? "border-b-2 border-b-[var(--accent)]" : ""
                     }`}
-                    style={hasSession ? { backgroundColor: `rgba(11, 165, 199, ${intensity})` } : undefined}
+                    style={hasSession ? { backgroundColor: `color-mix(in srgb, var(--accent) ${heatPct}%, var(--surface))` } : undefined}
                   >
-                    <div className="flex flex-col h-full gap-1">
+                    <div className="flex h-full flex-col gap-1">
                       {/* Day number */}
-                      <span className={`text-xs font-medium ${
-                        isToday(day) ? "text-[var(--signal-live)] font-bold" : hasSession ? "text-[var(--text-primary)]" : "text-[var(--text-meta)]"
+                      <span className={`text-xs font-medium num ${
+                        isToday(day) ? "font-semibold text-[var(--accent)]" : hasSession ? "text-[var(--text-1)]" : "text-[var(--text-3)]"
                       }`}>
                         {day}
                       </span>
 
                       {hasSession && (
-                        <div className="flex flex-col gap-0.5 mt-auto">
+                        <div className="mt-auto flex flex-col gap-1">
                           {/* River names */}
                           {rivers.slice(0, 2).map((river, i) => (
-                            <div key={i} className="flex items-center gap-0.5 min-w-0">
-                              <MapPin className="h-2 w-2 text-[var(--action)] shrink-0" />
-                              <span className="text-[9px] text-[var(--text-primary)] truncate leading-tight font-medium">
+                            <div key={i} className="flex min-w-0 items-center gap-1">
+                              <MapPin size={12} className="shrink-0 text-[var(--accent)]" />
+                              <span className="truncate text-xs font-medium leading-tight text-[var(--text-1)]">
                                 {river}
                               </span>
                             </div>
                           ))}
                           {rivers.length > 2 && (
-                            <span className="text-[8px] text-[var(--text-meta)]">+{rivers.length - 2} more</span>
+                            <span className="text-xs text-[var(--text-3)]">+{rivers.length - 2} more</span>
                           )}
 
                           {/* Fish count + session count */}
-                          <div className="flex items-center gap-1.5 mt-0.5">
+                          <div className="mt-1 flex items-center gap-2">
                             {totalFish > 0 && (
-                              <div className="flex items-center gap-0.5">
-                                <Fish className="h-2.5 w-2.5 text-[var(--signal-live)]" />
-                                <span className="text-[10px] font-bold text-[var(--signal-live)] font-mono">{totalFish}</span>
+                              <div className="flex items-center gap-1">
+                                <Fish size={12} className="text-[var(--text-2)]" />
+                                <span className="text-xs font-semibold text-[var(--text-1)] num">{totalFish}</span>
                               </div>
                             )}
                             {daySessions.length > 1 && (
-                              <span className="text-[9px] text-[var(--text-body)]">
+                              <span className="text-xs text-[var(--text-3)]">
                                 {daySessions.length} trips
                               </span>
                             )}
@@ -285,9 +300,9 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
             {/* Expanded session detail below the week row */}
             {expandedDate && week.some(day => day !== null && getDateKey(day) === expandedDate) && (
-              <div className="border-b border-[var(--border-rule)] bg-[var(--surface-page)] p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-[var(--action)]">
+              <div className="border-b border-[var(--border)] bg-[var(--paper)] p-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-[var(--text-1)]">
                     {parseLocalDate(expandedDate).toLocaleDateString("en-US", {
                       weekday: "long",
                       month: "long",
@@ -296,8 +311,9 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
                     })}
                   </h3>
                   <button
+                    type="button"
                     onClick={() => setExpandedDate(null)}
-                    className="text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                    className="text-xs text-[var(--text-2)] transition-colors hover:text-[var(--text-1)]"
                   >
                     Close
                   </button>
@@ -305,18 +321,18 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
                 {/* Quick summary */}
                 {sessionsByDate[expandedDate] && (
-                  <div className="flex items-center gap-4 mb-3 text-xs text-[var(--text-body)]">
+                  <div className="mb-3 flex items-center gap-2 text-xs text-[var(--text-2)] num">
                     <span>{sessionsByDate[expandedDate].length} session{sessionsByDate[expandedDate].length !== 1 ? "s" : ""}</span>
-                    <span>&middot;</span>
+                    <span aria-hidden className="text-[var(--text-3)]">&middot;</span>
                     <span>{sessionsByDate[expandedDate].reduce((s, d) => s + (d.session.total_fish || 0), 0)} fish total</span>
-                    <span>&middot;</span>
+                    <span aria-hidden className="text-[var(--text-3)]">&middot;</span>
                     <span>
                       {[...new Set(sessionsByDate[expandedDate].map(d => d.session.river_name).filter(Boolean))].join(", ")}
                     </span>
                   </div>
                 )}
 
-                <div className="space-y-2">
+                <div className="flex flex-col gap-2">
                   {sessionsByDate[expandedDate]?.map(({ session }) => (
                     <SessionCard
                       key={session.id}
@@ -333,11 +349,10 @@ export function CalendarView({ sessions, rigsMap }: CalendarViewProps) {
 
       {/* Empty month state */}
       {monthSessionCount === 0 && (
-        <div className="text-center py-8 text-[var(--text-body)]">
-          <Fish className="h-8 w-8 mx-auto mb-2 text-[var(--text-meta)]" />
-          <p className="text-sm">No sessions in {monthName} {currentYear}</p>
+        <div className="py-8 text-center">
+          <p className="text-sm text-[var(--text-2)]">No sessions in {monthName} {currentYear}.</p>
           {monthsWithSessions.size > 0 && (
-            <p className="text-xs text-[var(--text-meta)] mt-1">
+            <p className="mt-1 text-xs text-[var(--text-3)]">
               Try {[...monthsWithSessions].map(m =>
                 new Date(currentYear, m, 1).toLocaleDateString("en-US", { month: "short" })
               ).join(", ")}
