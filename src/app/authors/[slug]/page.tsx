@@ -86,18 +86,18 @@ export default async function AuthorPage({ params }: Props) {
         }}
       />
 
-      <div className="bg-[var(--surface-page)] min-h-screen pt-6 pb-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center gap-1.5 font-ui text-[13px] text-[var(--text-meta)] mb-8">
-            <Link href="/" className="hover:text-[var(--action)] transition-colors">
+      <div className="bg-[var(--paper)] min-h-screen pt-6 pb-24">
+        <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
+          <nav className="mb-8 flex items-center gap-1.5 text-[var(--text-13)] text-[var(--text-3)]">
+            <Link href="/" className="transition-colors hover:text-[var(--accent)]">
               Home
             </Link>
             <span>/</span>
-            <Link href="/authors" className="hover:text-[var(--action)] transition-colors">
+            <Link href="/authors" className="transition-colors hover:text-[var(--accent)]">
               Authors
             </Link>
             <span>/</span>
-            <span className="text-[var(--text-body)]">{author.name}</span>
+            <span className="text-[var(--text-2)]">{author.name}</span>
           </nav>
 
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
@@ -110,11 +110,11 @@ export default async function AuthorPage({ params }: Props) {
               />
             </div>
             <div className="flex-1">
-              <h1 className="font-heading text-[34px] sm:text-[44px] font-bold leading-[1.05] text-[var(--text-primary)]">
+              <h1 className="font-heading text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
                 {author.name}
               </h1>
               {author.role && (
-                <p className="mt-2 font-ui text-sm text-[var(--text-meta)]">
+                <p className="mt-2 text-sm text-[var(--text-3)]">
                   {author.role}
                 </p>
               )}
@@ -126,7 +126,7 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      className="text-[var(--text-3)] transition-colors hover:text-[var(--accent)]"
                       aria-label="Website"
                     >
                       <Icon name="map" className="h-5 w-5" />
@@ -137,7 +137,7 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      className="text-[var(--text-3)] transition-colors hover:text-[var(--accent)]"
                       aria-label="Instagram"
                     >
                       <Icon name="instagram" className="h-5 w-5" />
@@ -148,7 +148,7 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.twitter}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      className="text-[var(--text-3)] transition-colors hover:text-[var(--accent)]"
                       aria-label="Twitter / X"
                     >
                       <Icon name="social-x" className="h-5 w-5" />
@@ -159,7 +159,7 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      className="text-[var(--text-3)] transition-colors hover:text-[var(--accent)]"
                       aria-label="LinkedIn"
                     >
                       <Icon name="linkedin" className="h-5 w-5" />
@@ -170,7 +170,7 @@ export default async function AuthorPage({ params }: Props) {
                       href={socialLinks.youtube}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--text-meta)] hover:text-[var(--action)] transition-colors"
+                      className="text-[var(--text-3)] transition-colors hover:text-[var(--accent)]"
                       aria-label="YouTube"
                     >
                       <Icon name="youtube" className="h-5 w-5" />
@@ -182,7 +182,7 @@ export default async function AuthorPage({ params }: Props) {
           </div>
 
           {profile?.bio && (
-            <div className="prose mt-10">
+            <div className="prose mt-12">
               {profile.bio.split("\n\n").map((paragraph, i) => (
                 <p key={i} className={i > 0 ? "mt-4" : undefined}>
                   {paragraph}
@@ -192,26 +192,26 @@ export default async function AuthorPage({ params }: Props) {
           )}
 
           {profile?.expertise?.length ? (
-            <div className="mt-10">
-              <h2 className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+            <div className="mt-12">
+              <h2 className="ea-overline">
                 Writes about
               </h2>
-              <p className="mt-2 max-w-[68ch] font-body text-[var(--text-body)]">
+              <p className="mt-2 text-[var(--text-2)]">
                 {profile.expertise.join(" · ")}
               </p>
             </div>
           ) : null}
 
-          <div className="mt-14 border-t border-[var(--border-rule)] pt-8">
-            <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)]">
+          <div className="mt-12 border-t border-[var(--border)] pt-8">
+            <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
               Field notes by {author.name}
             </h2>
             {authorArticles.length === 0 ? (
-              <p className="mt-3 font-body text-[var(--text-body)]">
+              <p className="mt-3 text-[var(--text-2)]">
                 Nothing published yet.{" "}
                 <Link
                   href="/articles"
-                  className="text-[var(--action)] hover:underline"
+                  className="text-[var(--accent)] hover:underline"
                 >
                   Read the rest of the field notes
                 </Link>
@@ -222,21 +222,21 @@ export default async function AuthorPage({ params }: Props) {
                 {authorArticles.map((article) => (
                   <li
                     key={article.id}
-                    className="border-t border-[var(--border-rule)] first:border-t-0"
+                    className="border-t border-[var(--border)] first:border-t-0"
                   >
                     <Link href={`/articles/${article.slug}`} className="group block py-5">
-                      <p className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                      <p className="ea-overline">
                         {article.category}
                       </p>
-                      <h3 className="mt-1 font-heading text-xl font-bold leading-snug text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                      <h3 className="mt-1 font-heading text-xl font-semibold leading-snug text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
                         {article.title}
                       </h3>
                       {article.subtitle && (
-                        <p className="mt-1 max-w-[60ch] font-body text-[15px] leading-relaxed text-[var(--text-body)]">
+                        <p className="mt-1 max-w-[60ch] text-sm leading-relaxed text-[var(--text-2)]">
                           {article.subtitle}
                         </p>
                       )}
-                      <p className="mt-2 font-ui text-[13px] text-[var(--text-meta)]">
+                      <p className="mt-2 text-[var(--text-13)] text-[var(--text-3)]">
                         {article.readingTimeMinutes} min read
                       </p>
                     </Link>

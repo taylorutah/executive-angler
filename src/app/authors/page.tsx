@@ -24,28 +24,28 @@ export default async function AuthorsPage() {
   const authors = listAuthors(articles);
 
   return (
-    <div className="bg-[var(--surface-page)] min-h-screen pt-6 pb-20">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <nav className="flex items-center gap-1.5 font-ui text-[13px] text-[var(--text-meta)] mb-8">
-          <Link href="/" className="hover:text-[var(--action)] transition-colors">
+    <div className="bg-[var(--paper)] min-h-screen pt-6 pb-24">
+      <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
+        <nav className="mb-8 flex items-center gap-1.5 text-[var(--text-13)] text-[var(--text-3)]">
+          <Link href="/" className="transition-colors hover:text-[var(--accent)]">
             Home
           </Link>
           <span>/</span>
-          <span className="text-[var(--text-body)]">Authors</span>
+          <span className="text-[var(--text-2)]">Authors</span>
         </nav>
 
-        <h1 className="font-heading text-[34px] sm:text-[44px] font-bold leading-[1.05] text-[var(--text-primary)]">
+        <h1 className="font-heading text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
           Our Authors
         </h1>
-        <p className="mt-4 max-w-[68ch] font-body text-lg leading-relaxed text-[var(--text-body)]">
+        <p className="mt-4 text-lg leading-relaxed text-[var(--text-2)]">
           Every field note on {SITE_NAME} is written by someone who fishes.
         </p>
 
-        <ul className="mt-12 border-t border-[var(--border-rule)]">
+        <ul className="mt-12 border-t border-[var(--border)]">
           {authors.map((author) => {
             const count = articlesByAuthorSlug(author.slug, articles).length;
             return (
-              <li key={author.slug} className="border-b border-[var(--border-rule)]">
+              <li key={author.slug} className="border-b border-[var(--border)]">
                 <Link
                   href={`/authors/${author.slug}`}
                   className="group flex gap-5 py-6 items-start"
@@ -59,20 +59,20 @@ export default async function AuthorsPage() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h2 className="font-heading text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                    <h2 className="font-heading text-xl font-semibold text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
                       {author.name}
                     </h2>
                     {author.role && (
-                      <p className="font-ui text-[13px] text-[var(--text-meta)]">
+                      <p className="text-[var(--text-13)] text-[var(--text-3)]">
                         {author.role}
                       </p>
                     )}
                     {author.shortBio && (
-                      <p className="mt-2 max-w-[60ch] font-body text-[15px] leading-relaxed text-[var(--text-body)]">
+                      <p className="mt-2 max-w-[60ch] text-sm leading-relaxed text-[var(--text-2)]">
                         {author.shortBio}
                       </p>
                     )}
-                    <p className="mt-2 font-ui text-[13px] text-[var(--text-meta)]">
+                    <p className="mt-2 text-[var(--text-13)] text-[var(--text-3)]">
                       {count === 0
                         ? "No field notes published yet"
                         : `${count} field note${count === 1 ? "" : "s"}`}

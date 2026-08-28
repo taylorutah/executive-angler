@@ -38,10 +38,10 @@ export default function AuthorAvatar({
 
   return (
     <div
-      className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[var(--action)] to-[#A8551A]"
+      className="absolute inset-0 flex items-center justify-center bg-[var(--paper-deep)]"
       aria-label={name}
     >
-      <span className={`font-heading font-bold text-[var(--text-primary)] tracking-wide ${fallbackTextClass}`}>
+      <span className={`font-heading font-semibold text-[var(--text-2)] tracking-wide ${fallbackTextClass}`}>
         {getInitials(name)}
       </span>
     </div>
