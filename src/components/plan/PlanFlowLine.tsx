@@ -35,21 +35,21 @@ export default function PlanFlowLine({ siteId, gaugeLabel }: Props) {
   }, [siteId]);
 
   return (
-    <p className="mt-3 text-[15px] text-[var(--text-body)]" aria-live="polite">
+    <p className="mt-3 text-base text-[var(--text-2)]" aria-live="polite">
       {cfs != null ? (
         <>
-          <span className="num text-[var(--signal-live)]">
+          <span className="num text-[var(--accent)]">
             {cfs.toLocaleString("en-US")}
-            <span className="ml-1 text-[var(--text-meta)]">cfs</span>
+            <span className="ml-1 text-[var(--text-3)]">cfs</span>
           </span>{" "}
           on the gauge{gaugeLabel ? ` at ${gaugeLabel}` : ""} right now.
         </>
       ) : failed ? (
-        <span className="text-[var(--text-meta)]">
+        <span className="text-[var(--text-3)]">
           No live reading from the gauge{gaugeLabel ? ` at ${gaugeLabel}` : ""} right now.
         </span>
       ) : (
-        <span className="text-[var(--text-meta)]">Reading the gauge…</span>
+        <span className="text-[var(--text-3)]">Reading the gauge…</span>
       )}
     </p>
   );

@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function Column({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <section className="border-t border-[var(--border-strong)] pt-3">
-      <h2 className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--action)]">
+      <h2 className="ea-overline">
         {label}
       </h2>
       <div className="mt-3">{children}</div>
@@ -57,7 +57,7 @@ function Column({ label, children }: { label: string; children: React.ReactNode 
 
 function Empty({ children }: { children: React.ReactNode }) {
   return (
-    <p className="border border-dashed border-[var(--border-strong)] px-3 py-4 text-[13px] leading-relaxed text-[var(--text-meta)]">
+    <p className="border border-dashed border-[var(--border-strong)] px-3 py-4 text-[13px] leading-relaxed text-[var(--text-3)]">
       {children}
     </p>
   );
@@ -78,32 +78,32 @@ export default async function PlanPage({ params }: Props) {
   const siteId = firstUsgsSiteId(river.usgsGaugeId);
 
   return (
-    <div className="bg-[var(--surface-page)]">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--text-meta)]">
+    <div className="bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--container)] px-4 py-8 sm:px-6 lg:px-8">
+        <p className="ea-overline">
           Trip brief ·{" "}
-          <Link href={`/rivers/${river.slug}`} className="hover:text-[var(--action)]">
+          <Link href={`/rivers/${river.slug}`} className="hover:text-[var(--accent)]">
             {river.name}
           </Link>
         </p>
 
         <div className="mt-3 lg:flex lg:items-end lg:justify-between lg:gap-10">
-          <div className="max-w-[62ch]">
-            <h1 className="font-heading text-3xl leading-tight text-[var(--text-primary)] sm:text-4xl">
+          <div className="max-w-[var(--prose)]">
+            <h1 className="font-heading text-3xl leading-tight text-[var(--text-1)] sm:text-4xl">
               How to go fish the {river.name}
             </h1>
-            <p className="prose mt-3 text-[17px] leading-snug text-[var(--text-body)]">
+            <p className="prose mt-3 text-lg leading-snug text-[var(--text-2)]">
               {windowSentence(win, river.name)}
             </p>
           </div>
           <div className="mt-4 shrink-0 lg:mt-0 lg:text-right">
             {win.month ? (
-              <p className="font-heading text-2xl text-[var(--text-primary)]">{win.month}</p>
+              <p className="font-heading text-2xl font-semibold text-[var(--text-1)]">{win.month}</p>
             ) : null}
             {siteId ? (
               <PlanFlowLine siteId={siteId} />
             ) : (
-              <p className="mt-3 text-[15px] text-[var(--text-meta)]">
+              <p className="mt-3 text-base text-[var(--text-3)]">
                 No USGS gauge is mapped to this river.
               </p>
             )}
@@ -117,18 +117,18 @@ export default async function PlanPage({ params }: Props) {
                 {rows.map((row, i) => (
                   <li
                     key={`${row.insect}-${i}`}
-                    className="border-b border-[var(--border-rule)] pb-2 pt-2 first:pt-0"
+                    className="border-b border-[var(--border)] pb-2 pt-2 first:pt-0"
                   >
                     <p className="flex items-baseline justify-between gap-3">
-                      <span className="text-[15px] text-[var(--text-primary)]">{row.insect}</span>
+                      <span className="text-base text-[var(--text-1)]">{row.insect}</span>
                       {row.size ? (
-                        <span className="num shrink-0 text-[13px] text-[var(--text-meta)]">
+                        <span className="num shrink-0 text-[13px] text-[var(--text-3)]">
                           {row.size}
                         </span>
                       ) : null}
                     </p>
                     {row.patterns.length > 0 ? (
-                      <p className="mt-0.5 text-[13px] leading-relaxed text-[var(--text-body)]">
+                      <p className="mt-0.5 text-[13px] leading-relaxed text-[var(--text-2)]">
                         {row.patterns.slice(0, 2).map((pattern, j) => {
                           const flySlug = flyByName.get(pattern.toLowerCase());
                           return (
@@ -137,7 +137,7 @@ export default async function PlanPage({ params }: Props) {
                               {flySlug ? (
                                 <Link
                                   href={`/flies/${flySlug}`}
-                                  className="underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+                                  className="underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
                                 >
                                   {pattern}
                                 </Link>
@@ -157,7 +157,7 @@ export default async function PlanPage({ params }: Props) {
                 We hold no hatch chart for{" "}
                 {win.month ? `${win.month} on this river` : "this river"}, so there is no fly list
                 to publish here.{" "}
-                <Link href="/flies/library" className="text-[var(--action)]">
+                <Link href="/flies/library" className="text-[var(--accent)]">
                   Browse the fly library
                 </Link>
                 .
@@ -171,16 +171,16 @@ export default async function PlanPage({ params }: Props) {
                 {accessPoints.map((ap, i) => (
                   <li
                     key={`${ap.name}-${i}`}
-                    className="border-b border-[var(--border-rule)] pb-2 pt-2 first:pt-0"
+                    className="border-b border-[var(--border)] pb-2 pt-2 first:pt-0"
                   >
-                    <p className="text-[15px] text-[var(--text-primary)]">{ap.name}</p>
-                    <p className="mt-0.5 flex items-center gap-2 text-[12px] text-[var(--text-meta)]">
-                      <MapPin className="h-3 w-3 shrink-0" aria-hidden />
-                      <span className="font-mono">
+                    <p className="text-base text-[var(--text-1)]">{ap.name}</p>
+                    <p className="mt-0.5 flex items-center gap-2 text-xs text-[var(--text-3)]">
+                      <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                      <span className="num">
                         {ap.latitude.toFixed(3)}, {ap.longitude.toFixed(3)}
                       </span>
                       {ap.parking ? (
-                        <span className="text-[var(--text-body)]">parking</span>
+                        <span className="text-[var(--text-2)]">parking</span>
                       ) : null}
                     </p>
                   </li>
@@ -190,8 +190,8 @@ export default async function PlanPage({ params }: Props) {
               <Empty>No access points are listed for this river yet.</Empty>
             )}
             {accessOverflow > 0 ? (
-              <p className="mt-2 text-[12px] text-[var(--text-meta)]">
-                <Link href={`/rivers/${river.slug}`} className="hover:text-[var(--action)]">
+              <p className="mt-2 text-xs text-[var(--text-3)]">
+                <Link href={`/rivers/${river.slug}`} className="hover:text-[var(--accent)]">
                   {accessOverflow} more on the river page, with the map →
                 </Link>
               </p>
@@ -200,7 +200,7 @@ export default async function PlanPage({ params }: Props) {
 
           <Column label="Regs — check current rules before you go">
             {river.regulations ? (
-              <p className="line-clamp-[10] text-[13px] leading-relaxed text-[var(--text-body)]">
+              <p className="line-clamp-[10] text-[13px] leading-relaxed text-[var(--text-2)]">
                 {river.regulations}
               </p>
             ) : (
@@ -212,23 +212,23 @@ export default async function PlanPage({ params }: Props) {
           </Column>
 
           <Column label="Pack list">
-            <ul className="text-[13px] leading-relaxed text-[var(--text-body)]">
+            <ul className="text-[13px] leading-relaxed text-[var(--text-2)]">
               {PACK_LIST.map((item) => (
-                <li key={item} className="border-b border-[var(--border-rule)] py-1.5 first:pt-0">
+                <li key={item} className="border-b border-[var(--border)] py-1.5 first:pt-0">
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="mt-2 text-[12px] text-[var(--text-meta)]">
+            <p className="mt-2 text-xs text-[var(--text-3)]">
               Generic gear. Anything specific to this water is above.
             </p>
           </Column>
         </div>
 
-        <p className="mt-7 border-t border-[var(--border-rule)] pt-4 text-[13px] text-[var(--text-body)]">
+        <p className="mt-7 border-t border-[var(--border)] pt-4 text-[13px] text-[var(--text-2)]">
           <Link
             href={`/rivers/${river.slug}`}
-            className="underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+            className="underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
           >
             Full hatch chart, access map and live gauge on the {river.name} page →
           </Link>
