@@ -64,10 +64,10 @@ export default function FlyLibraryClient({ items }: FlyLibraryClientProps) {
       showOptionalFilters={!isLoading && Boolean(user)}
       toolbarExtra={
         !user ? (
-          <p className="text-[13px] text-[var(--text-body)]">
+          <p className="text-[13px] text-[var(--text-2)]">
             <Link
               href="/login?redirect=/flies/library"
-              className="text-[var(--action)] underline-offset-4 hover:underline"
+              className="text-[var(--accent)] underline-offset-4 hover:underline"
             >
               Sign in
             </Link>{" "}
