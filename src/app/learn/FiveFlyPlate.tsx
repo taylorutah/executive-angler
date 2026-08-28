@@ -14,14 +14,14 @@ export default function FiveFlyPlate({ flies }: { flies: LearnFly[] }) {
   if (flies.length === 0) return null;
 
   return (
-    <ul className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+    <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-5">
       {flies.map((fly) => {
         const size = sizeLabel(fly.sizes);
         const imitates = fly.imitates[0];
         return (
           <li key={fly.id}>
             <Link href={`/flies/${fly.slug}`} className="ea-focus-ring group block">
-              <div className="relative aspect-square w-full overflow-hidden border border-[var(--border-rule)] bg-[var(--surface-raised)]">
+              <div className="relative aspect-square w-full overflow-hidden rounded-surface border border-[var(--border)] bg-[var(--paper-deep)]">
                 <SafeEntityImage
                   src={fly.heroImageUrl}
                   alt={fly.name}
@@ -30,13 +30,13 @@ export default function FiveFlyPlate({ flies }: { flies: LearnFly[] }) {
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                 />
               </div>
-              <h3 className="mt-3 font-heading text-[17px] font-semibold leading-tight text-[var(--text-primary)] underline decoration-transparent underline-offset-4 group-hover:text-[var(--action)] group-hover:decoration-[var(--action)]">
+              <h3 className="mt-3 text-base font-semibold leading-tight text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
                 {fly.name}
               </h3>
-              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--text-body)]">
+              <p className="mt-1 text-xs text-[var(--text-3)]">
                 {[fly.category, size, imitates].filter(Boolean).join(" · ")}
               </p>
-              <p className="mt-2 text-[14px] leading-relaxed text-[var(--text-body)]">
+              <p className="mt-2 text-sm leading-relaxed text-[var(--text-2)]">
                 {fly.job}
               </p>
             </Link>

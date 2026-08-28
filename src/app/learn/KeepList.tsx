@@ -90,25 +90,25 @@ export default function KeepList({ flies, rivers }: Props) {
         <section aria-labelledby="keep-flies">
           <h3
             id="keep-flies"
-            className="font-heading text-2xl font-bold text-[var(--text-primary)]"
+            className="font-display text-2xl font-semibold text-[var(--text-1)]"
           >
             Five flies
           </h3>
-          <ol className="mt-5 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+          <ol className="mt-5 divide-y divide-[var(--border)] border-y border-[var(--border)]">
             {flies.map((fly, i) => (
               <li key={fly.id}>
                 <Link
                   href={`/flies/${fly.slug}`}
                   className="ea-focus-ring flex items-baseline gap-4 py-3.5"
                 >
-                  <span className="num w-6 shrink-0 text-right text-[12px] text-[var(--text-body)]">
+                  <span className="num w-6 shrink-0 text-right text-xs text-[var(--text-3)]">
                     {i + 1}
                   </span>
                   <span className="min-w-0">
-                    <span className="font-heading text-[17px] font-semibold text-[var(--text-primary)] underline decoration-transparent underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <span className="font-display text-lg font-semibold text-[var(--text-1)] underline decoration-transparent underline-offset-4 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       {fly.name}
                     </span>
-                    <span className="mt-0.5 block text-[14px] text-[var(--text-body)]">
+                    <span className="mt-0.5 block text-sm text-[var(--text-2)]">
                       {fly.job}
                     </span>
                   </span>
@@ -121,25 +121,25 @@ export default function KeepList({ flies, rivers }: Props) {
         <section aria-labelledby="keep-rivers">
           <h3
             id="keep-rivers"
-            className="font-heading text-2xl font-bold text-[var(--text-primary)]"
+            className="font-display text-2xl font-semibold text-[var(--text-1)]"
           >
             Five rivers
           </h3>
-          <ol className="mt-5 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+          <ol className="mt-5 divide-y divide-[var(--border)] border-y border-[var(--border)]">
             {rivers.map((river, i) => (
               <li key={river.id}>
                 <Link
                   href={`/rivers/${river.slug}`}
                   className="ea-focus-ring flex items-baseline gap-4 py-3.5"
                 >
-                  <span className="num w-6 shrink-0 text-right text-[12px] text-[var(--text-body)]">
+                  <span className="num w-6 shrink-0 text-right text-xs text-[var(--text-3)]">
                     {i + 1}
                   </span>
                   <span className="min-w-0">
-                    <span className="font-heading text-[17px] font-semibold text-[var(--text-primary)] underline decoration-transparent underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <span className="font-display text-lg font-semibold text-[var(--text-1)] underline decoration-transparent underline-offset-4 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       {river.name}
                     </span>
-                    <span className="mt-0.5 block text-[14px] text-[var(--text-body)]">
+                    <span className="mt-0.5 block text-sm text-[var(--text-2)]">
                       {river.place}
                       {river.flowType ? ` · ${river.flowType}` : ""}
                     </span>
@@ -162,13 +162,13 @@ export default function KeepList({ flies, rivers }: Props) {
         >
           {state === "kept" ? "Kept" : "Keep this list"}
         </Button>
-        <p className="text-[14px] leading-relaxed text-[var(--text-body)]">
+        <p className="text-sm leading-relaxed text-[var(--text-2)]">
           {state === "kept" ? (
             <>
               The flies are in your box. The rivers are in{" "}
               <Link
                 href="/rivers/mine"
-                className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+                className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
               >
                 My Rivers
               </Link>
@@ -180,7 +180,7 @@ export default function KeepList({ flies, rivers }: Props) {
         </p>
       </div>
       {state === "error" && (
-        <p className="mt-3 text-[14px] text-[var(--state-negative)]">
+        <p className="mt-3 text-sm text-[var(--danger)]">
           Could not save the list. Try again.
         </p>
       )}

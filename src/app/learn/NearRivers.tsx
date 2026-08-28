@@ -57,7 +57,7 @@ export default function NearRivers({ rivers }: { rivers: LearnRiver[] }) {
 
   if (rivers.length === 0) {
     return (
-      <p className="text-[15px] text-[var(--text-body)]">
+      <p className="text-base text-[var(--text-2)]">
         No beginner-marked rivers came back from the catalog. That is a data gap — not a
         reason to invent names.
       </p>
@@ -67,7 +67,7 @@ export default function NearRivers({ rivers }: { rivers: LearnRiver[] }) {
   return (
     <div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[15px] leading-relaxed text-[var(--text-body)]">
+        <p className="text-sm leading-relaxed text-[var(--text-2)]">
           {status === "located"
             ? "Closest first, from the rivers the catalog marks beginner."
             : "Every river below is marked beginner in the catalog. Use your location to put the nearest ones first."}
@@ -84,27 +84,27 @@ export default function NearRivers({ rivers }: { rivers: LearnRiver[] }) {
         </Button>
       </div>
       {status === "denied" && (
-        <p className="mt-2 text-[13px] text-[var(--text-body)]">
+        <p className="mt-2 text-xs text-[var(--text-2)]">
           Location stayed on the device. The list is still the beginner catalog, unordered
           by distance.
         </p>
       )}
 
-      <ol className="mt-8 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+      <ol className="mt-8 divide-y divide-[var(--border)] border-y border-[var(--border)]">
         {ranked.map(({ river, miles }, i) => (
           <li key={river.id}>
             <Link
               href={`/rivers/${river.slug}`}
               className="ea-focus-ring group flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:gap-6"
             >
-              <span className="num w-8 shrink-0 text-right text-[12px] text-[var(--text-body)]">
+              <span className="num w-8 shrink-0 text-right text-xs text-[var(--text-3)]">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="font-heading text-[18px] font-semibold text-[var(--text-primary)] underline decoration-transparent underline-offset-4 group-hover:text-[var(--action)] group-hover:decoration-[var(--action)]">
+                <span className="font-display text-lg font-semibold text-[var(--text-1)] underline decoration-transparent underline-offset-4 group-hover:text-[var(--accent)] group-hover:decoration-[var(--accent)]">
                   {river.name}
                 </span>
-                <span className="mt-1 block text-[13px] text-[var(--text-body)]">
+                <span className="mt-1 block text-xs text-[var(--text-2)]">
                   {[
                     river.place,
                     river.flowType,
@@ -117,7 +117,7 @@ export default function NearRivers({ rivers }: { rivers: LearnRiver[] }) {
                     .join(" · ")}
                 </span>
                 {river.excerpt && (
-                  <span className="mt-2 block text-[15px] leading-relaxed text-[var(--text-body)]">
+                  <span className="mt-2 block text-sm leading-relaxed text-[var(--text-2)]">
                     {river.excerpt}
                   </span>
                 )}
