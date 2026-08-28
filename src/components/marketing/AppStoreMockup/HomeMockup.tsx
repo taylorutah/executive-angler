@@ -233,7 +233,7 @@ export default function HomeMockup() {
                 minHeight: 140,
               }}
             >
-              <Icon width={44} height={44} strokeWidth={1.75} color={C.copper} />
+              <Icon width={44} height={44} color={C.copper} />
               <span
                 style={{
                   color: C.chalk,

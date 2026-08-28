@@ -14,7 +14,7 @@ export default function RiverMockup() {
             className="rounded-full flex items-center justify-center"
             style={{ width: 80, height: 80, backgroundColor: C.bgMid, border: `1px solid ${C.border}` }}
           >
-            <ChevronLeft width={38} height={38} color={C.chalk} strokeWidth={2.25} />
+            <ChevronLeft width={38} height={38} color={C.chalk} />
           </button>
           <span
             className="font-['IBM_Plex_Mono'] uppercase"
@@ -41,7 +41,7 @@ export default function RiverMockup() {
           className="flex items-center"
           style={{ marginTop: 14, gap: 12 }}
         >
-          <MapPin width={24} height={24} color={C.slateDim} strokeWidth={1.8} />
+          <MapPin width={24} height={24} color={C.slateDim} />
           <span
             className="font-['IBM_Plex_Mono']"
             style={{ color: C.slateDim, fontSize: 24, letterSpacing: "0.08em" }}
@@ -269,7 +269,7 @@ function StatBlock({
 }) {
   return (
     <div style={{ flex: 1 }}>
-      <Icon width={34} height={34} color={C.teal} strokeWidth={1.6} />
+      <Icon width={34} height={34} color={C.teal} />
       <div className="flex items-baseline" style={{ gap: 8, marginTop: 14 }}>
         <span
           className="font-['IBM_Plex_Mono']"

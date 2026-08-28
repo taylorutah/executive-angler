@@ -247,7 +247,7 @@ export default function FilterDropdown({
                         }`}
                         aria-hidden
                       >
-                        {isSelected && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                        {isSelected && <Check className="w-3 h-3 text-white" />}
                       </span>
                       <span className="truncate" title={opt.label}>{opt.label}</span>
                       {opt.meta && (

@@ -21,7 +21,7 @@ export default function SessionMockup() {
             className="rounded-full flex items-center justify-center"
             style={{ width: 80, height: 80, backgroundColor: C.bgMid, border: `1px solid ${C.border}` }}
           >
-            <ChevronLeft width={38} height={38} color={C.chalk} strokeWidth={2.25} />
+            <ChevronLeft width={38} height={38} color={C.chalk} />
           </button>
           <span
             className="font-['IBM_Plex_Mono'] uppercase"
@@ -33,7 +33,7 @@ export default function SessionMockup() {
             className="rounded-full flex items-center justify-center"
             style={{ width: 80, height: 80, backgroundColor: C.bgMid, border: `1px solid ${C.border}` }}
           >
-            <Share2 width={32} height={32} color={C.copper} strokeWidth={2} />
+            <Share2 width={32} height={32} color={C.copper} />
           </button>
         </div>
 
@@ -157,7 +157,7 @@ export default function SessionMockup() {
               gap: 18,
             }}
           >
-            <Cloud width={44} height={44} color={C.teal} strokeWidth={1.6} />
+            <Cloud width={44} height={44} color={C.teal} />
             <div className="flex-1">
               <div
                 className="font-['IBM_Plex_Mono']"
@@ -230,7 +230,7 @@ export default function SessionMockup() {
                 className="rounded-full flex items-center justify-center"
                 style={{ width: 74, height: 74, backgroundColor: "#232a36" }}
               >
-                <Fish width={38} height={38} color={C.copper} strokeWidth={1.5} />
+                <Fish width={38} height={38} color={C.copper} />
               </div>
               <div className="flex-1">
                 <div style={{ color: C.chalk, fontSize: 32, fontWeight: 600 }}>{c.species}</div>

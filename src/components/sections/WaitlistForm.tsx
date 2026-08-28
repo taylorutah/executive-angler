@@ -47,7 +47,7 @@ export default function WaitlistForm({ initialCount = 0 }: { initialCount?: numb
   if (state === "success") {
     return (
       <div className="bg-[var(--surface-raised)] border border-[#3FB950]/30 rounded-2xl p-6 text-center">
-        <CheckCircle className="h-10 w-10 text-[#3FB950] mx-auto mb-3" strokeWidth={1.5} />
+        <CheckCircle className="h-10 w-10 text-[#3FB950] mx-auto mb-3" />
         <h3 className="text-[var(--text-primary)] font-heading text-xl mb-1">
           You&apos;re on the list.
         </h3>

@@ -51,13 +51,13 @@ export default function FlyBoxMockup() {
               className="rounded-full flex items-center justify-center"
               style={{ width: 90, height: 90, backgroundColor: C.bgMid, border: `1px solid ${C.border}` }}
             >
-              <Search width={36} height={36} color={C.chalk} strokeWidth={2} />
+              <Search width={36} height={36} color={C.chalk} />
             </button>
             <button
               className="rounded-full flex items-center justify-center"
               style={{ width: 90, height: 90, backgroundColor: C.copper }}
             >
-              <Plus width={42} height={42} color="#0D1117" strokeWidth={2.4} />
+              <Plus width={42} height={42} color="#0D1117" />
             </button>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function FlyBoxMockup() {
               gap: 10,
             }}
           >
-            <Filter width={22} height={22} color="#0D1117" strokeWidth={2.4} />
+            <Filter width={22} height={22} color="#0D1117" />
             <span style={{ color: "#0D1117", fontSize: 22, fontWeight: 600 }}>All</span>
           </div>
           {["Nymphs", "Dries", "Streamers", "Midges"].map((t) => (

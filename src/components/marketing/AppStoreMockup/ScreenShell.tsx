@@ -199,7 +199,6 @@ function TabBar({ activeTab }: { activeTab: TabId }) {
               <Icon
                 width={58}
                 height={58}
-                strokeWidth={active ? 2.4 : 1.75}
                 color={active ? C.copper : C.slateDim}
               />
               <span

@@ -72,7 +72,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
         {state === "success" ? (
           /* Success state */
           <div className="bg-[var(--surface-raised)] border border-[#3FB950]/30 rounded-2xl p-8 text-center">
-            <CheckCircle className="h-12 w-12 text-[#3FB950] mx-auto mb-4" strokeWidth={1.5} />
+            <CheckCircle className="h-12 w-12 text-[#3FB950] mx-auto mb-4" />
             <h3 className="text-[var(--text-primary)] font-heading text-2xl mb-2">
               You&apos;re on the list.
             </h3>

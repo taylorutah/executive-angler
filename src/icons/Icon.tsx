@@ -12,7 +12,6 @@ export type IconProps = {
   title?: string;
   color?: string;
   fill?: string;
-  strokeWidth?: number;
   style?: CSSProperties;
   "aria-hidden"?: boolean | "true" | "false";
   "aria-label"?: string;
@@ -58,7 +57,6 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
     title,
     color,
     fill,
-    strokeWidth: _strokeWidth,
     style,
     "aria-hidden": ariaHidden,
     "aria-label": ariaLabel,
@@ -105,7 +103,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
       viewBox={`0 0 ${optical} ${optical}`}
       fill="none"
       stroke={color ?? "currentColor"}
-      strokeWidth={1.5}
+      strokeWidth={1.75}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}

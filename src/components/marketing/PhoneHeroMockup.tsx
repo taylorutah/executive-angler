@@ -157,7 +157,6 @@ export default function PhoneHeroMockup() {
                 <div key={t.label} className="flex flex-col items-center justify-center gap-0.5">
                   <t.icon
                     className={`h-4 w-4 ${t.active ? "text-[var(--action)]" : "text-[var(--text-meta)]"}`}
-                    strokeWidth={t.active ? 2.25 : 2}
                   />
                   <span
                     className={`text-[8px] font-medium ${t.active ? "text-[var(--action)]" : "text-[var(--text-meta)]"}`}

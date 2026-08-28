@@ -48,7 +48,7 @@ export default function InsightsMockup() {
         <div className="flex items-start justify-between" style={{ marginBottom: 34 }}>
           <div>
             <div className="flex items-center" style={{ gap: 14, marginBottom: 16 }}>
-              <Sparkles width={38} height={38} color={C.copper} strokeWidth={1.75} />
+              <Sparkles width={38} height={38} color={C.copper} />
               <span
                 className="font-['IBM_Plex_Mono'] uppercase"
                 style={{ color: C.copper, fontSize: 22, letterSpacing: "0.22em", fontWeight: 600 }}
@@ -157,7 +157,7 @@ export default function InsightsMockup() {
             gap: 14,
           }}
         >
-          <TrendingUp width={28} height={28} strokeWidth={2} color={C.copper} />
+          <TrendingUp width={28} height={28} color={C.copper} />
           What We Learned This Month
         </div>
 
@@ -178,7 +178,7 @@ export default function InsightsMockup() {
                   className="rounded-2xl flex items-center justify-center"
                   style={{ width: 76, height: 76, backgroundColor: "rgba(232,146,58,0.12)", flexShrink: 0 }}
                 >
-                  <Icon width={40} height={40} color={C.copper} strokeWidth={1.6} />
+                  <Icon width={40} height={40} color={C.copper} />
                 </div>
                 <div className="flex-1" style={{ minWidth: 0 }}>
                   <div

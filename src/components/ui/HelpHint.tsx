@@ -49,7 +49,7 @@ export default function HelpHint({
                 aria-label={label}
                 className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex ${btnSize} items-center justify-center rounded-full text-[var(--text-meta)] hover:text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors motion-reduce:transition-none ${className}`}
               >
-                <Icn size={iconSize} strokeWidth={2} aria-hidden />
+                <Icn size={iconSize} aria-hidden />
               </button>
             </Popover.Trigger>
           </Tooltip.Trigger>

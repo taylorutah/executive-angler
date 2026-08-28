@@ -63,7 +63,7 @@ export default function LegacyMockup() {
                   backgroundColor: C.teal,
                 }}
               >
-                <Trophy width={30} height={30} color="#0D1117" strokeWidth={2.2} />
+                <Trophy width={30} height={30} color="#0D1117" />
               </div>
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function LegacyMockup() {
               }}
             >
               <div className="flex items-center justify-between" style={{ marginBottom: 22 }}>
-                <Icon width={36} height={36} color={C.copper} strokeWidth={1.6} />
+                <Icon width={36} height={36} color={C.copper} />
                 <div
                   className="rounded-full flex items-center"
                   style={{
@@ -107,7 +107,6 @@ export default function LegacyMockup() {
                     width={16}
                     height={16}
                     color={deltaUp ? "#39D47B" : "#EF4444"}
-                    strokeWidth={2.4}
                   />
                   <span
                     className="font-['IBM_Plex_Mono']"
