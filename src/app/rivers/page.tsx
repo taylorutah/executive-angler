@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RiversPage() {
   const rivers = await getAllRivers();
-  const items = rivers.map(toRiverBrowseItem);
+  const items = rivers.map((river) => toRiverBrowseItem(river));
   const stateOptions = [...new Set(rivers.flatMap((r) => statesForRiver(r)))]
     .sort((a, b) => a.localeCompare(b))
     .map((name) => ({ value: name, label: name }));
