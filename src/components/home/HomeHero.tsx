@@ -59,7 +59,7 @@ export default function HomeHero({ cfs }: Props) {
             {cfs != null && (
               <>
                 <span className="px-1.5 text-[var(--hero-type)]/70">·</span>
-                <span className="text-[var(--teal-300)]">{cfs.toLocaleString("en-US")} CFS</span>
+                <span className="text-[var(--teal)]">{cfs.toLocaleString("en-US")} CFS</span>
               </>
             )}
             <span className="px-1.5 text-[var(--hero-type)]/70">·</span>

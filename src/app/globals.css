@@ -182,6 +182,8 @@
   --color-vellum: var(--vellum);
   --color-ink: var(--ink);
   --color-graphite: var(--graphite);
+  --color-slate: var(--slate);
+  --color-rule: var(--rule);
   --color-copper: var(--copper);
   --color-teal: var(--teal);
   --color-riverbed: var(--riverbed);

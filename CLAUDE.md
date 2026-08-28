@@ -2,6 +2,21 @@
 
 > ⚠️ **Vault writes:** Before writing any file to `~/Documents/Taylor's Vault/`, read `~/Documents/Taylor's Vault/VAULT_STANDARDS.md`. Required: `## See Also` wikilinks + `## Timeline` on every file. Run `qmd update -c ea` after every vault write.
 
+## Water Desk lock (read first — do not rebuild the old site)
+
+Figma file `https://www.figma.com/design/EnvVTMRRt65nDjyZqI6Mc9` is source of truth. Pull `get_design_context` on the named node. Implement that frame only. Do not invent layout, nav, or color.
+
+**Public header:** Rivers / Flies / Places / Field Notes | Learn. Mark is `logo-horizontal-forest.svg` in the 56px cream bar (not the Figma "EA" wordmark). Archivo 13px. No Destinations / Species mega-nav.
+
+**Public footer:** The desk / The notebook / Find / House. House includes About, Privacy, **Terms**, What we don't do, Contact. No site URL in the footer.
+
+**Cover Tokens (node 2:2) in `globals.css` `@theme inline`:**
+Paper `#FAF6F0` · Vellum `#F2EDE4` · Ink `#2C211B` · Graphite `#4F4540` · Slate `#6D645F` · Copper `#B4410D` · Teal `#086B6C` · Rule `#E2DACD` · Riverbed `#0B1112` (dusk only) · Chalk `#EEF2F1`
+
+Copper = actions only. Teal = live CFS only. Paper ground. Public live widgets are vellum cards, not dusk boxes. Radius 2–6. No Lucide on public chrome. No four doors. Privacy: no named spots, no fish counts. Fraunces display, Archivo UI, Newsreader prose only.
+
+Signed-in dusk (`/today`, `/journal`, …) stays dusk. Do not cream-wash it.
+
 ## Rules (read first)
 - state assumptions, never guess silently 
 - minimum code, nothing speculative 

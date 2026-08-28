@@ -22,6 +22,8 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /--color-vellum:\s*var\(--vellum\)/);
     assert.match(css, /--color-ink:\s*var\(--ink\)/);
     assert.match(css, /--color-graphite:\s*var\(--graphite\)/);
+    assert.match(css, /--color-slate:\s*var\(--slate\)/);
+    assert.match(css, /--color-rule:\s*var\(--rule\)/);
     assert.match(css, /--color-copper:\s*var\(--copper\)/);
     assert.match(css, /--color-teal:\s*var\(--teal\)/);
     assert.match(css, /--color-riverbed:\s*var\(--riverbed\)/);
