@@ -21,8 +21,8 @@ function Stars({ rating }: { rating: number }) {
           key={star}
           className={`h-4 w-4 ${
             star <= Math.round(rating)
-              ? "text-amber-400 fill-amber-400"
-              : "text-[var(--text-meta)]"
+              ? "text-[var(--accent)] fill-[var(--accent)]"
+              : "text-[var(--text-3)]"
           }`}
         />
       ))}
@@ -38,8 +38,8 @@ function LargeStars({ rating }: { rating: number }) {
           key={star}
           className={`h-6 w-6 ${
             star <= Math.round(rating)
-              ? "text-amber-400 fill-amber-400"
-              : "text-[var(--text-meta)]"
+              ? "text-[var(--accent)] fill-[var(--accent)]"
+              : "text-[var(--text-3)]"
           }`}
         />
       ))}
@@ -81,18 +81,18 @@ export default function GoogleReviews({
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <LargeStars rating={googleRating} />
-        <span className="text-2xl font-bold text-[var(--action)]">
+        <span className="ea-stat-value">
           {googleRating.toFixed(1)}
         </span>
-        <span className="text-[var(--text-body)]">/5 on Google</span>
+        <span className="text-[var(--text-2)]">/5 on Google</span>
         {googleReviewCount != null && (
-          <span className="text-sm text-[var(--text-meta)]">
+          <span className="text-sm text-[var(--text-3)]">
             ({googleReviewCount.toLocaleString()} reviews)
           </span>
         )}
       </div>
 
-      <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-6 mb-6">
+      <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mt-6 mb-6">
         What Anglers Say
       </h2>
 
@@ -102,14 +102,14 @@ export default function GoogleReviews({
           {featuredReviews.slice(0, 3).map((review, i) => (
             <div
               key={i}
-              className="bg-[var(--surface-raised)] rounded-xl shadow-sm p-5 flex flex-col"
+              className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-5 flex flex-col"
             >
               <Stars rating={review.rating} />
-              <p className="text-[var(--text-body)] text-sm leading-relaxed mt-3 flex-1 line-clamp-5">
+              <p className="text-[var(--text-2)] text-sm leading-relaxed mt-3 flex-1 line-clamp-5">
                 &ldquo;{review.text}&rdquo;
               </p>
-              <div className="flex items-center justify-between mt-4 pt-3 border-t border-[var(--border-rule)]">
-                <span className="text-sm font-medium text-[var(--action)]">
+              <div className="flex items-center justify-between mt-4 pt-3 border-t border-[var(--border)]">
+                <span className="text-sm font-medium text-[var(--text-1)]">
                   {review.reviewer_name}
                 </span>
                 <GoogleIcon />
@@ -126,7 +126,7 @@ export default function GoogleReviews({
             href={googleReviewsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--action)] hover:text-[var(--text-primary)] transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
           >
             Read all Google reviews
             <ExternalLink className="h-3.5 w-3.5" />

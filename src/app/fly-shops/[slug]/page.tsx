@@ -7,7 +7,6 @@ import QuickFacts from "@/components/ui/QuickFacts";
 import Badge from "@/components/ui/Badge";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
-import { Button } from "@/components/ui/Button";
 import JsonLd from "@/components/seo/JsonLd";
 import MapView from "@/components/maps/DynamicMapView";
 import GoogleReviews from "@/components/GoogleReviews";
@@ -166,8 +165,8 @@ export default async function FlyShopPage({ params }: Props) {
         )}
       </div>
 
-      <div className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="bg-[var(--paper)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <Breadcrumbs
               items={[
@@ -181,23 +180,23 @@ export default async function FlyShopPage({ params }: Props) {
         </div>
       </div>
 
-      <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div className="lg:col-span-2 space-y-10">
+      <section className="bg-[var(--paper)] pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2 space-y-12">
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                   About
                 </h2>
                 {shop.description.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-[var(--text-body)] leading-relaxed mb-4">
+                  <p key={i} className="text-[var(--text-2)] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
               </ScrollAnimation>
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                   Services
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -211,7 +210,7 @@ export default async function FlyShopPage({ params }: Props) {
 
               {(shop.brandsCarried || []).length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                     Brands Carried
                   </h2>
                   <div className="flex flex-wrap gap-2">
@@ -227,7 +226,7 @@ export default async function FlyShopPage({ params }: Props) {
               {/* Waters We Know */}
               {nearbyRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-6">
                     Waters We Know
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -235,12 +234,12 @@ export default async function FlyShopPage({ params }: Props) {
                       <Link
                         key={river.id}
                         href={`/rivers/${river.slug}`}
-                        className="flex items-center gap-3 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-3 p-4 bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] card-hover"
                       >
-                        <Waves className="h-5 w-5 text-river shrink-0" />
+                        <Waves className="h-5 w-5 text-[var(--accent)] shrink-0" />
                         <div>
-                          <h3 className="font-medium text-[var(--action)]">{river.name}</h3>
-                          <p className="text-xs text-[var(--text-body)]">
+                          <h3 className="font-medium text-[var(--accent)]">{river.name}</h3>
+                          <p className="text-xs text-[var(--text-2)]">
                             {(river.primarySpecies || []).slice(0, 3).join(", ")}
                           </p>
                         </div>
@@ -253,7 +252,7 @@ export default async function FlyShopPage({ params }: Props) {
               {/* Guides in This Area */}
               {areaGuides.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-6">
                     Guides in This Area
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -261,20 +260,20 @@ export default async function FlyShopPage({ params }: Props) {
                       <Link
                         key={guide.id}
                         href={`/guides/${guide.slug}`}
-                        className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] card-hover"
                       >
-                        <div className="w-12 h-12 rounded-full bg-[var(--action)]/10 flex items-center justify-center shrink-0">
-                          <User className="h-5 w-5 text-[var(--action)]" />
+                        <div className="w-12 h-12 rounded-full bg-[var(--accent-soft)] flex items-center justify-center shrink-0">
+                          <User className="h-5 w-5 text-[var(--accent)]" />
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
+                          <h3 className="font-heading text-base font-semibold text-[var(--accent)]">
                             {guide.name}
                           </h3>
-                          <p className="text-sm text-[var(--text-body)] mt-0.5">
+                          <p className="text-sm text-[var(--text-2)] mt-0.5">
                             {(guide.specialties || []).slice(0, 2).join(", ")}
                           </p>
                           {guide.dailyRate && (
-                            <p className="text-sm font-medium text-[var(--action)] mt-0.5">
+                            <p className="text-sm font-medium text-[var(--accent)] mt-0.5">
                               {guide.dailyRate}
                             </p>
                           )}
@@ -287,7 +286,7 @@ export default async function FlyShopPage({ params }: Props) {
 
               {shopSpecies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-6">
                     Species in This Area
                   </h2>
                   <div className="flex flex-wrap gap-2">
@@ -305,7 +304,7 @@ export default async function FlyShopPage({ params }: Props) {
 
               {shopFlies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-6">
                     Featured Patterns
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -326,7 +325,7 @@ export default async function FlyShopPage({ params }: Props) {
               )}
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                   Location
                 </h2>
                 <MapView
@@ -341,7 +340,7 @@ export default async function FlyShopPage({ params }: Props) {
                       description: shop.address,
                     },
                   ]}
-                  className="h-[300px] w-full rounded-xl overflow-hidden shadow-md"
+                  className="h-[300px] w-full overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)]"
                 />
               </ScrollAnimation>
 
@@ -374,16 +373,16 @@ export default async function FlyShopPage({ params }: Props) {
 
               {/* Hours */}
               {shop.hours && (
-                <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[var(--action)] mb-4 flex items-center gap-2">
+                <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-6">
+                  <h3 className="font-heading text-lg font-semibold text-[var(--text-1)] mb-4 flex items-center gap-2">
                     <Clock className="h-5 w-5" />
                     Hours
                   </h3>
                   <dl className="space-y-2">
                     {Object.entries(shop.hours || {}).map(([day, hours]) => (
                       <div key={day} className="flex justify-between text-sm">
-                        <dt className="text-[var(--text-body)] capitalize">{day}</dt>
-                        <dd className="font-medium text-[var(--text-body)]">{hours}</dd>
+                        <dt className="text-[var(--text-2)] capitalize">{day}</dt>
+                        <dd className="font-medium text-[var(--text-1)]">{hours}</dd>
                       </div>
                     ))}
                   </dl>
@@ -391,34 +390,32 @@ export default async function FlyShopPage({ params }: Props) {
               )}
 
               {/* Contact */}
-              <div className="bg-[var(--action)] rounded-xl p-6 text-white shadow-lg">
-                <h3 className="font-heading text-xl font-bold mb-3">
+              <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-6">
+                <h3 className="font-heading text-xl font-semibold text-[var(--text-1)] mb-4">
                   Contact
                 </h3>
                 {shop.websiteUrl && (
-                  <Button
+                  <a
                     href={shop.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    variant="solid"
-                    size="md"
-                    icon={ExternalLink}
-                    fullWidth
+                    className="ea-btn ea-btn-primary w-full"
                   >
+                    <ExternalLink className="h-4 w-4" aria-hidden />
                     Visit Website
-                  </Button>
+                  </a>
                 )}
                 <div className="mt-4 space-y-2 text-sm">
                   {shop.phone && (
                     <a
                       href={`tel:${shop.phone}`}
-                      className="flex items-center gap-2 text-white/80 hover:text-white"
+                      className="flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)]"
                     >
                       <Phone className="h-4 w-4" />
                       {shop.phone}
                     </a>
                   )}
-                  <p className="flex items-center gap-2 text-white/80">
+                  <p className="flex items-center gap-2 text-[var(--text-2)]">
                     <MapPin className="h-4 w-4" />
                     {shop.address}
                   </p>
@@ -426,8 +423,8 @@ export default async function FlyShopPage({ params }: Props) {
               </div>
 
               {shopArticles.length > 0 && (
-                <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[var(--action)] mb-4">
+                <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-6">
+                  <h3 className="font-heading text-lg font-semibold text-[var(--text-1)] mb-4">
                     Related Articles
                   </h3>
                   <div className="space-y-3">
@@ -435,12 +432,12 @@ export default async function FlyShopPage({ params }: Props) {
                       <Link
                         key={article.id}
                         href={`/articles/${article.slug}`}
-                        className="block p-3 rounded-lg hover:bg-[var(--surface-page)] transition-colors"
+                        className="block p-3 rounded-[var(--radius-md)] hover:bg-[var(--paper-deep)] transition-colors"
                       >
-                        <p className="text-sm font-medium text-[var(--action)]">
+                        <p className="text-sm font-medium text-[var(--accent)]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[var(--text-body)] mt-1">
+                        <p className="text-xs text-[var(--text-3)] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

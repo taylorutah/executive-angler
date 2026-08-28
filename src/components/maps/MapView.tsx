@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { COPPER_700 } from "@/lib/palette";
+import { COPPER_700, SLATE } from "@/lib/palette";
 
 interface Marker {
   latitude: number;
@@ -149,7 +149,7 @@ export default function MapView({
         markers.forEach((marker) => {
           const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
             `<div><strong>${marker.title}</strong>${
-              marker.description ? `<p style="margin-top:4px;color:#A8B2BD">${marker.description}</p>` : ""
+              marker.description ? `<p style="margin-top:4px;color:${SLATE}">${marker.description}</p>` : ""
             }</div>`
           );
 
@@ -192,7 +192,7 @@ export default function MapView({
     } catch (e) {
       console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
-        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--vellum);color:var(--text-meta);font-size:0.875rem">Map unavailable</div>';
       }
     }
 

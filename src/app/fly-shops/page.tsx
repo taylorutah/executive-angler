@@ -93,15 +93,15 @@ export default async function FlyShopsPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
+      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <p className="ea-overline">
             Outfitted for the Water
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
+          <h1 className="mt-3 text-[var(--text-1)]">
             Gear Up at the Source
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
+          <p className="mt-5 max-w-[var(--prose)] text-lg text-[var(--text-2)] leading-relaxed">
             Local knowledge, expert staff, and the right fly for the right river — curated
             shops near the best waters on earth.
           </p>
@@ -109,9 +109,9 @@ export default async function FlyShopsPage() {
       </section>
 
       {/* ── Spotlight Shops ───────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
+      <section className="bg-[var(--paper)] pt-2 pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <p className="ea-overline mb-8">
             Iconic Shops
           </p>
 
@@ -123,58 +123,54 @@ export default async function FlyShopsPage() {
                 <ScrollAnimation key={shop.id} delay={i * 0.08}>
                   <Link
                     href={`/fly-shops/${shop.slug}`}
-                    className="group block bg-[var(--surface-raised)] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-full"
+                    className="group block card-hover overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] h-full"
                   >
-                    <div className="relative h-48">
+                    <div className="relative h-48 overflow-hidden">
                       <SafeEntityImage
                         src={shop.heroImageUrl}
                         alt={shop.name}
                         title={shop.name}
                         meta={dest?.name}
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="ea-photo"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                       {shop.googleRating && (
-                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-[var(--surface-raised)]/90 backdrop-blur-sm rounded-full px-2 py-1">
-                          <Star className="h-3 w-3 fill-[var(--action)] text-[var(--action)]" />
-                          <span className="text-[10px] font-semibold text-[var(--action)]">
+                        <div className="absolute top-3 right-3 flex items-center gap-1 rounded-[var(--radius-sm)] bg-[var(--ink)] px-2 py-1">
+                          <Star className="h-3 w-3 fill-[var(--paper)] text-[var(--paper)]" />
+                          <span className="text-xs font-medium text-[var(--paper)]">
                             {shop.googleRating}
                           </span>
                         </div>
                       )}
                     </div>
                     <div className="p-5 flex flex-col h-full">
-                      <h3 className="font-heading text-lg font-bold text-[var(--action)] group-hover:text-[var(--action)] transition-colors leading-snug">
+                      <h3 className="font-heading text-lg font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors leading-snug">
                         {shop.name}
                       </h3>
-                      <p className="mt-0.5 text-sm font-medium text-[var(--action)]">
+                      <p className="mt-0.5 text-sm font-medium text-[var(--text-2)]">
                         {SHOP_HEADLINES[shop.slug]}
                       </p>
                       {(shop.address || dest) && (
-                        <div className="mt-1.5 flex items-start gap-1 text-[var(--text-meta)] text-xs">
+                        <div className="mt-1.5 flex items-start gap-1 text-[var(--text-3)] text-xs">
                           <MapPin className="h-3 w-3 flex-shrink-0 mt-0.5" />
                           <span className="line-clamp-1">
                             {shop.address ?? dest?.name}
                           </span>
                         </div>
                       )}
-                      <div className="mt-3 flex flex-wrap gap-1">
+                      <div className="mt-3 flex flex-wrap gap-1.5">
                         {shop.services.slice(0, 2).map((svc) => (
-                          <span
-                            key={svc}
-                            className="px-2 py-0.5 bg-[var(--surface-page)] text-[var(--action)] text-[10px] font-medium rounded-full"
-                          >
+                          <span key={svc} className="ea-chip">
                             {svc}
                           </span>
                         ))}
                       </div>
                       {shop.googleReviewCount && (
-                        <p className="mt-3 text-xs text-[var(--text-meta)]">
+                        <p className="mt-3 text-xs text-[var(--text-3)]">
                           {shop.googleReviewCount.toLocaleString()} Google reviews
                         </p>
                       )}
-                      <span className="mt-auto pt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--action)] group-hover:underline">
+                      <span className="mt-auto pt-3 inline-flex items-center gap-1 text-sm font-medium text-[var(--accent)] group-hover:underline">
                         Visit Shop <ChevronRight className="h-3.5 w-3.5" />
                       </span>
                     </div>
@@ -187,18 +183,18 @@ export default async function FlyShopsPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
+      <div className="bg-[var(--paper)] border-t border-[var(--border)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
             All Fly Shops
           </h2>
-          <p className="text-sm text-[var(--text-body)] mt-1">
+          <p className="text-sm text-[var(--text-2)] mt-1">
             {flyShops.length} shops — filterable by destination
           </p>
         </div>
       </div>
-      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView items={items} config={config} storageKey="fly-shops" />
           </Suspense>

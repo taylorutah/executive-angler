@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Star, Trash2, Edit3, User } from "@/icons";
 import { createBrowserClient } from "@supabase/ssr";
-import { Button } from "@/components/ui/Button";
 
 interface Review {
   id: string;
@@ -31,8 +30,8 @@ function StarRating({ rating }: { rating: number }) {
           key={n}
           className={`h-3.5 w-3.5 ${
             n <= rating
-              ? "fill-[var(--action)] text-[var(--action)]"
-              : "text-[var(--border-rule)]"
+              ? "fill-[var(--accent)] text-[var(--accent)]"
+              : "text-[var(--text-3)]"
           }`}
         />
       ))}
@@ -99,17 +98,15 @@ function ReviewForm({
     }
   }
 
-  const input = "w-full bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--action)]/50";
-
   return (
-    <form onSubmit={handleSubmit} className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5 space-y-4">
-      <h3 className="font-heading text-base font-semibold text-[var(--text-primary)]">
+    <form onSubmit={handleSubmit} className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-5 space-y-4">
+      <h3 className="font-heading text-base font-semibold text-[var(--text-1)]">
         {existingReview ? "Edit Your Review" : "Write a Review"}
       </h3>
 
       {/* Star picker */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-2">Rating</label>
+        <label className="ea-label">Rating</label>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((n) => (
             <button
@@ -125,8 +122,8 @@ function ReviewForm({
               <Star
                 className={`h-6 w-6 ${
                   n <= (hoverRating || rating)
-                    ? "fill-[var(--action)] text-[var(--action)]"
-                    : "text-[var(--text-meta)]"
+                    ? "fill-[var(--accent)] text-[var(--accent)]"
+                    : "text-[var(--text-3)]"
                 }`}
               />
             </button>
@@ -136,9 +133,9 @@ function ReviewForm({
 
       {/* Title */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">Title (optional)</label>
+        <label className="ea-label">Title (optional)</label>
         <input
-          className={input}
+          className="ea-input"
           placeholder="Sum up your experience"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -148,9 +145,9 @@ function ReviewForm({
 
       {/* Body */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">Your Review</label>
+        <label className="ea-label">Your Review</label>
         <textarea
-          className={input}
+          className="ea-input"
           rows={4}
           placeholder="What was your experience like?"
           value={body}
@@ -161,25 +158,28 @@ function ReviewForm({
 
       {/* Visit Date */}
       <div>
-        <label className="block text-xs font-medium text-[var(--text-body)] mb-1">Date of Visit (optional)</label>
-        <input type="date" className={input} value={visitDate} onChange={(e) => setVisitDate(e.target.value)} />
+        <label className="ea-label">Date of Visit (optional)</label>
+        <input type="date" className="ea-input" value={visitDate} onChange={(e) => setVisitDate(e.target.value)} />
       </div>
 
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="ea-field-error">{error}</p>}
 
       <div className="flex gap-2 items-center">
-        <Button
+        <button
           type="submit"
           disabled={saving}
-          loading={saving}
-          variant="solid"
-          size="md"
-         
+          className="ea-btn ea-btn-primary"
         >
+          {saving && (
+            <span
+              aria-hidden
+              className="h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent"
+            />
+          )}
           {saving ? "Saving..." : existingReview ? "Update Review" : "Submit Review"}
-        </Button>
+        </button>
         {onCancel && (
-          <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
+          <button type="button" onClick={onCancel} className="ea-btn ea-btn-ghost">
             Cancel
           </button>
         )}
@@ -238,8 +238,8 @@ export default function UserReviews({ entityType, entityId }: Props) {
   if (loading) {
     return (
       <div className="animate-pulse space-y-3">
-        <div className="h-6 w-32 bg-[var(--border-rule)] rounded" />
-        <div className="h-24 bg-[var(--surface-raised)] rounded-xl" />
+        <div className="h-6 w-32 bg-[var(--border)] rounded" />
+        <div className="h-24 bg-[var(--paper-deep)] rounded-[var(--radius-card)]" />
       </div>
     );
   }
@@ -247,18 +247,17 @@ export default function UserReviews({ entityType, entityId }: Props) {
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
-          Reviews {reviews.length > 0 && <span className="text-base font-normal text-[var(--text-meta)]">({reviews.length})</span>}
+        <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+          Reviews {reviews.length > 0 && <span className="text-base font-normal text-[var(--text-3)]">({reviews.length})</span>}
         </h2>
         {currentUserId && !hasOwnReview && !showForm && (
-          <Button
+          <button
+            type="button"
             onClick={() => setShowForm(true)}
-            variant="solid"
-            size="sm"
-           
+            className="ea-btn ea-btn-primary ea-btn-sm"
           >
             Write a Review
-          </Button>
+          </button>
         )}
       </div>
 
@@ -277,28 +276,28 @@ export default function UserReviews({ entityType, entityId }: Props) {
 
       {/* Review list */}
       {reviews.length === 0 && !showForm ? (
-        <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-8 text-center">
-          <p className="text-sm text-[var(--text-meta)]">No reviews yet. Be the first to share your experience.</p>
+        <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-8 text-center">
+          <p className="text-sm text-[var(--text-3)]">No reviews yet. Be the first to share your experience.</p>
         </div>
       ) : (
         <div className="space-y-4">
           {reviews.map((review) => (
-            <div key={review.id} className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
+            <div key={review.id} className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-5">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   {review.author_avatar ? (
                     <Image src={review.author_avatar} alt={`${review.author_name} avatar`} width={32} height={32} className="w-8 h-8 rounded-full object-cover" />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-[var(--border-rule)] flex items-center justify-center">
-                      <User className="h-4 w-4 text-[var(--text-meta)]" />
+                    <div className="w-8 h-8 rounded-full bg-[var(--paper-deep)] flex items-center justify-center">
+                      <User className="h-4 w-4 text-[var(--text-3)]" />
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-medium text-[var(--text-primary)]">{review.author_name}</p>
+                    <p className="text-sm font-medium text-[var(--text-1)]">{review.author_name}</p>
                     <div className="flex items-center gap-2 mt-0.5">
                       <StarRating rating={review.rating} />
                       {review.visit_date && (
-                        <span className="text-[10px] text-[var(--text-meta)]">
+                        <span className="text-xs text-[var(--text-3)]">
                           Visited {new Date(review.visit_date + "T12:00:00").toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                         </span>
                       )}
@@ -309,38 +308,42 @@ export default function UserReviews({ entityType, entityId }: Props) {
                 {/* Edit/Delete for own reviews */}
                 {review.user_id === currentUserId && (
                   <div className="flex gap-2 shrink-0">
-                    <Button
+                    <button
+                      type="button"
                       onClick={() => { setEditingReview(review); setShowForm(false); }}
-                      variant="outline"
-                      size="sm"
-                      icon={Edit3}
-                     
+                      className="ea-btn ea-btn-secondary ea-btn-sm"
                       aria-label="Edit review"
                     >
+                      <Edit3 className="h-3.5 w-3.5" aria-hidden />
                       Edit
-                    </Button>
-                    <Button
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => handleDelete(review.id)}
                       disabled={deleting === review.id}
-                      loading={deleting === review.id}
-                      variant="destructive"
-                      size="sm"
-                      icon={deleting === review.id ? undefined : Trash2}
-                     
+                      className="ea-btn ea-btn-danger ea-btn-sm"
                       aria-label="Delete review"
                     >
+                      {deleting === review.id ? (
+                        <span
+                          aria-hidden
+                          className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-r-transparent"
+                        />
+                      ) : (
+                        <Trash2 className="h-3.5 w-3.5" aria-hidden />
+                      )}
                       Delete
-                    </Button>
+                    </button>
                   </div>
                 )}
               </div>
 
               {review.title && (
-                <h4 className="text-sm font-semibold text-[var(--text-primary)] mt-3">{review.title}</h4>
+                <h4 className="text-sm font-semibold text-[var(--text-1)] mt-3">{review.title}</h4>
               )}
-              <p className="text-sm text-[var(--text-body)] mt-2 leading-relaxed">{review.body}</p>
+              <p className="text-sm text-[var(--text-2)] mt-2 leading-relaxed">{review.body}</p>
 
-              <p className="text-[10px] text-[var(--text-meta)] mt-3">
+              <p className="text-xs text-[var(--text-3)] mt-3">
                 {new Date(review.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
               </p>
             </div>
@@ -351,7 +354,7 @@ export default function UserReviews({ entityType, entityId }: Props) {
       {/* Not logged in prompt */}
       {!currentUserId && reviews.length > 0 && (
         <div className="mt-4 text-center">
-          <a href="/login" className="text-sm text-[var(--action)] hover:underline">
+          <a href="/login" className="text-sm text-[var(--accent)] hover:underline">
             Sign in to leave a review
           </a>
         </div>
