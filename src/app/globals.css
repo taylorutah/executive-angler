@@ -488,6 +488,53 @@
     height: 14px;
   }
 
+  /* ── Segmented control: view toggles (list / calendar / table) ── */
+  .ea-segmented {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+  .ea-segment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: 32px;
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-ui);
+    font-size: var(--text-13);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--text-2);
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+  }
+  .ea-segment:hover { color: var(--text-1); }
+  .ea-segment[aria-pressed="true"] {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .ea-segment-icon {
+    width: 32px;
+    padding-inline: 0;
+  }
+
+  /* ── Mobile sheet: bottom-anchored modal surface ─────────────── */
+  .ea-sheet {
+    background: var(--surface);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    max-height: 80vh;
+    box-shadow: var(--shadow-float);
+  }
+
   /* ── Badges: pill metadata; ember reserved for featured/seasonal ── */
   .ea-badge {
     display: inline-flex;
