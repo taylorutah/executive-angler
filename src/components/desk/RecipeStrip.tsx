@@ -32,7 +32,7 @@ export default function RecipeStrip({ materials, notes }: Props) {
         Recipe
       </h2>
       {hasMaterials ? (
-        <ul className="mt-4 max-w-2xl divide-y divide-[var(--border)] border-y border-[var(--border)]">
+        <ul className="mt-4 max-w-[var(--prose)] divide-y divide-[var(--border)] border-y border-[var(--border)]">
           {materials.map((m, i) => {
             const slotLabel = formatSlotLabel(String(m.slot ?? "Material"));
             const detail = [m.material, m.brand].filter(Boolean).join(" · ");
