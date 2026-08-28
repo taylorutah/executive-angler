@@ -45,8 +45,8 @@
 
   /* Motion budget — §5.4. Banned: count-ups, text parallax, scroll-jacking,
      self-drawing charts, animated logo, motion inside data tables. */
-  --hover-duration: 520ms;
-  --hover-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --hover-duration: 600ms;
+  --hover-ease: cubic-bezier(0.33, 0, 0.15, 1);
   --crossfade-duration: 400ms;
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
   --gutter: 1rem;

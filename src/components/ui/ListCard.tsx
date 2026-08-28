@@ -21,7 +21,7 @@ export default function ListCard({
       className="group -mx-2 flex items-start gap-4 border-b border-[var(--border-rule)] px-2 py-4 transition-colors last:border-b-0 hover:bg-[var(--surface-card)]/60"
     >
       <div
-        className="relative h-20 w-20 shrink-0 overflow-hidden bg-[var(--surface-card)] sm:h-24 sm:w-24"
+        className="photo-lift relative h-20 w-20 shrink-0 bg-[var(--surface-card)] sm:h-24 sm:w-24"
         style={{ borderRadius: "var(--radius-instrument)" }}
       >
         <SafeEntityImage

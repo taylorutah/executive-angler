@@ -42,7 +42,7 @@ export default async function AboutPage() {
             instruction.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             Our Mission
           </h2>
           <p>
@@ -54,7 +54,7 @@ export default async function AboutPage() {
             unforgettable.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             What We Cover
           </h2>
           <p>
@@ -97,7 +97,7 @@ export default async function AboutPage() {
             </li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             No Middleman
           </h2>
           <p>
@@ -107,7 +107,7 @@ export default async function AboutPage() {
             contact information and website links go straight to them.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             Community
           </h2>
           <p>
@@ -117,7 +117,7 @@ export default async function AboutPage() {
             content after a brief review.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             A private journal
           </h2>
           <p>
@@ -134,7 +134,7 @@ export default async function AboutPage() {
             .
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             Conservation
           </h2>
           <p>

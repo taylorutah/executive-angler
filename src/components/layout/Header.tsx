@@ -121,7 +121,11 @@ export default function Header() {
             {/* ── Utility zone ── */}
             <div className="ml-auto flex items-center gap-2">
               {user && <span className="ea-nav-divider hidden lg:block" aria-hidden />}
-              {!onHome && <HeaderSearch />}
+              {!onHome && (
+                <div className="hidden lg:block">
+                  <HeaderSearch />
+                </div>
+              )}
 
               {isLoading ? (
                 <div className="hidden lg:flex items-center">

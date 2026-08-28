@@ -66,7 +66,10 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
   return (
     <article className="min-h-[70vh] bg-[var(--surface-page)]">
       <div className="mx-auto max-w-[780px] px-4 py-12 sm:px-6 sm:py-16">
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+        <p
+          data-live
+          className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-meta)]"
+        >
           {today}
         </p>
         <h1 className="mt-2 font-heading text-4xl text-[var(--text-primary)] sm:text-5xl">
@@ -173,18 +176,21 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                             ) : null}
                           </span>
                           {river.cfs != null ? (
-                            <span className="num shrink-0 text-[var(--signal-live)]">
+                            <span data-live className="num shrink-0 text-[var(--signal-live)]">
                               {river.cfs.toLocaleString("en-US")}
                               <span className="ml-1 text-[var(--text-meta)]">cfs</span>
                             </span>
                           ) : (
-                            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                            <span
+                              data-live
+                              className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]"
+                            >
                               no reading
                             </span>
                           )}
                         </div>
                         {river.lastCfs != null && river.cfs != null ? (
-                          <p className="mt-1 text-[13px] text-[var(--text-body)]">
+                          <p data-live className="mt-1 text-[13px] text-[var(--text-body)]">
                             {flowDelta(river.cfs, river.lastCfs)} than your last day here
                             {river.lastFishedDate
                               ? ` (${daysAgo(river.lastFishedDate)} days ago at ${river.lastCfs.toLocaleString("en-US")} cfs)`
@@ -192,7 +198,7 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                             .
                           </p>
                         ) : river.lastFishedDate ? (
-                          <p className="mt-1 text-[13px] text-[var(--text-body)]">
+                          <p data-live className="mt-1 text-[13px] text-[var(--text-body)]">
                             You have not logged flow on your last day here (
                             {daysAgo(river.lastFishedDate)} days ago).
                           </p>
@@ -243,7 +249,7 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                     <>
                       {" "}
                       is{" "}
-                      <span className="num text-[var(--signal-live)]">
+                      <span data-live className="num text-[var(--signal-live)]">
                         {data.worthGoing.cfs.toLocaleString("en-US")} cfs
                       </span>{" "}
                       now.
@@ -256,16 +262,16 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                   {data.worthGoing.days.map((day) => (
                     <li key={day.date} className="py-3.5">
                       <div className="flex items-baseline justify-between gap-4">
-                        <span className="text-[15px] text-[var(--text-primary)]">
+                        <span data-live className="text-[15px] text-[var(--text-primary)]">
                           {day.weekday}
                           <span className="ml-2 text-[13px] text-[var(--text-meta)]">{day.date}</span>
                         </span>
                         {day.tempHighF != null ? (
-                          <span className="num text-[13px] text-[var(--text-body)]">
+                          <span data-live className="num text-[13px] text-[var(--text-body)]">
                             {day.tempHighF}°F · {day.weatherLabel}
                           </span>
                         ) : (
-                          <span className="text-[13px] text-[var(--text-meta)]">{day.weatherLabel}</span>
+                          <span data-live className="text-[13px] text-[var(--text-meta)]">{day.weatherLabel}</span>
                         )}
                       </div>
                       <p className="mt-1 text-[13px] leading-relaxed text-[var(--text-body)]">

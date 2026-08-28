@@ -7,8 +7,6 @@ import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const SUBJECT_OPTIONS = [
   "General Inquiry",
-  "Pro Refund Request",
-  "Guide Pro Claim",
   "Content Correction",
   "Lodge or Guide Listing",
   "Partnership",
