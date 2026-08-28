@@ -33,17 +33,23 @@ function hatchLabel(river: FlagshipRiver, month: string): string | null {
 }
 
 /**
- * One ON THE WATER kicker. Six chips. Live CFS in teal only.
- * No second "On the water" rail above this.
+ * Home / 1440 full 40:24 — ON THE WATER kicker + six paper-register chips.
+ * Live CFS in teal only. No second "On the water" rail.
  */
 export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
   if (rivers.length === 0) return null;
 
   return (
-    <section data-lane="resource" data-home-rail className="bg-[var(--surface-page)] pt-10 pb-9">
+    <section data-lane="resource" data-home-rail className="bg-[var(--paper)] pb-9 pt-10">
       <HomeGutter>
-        <p className="mb-3.5 flex items-center gap-2 font-ui text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--signal-live)]">
-          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[var(--signal-live)]" />
+        <p className="mb-3.5 flex items-center gap-2 font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--teal)]">
+          <img
+            src="/images/home/live.svg"
+            alt=""
+            width={6}
+            height={6}
+            className="size-[6px]"
+          />
           On the water
         </p>
         <ul className="flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -53,32 +59,36 @@ export default function OnTheWaterNow({ rivers, snapshots, month }: Props) {
             const cfs = snapshot?.cfs ?? null;
             const state = stateLabel(river.state);
             const hatch = hatchLabel(river, month);
-            const meta = [state, hatch].filter(Boolean).join("  ·  ");
+            const metaDesktop = [state, hatch].filter(Boolean).join("  ·  ");
+            const metaMobile = hatch;
 
             return (
               <li key={river.id} className="shrink-0">
                 <Link
                   href={`/rivers/${river.slug}`}
-                  className="group flex w-[150px] flex-col gap-1 rounded-[4px] border border-[rgb(44_33_27/0.18)] bg-[var(--surface-card)] px-3.5 py-3 sm:w-[204px]"
+                  className="group flex w-[150px] flex-col gap-1 rounded-[4px] border border-[rgb(44_33_27/0.18)] bg-[var(--vellum)] px-3.5 py-3 sm:w-[204px]"
                 >
-                  <span className="font-ui text-[13px] font-medium text-[var(--text-primary)] group-hover:text-[var(--action)]">
+                  <span className="hover-copper font-ui text-[13px] font-medium text-[var(--ink)] group-hover:text-[var(--copper)]">
                     {river.label}
                   </span>
                   {cfs != null ? (
                     <span
                       className={`font-ui text-[18px] font-medium tabular-nums ${
-                        live ? "text-[var(--signal-live)]" : "text-[var(--text-meta)]"
+                        live ? "text-[var(--teal)]" : "text-[var(--slate)]"
                       }`}
                     >
                       {cfs.toLocaleString("en-US")} cfs
                     </span>
                   ) : (
-                    <span className="font-ui text-[18px] font-medium text-[var(--text-meta)]">
+                    <span className="font-ui text-[18px] font-medium text-[var(--slate)]">
                       no reading
                     </span>
                   )}
-                  {meta ? (
-                    <span className="font-ui text-[11px] text-[var(--text-meta)]">{meta}</span>
+                  {metaMobile ? (
+                    <span className="font-ui text-[11px] text-[var(--slate)] sm:hidden">{metaMobile}</span>
+                  ) : null}
+                  {metaDesktop ? (
+                    <span className="hidden font-ui text-[11px] text-[var(--slate)] sm:inline">{metaDesktop}</span>
                   ) : null}
                 </Link>
               </li>

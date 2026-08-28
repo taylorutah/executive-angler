@@ -5,12 +5,15 @@
  */
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import BrowseIndexFallback from "@/components/ui/BrowseIndexFallback";
 import DismissBrowseFallback from "@/components/ui/DismissBrowseFallback";
 import FlyLibraryClient from "./FlyLibraryClient";
 import { formatHookSize } from "@/lib/flies/variant-format";
 import { hatchTokens, sizeListValue } from "@/lib/browse/fly-filters";
 import { getAllCanonicalFlies } from "@/lib/db";
+import { plateImageUrl } from "@/lib/media/image-url";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
@@ -48,20 +51,21 @@ export default async function FliesPage() {
   const allFlies = await getAllCanonicalFlies();
 
   const items: (CardData & { _filterValues: Record<string, string> })[] = allFlies.map(
-    (fly) => ({
+    (fly) => {
+    const imageUrl = plateImageUrl(fly.heroImageUrl);
+    const iconOnly = imageUrl === undefined;
+    return {
       href: `/flies/${fly.slug}`,
-      imageUrl: fly.heroImageUrl || undefined,
+      imageUrl,
       imageAlt: `${fly.name} fly pattern for trout fishing`,
       title: fly.name,
       subtitle: fly.tagline || undefined,
+      group: FLY_CATEGORY_LABELS[fly.category] || fly.category,
       meta: `Sizes ${formatHookSize(fly.sizes[0])}–${formatHookSize(fly.sizes[fly.sizes.length - 1])}`,
       badges: [FLY_CATEGORY_LABELS[fly.category] || fly.category],
       featured: fly.featured,
       description: fly.description?.substring(0, 150),
-      iconOnly:
-        !fly.heroImageUrl ||
-        fly.heroImageUrl.includes("/fly-icons/") ||
-        fly.heroImageUrl.includes("/community-images/submissions/"),
+      iconOnly,
       actionSlot: {
         kind: "add-to-fly-box" as const,
         canonicalFlyId: fly.id,
@@ -79,28 +83,21 @@ export default async function FliesPage() {
         size: sizeListValue(fly.sizes),
         canTie: "0",
       },
-    }),
+    };
+    },
   );
 
   return (
     <>
-      <section className="bg-[var(--surface-page)] pt-6 pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-body)]">
-            The complete reference
-          </p>
-          <h1 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
-            {allFlies.length} trout fly patterns
-          </h1>
-          <p className="mt-5 max-w-[68ch] text-lg leading-relaxed text-[var(--text-body)]">
-            {allFlies.length} patterns. Filter by hatch, size, and — when you are signed
-            in — what you can tie from your own materials.
-          </p>
-        </div>
-      </section>
+      <DeskMast
+        title="Every fly we keep"
+        lede="The plate is twelve this week. This is the bench — nymphs, dries, streamers. Pictures first. One Refine."
+        titleSize="phrase"
+        ledeFace="ui"
+      />
 
-      <section className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
           <BrowseIndexFallback
             id="flies-browse-fallback"
             count={items.length > 24 ? 24 : items.length}
@@ -110,7 +107,7 @@ export default async function FliesPage() {
               <FlyLibraryClient items={items} />
             </DismissBrowseFallback>
           </Suspense>
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { getFliesByCategory } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import { formatHookSize } from "@/lib/flies/variant-format";
 
 export const revalidate = 3600;
@@ -31,17 +32,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   terrestrial: "Terrestrials",
   egg: "Egg Patterns",
   midge: "Midges",
-};
-
-const CATEGORY_ICONS: Record<string, string> = {
-  dry: "/images/fly-icons/dry.svg",
-  nymph: "/images/fly-icons/nymph.svg",
-  streamer: "/images/fly-icons/streamer.svg",
-  emerger: "/images/fly-icons/emerger.svg",
-  wet: "/images/fly-icons/wet.svg",
-  terrestrial: "/images/fly-icons/terrestrial.svg",
-  egg: "/images/fly-icons/egg.svg",
-  midge: "/images/fly-icons/midge.svg",
 };
 
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
@@ -87,7 +77,6 @@ export default async function FlyCategoryPage({ params }: Props) {
   if (!label) notFound();
 
   const flies = await getFliesByCategory(category);
-  const icon = CATEGORY_ICONS[category] || CATEGORY_ICONS.dry;
   const description = CATEGORY_DESCRIPTIONS[category] || "";
 
   return (
@@ -102,44 +91,30 @@ export default async function FlyCategoryPage({ params }: Props) {
         }}
       />
 
-      {/* Breadcrumbs */}
-      <div className="bg-[var(--surface-page)] pt-6 pb-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="bg-[var(--surface-page)] pt-6">
+        <HomeGutter>
           <Breadcrumbs
             items={[
               { label: "Fly Library", href: "/flies" },
               { label },
             ]}
           />
-        </div>
+        </HomeGutter>
       </div>
 
-      {/* Editorial header */}
-      <section className="bg-[var(--surface-page)] pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] flex items-center justify-center p-2">
-              <Image src={icon} alt={label} width={48} height={48} />
-            </div>
-          </div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
-            Fly Library
-          </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
-            {label}
-          </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)]">
-            {description}
-          </p>
-          <p className="mt-3 text-sm text-[var(--text-meta)]">
+      <DeskMast
+        kicker="Fly Library"
+        title={label}
+        lede={description}
+        titleSize="phrase"
+        ledeFace="ui"
+      />
+
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
+          <p className="mb-6 font-ui text-[13px] text-[var(--text-meta)]">
             {flies.length} pattern{flies.length !== 1 ? "s" : ""} in this category
           </p>
-        </div>
-      </section>
-
-      {/* Fly grid */}
-      <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {flies.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {flies.map((fly, i) => (
@@ -174,13 +149,11 @@ export default async function FlyCategoryPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <p className="text-[var(--text-body)] text-lg">
-                No patterns found in this category yet. Check back soon.
-              </p>
-            </div>
+            <p className="py-8 font-ui text-[15px] text-[var(--text-body)]">
+              No patterns found in this category yet. Check back soon.
+            </p>
           )}
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

@@ -24,8 +24,9 @@ export default async function AuthorsPage() {
   const authors = listAuthors(articles);
 
   return (
-    <div className="bg-[var(--surface-page)] min-h-screen pt-6 pb-20">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div className="bg-[var(--paper)]">
+      <div className="desk-sheet">
+        <div className="house-measure">
         <nav className="flex items-center gap-1.5 font-ui text-[13px] text-[var(--text-meta)] mb-8">
           <Link href="/" className="hover:text-[var(--action)] transition-colors">
             Home
@@ -83,6 +84,7 @@ export default async function AuthorsPage() {
             );
           })}
         </ul>
+        </div>
       </div>
     </div>
   );

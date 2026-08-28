@@ -3,8 +3,6 @@ import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle, catalogCounts } from "@/lib/seo";
 
-export const revalidate = 3600;
-
 export async function generateMetadata(): Promise<Metadata> {
   const counts = await catalogCounts();
   const desc = `${SITE_NAME} combines world-class fishing editorial with a private journal. Explore ${counts.destinations} destinations, ${counts.rivers} rivers, and ${counts.flies} fly patterns.`;
@@ -23,20 +21,27 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const counts = await catalogCounts();
   return (
-    <div className="pt-8 pb-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-6">
+    <div className="bg-[var(--paper)]">
+      <div className="desk-sheet">
+        <div className="house-measure">
+        <p className="desk-eyebrow">
+          House
+        </p>
+        <h1
+          className="mt-4 mb-4 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
           About {SITE_NAME}
         </h1>
+        <p className="desk-dek-ui">
+          {SITE_NAME} is the definitive fly fishing resource, built to connect
+          anglers with the world&apos;s finest waters, lodges, guides, and expert
+          instruction.
+        </p>
 
-        <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
-          <p className="text-xl text-[var(--text-body)] leading-relaxed">
-            {SITE_NAME} is the definitive fly fishing resource, built to connect
-            anglers with the world&apos;s finest waters, lodges, guides, and expert
-            instruction.
-          </p>
+        <div className="prose mt-8 space-y-6">
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             Our Mission
           </h2>
           <p>
@@ -48,7 +53,7 @@ export default async function AboutPage() {
             unforgettable.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             What We Cover
           </h2>
           <p>
@@ -91,7 +96,7 @@ export default async function AboutPage() {
             </li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             No Middleman
           </h2>
           <p>
@@ -101,7 +106,7 @@ export default async function AboutPage() {
             contact information and website links go straight to them.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             Community
           </h2>
           <p>
@@ -111,7 +116,7 @@ export default async function AboutPage() {
             content after a brief review.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             A private journal
           </h2>
           <p>
@@ -128,7 +133,7 @@ export default async function AboutPage() {
             .
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-heading text-2xl font-semibold text-[var(--text-primary)]">
             Conservation
           </h2>
           <p>
@@ -139,6 +144,7 @@ export default async function AboutPage() {
             stewardship issues that matter most to the future of our sport and the
             ecosystems it depends on.
           </p>
+        </div>
         </div>
       </div>
     </div>

@@ -34,7 +34,7 @@ export const PUBLIC_NOUNS: NavItem[] = [
   },
   {
     label: "Flies",
-    href: "/flies/library",
+    href: "/flies",
     section: "/flies",
     descriptor: "Patterns, recipes, and materials",
   },
@@ -64,7 +64,7 @@ export const MEMBER_NOUNS: NavItem[] = [
   { label: "Today", href: "/today", section: "/today" },
   { label: "Journal", href: "/journal", section: "/journal" },
   { label: "Rivers", href: "/rivers", section: "/rivers" },
-  { label: "Flies", href: "/flies", section: "/flies" },
+  { label: "Flies", href: "/flybox", section: "/flybox" },
 ];
 
 /** The one dropdown in the bar: utility routes for signed-in anglers. */

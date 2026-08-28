@@ -101,8 +101,19 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
         </ul>
       </div>
 
-      <div className="overflow-x-auto border border-[var(--border-rule)] bg-[var(--surface-card)]">
-        <table className="w-full min-w-[720px] border-collapse text-sm">
+      <div
+        className="overflow-x-auto border border-[var(--border-rule)] bg-[var(--surface-card)]"
+        tabIndex={0}
+        role="region"
+        aria-label="Hatch chart by month"
+      >
+        <table className="w-full min-w-[720px] table-fixed border-collapse text-sm">
+          <colgroup>
+            <col className="w-[9.5rem]" />
+            {MONTHS.map((month) => (
+              <col key={month} className="w-8" />
+            ))}
+          </colgroup>
           <thead>
             <tr>
               <th className="sticky left-0 z-10 bg-[var(--surface-card)] px-3 py-2 text-left font-medium text-[var(--text-meta)]">
@@ -113,7 +124,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                 return (
                   <th
                     key={month}
-                    className={`px-1 py-2 text-center text-[11px] font-semibold ${
+                    className={`w-8 px-0 py-2 text-center text-[11px] font-semibold ${
                       on
                         ? "bg-[var(--action)] text-[var(--on-action)]"
                         : "text-[var(--text-body)]"
@@ -139,7 +150,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                     return (
                       <td
                         key={month}
-                        className={`px-1 py-2 text-center ${on ? "bg-[var(--action)]/5" : ""}`}
+                        className={`w-8 px-0 py-2 text-center ${on ? "bg-[var(--action)]/5" : ""}`}
                       >
                         {cell ? (
                           <span

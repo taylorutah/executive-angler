@@ -1,30 +1,14 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Link from "next/link";
-import { MapPin, ChevronRight, Star } from "@/icons";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import EntityListView from "@/components/ui/EntityListView";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllFlyShops, getAllDestinations } from "@/lib/db";
 import { flyShopListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
-
-const SPOTLIGHT_SLUGS = [
-  "blue-ribbon-flies",
-  "jack-dennis-outdoor-shop",
-  "world-cast-anglers",
-  "silver-creek-outfitters",
-] as const;
-
-const SHOP_HEADLINES: Record<string, string> = {
-  "blue-ribbon-flies": "The Gateway to Yellowstone's Blue-Ribbon Waters",
-  "jack-dennis-outdoor-shop": "Jackson Hole's Premier Fly Fishing Institution",
-  "world-cast-anglers": "Teton Valley's Destination Shop",
-  "silver-creek-outfitters": "Sun Valley's Spring Creek Specialists",
-};
 
 export const metadata: Metadata = {
   title: "27 Fly Shops Near the Best Fishing Waters — Local Gear",
@@ -44,11 +28,6 @@ export default async function FlyShopsPage() {
     getAllDestinations(),
   ]);
 
-  const spotlightShops = SPOTLIGHT_SLUGS.map((s) =>
-    flyShops.find((shop) => shop.slug === s)
-  ).filter(Boolean);
-
-  // Build destination filter options dynamically
   const destCounts = new Map<string, { name: string; count: number }>();
   flyShops.forEach((shop) => {
     const dest = destinations.find((d) => d.id === shop.destinationId);
@@ -76,133 +55,37 @@ export default async function FlyShopsPage() {
       const dest = destinations.find((d) => d.id === shop.destinationId);
       return {
         href: `/fly-shops/${shop.slug}`,
+        imageUrl: shop.heroImageUrl || undefined,
         imageAlt: shop.name,
         title: shop.name,
         subtitle: dest?.name,
+        kicker: dest?.state || dest?.name,
+        group: dest?.state || dest?.name || dest?.country,
+        meta: dest?.name,
         description: shop.description.substring(0, 120),
-        tags: shop.services.slice(0, 3),
         featured: false,
-        iconOnly: true,
         _filterValues: {
           destination: shop.destinationId,
         },
       };
-    }
+    },
   );
 
   return (
     <>
-      {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
-            Outfitted for the Water
-          </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
-            Gear Up at the Source
-          </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
-            Local knowledge, expert staff, and the right fly for the right river — curated
-            shops near the best waters on earth.
-          </p>
-        </div>
-      </section>
+      <DeskMast
+        title="Shops"
+        lede="Local counters near the water we keep. Hours and flies. Not a cart."
+        titleSize="word"
+        ledeFace="ui"
+      />
 
-      {/* ── Spotlight Shops ───────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
-            Iconic Shops
-          </p>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {spotlightShops.map((shop, i) => {
-              if (!shop) return null;
-              const dest = destinations.find((d) => d.id === shop.destinationId);
-              return (
-                <ScrollAnimation key={shop.id} delay={i * 0.08}>
-                  <Link
-                    href={`/fly-shops/${shop.slug}`}
-                    className="group block bg-[var(--surface-raised)] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-full"
-                  >
-                    <div className="relative h-48">
-                      <SafeEntityImage
-                        src={shop.heroImageUrl}
-                        alt={shop.name}
-                        title={shop.name}
-                        meta={dest?.name}
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-                      {shop.googleRating && (
-                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-[var(--surface-raised)]/90 backdrop-blur-sm rounded-full px-2 py-1">
-                          <Star className="h-3 w-3 fill-[var(--action)] text-[var(--action)]" />
-                          <span className="text-[10px] font-semibold text-[var(--action)]">
-                            {shop.googleRating}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-5 flex flex-col h-full">
-                      <h3 className="font-heading text-lg font-bold text-[var(--action)] group-hover:text-[var(--action)] transition-colors leading-snug">
-                        {shop.name}
-                      </h3>
-                      <p className="mt-0.5 text-sm font-medium text-[var(--action)]">
-                        {SHOP_HEADLINES[shop.slug]}
-                      </p>
-                      {(shop.address || dest) && (
-                        <div className="mt-1.5 flex items-start gap-1 text-[var(--text-meta)] text-xs">
-                          <MapPin className="h-3 w-3 flex-shrink-0 mt-0.5" />
-                          <span className="line-clamp-1">
-                            {shop.address ?? dest?.name}
-                          </span>
-                        </div>
-                      )}
-                      <div className="mt-3 flex flex-wrap gap-1">
-                        {shop.services.slice(0, 2).map((svc) => (
-                          <span
-                            key={svc}
-                            className="px-2 py-0.5 bg-[var(--surface-page)] text-[var(--action)] text-[10px] font-medium rounded-full"
-                          >
-                            {svc}
-                          </span>
-                        ))}
-                      </div>
-                      {shop.googleReviewCount && (
-                        <p className="mt-3 text-xs text-[var(--text-meta)]">
-                          {shop.googleReviewCount.toLocaleString()} Google reviews
-                        </p>
-                      )}
-                      <span className="mt-auto pt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--action)] group-hover:underline">
-                        Visit Shop <ChevronRight className="h-3.5 w-3.5" />
-                      </span>
-                    </div>
-                  </Link>
-                </ScrollAnimation>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
-            All Fly Shops
-          </h2>
-          <p className="text-sm text-[var(--text-body)] mt-1">
-            {flyShops.length} shops — filterable by destination
-          </p>
-        </div>
-      </div>
-      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
           <Suspense>
             <EntityListView items={items} config={config} storageKey="fly-shops" />
           </Suspense>
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Images } from "@/icons";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
-import { isUsableImageUrl } from "@/lib/media/image-url";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
 import { localHeroMobileSrc, localHeroWebpSrc } from "@/lib/media/local-hero";
 
@@ -43,16 +42,16 @@ export default function RiverHeroImage({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const showPhoto = isUsableImageUrl(heroImageUrl) && !failed;
-  const mobileSrc = heroImageUrl ? localHeroMobileSrc(heroImageUrl) : undefined;
-  const webpSrc = heroImageUrl ? localHeroWebpSrc(heroImageUrl) : undefined;
+  const heroSrc = normalizeImageUrl(heroImageUrl);
+  const showPhoto = Boolean(heroSrc) && !failed;
+  const mobileSrc = heroSrc ? localHeroMobileSrc(heroSrc) : undefined;
   const mobileWebp = mobileSrc ? localHeroWebpSrc(mobileSrc) : undefined;
-  const useNativeHero = Boolean(mobileSrc && heroImageUrl);
+  const useNativeHero = Boolean(mobileSrc && heroSrc);
 
-  const heroAsPhoto: ApprovedPhoto | null = showPhoto
+  const heroAsPhoto: ApprovedPhoto | null = showPhoto && heroSrc
     ? {
         id: "hero",
-        photoUrl: heroImageUrl,
+        photoUrl: heroSrc,
         caption: heroImageAlt,
         submitterName: heroImageCredit || "Executive Angler",
         submittedAt: new Date().toISOString(),
@@ -64,8 +63,8 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <section className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
-        {showPhoto && useNativeHero ? (
+      <section className="hero-on-photo relative h-[420px] w-full overflow-hidden">
+        {heroSrc && showPhoto && useNativeHero ? (
           <div className="absolute inset-0">
             <picture className="block h-full w-full">
           {mobileWebp ? (
@@ -75,7 +74,7 @@ export default function RiverHeroImage({
             <source srcSet={mobileSrc} media="(max-width: 1024px)" />
           ) : null}
           <img
-                src={heroImageUrl}
+                src={heroSrc}
                 alt={heroImageAlt}
                 decoding="async"
                 fetchPriority="high"
@@ -85,10 +84,10 @@ export default function RiverHeroImage({
               />
             </picture>
           </div>
-        ) : showPhoto ? (
+        ) : heroSrc && showPhoto ? (
           <div className="absolute inset-0">
             <Image
-              src={heroImageUrl}
+              src={heroSrc}
               alt={heroImageAlt}
               fill
               className="object-cover"
@@ -105,25 +104,28 @@ export default function RiverHeroImage({
           <PlateFallback title="" meta={meta} />
         )}
 
-        {/* Unconditional scrim — title is items-end in the 0.8 band. */}
-        <div className="hero-overlay absolute inset-0 pointer-events-none" />
+        {/* Unconditional scrim — type sits in the 0.8 band of the 420px desk wash. */}
+        <div className="hero-overlay-desk absolute inset-0 pointer-events-none" />
 
         <div className="absolute inset-0 flex items-end">
-          <div className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
+          <div className="w-full px-5 pb-7 sm:px-8 xl:px-20">
             {subtitle ? (
-              <p className="mb-2 text-[13px] font-medium uppercase tracking-[0.14em] text-white">
+              <p className="mb-2 font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--hero-type)]">
                 {subtitle}
               </p>
             ) : null}
             <h1
-              className="max-w-4xl font-heading font-bold leading-[1.08] tracking-tight text-white"
-              style={{ fontSize: "clamp(2.25rem, 5vw, 4.25rem)" }}
+              className="max-w-4xl font-heading text-[32px] font-semibold leading-[36px] text-[var(--hero-type)] sm:text-[56px] sm:leading-[60px]"
+              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
               {title}
             </h1>
+            {meta ? (
+              <p className="mt-2 font-ui text-[14px] text-[var(--hero-type)]">{meta}</p>
+            ) : null}
             {heroImageCredit ? (
               <p
-                className={`mt-3 min-h-[1.125rem] text-[11px] tracking-wide text-white/80 transition-opacity ${loaded && showPhoto ? "opacity-100" : "opacity-0"}`}
+                className={`mt-3 min-h-[1.125rem] font-ui text-[11px] tracking-wide text-[var(--hero-type)]/80 transition-opacity ${loaded && showPhoto ? "opacity-100" : "opacity-0"}`}
               >
                 {heroImageCreditUrl ? (
                   <a
@@ -146,10 +148,9 @@ export default function RiverHeroImage({
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
-            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 text-[11px] font-medium text-white/90 underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white"
+            className="absolute bottom-3 left-3 z-10 font-ui text-[11px] font-medium text-[var(--hero-type)]/90 underline decoration-white/40 underline-offset-4 hover:text-[var(--hero-type)] hover:decoration-white"
             aria-label={`View ${totalCount} photos`}
           >
-            <Images className="h-3.5 w-3.5" />
             {totalCount} photographs
           </button>
         )}

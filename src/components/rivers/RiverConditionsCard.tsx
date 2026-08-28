@@ -52,20 +52,20 @@ interface WeatherSection {
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatTimestamp(iso: string): string {
-  try {
-    return new Date(iso).toLocaleString("en-US", {
-      month: "short", day: "numeric",
-      hour: "numeric", minute: "2-digit", hour12: true,
-    });
-  } catch { return ""; }
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("en-US", {
+    month: "short", day: "numeric",
+    hour: "numeric", minute: "2-digit", hour12: true,
+  });
 }
 
 function formatTime(iso: string): string {
-  try {
-    return new Date(iso).toLocaleString("en-US", {
-      hour: "numeric", minute: "2-digit", hour12: true,
-    });
-  } catch { return ""; }
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("en-US", {
+    hour: "numeric", minute: "2-digit", hour12: true,
+  });
 }
 
 function getFlowLabel(cfs: number): { label: string; color: string } {
@@ -101,8 +101,8 @@ interface Props {
   riverLatitude?: number | null;
   riverLongitude?: number | null;
   onSectionChange?: (siteId: string, section: string) => void;
-  /** `band` = instrument body inside InstrumentWell. Default keeps the stacked card. */
-  layout?: "card" | "band";
+  /** `band` = instrument body inside InstrumentWell. `well` = dusk LIVE + CFS for the 438 rail. */
+  layout?: "card" | "band" | "well";
   /** Server-rendered readings already in hand — paint numbers, not greys. */
   initialGauges?: GaugeReading[];
 }
@@ -189,6 +189,27 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
   }, [riverId, riverLatitude, riverLongitude]);
 
   if (loadingConditions && gauges.length === 0) {
+    if (layout === "well") {
+      return (
+        <div className="register-dusk bg-[var(--riverbed)] px-5 pb-4 pt-4" aria-busy>
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--signal-live)]">
+            Live
+          </p>
+          <p className="mt-3 font-ui text-[11px] font-medium uppercase tracking-[1.2px] text-[var(--hero-type)]">
+            {riverName}
+          </p>
+          <div className="mt-1 flex items-end gap-2 text-[var(--signal-live)]">
+            <p
+              className="font-heading text-[52px] font-semibold leading-[48px]"
+              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+            >
+              —
+            </p>
+            <p className="pb-1 font-ui text-[14px]">cfs</p>
+          </div>
+        </div>
+      );
+    }
     if (layout === "band") {
       return (
         <div aria-hidden>
@@ -214,6 +235,23 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
   }
 
   if (conditionsError || gauges.length === 0) {
+    if (layout === "well") {
+      return (
+        <div className="register-dusk bg-[var(--riverbed)] px-5 pb-4 pt-4">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--signal-live)]">
+            Live
+          </p>
+          <p className="mt-3 font-ui text-[11px] font-medium uppercase tracking-[1.2px] text-[var(--hero-type)]">
+            {riverName}
+          </p>
+          <p className="mt-3 font-ui text-[13px] leading-5 text-[var(--fog)]">
+            {usgsSiteId
+              ? missingInstantaneousCopy(riverName ?? "this river", usgsSiteId)
+              : `No live cfs${riverName ? ` for ${riverName}` : ""}. We do not guess a flow.`}
+          </p>
+        </div>
+      );
+    }
     if (layout === "band") {
       return (
         <div>
@@ -235,6 +273,67 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
   const flow = active.discharge ? getFlowLabel(active.discharge.value) : null;
   const hasMultipleSections = gauges.length > 1;
   const weather = matchWeather(active.section, weatherSections);
+
+  if (layout === "well") {
+    const cfs = active.discharge?.value;
+    return (
+      <div>
+        <div className="register-dusk bg-[var(--riverbed)] px-5 pb-4 pt-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-1.5 w-1.5 bg-[var(--signal-live)]" aria-hidden />
+              <p className="font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--signal-live)]">
+                Live
+              </p>
+            </div>
+            <p className="font-ui text-[12px] text-[var(--hero-type)]">
+              {active.section || active.siteName}
+            </p>
+          </div>
+          <p className="mt-3 font-ui text-[11px] font-medium uppercase tracking-[1.2px] text-[var(--hero-type)]">
+            {active.siteName || active.section || riverName}
+          </p>
+          <div className="mt-1 flex items-end gap-2 text-[var(--signal-live)]">
+            <p
+              className="num font-heading text-[52px] font-semibold leading-[48px]"
+              style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+            >
+              {cfs != null ? cfs.toLocaleString() : "—"}
+            </p>
+            <p className="pb-1 font-ui text-[14px]">cfs</p>
+          </div>
+          <p className="mt-1 font-ui text-[12px] text-[var(--fog)]">
+            {formatTimestamp(active.timestamp)}
+            {active.stale ? " · delayed" : ""}
+          </p>
+        </div>
+        {hasMultipleSections ? (
+          <div
+            className="flex gap-5 overflow-x-auto border-t border-[var(--border-strong)] px-5 py-3"
+            role="tablist"
+            aria-label="River section"
+          >
+            {gauges.map((g, idx) => (
+              <button
+                key={g.siteId}
+                type="button"
+                role="tab"
+                aria-selected={idx === selectedIdx}
+                onClick={() => setSection(g.siteId)}
+                className={`shrink-0 font-ui text-[12px] ${
+                  idx === selectedIdx
+                    ? "font-medium text-[var(--ink)]"
+                    : "font-normal text-[var(--slate)]"
+                }`}
+              >
+                {g.section || g.siteName}
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 
   if (layout === "band") {
     return (

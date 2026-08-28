@@ -24,26 +24,31 @@ export default async function VerifyEmailPage({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl shadow-md p-8 text-center">
-          <div className="text-4xl mb-4">📬</div>
-          <h1 className="font-heading text-2xl font-bold text-[var(--action)] mb-3">
+    <div className="bg-[var(--paper)]">
+      <div className="desk-sheet">
+        <div className="desk-form">
+          <h1
+            className="font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
+            style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+          >
             Confirm your email
           </h1>
-          <p className="text-[var(--text-body)] mb-2">
+          <p className="desk-dek-ui mt-3">
             We sent a confirmation link to{" "}
             <span className="font-mono text-[var(--text-primary)]">{user.email}</span>.
           </p>
-          <p className="text-sm text-[var(--text-meta)] mb-6">
+          <p className="mt-3 font-ui text-sm text-[var(--text-meta)]">
             Click the link in that email to unlock your journal, fly box, and feed. Check spam if you don&apos;t see it within a minute.
           </p>
-
-          <ResendButton email={user.email || ""} />
-
-          <p className="text-xs text-[var(--text-meta)] mt-6">
+          <div className="mt-8">
+            <ResendButton email={user.email || ""} />
+          </div>
+          <p className="mt-6 font-ui text-sm text-[var(--text-meta)]">
             Wrong address?{" "}
-            <Link href="/account" className="text-[var(--action)] hover:underline">
+            <Link
+              href="/account"
+              className="hover-copper text-[var(--action)] underline underline-offset-4"
+            >
               Update it in Account
             </Link>
             .

@@ -8,6 +8,8 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import { formatHookSize } from "@/lib/flies/variant-format";
 
 export const revalidate = 3600;
@@ -136,39 +138,27 @@ export default async function HatchInsectPage({ params }: Props) {
         }}
       />
 
-      {/* Breadcrumbs */}
-      <div className="bg-[var(--surface-page)] pt-6 pb-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="bg-[var(--surface-page)] pt-6">
+        <HomeGutter>
           <Breadcrumbs
             items={[
               { label: "Fly Library", href: "/flies" },
               { label: displayName },
             ]}
           />
-        </div>
+        </HomeGutter>
       </div>
 
-      {/* Editorial header */}
-      <section className="bg-[var(--surface-page)] pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
-            Hatch Imitations
-          </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
-            Flies That Imitate {displayName}
-          </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)]">
-            {flies.length} proven pattern{flies.length !== 1 ? "s" : ""} designed
-            to match {displayName.toLowerCase()} across multiple life stages.
-            From subsurface nymphs to surface duns, these are the flies that
-            consistently fool selective trout.
-          </p>
-        </div>
-      </section>
+      <DeskMast
+        kicker="Hatch Imitations"
+        title={`Flies That Imitate ${displayName}`}
+        lede={`${flies.length} proven pattern${flies.length !== 1 ? "s" : ""} designed to match ${displayName.toLowerCase()} across multiple life stages. From subsurface nymphs to surface duns, these are the flies that consistently fool selective trout.`}
+        titleSize="phrase"
+        ledeFace="ui"
+      />
 
-      {/* Fly grid */}
-      <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
           {flies.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {flies.map((fly, i) => (
@@ -199,13 +189,11 @@ export default async function HatchInsectPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <p className="text-[var(--text-body)] text-lg">
-                No patterns found for this insect yet. Check back soon.
-              </p>
-            </div>
+            <p className="py-8 font-ui text-[15px] text-[var(--text-body)]">
+              No patterns found for this insect yet. Check back soon.
+            </p>
           )}
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

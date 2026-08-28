@@ -5,6 +5,8 @@ interface PlateFallbackProps {
   /** Distinguishing metadata: water type + state, fly category + sizes, etc. */
   meta?: string;
   className?: string;
+  /** Vellum field with a hairline — not a blank white hole, no inner title. */
+  quiet?: boolean;
 }
 
 /**
@@ -15,7 +17,23 @@ export default function PlateFallback({
   title,
   meta,
   className,
+  quiet = false,
 }: PlateFallbackProps) {
+  const label = meta ? `${title}, ${meta}` : title;
+  if (quiet) {
+    return (
+      <div
+        className={cn(
+          "flex h-full w-full items-end bg-[var(--surface-raised)] px-2.5 py-2 ring-1 ring-inset ring-[var(--border-rule)]",
+          className,
+        )}
+        role="img"
+        aria-label={label}
+      >
+        <p className="font-ui text-[11px] text-[var(--text-meta)]">No photograph</p>
+      </div>
+    );
+  }
   return (
     <div
       className={cn(
@@ -23,7 +41,7 @@ export default function PlateFallback({
         className,
       )}
       role="img"
-      aria-label={meta ? `${title}, ${meta}` : title}
+      aria-label={label}
     >
       <p className="font-heading text-base font-semibold leading-tight text-[var(--text-primary)] line-clamp-3 sm:text-lg">
         {title}

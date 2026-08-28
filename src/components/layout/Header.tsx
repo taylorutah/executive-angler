@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -15,15 +15,21 @@ import { FOCUS_VISIBLE, LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive 
 import { useRouteChangeReset } from "./nav/useRouteChangeReset";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 import { registerForPath } from "@/lib/register";
+import { hasSessionHint } from "./session-hint";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [sessionHint, setSessionHint] = useState(false);
   const { user, isLoading } = useAuth();
   const pathname = usePathname();
   const plusRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useLayoutEffect(() => {
+    setSessionHint(hasSessionHint(document.cookie));
+  }, []);
 
   useRouteChangeReset(() => {
     setMobileOpen(false);
@@ -48,19 +54,23 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const nouns = user ? MEMBER_NOUNS : PUBLIC_NOUNS;
+  const signedInChrome = Boolean(user) || (isLoading && sessionHint);
+  const nouns = signedInChrome ? MEMBER_NOUNS : PUBLIC_NOUNS;
   const onHome = pathname === "/";
-  const logoSrc =
-    registerForPath(pathname) === "dusk"
-      ? "/images/logo-horizontal-white.svg"
-      : "/images/logo-horizontal-forest.svg";
+  const duskPath = registerForPath(pathname) === "dusk";
+  // sessionHint is set in useLayoutEffect so SSR and the first client
+  // render stay cream. The cookie then holds dusk chrome before paint.
+  const duskApp = duskPath && signedInChrome;
+  const logoSrc = duskApp
+    ? "/images/logo-horizontal-white.svg"
+    : "/images/logo-horizontal-forest.svg";
 
   return (
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 ea-header-primary ${
           scrolled ? "ea-header-scrolled" : "ea-header-flat"
-        }`}
+        } ${duskApp ? "" : "ea-header-public"}`}
       >
         <div className="w-full px-5 sm:px-8 xl:px-20">
           <div className="flex h-14 items-center gap-4 lg:gap-7">
@@ -69,22 +79,25 @@ export default function Header() {
               className="ea-focus-ring flex flex-shrink-0 cursor-pointer select-none items-center"
               aria-label="Executive Angler — home"
             >
-              <Image
+              {/* One mark, both viewports. Native SVG — next/image's 160×32
+                  box cropped ANGLER at 390 into a one-line copper smear. */}
+              <img
                 src={logoSrc}
                 alt="Executive Angler"
-                width={160}
-                height={32}
-                className="h-7 w-auto pointer-events-none"
-                priority
+                width={136}
+                height={26}
+                data-wordmark={duskApp ? "white-horizontal" : "forest-horizontal"}
+                className="pointer-events-none h-[26px] w-[136px] max-h-[26px] object-contain object-left"
               />
             </Link>
 
+            {/* 56px hit area. Do not use ea-nav-link — unlayered display leaks Menu onto 1440. */}
             <button
               ref={menuButtonRef}
               onClick={() => setMobileOpen(true)}
               aria-expanded={mobileOpen}
               aria-haspopup="dialog"
-              className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden font-ui text-[12px] text-[var(--text-body)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden flex h-14 items-center font-ui text-[12px] leading-none text-[var(--text-body)]`}
             >
               Menu
             </button>
@@ -121,13 +134,13 @@ export default function Header() {
             {/* ── Utility zone ── */}
             <div className="ml-auto flex items-center gap-2">
               {user && <span className="ea-nav-divider hidden lg:block" aria-hidden />}
-              {!onHome && <HeaderSearch />}
-
-              {isLoading ? (
-                <div className="hidden lg:flex items-center">
-                  <div className="h-8 w-8 rounded-full bg-[var(--surface-card)] animate-pulse" />
+              {!onHome && (
+                <div className={user ? undefined : "hidden lg:block"}>
+                  <HeaderSearch />
                 </div>
-              ) : user ? (
+              )}
+
+              {user ? (
                 <div className="hidden lg:flex items-center gap-1">
                   <ExploreMenu />
                   <NotificationBell />
@@ -194,6 +207,10 @@ export default function Header() {
                       </div>
                     )}
                   </div>
+                </div>
+              ) : isLoading && sessionHint ? (
+                <div className="hidden lg:flex items-center">
+                  <div className="h-8 w-8 rounded-full bg-[var(--surface-card)] animate-pulse" />
                 </div>
               ) : (
                 <Link href="/login" className="ea-nav-link ea-focus-ring">

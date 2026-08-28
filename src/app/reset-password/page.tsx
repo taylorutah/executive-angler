@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { SITE_NAME } from "@/lib/constants";
 import { Lock, CheckCircle, Eye, EyeOff } from "@/icons";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 
@@ -84,21 +83,15 @@ export default function ResetPasswordPage() {
   const strength = getStrength(password);
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="font-heading text-3xl font-bold text-[var(--action)]">
-            {SITE_NAME}
-          </Link>
-        </div>
-
-        <div className="bg-[var(--surface-raised)] rounded-xl shadow-md p-8">
+    <div className="bg-[var(--paper)]">
+      <div className="desk-sheet">
+        <div className="desk-form">
           {success ? (
             <div className="text-center space-y-4">
               <div className="mx-auto w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center">
                 <CheckCircle className="h-7 w-7 text-green-500" />
               </div>
-              <h1 className="text-xl font-bold text-[var(--text-primary)]">Password updated</h1>
+              <h1 className="font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)]">Password updated</h1>
               <p className="text-sm text-[var(--text-body)]">
                 Your password has been reset successfully. Redirecting to your dashboard…
               </p>
@@ -113,7 +106,7 @@ export default function ResetPasswordPage() {
               <div className="mx-auto w-14 h-14 rounded-full bg-[var(--action)]/10 flex items-center justify-center">
                 <Lock className="h-7 w-7 text-[var(--action)] animate-pulse" />
               </div>
-              <h1 className="text-xl font-bold text-[var(--text-primary)]">Verifying your link…</h1>
+              <h1 className="font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)]">Verifying your link</h1>
               <p className="text-sm text-[var(--text-body)]">
                 Please wait while we verify your reset token.
               </p>
@@ -131,7 +124,7 @@ export default function ResetPasswordPage() {
                 <div className="mx-auto w-14 h-14 rounded-full bg-[var(--action)]/10 flex items-center justify-center mb-4">
                   <Lock className="h-7 w-7 text-[var(--action)]" />
                 </div>
-                <h1 className="text-xl font-bold text-[var(--text-primary)]">Set new password</h1>
+                <h1 className="font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)]">Set a new password</h1>
                 <p className="text-sm text-[var(--text-body)] mt-1">
                   Choose a strong password for your account.
                 </p>
@@ -206,10 +199,10 @@ export default function ResetPasswordPage() {
 
                 <button
                   type="submit"
-                  disabled={loading || password.length < 8 || password !== confirmPassword}
-                  className="w-full py-3 bg-[var(--action)] text-white font-semibold rounded-lg hover:bg-[#d17d28] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading}
+                  className="w-full rounded-[2px] bg-[var(--action)] py-3 font-ui text-[14px] font-semibold text-[var(--on-action)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {loading ? "Updating…" : "Update Password"}
+                  {loading ? "Updating…" : "Update password"}
                 </button>
               </form>
             </div>

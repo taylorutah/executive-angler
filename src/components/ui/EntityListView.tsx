@@ -9,6 +9,11 @@ import CompactCard from "./CompactCard";
 import ListCard from "./ListCard";
 import MagazineGrid from "./MagazineGrid";
 import ScrollAnimation from "./ScrollAnimation";
+import DeskAlsoKept from "@/components/desk/DeskAlsoKept";
+import DeskArchive from "@/components/desk/DeskArchive";
+import DeskFlyIndex from "@/components/desk/DeskFlyIndex";
+import DeskMagazine from "@/components/desk/DeskMagazine";
+import DeskToolbar from "@/components/desk/DeskToolbar";
 import { itemMatchesFilters } from "@/lib/browse/match";
 
 const VIEW_STORAGE_KEY = "ea-view-mode";
@@ -31,6 +36,11 @@ interface EntityListViewProps {
   onFiltersOpenChange?: (open: boolean) => void;
   /** When set, replace the card grid (e.g. river map). */
   resultsOverride?: ReactNode;
+  /** Water Desk chrome: Pictures/List + Refine drawer. */
+  chrome?: "desk" | "legacy";
+  /** Pictures layout when chrome is desk. */
+  deskLayout?: "magazine" | "archive" | "flies";
+  liveCfs?: Record<string, string>;
 }
 
 export default function EntityListView({
@@ -43,34 +53,48 @@ export default function EntityListView({
   filtersOpen,
   onFiltersOpenChange,
   resultsOverride,
+  chrome = "desk",
+  deskLayout = "magazine",
+  liveCfs,
 }: EntityListViewProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  // View mode from localStorage
-  const [viewMode, setViewMode] = useState<ViewMode>(config.defaultView);
+  // View mode: URL ?view= wins over localStorage when it is a valid mode.
+  const deskDefault: ViewMode = chrome === "desk" ? "magazine" : config.defaultView;
+  const allowedViews = useMemo<ViewMode[]>(
+    () =>
+      chrome === "desk"
+        ? ["magazine", "list"]
+        : (config.availableViews ?? ["grid", "compact", "list", "magazine"]),
+    [chrome, config.availableViews],
+  );
+  const urlViewRaw = searchParams.get("view");
+  const urlViewMode =
+    urlViewRaw && allowedViews.includes(urlViewRaw as ViewMode)
+      ? (urlViewRaw as ViewMode)
+      : null;
+
+  const [viewMode, setViewMode] = useState<ViewMode>(urlViewMode ?? deskDefault);
   const [mounted, setMounted] = useState(false);
+  const [deskRefine, setDeskRefine] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem(`${VIEW_STORAGE_KEY}-${storageKey}`);
-    const allowed = config.availableViews ?? ["grid", "compact", "list", "magazine"];
-    if (stored && (allowed as string[]).includes(stored)) {
-      setViewMode(stored as ViewMode);
-    } else if (stored && !(allowed as string[]).includes(stored)) {
-      // Stored view not allowed — reset to default
-      setViewMode(config.defaultView);
+    if (urlViewMode) {
+      setViewMode(urlViewMode);
+      localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, urlViewMode);
+      return;
     }
-  }, [storageKey, config.availableViews, config.defaultView]);
-
-  const handleViewChange = useCallback(
-    (mode: ViewMode) => {
-      setViewMode(mode);
-      localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, mode);
-    },
-    [storageKey]
-  );
+    const stored = localStorage.getItem(`${VIEW_STORAGE_KEY}-${storageKey}`);
+    if (stored && allowedViews.includes(stored as ViewMode)) {
+      setViewMode(stored as ViewMode);
+    } else if (stored && !allowedViews.includes(stored as ViewMode)) {
+      setViewMode(deskDefault);
+      localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, deskDefault);
+    }
+  }, [storageKey, allowedViews, deskDefault, urlViewMode]);
 
   // Search query from URL params
   const searchQuery = searchParams.get("q") || "";
@@ -124,6 +148,23 @@ export default function EntityListView({
       updateParams({ sort: value === config.defaultSort ? null : value });
     },
     [updateParams, config.defaultSort]
+  );
+
+  const handleClearAll = useCallback(() => {
+    const updates: Record<string, string | null> = { q: null };
+    for (const dim of config.filters) {
+      updates[dim.key] = null;
+    }
+    updateParams(updates);
+  }, [config.filters, updateParams]);
+
+  const handleViewChange = useCallback(
+    (mode: ViewMode) => {
+      setViewMode(mode);
+      localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, mode);
+      updateParams({ view: mode === deskDefault ? null : mode });
+    },
+    [storageKey, deskDefault, updateParams],
   );
 
   const [visibleCount, setVisibleCount] = useState(config.pageSize ?? items.length);
@@ -219,36 +260,57 @@ export default function EntityListView({
     return sorted;
   }, [filteredItems, activeSort]);
 
-  const pageSize = config.pageSize;
+  const pageSize = chrome === "desk" ? undefined : config.pageSize;
   const visibleItems =
     pageSize && !resultsOverride ? sortedItems.slice(0, visibleCount) : sortedItems;
   const canLoadMore = Boolean(pageSize && !resultsOverride && visibleCount < sortedItems.length);
 
   // Use defaultView on server, real viewMode only after mount
-  const displayView = mounted ? viewMode : config.defaultView;
+  const displayView = mounted ? viewMode : (urlViewMode ?? deskDefault);
 
   return (
     <>
-      <ListToolbar
-        filters={config.filters}
-        activeFilters={activeFilters}
-        onFilterChange={handleFilterChange}
-        sortOptions={config.sortOptions}
-        activeSort={activeSort}
-        onSortChange={handleSortChange}
-        viewMode={displayView}
-        onViewChange={handleViewChange}
-        totalCount={items.length}
-        filteredCount={sortedItems.length}
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        searchPlaceholder={config.searchPlaceholder}
-        availableViews={config.availableViews}
-        showOptionalFilters={showOptionalFilters}
-        toolbarExtra={toolbarExtra}
-        filtersOpen={filtersOpen}
-        onFiltersOpenChange={onFiltersOpenChange}
-      />
+      {chrome === "desk" ? (
+        <DeskToolbar
+          filters={config.filters}
+          activeFilters={activeFilters}
+          onFilterChange={handleFilterChange}
+          sortOptions={config.sortOptions}
+          activeSort={activeSort}
+          onSortChange={handleSortChange}
+          viewMode={displayView}
+          onViewChange={handleViewChange}
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          searchPlaceholder={config.searchPlaceholder}
+          showOptionalFilters={showOptionalFilters}
+          toolbarExtra={toolbarExtra}
+          refineOpen={filtersOpen ?? deskRefine}
+          onRefineOpenChange={onFiltersOpenChange ?? setDeskRefine}
+          onClearAll={handleClearAll}
+        />
+      ) : (
+        <ListToolbar
+          filters={config.filters}
+          activeFilters={activeFilters}
+          onFilterChange={handleFilterChange}
+          sortOptions={config.sortOptions}
+          activeSort={activeSort}
+          onSortChange={handleSortChange}
+          viewMode={displayView}
+          onViewChange={handleViewChange}
+          totalCount={items.length}
+          filteredCount={sortedItems.length}
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          searchPlaceholder={config.searchPlaceholder}
+          availableViews={config.availableViews}
+          showOptionalFilters={showOptionalFilters}
+          toolbarExtra={toolbarExtra}
+          filtersOpen={filtersOpen}
+          onFiltersOpenChange={onFiltersOpenChange}
+        />
+      )}
 
       <div>
         {resultsOverride ? (
@@ -260,18 +322,29 @@ export default function EntityListView({
               </p>
               <button
                 type="button"
-                onClick={() => {
-                  config.filters.forEach((f) => handleFilterChange(f.key, null));
-                  handleSearchChange("");
-                }}
+                onClick={handleClearAll}
                 className="mt-4 inline-block text-[var(--action)] font-medium hover:underline"
               >
                 Clear all filters
               </button>
             </div>
           ) : displayView === "magazine" ? (
-            <MagazineGrid items={visibleItems} />
+            chrome === "desk" && deskLayout === "archive" ? (
+              <DeskArchive items={visibleItems} />
+            ) : chrome === "desk" && deskLayout === "flies" ? (
+              <DeskFlyIndex items={visibleItems} />
+            ) : chrome === "desk" ? (
+              <DeskMagazine items={visibleItems} liveCfs={liveCfs} />
+            ) : (
+              <MagazineGrid items={visibleItems} />
+            )
           ) : displayView === "list" ? (
+            chrome === "desk" ? (
+              <DeskAlsoKept
+                items={visibleItems}
+                heading={deskLayout === "flies" ? "The rest of the bench" : "Also kept"}
+              />
+            ) : (
             <div className="divide-y-0">
               {visibleItems.map((item, i) => (
                 <ScrollAnimation key={item.href} index={i}>
@@ -279,6 +352,7 @@ export default function EntityListView({
                 </ScrollAnimation>
               ))}
             </div>
+            )
           ) : displayView === "compact" ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {visibleItems.map((item, i) => (

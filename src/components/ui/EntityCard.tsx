@@ -58,7 +58,7 @@ export default function EntityCard({
         <div className="p-6">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+              <h3 className="hover-copper font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)]">
                 {title}
               </h3>
               {subtitle && (
@@ -115,7 +115,7 @@ export default function EntityCard({
           flyName={actionSlot.flyName}
         />
       )}
-      <div className={`relative h-44 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
+      <div className={`photo-lift relative h-44${imageContain ? " bg-[var(--surface-card)]" : ""}`}>
         <SafeEntityImage
           src={imageUrl}
           alt={imageAlt}
@@ -124,7 +124,7 @@ export default function EntityCard({
           contain={imageContain}
           loading="eager"
           placeholderEmpty
-          className={imageContain ? "object-contain p-3" : "object-cover card-image-zoom"}
+          className={imageContain ? "object-contain p-3" : "object-cover"}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
         />
         {badges && badges.length > 0 && (
@@ -136,7 +136,7 @@ export default function EntityCard({
         )}
       </div>
       <div className="p-5">
-        <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+        <h3 className="hover-copper font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)]">
           {title}
         </h3>
         {subtitle && (

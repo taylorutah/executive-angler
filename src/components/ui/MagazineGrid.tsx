@@ -15,7 +15,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
       className="group block card-hover overflow-hidden rounded-surface border border-[var(--border-rule)] bg-[var(--surface-raised)]"
     >
       <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="relative h-64 min-h-[16rem] overflow-hidden md:h-auto">
+        <div className="photo-lift relative h-64 min-h-[16rem] md:h-auto">
           <SafeEntityImage
             src={imageUrl}
             alt={imageAlt}
@@ -46,7 +46,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
               <span className="ml-auto shrink-0 text-lg font-semibold text-[var(--action)]">{accent}</span>
             )}
           </div>
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] transition-colors group-hover:text-[var(--action)] md:text-3xl">
+          <h2 className="hover-copper font-heading text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] md:text-3xl">
             {title}
           </h2>
           {subtitle && (

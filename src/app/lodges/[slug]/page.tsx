@@ -179,7 +179,7 @@ export default async function LodgePage({ params }: Props) {
       </div>
 
       <div className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full px-5 py-8 sm:px-8 xl:px-20">
           <div className="flex items-center justify-between">
             <Breadcrumbs
               items={[
@@ -194,7 +194,7 @@ export default async function LodgePage({ params }: Props) {
       </div>
 
       <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-5 sm:px-8 xl:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-12">
@@ -211,7 +211,7 @@ export default async function LodgePage({ params }: Props) {
 
               {/* Overview */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   About {lodge.name}
                 </h2>
                 {lodge.description.split("\n\n").map((p, i) => (
@@ -223,7 +223,7 @@ export default async function LodgePage({ params }: Props) {
 
               {/* Amenities */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   Amenities & Services
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -238,7 +238,7 @@ export default async function LodgePage({ params }: Props) {
               {/* Photo Gallery */}
               {(lodge.galleryUrls || []).length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     Photos
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -263,7 +263,7 @@ export default async function LodgePage({ params }: Props) {
 
               {/* Map */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   Location
                 </h2>
                 <MapView
@@ -286,7 +286,7 @@ export default async function LodgePage({ params }: Props) {
               {/* Nearby Rivers */}
               {nearbyRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Nearby Rivers
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -322,7 +322,7 @@ export default async function LodgePage({ params }: Props) {
               {/* Species in This Area */}
               {lodgeSpecies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Species in This Area
                   </h2>
                   <div className="flex flex-wrap gap-2">

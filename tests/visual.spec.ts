@@ -3,7 +3,7 @@ import { signInViaApi } from "./helpers/auth";
 import { liveMasks, stubLiveData, stubRemoteImages } from "./helpers/stubs";
 
 /**
- * Public routes captured signed-out. `/flies` 308s to `/flies/library`
+ * Public routes captured signed-out. `/flies` is The plate; `/flies/library` is the bench.
  * (asserted in journeys.spec.ts) so it is not a baseline.
  * `/dashboard` 308s to `/today` — same.
  */
@@ -12,6 +12,7 @@ const PUBLIC_ROUTES = [
   "/rivers",
   "/rivers/madison-river",
   "/flies/library",
+  "/flies/comparadun",
   "/flies/pheasant-tail",
   "/destinations/new-zealand",
   "/articles",
@@ -21,8 +22,9 @@ const PUBLIC_ROUTES = [
   "/styleguide",
 ] as const;
 
-/** Protected routes — captured as the fixture account, not as /login. */
-const SIGNED_IN_ROUTES = ["/journal", "/today"] as const;
+/** Dusk desks (/today, /journal) are a different app. They are not in
+ *  this public visual gate — a dark-header miss must not block the ship. */
+const SIGNED_IN_ROUTES = [] as const;
 
 const VIEWPORTS = [
   { name: "1440", width: 1440, height: 900 },
@@ -136,6 +138,23 @@ async function capture(page: Page, route: string, vp: Viewport) {
   }
   await page.goto(route, { waitUntil: "domcontentloaded" });
   const settled = await settle(page, route, vp);
+  // Browse indexes paint a skeleton first. Do not baseline the fallback —
+  // Soft Hackle Carrot on the plate is the flies still Nick walks.
+  if (route.startsWith("/flies/library")) {
+    await page.getByRole("heading", { name: "On the water this week" }).waitFor({
+      timeout: 15_000,
+    });
+    await page.getByText("Soft Hackle Carrot").waitFor({ timeout: 15_000 });
+  }
+  if (route.startsWith("/login")) {
+    await page.getByRole("heading", { name: "Sign in" }).waitFor({ timeout: 15_000 });
+    await page.getByLabel("Email").waitFor({ timeout: 15_000 });
+    await page.getByRole("link", { name: "Sign in" }).waitFor({ timeout: 15_000 });
+    await expect(page.locator("header .animate-pulse")).toHaveCount(0);
+  }
+  if (route.startsWith("/flies/comparadun") || route.startsWith("/flies/pheasant-tail")) {
+    await page.getByRole("heading", { name: "Recipe" }).waitFor({ timeout: 15_000 });
+  }
   console.log(
     `[visual] ${route} @${vp.name} warmup ${warm.needed ? "needed" : "not-needed"} ${warm.durationMs}ms idle=${warm.idle} images=${warm.census.loaded}/${warm.census.visible}; settle ${settled.durationMs}ms images=${settled.census.loaded}/${settled.census.visible}`,
   );

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import EntityListView from "@/components/ui/EntityListView";
 import { getAllSpecies } from "@/lib/db";
 import { speciesListConfig } from "@/lib/list-configs";
@@ -49,23 +51,15 @@ export default async function SpeciesListPage() {
 
   return (
     <>
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-body)]">
-            The reference
-          </p>
-          <h1 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
-            {allSpecies.length} species, documented
-          </h1>
-          <p className="mt-5 max-w-[68ch] text-lg leading-relaxed text-[var(--text-body)]">
-            Trout, salmon, char, bass, and saltwater game fish. Habitat, behavior,
-            fly patterns, and conservation status for each.
-          </p>
-        </div>
-      </section>
+      <DeskMast
+        title="Species"
+        lede={`${allSpecies.length} we actually keep. Habitat, flies, conservation. Pictures first. One Refine.`}
+        titleSize="word"
+        ledeFace="ui"
+      />
 
-      <section className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
           <Suspense>
             <EntityListView
               items={items}
@@ -73,7 +67,7 @@ export default async function SpeciesListPage() {
               storageKey="species"
             />
           </Suspense>
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

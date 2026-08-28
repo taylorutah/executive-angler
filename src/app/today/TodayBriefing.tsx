@@ -173,12 +173,15 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                             ) : null}
                           </span>
                           {river.cfs != null ? (
-                            <span className="num shrink-0 text-[var(--signal-live)]">
+                            <span data-live className="num shrink-0 text-[var(--signal-live)]">
                               {river.cfs.toLocaleString("en-US")}
                               <span className="ml-1 text-[var(--text-meta)]">cfs</span>
                             </span>
                           ) : (
-                            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                            <span
+                              data-live
+                              className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]"
+                            >
                               no reading
                             </span>
                           )}
@@ -243,7 +246,7 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                     <>
                       {" "}
                       is{" "}
-                      <span className="num text-[var(--signal-live)]">
+                      <span data-live className="num text-[var(--signal-live)]">
                         {data.worthGoing.cfs.toLocaleString("en-US")} cfs
                       </span>{" "}
                       now.

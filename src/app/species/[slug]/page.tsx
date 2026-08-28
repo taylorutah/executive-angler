@@ -192,7 +192,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
         </div>
       ) : (
         <div className="bg-[var(--surface-page)] pt-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="w-full px-5 sm:px-8 xl:px-20">
             <HeroCompact
               heroImageUrl={sp.imageUrl}
               heroImageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
@@ -222,7 +222,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
       )}
 
       <div className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full px-5 py-8 sm:px-8 xl:px-20">
           <div className="flex items-center justify-between">
             <Breadcrumbs
               items={[
@@ -236,13 +236,13 @@ export default async function SpeciesDetailPage({ params }: Props) {
       </div>
 
       <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-5 sm:px-8 xl:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-12">
               {/* Overview */}
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                   Overview
                 </h2>
                 {sp.description ? (
@@ -278,7 +278,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Taxonomy */}
               {sp.taxonomy && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     Taxonomy
                   </h2>
                   <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
@@ -323,7 +323,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Habitat & Behavior */}
               {sp.preferredHabitat && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     <Droplets className="inline h-6 w-6 mr-2 text-river" />
                     Habitat & Behavior
                   </h2>
@@ -360,7 +360,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Diet */}
               {sp.diet && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     <Bug className="inline h-6 w-6 mr-2 text-[var(--action)]" />
                     Diet
                   </h2>
@@ -373,7 +373,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Spawning */}
               {sp.spawningInfo && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     Spawning
                   </h2>
                   <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
@@ -463,7 +463,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Conservation Status */}
               {sp.conservationStatus && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     Conservation Status
                   </h2>
                   <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
@@ -489,7 +489,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Fly Fishing Tips */}
               {(sp.flyFishingTips || sp.tackleRecommendations) && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     <Fish className="inline h-6 w-6 mr-2 text-river" />
                     Fly Fishing Tips
                   </h2>
@@ -516,7 +516,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Distribution Map */}
               {defaultCoords && mapMarkers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-4">
                     Distribution Map
                   </h2>
                   <MapView
@@ -532,7 +532,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Recommended Fly Patterns */}
               {sp.preferredFlies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     <Bug className="inline h-6 w-6 mr-2 text-[var(--action)]" />
                     Recommended Fly Patterns
                   </h2>
@@ -557,7 +557,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Proven Fly Patterns (from canonical_flies) */}
               {speciesFlies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Proven Fly Patterns for {sp.commonName}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -580,7 +580,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Related Destinations */}
               {relatedDests.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Where to Find {sp.commonName}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -602,7 +602,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
               {/* Related Rivers */}
               {relatedRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                     Rivers with {sp.commonName}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -685,7 +685,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                         }),
                       }}
                     />
-                    <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                    <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mb-6">
                       Frequently Asked Questions
                     </h2>
                     <div className="space-y-4">

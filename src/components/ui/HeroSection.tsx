@@ -40,7 +40,7 @@ export default function HeroSection({
   const showCredit = Boolean(imageCredit) && isUsableImageUrl(imageUrl);
 
   return (
-    <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-[var(--surface-card)]" : ""}`}>
+    <section className={`hero-on-photo relative ${height} w-full overflow-hidden${imageContain ? " bg-[var(--surface-card)]" : ""}`}>
       <SafeEntityImage
         src={imageUrl}
         alt={imageAlt}
@@ -57,7 +57,7 @@ export default function HeroSection({
       />
       <div className="absolute inset-0 flex items-end">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
-          <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl font-heading font-bold tracking-tight drop-shadow-lg">
+          <h1 className="text-4xl font-heading font-bold tracking-tight text-[var(--hero-type)] drop-shadow-lg sm:text-5xl lg:text-6xl">
             {title}
           </h1>
           {subtitle && (

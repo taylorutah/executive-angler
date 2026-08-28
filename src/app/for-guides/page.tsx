@@ -9,12 +9,11 @@ export const metadata: Metadata = {
 
 export default function ForGuidesPage() {
   return (
-    <div className="pt-8 pb-20 bg-[var(--surface-page)] min-h-screen">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <div className="bg-[var(--paper)]">
+      <div className="desk-sheet">
+        <div className="house-measure">
         <div className="inline-flex items-center gap-2 mb-6">
-          <span className="font-mono text-[var(--action)] text-xs uppercase tracking-[0.2em]">
-            For Professional Guides
-          </span>
+          <span className="desk-eyebrow">House</span>
         </div>
         <h1 className="font-heading text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-4">
           Claim your guide profile.
@@ -26,7 +25,7 @@ export default function ForGuidesPage() {
         </p>
 
         <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mt-10">
             Why we do this
           </h2>
           <p>
@@ -37,7 +36,7 @@ export default function ForGuidesPage() {
             the whole thing is free, for you and for everyone.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mt-10">
             What you get
           </h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -46,7 +45,7 @@ export default function ForGuidesPage() {
             <li>Early access to new features before public launch.</li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="font-heading text-2xl font-semibold text-[var(--text-primary)] mt-10">
             How to claim
           </h2>
           <ol className="list-decimal pl-6 space-y-2">
@@ -94,6 +93,7 @@ export default function ForGuidesPage() {
               Submit your claim
             </Link>
           </div>
+        </div>
         </div>
       </div>
     </div>

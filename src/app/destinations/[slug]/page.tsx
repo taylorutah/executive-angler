@@ -167,7 +167,7 @@ export default async function DestinationPage({ params }: Props) {
       </div>
 
       <div className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="w-full px-5 py-6 sm:px-8 xl:px-20">
           <div className="flex items-center justify-between">
             <Breadcrumbs
               items={[
@@ -182,7 +182,7 @@ export default async function DestinationPage({ params }: Props) {
 
       {destRivers.length > 0 && (
         <section className="bg-[var(--surface-page)] pb-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="w-full px-5 sm:px-8 xl:px-20">
             <h2 className="font-heading text-3xl text-[var(--text-primary)]">
               Rivers of this place
             </h2>
@@ -206,13 +206,13 @@ export default async function DestinationPage({ params }: Props) {
       )}
 
       <section className="bg-[var(--surface-page)] pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-5 sm:px-8 xl:px-20">
           <SeasonalChart placeName={dest.name} bestMonths={dest.bestMonths || []} />
         </div>
       </section>
 
       <section className="bg-[var(--surface-page)] pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-5 sm:px-8 xl:px-20">
           <PlaceEssay description={dest.description} images={essayImages} />
 
           {(dest.licenseInfo || dest.elevationRange || dest.climateNotes || dest.regulationsSummary) && (
@@ -259,7 +259,7 @@ export default async function DestinationPage({ params }: Props) {
 
       {dest.slug === "belize" && (
         <section className="bg-[var(--surface-page)] pb-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="w-full px-5 sm:px-8 xl:px-20">
             <div className="prose max-w-[68ch]">
               <h2 className="font-heading text-2xl text-[var(--text-primary)]">
                 Permit, bonefish, and tarpon
@@ -290,7 +290,7 @@ export default async function DestinationPage({ params }: Props) {
 
       {mapMarkers.length > 0 && (
         <section className="bg-[var(--surface-page)] pb-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="w-full px-5 sm:px-8 xl:px-20">
             <h2 className="mb-4 font-heading text-2xl text-[var(--text-primary)]">
               Map
             </h2>
@@ -318,7 +318,7 @@ export default async function DestinationPage({ params }: Props) {
       />
 
       <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-5 sm:px-8 xl:px-20">
           <CommunityPhotos entityType="destination" entityId={dest.id} />
           <PhotoSubmissionForm entityType="destination" entityId={dest.id} entityName={dest.name} />
         </div>

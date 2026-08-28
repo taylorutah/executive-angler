@@ -96,9 +96,10 @@ describe("claimImageUrl", () => {
     const used = new Set<string>();
     assert.equal(
       claimImageUrl("/images/madison-river-three-dollar-bridge.jpg", used),
-      "/images/madison-river-three-dollar-bridge.jpg",
+      "/images/home/madison-three-dollar-bridge.jpg",
     );
     assert.equal(claimImageUrl("/images/madison-river-three-dollar-bridge.jpg", used), undefined);
+    assert.equal(claimImageUrl("/images/home/madison-three-dollar-bridge.jpg", used), undefined);
     assert.equal(imageAvailable("/images/destinations/utah-hero.jpg", used), true);
   });
 });

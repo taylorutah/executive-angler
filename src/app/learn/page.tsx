@@ -113,15 +113,18 @@ export default async function LearnPage() {
 
   return (
     <div className="bg-[var(--surface-page)]">
-      <header className="mx-auto max-w-3xl px-4 pt-10 pb-16 sm:px-6 lg:px-8">
+      <header className="mx-auto max-w-3xl px-5 pt-10 pb-16 sm:px-8 xl:px-20">
         <Breadcrumbs items={[{ label: "Learn", href: "/learn" }]} />
-        <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+        <p className="mt-8 font-ui text-[11px] font-medium uppercase tracking-[1.8px] text-[var(--text-meta)]">
           The beginner path
         </p>
-        <h1 className="mt-4 font-heading text-4xl font-bold leading-[1.15] text-[var(--text-primary)] sm:text-5xl">
+        <h1
+          className="mt-4 font-heading text-[32px] font-semibold leading-[36px] text-[var(--text-primary)] sm:text-[48px] sm:leading-[56px]"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
           Learn the water
         </h1>
-        <p className="prose mt-6">
+        <p className="prose mt-6 text-[16px] leading-6 sm:text-[18px] sm:leading-7">
           Fly fishing is smaller than the catalog makes it look. Gear that earns its
           pocket. Current that holds fish. Five flies that cover most days. Rivers that
           forgive a first cast. How to put a fish back. Then two lists — not a form.
@@ -132,13 +135,13 @@ export default async function LearnPage() {
         aria-labelledby="gear"
         className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
-        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+        <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             01
           </p>
           <h2
             id="gear"
-            className="mt-3 font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             What gear actually matters
           </h2>
@@ -173,13 +176,13 @@ export default async function LearnPage() {
       </section>
 
       <section aria-labelledby="water" className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+        <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             02
           </p>
           <h2
             id="water"
-            className="mt-3 font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             How to read water
           </h2>
@@ -218,14 +221,14 @@ export default async function LearnPage() {
         aria-labelledby="flies"
         className="border-y border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <div className="desk-sheet py-16 sm:py-20">
           <div className="mx-auto max-w-3xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+            <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
               03
             </p>
             <h2
               id="flies"
-              className="mt-3 font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl"
+              className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
             >
               Your first five flies
             </h2>
@@ -249,13 +252,13 @@ export default async function LearnPage() {
       </section>
 
       <section aria-labelledby="rivers" className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+        <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             04
           </p>
           <h2
             id="rivers"
-            className="mt-3 font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             Rivers near you that forgive beginners
           </h2>
@@ -274,13 +277,13 @@ export default async function LearnPage() {
         aria-labelledby="release"
         className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
-        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+        <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             05
           </p>
           <h2
             id="release"
-            className="mt-3 font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             Catch-and-release etiquette
           </h2>
@@ -321,13 +324,13 @@ export default async function LearnPage() {
         aria-labelledby="keep"
         className="border-t border-[var(--border-rule)] bg-[var(--surface-page)]"
       >
-        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-body)]">
+        <div className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-24 xl:px-20">
+          <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             Take these with you
           </p>
           <h2
             id="keep"
-            className="mt-3 font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl"
+            className="mt-3 font-heading text-[28px] font-semibold leading-[32px] text-[var(--text-primary)] sm:text-[36px] sm:leading-[40px]"
           >
             Two lists. That is the whole path.
           </h2>

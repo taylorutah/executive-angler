@@ -8,7 +8,7 @@ const footerColumns: { title: string; links: FooterLink[] }[] = [
     title: "The desk",
     links: [
       { label: "Rivers", href: "/rivers" },
-      { label: "Flies", href: "/flies/library" },
+      { label: "Flies", href: "/flies" },
       { label: "Places", href: "/destinations" },
       { label: "Field Notes", href: "/articles" },
       { label: "Learn", href: "/learn" },
@@ -35,6 +35,7 @@ const footerColumns: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: "About", href: "/about" },
       { label: "Privacy", href: "/privacy" },
+      { label: "Terms", href: "/terms" },
       { label: "What we don't do", href: "/#what-we-dont-do" },
       { label: "Contact", href: "/contact" },
     ],
@@ -43,24 +44,24 @@ const footerColumns: { title: string; links: FooterLink[] }[] = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)]">
-      <div className="w-full px-5 pb-9 pt-12 sm:px-8 xl:px-20">
+    <footer className="border-t border-[var(--rule)] bg-[var(--vellum)] text-[var(--graphite)]">
+      <div className="w-full px-5 pb-24 pt-12 sm:px-8 lg:pb-9 xl:px-20">
         <div>
           <p
-            className="font-heading text-[28px] font-semibold leading-none text-[var(--text-primary)]"
+            className="font-heading text-[28px] font-semibold leading-none text-[var(--ink)]"
             style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
           >
             {SITE_NAME}
           </p>
-          <p className="mt-1 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-meta)]">
-            The water desk
+          <p className="mt-1 font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--slate)]">
+            THE WATER DESK
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-y-7 py-7 sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-y-7 py-7 sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-4 lg:gap-x-12">
           {footerColumns.map(({ title, links }) => (
             <div key={title}>
-              <h3 className="mb-2 font-ui text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--text-meta)]">
+              <h3 className="mb-2 font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--slate)]">
                 {title}
               </h3>
               <ul className="space-y-2">
@@ -68,7 +69,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="ea-focus-ring font-ui text-[14px] text-[var(--text-primary)] transition-colors hover:text-[var(--action)]"
+                      className="hover-copper ea-focus-ring font-ui text-[14px] text-[var(--ink)] hover:text-[var(--copper)]"
                     >
                       {link.label}
                     </Link>
@@ -79,9 +80,9 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="border-t border-[var(--border-rule)] pt-5">
-          <p className="font-ui text-[13px] text-[var(--text-body)]">Every feature, free.</p>
-          <p className="mt-1.5 font-ui text-[13px] text-[var(--text-body)]">
+        <div className="border-t border-[var(--rule)] pt-5">
+          <p className="font-ui text-[13px] text-[var(--graphite)]">Every feature, free.</p>
+          <p className="mt-1.5 font-ui text-[13px] text-[var(--graphite)]">
             We never publish locations or fish counts.
           </p>
         </div>

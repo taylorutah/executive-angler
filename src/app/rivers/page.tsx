@@ -7,6 +7,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getAllRivers } from "@/lib/db";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import BrowseIndexFallback from "@/components/ui/BrowseIndexFallback";
 import DismissBrowseFallback from "@/components/ui/DismissBrowseFallback";
 import RiversPageClient from "./RiversPageClient";
@@ -32,37 +34,29 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RiversPage() {
   const rivers = await getAllRivers();
-  const items = rivers.map(toRiverBrowseItem);
+  const items = rivers.map((river) => toRiverBrowseItem(river));
   const stateOptions = [...new Set(rivers.flatMap((r) => statesForRiver(r)))]
     .sort((a, b) => a.localeCompare(b))
     .map((name) => ({ value: name, label: name }));
 
   return (
     <>
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-body)]">
-            The reference
-          </p>
-          <h1 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
-            {rivers.length} rivers, documented
-          </h1>
-          <p className="mt-5 max-w-[68ch] text-lg leading-relaxed text-[var(--text-body)]">
-            Access points, hatch charts, and live flow when a gauge exists.
-            Filter by state, water, species, difficulty, and flow.
-          </p>
-        </div>
-      </section>
+      <DeskMast
+        title="Every river we keep"
+        lede={`${rivers.length} waters we actually keep. Honest flows. Pictures first.`}
+        titleSize="phrase"
+        ledeFace="ui"
+      />
 
-      <section className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
           <BrowseIndexFallback id="rivers-browse-fallback" count={items.length} />
           <Suspense fallback={null}>
             <DismissBrowseFallback fallbackId="rivers-browse-fallback">
               <RiversPageClient items={items} stateOptions={stateOptions} />
             </DismissBrowseFallback>
           </Suspense>
-        </div>
+        </HomeGutter>
       </section>
     </>
   );

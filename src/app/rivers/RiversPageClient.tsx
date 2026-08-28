@@ -34,7 +34,7 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
   const router = useRouter();
   const pathname = usePathname();
 
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [flows, setFlows] = useState<Record<string, FlowStateRow>>({});
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -176,6 +176,16 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
     return out;
   }, [decoratedItems]);
 
+  const liveCfs = useMemo(() => {
+    const out: Record<string, string> = {};
+    for (const item of items) {
+      const flow = flows[item.riverId];
+      if (flow?.cfs == null || !Number.isFinite(flow.cfs)) continue;
+      out[item.href] = `${Math.round(flow.cfs).toLocaleString("en-US")} cfs`;
+    }
+    return out;
+  }, [items, flows]);
+
   const selectedStateName = searchParams.get("state") ?? "";
   const selectedStateObj = US_STATES.find((s) => s.name === selectedStateName) ?? null;
 
@@ -210,6 +220,7 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
       items={decoratedItems}
       config={config}
       storageKey="rivers"
+      liveCfs={liveCfs}
       liveValues={liveValues}
       filtersOpen={filtersOpen}
       onFiltersOpenChange={setFiltersOpen}

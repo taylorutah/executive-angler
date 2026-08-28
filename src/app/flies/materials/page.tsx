@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import DeskMast from "@/components/desk/DeskMast";
+import HomeGutter from "@/components/home/HomeGutter";
 import { SITE_URL } from "@/lib/constants";
 import MaterialsBrowserClient from "./MaterialsBrowserClient";
 
@@ -69,32 +71,35 @@ export default async function MaterialsPage() {
 
   return (
     <main className="min-h-screen bg-[var(--surface-page)]">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <Breadcrumbs
-          items={[
-            { label: "Fly Library", href: "/flies" },
-            { label: "Materials" },
-          ]}
-        />
-
-        <div className="mt-6 mb-10">
-          <h1 className="font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl">
-            Fly Tying Materials
-          </h1>
-          <p className="mt-2 text-lg text-[var(--text-body)]">
-            Browse {totalCount > 0 ? `${totalCount}+` : ""} verified materials
-            from top brands. Search, filter by category, and build your
-            inventory.
-          </p>
-        </div>
-
-        <MaterialsBrowserClient
-          initialMaterials={materials || []}
-          categoryCounts={categoryCounts}
-          totalCount={totalCount}
-          isAuthenticated={isAuthenticated}
-        />
+      <div className="bg-[var(--surface-page)] pt-6">
+        <HomeGutter>
+          <Breadcrumbs
+            items={[
+              { label: "Fly Library", href: "/flies" },
+              { label: "Materials" },
+            ]}
+          />
+        </HomeGutter>
       </div>
+
+      <DeskMast
+        kicker="Fly Library"
+        title="Fly Tying Materials"
+        lede={`Browse ${totalCount > 0 ? `${totalCount}+` : ""} verified materials from top brands. Search, filter by category, and build your inventory.`}
+        titleSize="phrase"
+        ledeFace="ui"
+      />
+
+      <section className="bg-[var(--surface-page)] pb-16">
+        <HomeGutter>
+          <MaterialsBrowserClient
+            initialMaterials={materials || []}
+            categoryCounts={categoryCounts}
+            totalCount={totalCount}
+            isAuthenticated={isAuthenticated}
+          />
+        </HomeGutter>
+      </section>
     </main>
   );
 }

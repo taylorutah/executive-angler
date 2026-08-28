@@ -30,6 +30,8 @@
   --copper-hover-400: #FE9A77;
   --teal-700: #086B6C;
   --teal-300: #00BCC5;
+  --copper: var(--copper-700);
+  --teal: var(--teal-700);
   --rise-700: #1F7A3D;
   --rise-400: #3FB863;
   --cut-700: #B3261E;
@@ -45,8 +47,8 @@
 
   /* Motion budget — §5.4. Banned: count-ups, text parallax, scroll-jacking,
      self-drawing charts, animated logo, motion inside data tables. */
-  --hover-duration: 160ms;
-  --hover-ease: ease-out;
+  --hover-duration: 600ms;
+  --hover-ease: cubic-bezier(0.33, 0, 0.15, 1);
   --crossfade-duration: 400ms;
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
   --gutter: 1rem;
@@ -170,6 +172,24 @@
   --font-display: var(--font-fraunces), "Fraunces", serif;
   --font-body: var(--font-newsreader), "Newsreader", serif;
   --font-ui: var(--font-archivo), "Archivo", system-ui, sans-serif;
+
+  /* Cover Tokens — Figma 2:2. Named swatches only.
+     Paper #FAF6F0 · Vellum #F2EDE4 · Ink #2C211B · Graphite #4F4540
+     Copper #B4410D = actions only · Teal #086B6C = live data only
+     Riverbed #0B1112 · Chalk #EEF2F1
+     Radius 2–6. Display serif + Archivo UI. */
+  --color-paper: var(--paper);
+  --color-vellum: var(--vellum);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-slate: var(--slate);
+  --color-rule: var(--rule);
+  --color-copper: var(--copper);
+  --color-teal: var(--teal);
+  --color-riverbed: var(--riverbed);
+  --color-chalk: var(--chalk);
+  --radius-2: 2px;
+  --radius-6: 6px;
 
   --color-bg: var(--surface-page);
   --color-surface: var(--surface-raised);
@@ -373,6 +393,34 @@
     );
   }
 
+  /* 420px dossier hero (Figma 40:489). Same forest wash, earlier 0.8
+     band so kicker + name + meta sit in the dark stop, not the fade. */
+  .hero-overlay-desk {
+    background: linear-gradient(
+      to bottom,
+      rgb(15 43 31 / 0) 0%,
+      rgb(15 43 31 / 0.18) 32%,
+      rgb(15 43 31 / 0.72) 52%,
+      rgb(15 43 31 / 0.88) 72%,
+      rgb(15 43 31 / 0.92) 100%
+    );
+  }
+
+  /* Home / 1440 fold 40:2 — type sits at the bottom of the plate.
+     Cream kicker / dek / caption need a dark riverbed band there.
+     Teal CFS (#086B6C) cannot clear 4.5:1 on that band; it sits on
+     .hero-cfs paper instead. 390 keeps the unlayered override below. */
+  .hero-overlay-home {
+    background: linear-gradient(
+      to top,
+      rgb(11 17 18 / 0.92) 0%,
+      rgb(11 17 18 / 0.86) 42%,
+      rgb(11 17 18 / 0.58) 58%,
+      rgb(11 17 18 / 0.18) 78%,
+      rgb(11 17 18 / 0) 100%
+    );
+  }
+
   .hero-overlay-light {
     background: var(--scrim-light);
   }
@@ -392,15 +440,30 @@
     box-shadow: 0 2px 4px rgb(44 33 27 / 0.08);
   }
 
-  /* Image cards: clip, 2–4px lift, ~1.04 ease. No bounce, glow, or Ken Burns. */
+  /* Name / copper live-hint — same long ease as the photograph. */
+  .hover-copper {
+    transition: color var(--hover-duration) var(--hover-ease);
+  }
+
+  /* Image cards: clip, 2–4px lift, ~1.04 scale. Long ease — not a snap.
+     No bounce, glow, or Ken Burns. */
   .photo-lift {
     overflow: hidden;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgb(44 33 27 / 0.08);
+    transition:
+      transform var(--hover-duration) var(--hover-ease),
+      box-shadow var(--hover-duration) var(--hover-ease);
   }
 
   .photo-lift img {
-    transition: transform 180ms ease-out;
+    transition: transform var(--hover-duration) var(--hover-ease);
+  }
+
+  .group:hover .photo-lift,
+  .photo-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgb(44 33 27 / 0.10);
   }
 
   .group:hover .photo-lift img,
@@ -408,17 +471,21 @@
     transform: scale(1.04);
   }
 
-  .group:hover .photo-lift {
-    box-shadow: 0 4px 8px rgb(44 33 27 / 0.10);
-  }
-
   @media (prefers-reduced-motion: reduce) {
+    .photo-lift,
     .photo-lift img {
       transition: none;
+    }
+    .group:hover .photo-lift,
+    .photo-lift:hover {
+      transform: none;
     }
     .group:hover .photo-lift img,
     .photo-lift:hover img {
       transform: none;
+    }
+    .hover-copper {
+      transition: none;
     }
   }
 
@@ -562,6 +629,69 @@
   line-height: 1.7;
   max-width: 68ch;
   color: var(--text-body);
+}
+
+.home-hero-fold {
+  height: calc(100dvh - 56px - var(--app-banner-height, 0px));
+}
+
+/* Home fold: Archivo cream dek (Taylor lock). 1440 is 18/28; 390 is 14/20. */
+.hero-dek,
+.prose.hero-dek {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--hero-type);
+  max-width: 720px;
+  text-wrap: pretty;
+}
+
+/* Daylight public heads inherit ink Fraunces — leftover copper utilities lose. */
+[data-register="daylight"] main h1,
+[data-register="daylight"] main h2 {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+}
+
+/* Photo heroes keep cream type. Unlayered so this beats the ink rule. */
+[data-register="daylight"] .home-hero-fold h1,
+[data-register="daylight"] .home-hero-fold h2,
+[data-register="daylight"] .hero-on-photo h1,
+[data-register="daylight"] .hero-on-photo h2 {
+  color: var(--hero-type);
+}
+
+/* Token teal on paper — the only pair where #086B6C clears 4.5:1 on the fold. */
+.hero-cfs {
+  color: var(--teal);
+  background-color: var(--paper);
+  padding: 0 0.35em;
+}
+
+/* 390 fold: keep chalk / dek / teal CFS in a ≥0.86 riverbed band.
+   Unlayered so it beats the @layer components 1440 wash. */
+@media (max-width: 639px) {
+  .home-hero-fold {
+    height: 664px;
+  }
+
+  .hero-dek,
+  .prose.hero-dek {
+    font-size: 14px;
+    line-height: 20px;
+    max-width: 350px;
+  }
+
+  .hero-overlay-home {
+    background: linear-gradient(
+      to top,
+      rgb(11 17 18 / 0.94) 0%,
+      rgb(11 17 18 / 0.90) 50%,
+      rgb(11 17 18 / 0.86) 70%,
+      rgb(11 17 18 / 0.45) 84%,
+      rgb(11 17 18 / 0) 100%
+    );
+  }
 }
 
 .article-body,
@@ -1001,6 +1131,29 @@ select:focus {
   border-bottom: 1px solid var(--border-rule);
 }
 
+/* Signed-out chrome stays paper + forest even on dusk routes like /today.
+   Remap the full daylight set — leftover --text-meta/--signal-live would
+   keep fog and teal-300 on the cream bar. */
+.ea-header-public {
+  --surface-page: var(--paper);
+  --surface-raised: var(--vellum);
+  --surface-card: var(--card);
+  --border-rule: var(--rule);
+  --border-strong: #C9BFAE;
+  --text-primary: var(--ink);
+  --text-body: var(--graphite);
+  --text-meta: var(--slate);
+  --action: var(--copper-700);
+  --action-hover: var(--copper-hover-700);
+  --on-action: #FFFFFF;
+  --signal-live: var(--teal-700);
+  --state-positive: var(--rise-700);
+  --state-negative: var(--cut-700);
+  background: var(--paper);
+  /* Home / 1440 fold 40:2 — paper bar always carries the rule. */
+  border-bottom: 1px solid var(--rule);
+}
+
 .ea-nav-link {
   position: relative;
   display: inline-flex;
@@ -1011,7 +1164,7 @@ select:focus {
   font-size: 13px;
   line-height: 1;
   color: var(--text-body);
-  transition: color 120ms ease-out;
+  transition: color var(--hover-duration) var(--hover-ease);
   white-space: nowrap;
 }
 
@@ -1100,4 +1253,252 @@ input.ea-focus-ring:focus-visible,
 
 .ea-wb-row.ea-focus-ring:focus-visible {
   outline-offset: -2px !important;
+}
+
+/* Tailwind's default 150ms snap. Public chrome uses the long desk ease. */
+.transition-colors,
+.transition-transform,
+.transition-opacity,
+.transition-all,
+.transition-\[border-color\],
+.transition-\[color\] {
+  transition-duration: var(--hover-duration);
+  transition-timing-function: var(--hover-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transition-colors,
+  .transition-transform,
+  .transition-opacity,
+  .transition-all,
+  .transition-\[border-color\],
+  .transition-\[color\],
+  .hover-copper {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* =============================================
+   WATER DESK SHEET — one gutter, one 12-col rail
+   Fly detail, house pages, login/contact forms.
+   Unlayered so leftover max-w-7xl / 50vw utilities cannot split the measure.
+   ============================================= */
+
+.desk-sheet {
+  width: 100%;
+  padding-inline: var(--gutter);
+  padding-top: 1.25rem;
+  padding-bottom: 4rem;
+}
+
+.desk-sheet-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 2rem;
+}
+
+.desk-sheet-photo {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  overflow: hidden;
+  background: var(--surface-page);
+}
+
+.desk-sheet-name {
+  min-width: 0;
+}
+
+.desk-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-meta);
+}
+
+.desk-dek {
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  font-size: 19px;
+  line-height: 1.7;
+  max-width: 60ch;
+  color: var(--text-body);
+}
+
+.desk-dek-ui {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 24px;
+  max-width: 60ch;
+  color: var(--text-body);
+}
+
+/* One Newsreader 65ch sheet. Dek is Archivo; it does not get its own measure. */
+.house-measure {
+  max-width: 65ch;
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  font-size: 19px;
+}
+
+.house-measure .prose,
+.house-measure .desk-dek-ui {
+  max-width: none;
+}
+
+/* Ink Fraunces headings beat leftover copper utilities and unlayered .prose. */
+.house-measure h1,
+.house-measure h2,
+.house-measure h3,
+.house-measure .prose h1,
+.house-measure .prose h2,
+.house-measure .prose h3,
+.desk-form h1,
+.desk-form h2 {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+}
+
+.house-measure .prose {
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+}
+
+.house-measure .desk-dek-ui {
+  font-family: var(--font-ui);
+}
+
+.desk-form {
+  max-width: 28rem;
+  --action: var(--copper-700);
+  --action-hover: var(--copper-hover-700);
+  --on-action: #ffffff;
+}
+
+/* Public routes pack the footer under the sheet. Dusk apps keep a full-height main. */
+[data-register="daylight"] main {
+  flex: 0 0 auto;
+}
+
+.desk-spec,
+.desk-recipe,
+.desk-rule-list {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.desk-spec {
+  display: grid;
+  grid-template-columns: 7em minmax(0, 1fr);
+  column-gap: 1rem;
+  row-gap: 0.4rem;
+  border-top: 1px solid var(--border-rule);
+  padding-top: 1rem;
+}
+
+.desk-spec dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.desk-spec dd {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.desk-recipe {
+  border-top: 1px solid var(--border-rule);
+  border-bottom: 1px solid var(--border-rule);
+}
+
+.desk-recipe-row {
+  display: grid;
+  grid-template-columns: 7em minmax(0, 1fr);
+  column-gap: 1rem;
+  align-items: baseline;
+  padding-block: 0.65rem;
+  border-bottom: 1px solid var(--border-rule);
+}
+
+.desk-recipe-row:last-child {
+  border-bottom: 0;
+}
+
+.desk-recipe-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.desk-recipe-value {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.desk-rule-list {
+  border-top: 1px solid var(--border-rule);
+  border-bottom: 1px solid var(--border-rule);
+}
+
+.desk-rule-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1rem;
+  align-items: baseline;
+  padding-block: 0.65rem;
+  border-bottom: 1px solid var(--border-rule);
+}
+
+.desk-rule-list li:last-child {
+  border-bottom: 0;
+}
+
+.desk-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.desk-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+@media (min-width: 1024px) {
+  .desk-sheet-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: start;
+  }
+
+  .desk-sheet-photo {
+    grid-column: 1 / span 5;
+  }
+
+  .desk-sheet-name {
+    grid-column: 6 / span 7;
+  }
+
+  .desk-table-wrap {
+    overflow-x: visible;
+  }
+}
+
+@media (max-width: 1023px) {
+  .desk-table {
+    min-width: 32rem;
+  }
 }

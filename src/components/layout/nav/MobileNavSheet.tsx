@@ -61,6 +61,17 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
       </div>
 
       <nav aria-label="Site" className="py-2">
+        <Link
+          href="/search"
+          onClick={onClose}
+          className={rowClass(isSectionActive(pathname, "/search"))}
+        >
+          <span className="flex flex-col">
+            <span className="font-medium">Search</span>
+            <span className="text-[13px] text-[var(--text-meta)]">River, fly, hatch, destination</span>
+          </span>
+        </Link>
+
         {(user ? EXPLORE_ITEMS : PUBLIC_NOUNS).map((item) => {
           const active = isSectionActive(pathname, item.section);
           return (
