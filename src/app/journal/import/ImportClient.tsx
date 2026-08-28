@@ -188,8 +188,8 @@ export default function ImportClient() {
   );
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)]">
-      <div className="max-w-5xl mx-auto px-4 py-6 lg:py-8">
+    <div className="min-h-screen bg-[var(--paper)] text-[var(--text-1)]">
+      <div className="max-w-[var(--container)] mx-auto px-4 py-6 lg:py-8">
         <PageHeader
           eyebrow="Journal"
           title="Import sessions"
@@ -208,11 +208,11 @@ export default function ImportClient() {
             >
               <a
                 href="/api/import/template"
-                className="inline-flex items-center gap-2 bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#1C2028] hover:border-[var(--action)]/40 transition-colors"
+                className="ea-btn ea-btn-secondary"
               >
                 <Download className="h-4 w-4" /> Download Template (.csv)
               </a>
-              <div className="mt-4 text-xs text-[var(--text-meta)] space-y-1.5">
+              <div className="mt-4 text-xs text-[var(--text-3)] space-y-1.5">
                 <p>
                   The template includes one sample row as a formatting reference.
                   It&apos;s marked and will be ignored on upload — feel free to
@@ -220,7 +220,7 @@ export default function ImportClient() {
                 </p>
                 <p>
                   Already an Executive Angler user? Your{" "}
-                  <a href="/api/export/csv" className="text-[var(--action)] hover:underline">
+                  <a href="/api/export/csv" className="text-[var(--accent)] hover:underline">
                     CSV export
                   </a>{" "}
                   uses this same format — edit and re-import to make bulk changes.
@@ -234,19 +234,19 @@ export default function ImportClient() {
               title="Prepare your data with AI"
               subtitle="Paste this prompt into ChatGPT, Claude, or Gemini along with your notebook photos or old file. The AI will output a ready-to-upload CSV."
             >
-              <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
-                  <div className="flex items-center gap-2 text-xs text-[var(--text-body)]">
-                    <Sparkles className="h-3.5 w-3.5 text-[var(--action)]" />
+              <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--paper-deep)] overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--border)] bg-[var(--surface)]">
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-2)]">
+                    <Sparkles className="h-3.5 w-3.5 text-[var(--accent)]" />
                     <span className="font-semibold">AI Prompt Template</span>
                   </div>
                   <button
                     onClick={copyPrompt}
-                    className="inline-flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors"
                   >
                     {promptCopied ? (
                       <>
-                        <Check className="h-3.5 w-3.5 text-[var(--signal-live)]" />
+                        <Check className="h-3.5 w-3.5 text-[var(--success)]" />
                         Copied
                       </>
                     ) : (
@@ -257,14 +257,14 @@ export default function ImportClient() {
                     )}
                   </button>
                 </div>
-                <pre className="px-4 py-3 text-xs text-[var(--text-body)] whitespace-pre-wrap font-mono leading-relaxed max-h-80 overflow-y-auto">
+                <pre className="px-4 py-3 text-xs text-[var(--text-2)] whitespace-pre-wrap leading-relaxed max-h-80 overflow-y-auto">
                   {AI_PROMPT}
                 </pre>
               </div>
-              <div className="mt-3 text-xs text-[var(--text-meta)]">
+              <div className="mt-3 text-xs text-[var(--text-3)]">
                 Gear isn&apos;t part of import — once your journal is in, add rods,
                 reels, lines and tippets from{" "}
-                <Link href="/account/gear" className="text-[var(--action)] hover:underline">
+                <Link href="/account/gear" className="text-[var(--accent)] hover:underline">
                   Gear Locker
                 </Link>
                 .
@@ -284,10 +284,10 @@ export default function ImportClient() {
                 }}
                 onDragLeave={() => setDragActive(false)}
                 onDrop={onDrop}
-                className={`flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed py-10 px-6 cursor-pointer transition-colors ${
+                className={`flex flex-col items-center justify-center gap-3 rounded-[var(--radius-card)] border-2 border-dashed py-10 px-6 cursor-pointer transition-colors ${
                   dragActive
-                    ? "border-[var(--action)] bg-[var(--action)]/5"
-                    : "border-[var(--border-rule)] bg-[var(--surface-page)] hover:border-[var(--action)]/40"
+                    ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+                    : "border-[var(--border-strong)] bg-[var(--surface)] hover:border-[var(--accent)]"
                 }`}
               >
                 <input
@@ -301,25 +301,25 @@ export default function ImportClient() {
                 />
                 {busy ? (
                   <>
-                    <Loader2 className="h-8 w-8 text-[var(--action)] animate-spin" />
-                    <div className="text-sm font-semibold text-[var(--text-primary)]">
+                    <Loader2 className="h-8 w-8 text-[var(--accent)] animate-spin" />
+                    <div className="text-sm font-semibold text-[var(--text-1)]">
                       Parsing your file…
                     </div>
                   </>
                 ) : (
                   <>
-                    <FileSpreadsheet className="h-8 w-8 text-[var(--text-body)]" />
-                    <div className="text-sm font-semibold text-[var(--text-primary)]">
+                    <FileSpreadsheet className="h-8 w-8 text-[var(--text-3)]" />
+                    <div className="text-sm font-semibold text-[var(--text-1)]">
                       Drop CSV here or click to choose
                     </div>
-                    <div className="text-xs text-[var(--text-meta)]">
+                    <div className="text-xs text-[var(--text-3)]">
                       Max 5 MB · up to 10,000 rows
                     </div>
                   </>
                 )}
               </label>
               {error && (
-                <div className="mt-4 flex items-start gap-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+                <div className="mt-4 flex items-start gap-2 text-sm text-[var(--danger)] bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] px-3 py-2">
                   <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -341,11 +341,11 @@ export default function ImportClient() {
         {/* Stage: importing */}
         {stage === "importing" && (
           <div className="flex flex-col items-center justify-center gap-4 py-20">
-            <Loader2 className="h-10 w-10 text-[var(--action)] animate-spin" />
-            <div className="text-base font-semibold text-[var(--text-primary)]">
+            <Loader2 className="h-10 w-10 text-[var(--accent)] animate-spin" />
+            <div className="text-base font-semibold text-[var(--text-1)]">
               Importing your sessions…
             </div>
-            <div className="text-sm text-[var(--text-body)]">This usually takes a few seconds.</div>
+            <div className="text-sm text-[var(--text-2)]">This usually takes a few seconds.</div>
           </div>
         )}
 
@@ -370,14 +370,14 @@ function StepCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6 lg:p-7">
+    <div className="ea-card">
       <div className="flex items-start gap-4 mb-5">
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--action)]/10 border border-[var(--action)]/30 flex items-center justify-center text-[var(--action)] font-bold text-sm">
+        <div className="num flex-shrink-0 w-8 h-8 rounded-full bg-[var(--accent-soft)] border border-[var(--accent)]/30 flex items-center justify-center text-[var(--accent)] font-semibold text-sm">
           {number}
         </div>
         <div className="flex-1">
-          <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">{title}</h2>
-          <p className="text-sm text-[var(--text-body)]">{subtitle}</p>
+          <h2 className="font-display text-lg font-semibold text-[var(--text-1)] mb-1">{title}</h2>
+          <p className="text-sm text-[var(--text-2)]">{subtitle}</p>
         </div>
       </div>
       <div className="pl-12">{children}</div>
@@ -404,8 +404,8 @@ function PreviewPanel({
   return (
     <div className="space-y-6">
       {/* Summary */}
-      <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6">
-        <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">Preview</h2>
+      <div className="ea-card">
+        <h2 className="font-display text-lg font-semibold text-[var(--text-1)] mb-4">Preview</h2>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
           <Stat label="Sessions" value={summary.sessions} />
           <Stat label="Catches" value={summary.catches} />
@@ -427,8 +427,8 @@ function PreviewPanel({
         </div>
 
         {unknownHeaders.length > 0 && (
-          <div className="mt-4 flex items-start gap-2 text-xs text-[var(--text-body)] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2">
-            <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[var(--action)]" />
+          <div className="mt-4 flex items-start gap-2 text-xs text-[var(--text-2)] bg-[var(--paper-deep)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2">
+            <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[var(--warning)]" />
             <span>
               Ignored {unknownHeaders.length} unknown column{unknownHeaders.length > 1 ? "s" : ""}: {unknownHeaders.join(", ")}
             </span>
@@ -436,8 +436,8 @@ function PreviewPanel({
         )}
 
         {preview.exampleRowsSkipped > 0 && (
-          <div className="mt-2 flex items-start gap-2 text-xs text-[var(--text-body)] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-3 py-2">
-            <Check className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[var(--signal-live)]" />
+          <div className="mt-2 flex items-start gap-2 text-xs text-[var(--text-2)] bg-[var(--paper-deep)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2">
+            <Check className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[var(--success)]" />
             <span>
               Skipped {preview.exampleRowsSkipped} template example row{preview.exampleRowsSkipped > 1 ? "s" : ""}.
             </span>
@@ -448,7 +448,7 @@ function PreviewPanel({
           <button
             onClick={onCommit}
             disabled={commitDisabled || busy}
-            className="inline-flex items-center gap-2 bg-[var(--action)] text-white font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#d4822e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="ea-btn ea-btn-primary"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
             Import {summary.sessionsReady} session{summary.sessionsReady !== 1 ? "s" : ""}
@@ -456,7 +456,7 @@ function PreviewPanel({
           </button>
           <button
             onClick={onReset}
-            className="inline-flex items-center gap-2 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+            className="ea-btn ea-btn-ghost"
           >
             Use a different file
           </button>
@@ -465,8 +465,8 @@ function PreviewPanel({
 
       {/* Issues */}
       {(errorIssues.length > 0 || warnIssues.length > 0) && (
-        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6">
-          <h3 className="text-base font-bold text-[var(--text-primary)] mb-3">
+        <div className="ea-card">
+          <h3 className="font-display text-base font-semibold text-[var(--text-1)] mb-3">
             {errorIssues.length > 0
               ? `${errorIssues.length} error${errorIssues.length > 1 ? "s" : ""} will be skipped`
               : "Warnings"}
@@ -475,10 +475,10 @@ function PreviewPanel({
             {[...errorIssues, ...warnIssues].map((i, idx) => (
               <div
                 key={idx}
-                className={`flex items-start gap-2 text-xs rounded-lg px-3 py-2 ${
+                className={`flex items-start gap-2 text-xs rounded-[var(--radius-md)] px-3 py-2 ${
                   i.severity === "error"
-                    ? "bg-red-500/10 border border-red-500/20 text-red-300"
-                    : "bg-amber-500/5 border border-amber-500/20 text-amber-300"
+                    ? "bg-[var(--danger)]/10 border border-[var(--danger)]/30 text-[var(--danger)]"
+                    : "bg-[var(--warning)]/10 border border-[var(--warning)]/30 text-[var(--warning)]"
                 }`}
               >
                 {i.severity === "error" ? (
@@ -487,9 +487,9 @@ function PreviewPanel({
                   <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
                 )}
                 <span>
-                  <span className="font-mono font-semibold">Row {i.row}</span>
+                  <span className="num font-semibold">Row {i.row}</span>
                   {i.column && (
-                    <span className="text-[var(--text-body)]"> · {i.column}</span>
+                    <span> · {i.column}</span>
                   )}
                   : {i.message}
                 </span>
@@ -500,8 +500,8 @@ function PreviewPanel({
       )}
 
       {/* Sessions list */}
-      <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-6">
-        <h3 className="text-base font-bold text-[var(--text-primary)] mb-4">
+      <div className="ea-card">
+        <h3 className="font-display text-base font-semibold text-[var(--text-1)] mb-4">
           {sessions.length} session{sessions.length !== 1 ? "s" : ""} detected
         </h3>
         <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
@@ -512,19 +512,19 @@ function PreviewPanel({
                 ? "Ready — river unmatched"
                 : "Ready";
             const stateTone = s.duplicate
-              ? "text-amber-400 bg-amber-500/10"
+              ? "text-[var(--warning)] bg-[var(--warning)]/10"
               : s.river_match === "unmatched"
-                ? "text-amber-400 bg-amber-500/10"
-                : "text-[var(--signal-live)] bg-[var(--signal-live)]/10";
+                ? "text-[var(--warning)] bg-[var(--warning)]/10"
+                : "text-[var(--success)] bg-[var(--success)]/10";
             return (
               <div
                 key={idx}
-                className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-4 py-3"
+                className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--paper-deep)] px-4 py-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 text-xs text-[var(--text-meta)] mb-1">
-                      <span className="font-mono">{s.date}</span>
+                    <div className="flex items-center gap-2 text-xs text-[var(--text-3)] mb-1">
+                      <span className="num">{s.date}</span>
                       {s.river_name && (
                         <>
                           <span>·</span>
@@ -532,10 +532,10 @@ function PreviewPanel({
                         </>
                       )}
                     </div>
-                    <div className="text-sm font-semibold text-[var(--text-primary)] truncate">
+                    <div className="text-sm font-semibold text-[var(--text-1)] truncate">
                       {s.title || "Untitled session"}
                     </div>
-                    <div className="mt-1 text-xs text-[var(--text-body)]">
+                    <div className="mt-1 text-xs text-[var(--text-2)]">
                       {s.catches.length === 0 ? (
                         <span>No fish</span>
                       ) : (
@@ -546,7 +546,7 @@ function PreviewPanel({
                       )}
                     </div>
                   </div>
-                  <span className={`flex-shrink-0 text-[11px] font-semibold rounded-md px-2 py-1 ${stateTone}`}>
+                  <span className={`flex-shrink-0 text-xs font-semibold rounded-[var(--radius-sm)] px-2 py-1 ${stateTone}`}>
                     {stateLabel}
                   </span>
                 </div>
@@ -568,16 +568,16 @@ function DonePanel({
 }) {
   const { summary } = commit;
   return (
-    <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl p-8 text-center">
-      <div className="w-14 h-14 rounded-full bg-[var(--signal-live)]/10 border border-[var(--signal-live)]/30 flex items-center justify-center mx-auto mb-4">
-        <Check className="h-7 w-7 text-[var(--signal-live)]" />
+    <div className="ea-card p-8 text-center">
+      <div className="w-14 h-14 rounded-full bg-[var(--success)]/10 border border-[var(--success)]/30 flex items-center justify-center mx-auto mb-4">
+        <Check className="h-7 w-7 text-[var(--success)]" />
       </div>
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">Import complete</h2>
-      <div className="text-sm text-[var(--text-body)] mb-6 space-y-1">
+      <h2 className="font-display text-xl font-semibold text-[var(--text-1)] mb-2">Import complete</h2>
+      <div className="text-sm text-[var(--text-2)] mb-6 space-y-1">
         <div>
-          Created <span className="font-semibold text-[var(--text-primary)]">{summary.sessionsCreated}</span> session
+          Created <span className="font-semibold text-[var(--text-1)]">{summary.sessionsCreated}</span> session
           {summary.sessionsCreated !== 1 ? "s" : ""} and{" "}
-          <span className="font-semibold text-[var(--text-primary)]">{summary.catchesCreated}</span> catch
+          <span className="font-semibold text-[var(--text-1)]">{summary.catchesCreated}</span> catch
           {summary.catchesCreated !== 1 ? "es" : ""}.
         </div>
         {summary.duplicatesSkipped > 0 && (
@@ -592,7 +592,7 @@ function DonePanel({
           </div>
         )}
         {summary.failed.length > 0 && (
-          <div className="text-red-400">
+          <div className="text-[var(--danger)]">
             {summary.failed.length} session{summary.failed.length !== 1 ? "s" : ""} failed to save.
           </div>
         )}
@@ -600,13 +600,13 @@ function DonePanel({
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link
           href="/journal"
-          className="inline-flex items-center gap-2 bg-[var(--action)] text-white font-semibold rounded-xl px-5 py-2.5 text-sm hover:bg-[#d4822e] transition-colors"
+          className="ea-btn ea-btn-primary"
         >
           View Journal
         </Link>
         <button
           onClick={onReset}
-          className="inline-flex items-center gap-2 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+          className="ea-btn ea-btn-ghost"
         >
           Import another file
         </button>
@@ -626,16 +626,16 @@ function Stat({
 }) {
   const color =
     tone === "good"
-      ? "text-[var(--signal-live)]"
+      ? "text-[var(--success)]"
       : tone === "warn"
-        ? "text-amber-400"
+        ? "text-[var(--warning)]"
         : tone === "bad"
-          ? "text-red-400"
-          : "text-[var(--text-primary)]";
+          ? "text-[var(--danger)]"
+          : "text-[var(--text-1)]";
   return (
-    <div className="rounded-xl bg-[var(--surface-page)] border border-[var(--border-rule)] px-3 py-2.5">
-      <div className={`text-xl font-bold font-mono ${color}`}>{value}</div>
-      <div className="text-[11px] text-[var(--text-meta)] uppercase tracking-wide mt-0.5">{label}</div>
+    <div className="rounded-[var(--radius-md)] bg-[var(--paper-deep)] border border-[var(--border)] px-3 py-2.5">
+      <div className={`num text-xl font-semibold ${color}`}>{value}</div>
+      <div className="ea-stat-label mt-0.5">{label}</div>
     </div>
   );
 }
