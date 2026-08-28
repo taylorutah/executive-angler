@@ -35,7 +35,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
     if (!token) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable — missing Mapbox token</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#F2EFE8;color:#525B55;font-size:0.875rem">Map unavailable — missing Mapbox token</div>';
       }
       return;
     }
@@ -48,7 +48,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
     if (sessionsWithCoords.length === 0) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">No sessions with map locations yet</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#F2EFE8;color:#525B55;font-size:0.875rem">No sessions with map locations yet</div>';
       }
       return;
     }
@@ -79,15 +79,15 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
 
         const popupHTML = `
           <div style="font-family: system-ui, -apple-system, sans-serif; min-width: 160px;">
-            <div style="font-weight: 600; color: #0D1117; margin-bottom: 4px;">
+            <div style="font-weight: 600; color: #171C19; margin-bottom: 4px;">
               ${session.river_name || session.location || "Session"}
             </div>
-            <div style="font-size: 12px; color: #A8B2BD; margin-bottom: 6px;">
+            <div style="font-size: 12px; color: #6E746F; margin-bottom: 6px;">
               ${formattedDate}
             </div>
             ${
               session.total_fish
-                ? `<div style="font-size: 13px; color: ${COPPER_700}; margin-bottom: 8px;">🐟 ${session.total_fish}</div>`
+                ? `<div style="font-size: 13px; color: ${COPPER_700}; margin-bottom: 8px;">${session.total_fish} fish</div>`
                 : ""
             }
             <a href="/journal/${session.id}"
@@ -132,7 +132,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
       console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#F2EFE8;color:#525B55;font-size:0.875rem">Map unavailable</div>';
       }
     }
 
@@ -144,7 +144,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
   return (
     <div
       ref={mapContainer}
-      className={compact ? "h-[280px] w-full" : "h-64 lg:h-[calc(100vh-5rem)] w-full rounded-xl overflow-hidden border border-[var(--border-rule)]"}
+      className={compact ? "h-72 w-full" : "h-64 lg:h-[calc(100vh-5rem)] w-full rounded-card overflow-hidden border border-[var(--border)]"}
     />
   );
 }

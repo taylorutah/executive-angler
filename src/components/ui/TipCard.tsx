@@ -37,26 +37,23 @@ export default function TipCard({
 
   if (dismissed !== false) return null;
 
-  const accent =
-    tone === "premium"
-      ? "from-[var(--action)]/15 to-[var(--signal-live)]/10 border-[var(--action)]/30"
-      : "from-[var(--signal-live)]/10 to-[var(--signal-live)]/5 border-[var(--signal-live)]/25";
-
-  const iconColor = tone === "premium" ? "text-[var(--action)]" : "text-[var(--signal-live)]";
+  // Flat tint panel — gradients are banned (DESIGN.md §8). `tone` is kept for
+  // API compatibility; both tones render the same lawful surface.
+  void tone;
 
   return (
     <div
-      className={`relative rounded-xl border bg-gradient-to-br ${accent} p-4 pr-10`}
+      className="relative rounded-card border border-[var(--border)] bg-[var(--paper-deep)] p-4 pr-12"
     >
       <div className="flex items-start gap-3">
-        <div className={`mt-0.5 ${iconColor}`}>
-          <Sparkles size={18} />
+        <div className="mt-0.5 text-[var(--accent)]">
+          <Sparkles size={20} />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-heading text-sm font-semibold text-[var(--text-primary)]">
+          <h3 className="font-display text-sm font-semibold text-[var(--text-1)]">
             {title}
           </h3>
-          <div className="mt-1 text-sm text-[var(--text-body)] leading-relaxed space-y-1.5">
+          <div className="mt-1 text-sm text-[var(--text-2)] leading-relaxed space-y-2">
             {children}
           </div>
         </div>
@@ -70,9 +67,9 @@ export default function TipCard({
           } catch {}
           setDismissed(true);
         }}
-        className="absolute top-3 right-3 p-1 rounded text-[var(--text-meta)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
+        className="absolute top-3 right-3 rounded-instrument p-2 text-[var(--text-3)] transition-colors hover:bg-[var(--border)] hover:text-[var(--text-1)]"
       >
-        <X size={14} />
+        <X size={16} />
       </button>
     </div>
   );

@@ -25,9 +25,9 @@ export default function FilterBar({
   const hasChips = activeChips.length > 0;
 
   const containerClasses = [
-    sticky ? "sticky top-14 z-30" : "",
+    sticky ? "sticky top-[var(--header-h)] z-30" : "",
     inline ? "" : "-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8",
-    "py-3 bg-[var(--surface-page)]/95 backdrop-blur-sm border-b border-[var(--border-rule)]/60 mb-4",
+    "py-3 bg-[var(--paper)] border-b border-[var(--border)] mb-4",
   ]
     .filter(Boolean)
     .join(" ");

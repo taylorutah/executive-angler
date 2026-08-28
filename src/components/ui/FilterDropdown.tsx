@@ -185,7 +185,7 @@ export default function FilterDropdown({
       {open && (
         <div
           ref={popoverRef}
-          className={`absolute z-50 mt-2 ${align === "end" ? "right-0" : "left-0"} w-[280px] sm:w-[300px] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-xl shadow-xl overflow-hidden`}
+          className={`absolute z-50 mt-2 ${align === "end" ? "right-0" : "left-0"} w-[280px] sm:w-[300px] bg-[var(--surface)] border border-[var(--border)] rounded-card shadow-xl overflow-hidden`}
         >
           <p role="status" aria-live="polite" className="sr-only">
             {filteredOptions.length === 1
