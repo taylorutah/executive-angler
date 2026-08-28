@@ -25,7 +25,6 @@ export default function LoginForm({ redirect, authError }: Props) {
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
   const [captchaResolved, setCaptchaResolved] = useState(false);
-  const router = useRouter();
 
   const authErrorMessage =
     authError === "auth_failed" || authError === "auth_callback_failed"
