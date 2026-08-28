@@ -21,9 +21,9 @@ const PUBLIC_ROUTES = [
   "/styleguide",
 ] as const;
 
-/** Protected routes — captured as the fixture account, not as /login.
- *  /today stays the signed-in dusk desk and is not in this public gate. */
-const SIGNED_IN_ROUTES = ["/journal"] as const;
+/** Dusk desks (/today, /journal) are a different app. They are not in
+ *  this public visual gate — a dark-header miss must not block the ship. */
+const SIGNED_IN_ROUTES = [] as const;
 
 const VIEWPORTS = [
   { name: "1440", width: 1440, height: 900 },

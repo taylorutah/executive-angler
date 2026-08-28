@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -15,24 +15,21 @@ import { FOCUS_VISIBLE, LEARN_LINK, MEMBER_NOUNS, PUBLIC_NOUNS, isSectionActive 
 import { useRouteChangeReset } from "./nav/useRouteChangeReset";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 import { registerForPath } from "@/lib/register";
-
-/** Chrome hint only — not an auth check. Matches sb-*-auth-token cookies. */
-export function hasSessionHint(): boolean {
-  if (typeof document === "undefined") return false;
-  return document.cookie.split(";").some((part) => {
-    const name = part.trim().split("=")[0] ?? "";
-    return name.includes("-auth-token");
-  });
-}
+import { hasSessionHint } from "./session-hint";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [sessionHint, setSessionHint] = useState(false);
   const { user, isLoading } = useAuth();
   const pathname = usePathname();
   const plusRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useLayoutEffect(() => {
+    setSessionHint(hasSessionHint(document.cookie));
+  }, []);
 
   useRouteChangeReset(() => {
     setMobileOpen(false);
@@ -57,12 +54,13 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const nouns = user ? MEMBER_NOUNS : PUBLIC_NOUNS;
+  const signedInChrome = Boolean(user) || (isLoading && sessionHint);
+  const nouns = signedInChrome ? MEMBER_NOUNS : PUBLIC_NOUNS;
   const onHome = pathname === "/";
   const duskPath = registerForPath(pathname) === "dusk";
-  // Session cookie keeps dusk chrome up while getUser runs. Without it,
-  // signed-in /journal first-paints paper tokens on riverbed (2.2:1).
-  const duskApp = duskPath && (Boolean(user) || (isLoading && hasSessionHint()));
+  // sessionHint is set in useLayoutEffect so SSR and the first client
+  // render stay cream. The cookie then holds dusk chrome before paint.
+  const duskApp = duskPath && signedInChrome;
   const logoSrc = duskApp
     ? "/images/logo-horizontal-white.svg"
     : "/images/logo-horizontal-forest.svg";

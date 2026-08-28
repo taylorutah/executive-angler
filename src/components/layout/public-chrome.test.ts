@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { hasSessionHint } from "./session-hint";
 
 const root = process.cwd();
 const header = readFileSync(join(root, "src/components/layout/Header.tsx"), "utf8");
@@ -24,10 +25,9 @@ const CARD_FILES = [
 
 describe("public chrome locks", () => {
   it("uses one forest horizontal wordmark on cream public headers", () => {
-    assert.match(
-      header,
-      /duskApp = duskPath && \(Boolean\(user\) \|\| \(isLoading && hasSessionHint\(\)\)\)/,
-    );
+    assert.match(header, /signedInChrome = Boolean\(user\) \|\| \(isLoading && sessionHint\)/);
+    assert.match(header, /duskApp = duskPath && signedInChrome/);
+    assert.match(header, /useLayoutEffect/);
     assert.match(header, /logo-horizontal-white\.svg/);
     assert.match(header, /logo-horizontal-forest\.svg/);
     assert.equal(header.includes("/images/logo.svg"), false);
@@ -41,9 +41,17 @@ describe("public chrome locks", () => {
   it("keeps signed-out /today on the cream public bar and out of the visual gate", () => {
     assert.match(header, /duskApp \? "" : "ea-header-public"/);
     assert.match(header, /hasSessionHint/);
-    assert.match(visual, /SIGNED_IN_ROUTES = \["\/journal"\]/);
+    assert.match(visual, /SIGNED_IN_ROUTES = \[\] as const/);
     assert.equal(/SIGNED_IN_ROUTES[\s\S]*?"\/today"/.test(visual), false);
+    assert.equal(/SIGNED_IN_ROUTES[\s\S]*?"\/journal"/.test(visual), false);
     assert.equal(/PUBLIC_ROUTES[\s\S]*?"\/today"/.test(visual), false);
+  });
+
+  it("treats sb-*-auth-token as a chrome hint only", () => {
+    assert.equal(hasSessionHint(""), false);
+    assert.equal(hasSessionHint("theme=dusk"), false);
+    assert.equal(hasSessionHint("sb-qlasxtfbodyxbcuchvxz-auth-token=e30"), true);
+    assert.equal(hasSessionHint("other=1; sb-proj-auth-token=e30"), true);
   });
 
   it("remaps daylight meta and signal tokens on the cream public header", () => {
