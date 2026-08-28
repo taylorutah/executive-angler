@@ -44,21 +44,21 @@ export function SidebarFilters({
   if (locationOptions.length === 0) return null;
 
   return (
-    <div className="space-y-6">
+    <div className="rounded-card border border-[var(--border)] bg-[var(--surface)] p-2">
 
       {/* Location Filter */}
       {locationOptions.length > 0 && (
         <div>
-          <h3 className="mb-3 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-[var(--text-body)]">
+          <h3 className="ea-overline flex items-center gap-1 px-3 pt-2 pb-1">
             Filter by Location
             <HelpHint label="What Location filter pulls from">
-              <p className="text-[var(--text-primary)] font-semibold">Venue-type tags you added to sessions.</p>
-              <p>Things like <span className="text-[var(--action)]">walk-in</span>, <span className="text-[var(--action)]">tailwater</span>, <span className="text-[var(--action)]">below-dam</span>, <span className="text-[var(--action)]">public</span>. We pull them from your session tags so you can filter down to a specific kind of water.</p>
-              <p className="text-[var(--text-meta)] text-xs">Nothing here? Start tagging sessions with where you fished (not just the river).</p>
+              <p className="font-semibold text-[var(--text-1)]">Venue-type tags you added to sessions.</p>
+              <p>Things like <span className="text-[var(--accent)]">walk-in</span>, <span className="text-[var(--accent)]">tailwater</span>, <span className="text-[var(--accent)]">below-dam</span>, <span className="text-[var(--accent)]">public</span>. We pull them from your session tags so you can filter down to a specific kind of water.</p>
+              <p className="text-xs text-[var(--text-3)]">Nothing here? Start tagging sessions with where you fished (not just the river).</p>
             </HelpHint>
           </h3>
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm text-[var(--text-body)] cursor-pointer">
+          <div className="flex flex-col">
+            <label className="flex cursor-pointer items-center gap-2 rounded-surface px-3 py-2 text-sm text-[var(--text-2)] transition-colors hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)]">
               <input
                 type="checkbox"
                 checked={filterLocations.length === 0}
@@ -70,30 +70,31 @@ export function SidebarFilters({
                     }
                   });
                 }}
-                className="h-4 w-4 rounded border-[var(--border-rule)] text-[var(--action)] focus:ring-[var(--action)]"
+                className="h-4 w-4 rounded-instrument border-[var(--border-strong)] text-[var(--accent)] focus:ring-[var(--accent)]"
               />
               <span>All Locations</span>
             </label>
             {visibleLocations.map(({ location, count }) => (
               <label
                 key={location}
-                className="flex items-center gap-2 text-sm text-[var(--text-body)] cursor-pointer"
+                className="flex cursor-pointer items-center gap-2 rounded-surface px-3 py-2 text-sm text-[var(--text-2)] transition-colors hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)]"
               >
                 <input
                   type="checkbox"
                   checked={filterLocations.includes(location)}
                   onChange={() => onFilterChange("locations", location)}
-                  className="h-4 w-4 rounded border-[var(--border-rule)] text-[var(--action)] focus:ring-[var(--action)]"
+                  className="h-4 w-4 rounded-instrument border-[var(--border-strong)] text-[var(--accent)] focus:ring-[var(--accent)]"
                 />
                 <span>
-                  {location} <span className="text-[var(--text-body)]">({count})</span>
+                  {location} <span className="text-[var(--text-3)] num">({count})</span>
                 </span>
               </label>
             ))}
             {locationOptions.length > 5 && (
               <button
+                type="button"
                 onClick={() => setShowAllLocations(!showAllLocations)}
-                className="text-xs text-[var(--action)] hover:text-[var(--action)]"
+                className="rounded-surface px-3 py-2 text-left text-13 font-medium text-[var(--accent)] transition-colors hover:bg-[var(--paper-deep)] hover:text-[var(--accent-hover)]"
               >
                 {showAllLocations
                   ? "Show less"
@@ -103,8 +104,6 @@ export function SidebarFilters({
           </div>
         </div>
       )}
-
-      <hr className="border-[var(--border-rule)]" />
 
     </div>
   );
