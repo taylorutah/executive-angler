@@ -34,7 +34,7 @@ export default function SessionLocationPicker({
     if (!token) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.5rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable — missing token</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--paper-deep);color:var(--text-3);border-radius:var(--radius-card);font-size:0.875rem;border:1px solid var(--border)">Map unavailable — missing token</div>';
       }
       return;
     }
@@ -72,7 +72,7 @@ export default function SessionLocationPicker({
       console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#161B22;color:#A8B2BD;border-radius:0.5rem;font-size:0.875rem;border:1px solid #21262D">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--paper-deep);color:var(--text-3);border-radius:var(--radius-card);font-size:0.875rem;border:1px solid var(--border)">Map unavailable</div>';
       }
     }
 
@@ -112,26 +112,23 @@ export default function SessionLocationPicker({
   return (
     <div>
       <div className="relative">
-        <div ref={mapContainer} className="h-[240px] w-full rounded-lg" />
+        <div ref={mapContainer} className="h-[240px] w-full rounded-[var(--radius-card)] border border-[var(--border)]" />
         {/* Style toggle — cycles: outdoors → rivers → satellite */}
-        <div className="absolute top-2 right-2 z-10 flex rounded-md overflow-hidden shadow-md" style={{ border: "1px solid rgba(0,0,0,0.15)" }}>
+        <div className="ea-segmented absolute top-2 right-2 z-10">
           {(["outdoors", "rivers", "satellite"] as MapStyle[]).map((s) => (
             <button
               key={s}
               type="button"
               onClick={() => setMapStyle(s)}
-              className="px-2 py-1.5 text-[11px] font-semibold transition-colors"
-              style={{
-                background: mapStyle === s ? COPPER_700 : "rgba(255,255,255,0.92)",
-                color: mapStyle === s ? "#fff" : "#161B22",
-              }}
+              className="ea-segment"
+              aria-pressed={mapStyle === s}
             >
-              {s === "outdoors" ? "🗺" : s === "rivers" ? "🌊" : "🛰"}
+              {s === "outdoors" ? "Outdoors" : s === "rivers" ? "Rivers" : "Satellite"}
             </button>
           ))}
         </div>
       </div>
-      <p className="mt-1.5 text-xs text-[var(--text-meta)] font-['IBM_Plex_Mono']">
+      <p className="num mt-1.5 text-xs text-[var(--text-3)]">
         {formatCoord(coords.lat, true)}, {formatCoord(coords.lng, false)}
       </p>
     </div>

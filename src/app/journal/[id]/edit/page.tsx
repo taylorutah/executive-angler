@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera } from "@/icons";
+import { ArrowLeft, Plus, Trash2, MapPin, X, Check, Fish, Feather, Camera, Lock } from "@/icons";
 import GearPicker from "@/components/gear/GearPicker";
 import FlyPicker from "@/components/flies/FlyPicker";
 import SessionPrivacyToggle, { SessionPrivacy } from "@/components/journal/SessionPrivacyToggle";
@@ -570,57 +570,66 @@ export default function EditSessionPage() {
     }
   }
 
-  const input = "w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)] dark:border-[var(--border-rule)] dark:bg-[var(--surface-raised)] dark:text-[var(--text-primary)] dark:placeholder:text-[var(--text-meta)]";
-  const label = "block text-xs font-semibold text-gray-500 dark:text-[var(--text-body)] uppercase tracking-wide mb-1";
-  const section = "bg-white dark:bg-[var(--surface-raised)] rounded-xl border border-gray-200 dark:border-[var(--border-rule)] p-5 mb-4";
+  const input = "ea-input";
+  const label = "ea-label";
+  const section = "ea-card mb-4";
 
   if (loading) return (
-    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-3 text-[var(--text-meta)]">
-        <div className="h-8 w-8 rounded-full border-2 border-[var(--border-rule)] border-t-forest animate-spin" />
+    <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-3 text-[var(--text-3)]">
+        <div className="h-8 w-8 rounded-full border-2 border-[var(--border)] border-t-[var(--accent)] animate-spin" />
         <p className="text-sm">Loading session…</p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
-      <div className="mx-auto max-w-2xl px-4 pt-6 pb-32">
+    <div className="min-h-screen bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--prose)] px-4 pt-6 pb-24">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Link href={`/journal/${id}`} className="flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--action)] transition-colors">
+          <Link href={`/journal/${id}`} className="flex items-center gap-1.5 text-sm text-[var(--text-2)] hover:text-[var(--accent)] transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
-          <h1 className="font-heading text-xl font-bold text-[var(--text-primary)]">Edit Session</h1>
+          <h1 className="font-display text-xl font-semibold text-[var(--text-1)]">Edit Session</h1>
           {/* Simple / Full toggle */}
           {simpleModeResolved && (
-            <button
-              type="button"
-              onClick={toggleSimpleMode}
-              className="flex items-center gap-1.5 rounded-full border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-[var(--action)]/50"
-            >
-              <span className={isSimpleMode ? "text-[var(--action)]" : "text-[var(--text-body)]"}>Simple</span>
-              <span className="text-[var(--border-rule)]">|</span>
-              <span className={!isSimpleMode ? "text-[var(--action)]" : "text-[var(--text-body)]"}>Full</span>
-            </button>
+            <div className="ea-segmented" role="group" aria-label="Edit mode">
+              <button
+                type="button"
+                onClick={() => { if (!isSimpleMode) toggleSimpleMode(); }}
+                className="ea-segment"
+                aria-pressed={isSimpleMode}
+              >
+                Simple
+              </button>
+              <button
+                type="button"
+                onClick={() => { if (isSimpleMode) toggleSimpleMode(); }}
+                className="ea-segment"
+                aria-pressed={!isSimpleMode}
+              >
+                Full
+              </button>
+            </div>
           )}
         </div>
 
-        {error && <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-700 text-sm">{error}</div>}
+        {error && <div className="mb-4 rounded-[var(--radius-md)] bg-[var(--danger)]/10 border border-[var(--danger)]/40 px-4 py-3 text-[var(--danger)] text-sm">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-0">
 
           {/* Basic Info */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[var(--text-body)] mb-4 flex items-center gap-2">📋 Basic Info</h2>
+            <h2 className="ea-overline mb-4">Basic Info</h2>
             <div className="space-y-3">
               <div>
                 <label className={label}>Session Title</label>
                 <input className={input} placeholder="e.g. Sept 13 - Lower Provo" value={form.title} onChange={(e) => updateForm("title", e.target.value)} />
               </div>
               <div>
-                <label className={label}>Date <span className="text-red-400">*</span></label>
+                <label className={label}>Date <span className="text-[var(--danger)]">*</span></label>
                 <input type="date" required className={input} value={form.date} onChange={(e) => updateForm("date", e.target.value)} />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -637,7 +646,7 @@ export default function EditSessionPage() {
                       autoComplete="off"
                     />
                     {riverOpen && rivers.filter(r => r.toLowerCase().includes(form.river_name.toLowerCase())).length > 0 && (
-                      <ul className="absolute z-50 w-full mt-1 max-h-52 overflow-y-auto rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] shadow-lg">
+                      <ul className="absolute z-50 w-full mt-1 max-h-52 overflow-y-auto rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-float)]">
                         {rivers
                           .filter(r => !form.river_name || r.toLowerCase().includes(form.river_name.toLowerCase()))
                           .slice(0, 20)
@@ -645,7 +654,7 @@ export default function EditSessionPage() {
                             <li
                               key={r}
                               onMouseDown={() => { updateForm("river_name", r); setRiverOpen(false); }}
-                              className="px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--border-rule)] cursor-pointer text-sm"
+                              className="px-4 py-2 text-[var(--text-1)] hover:bg-[var(--paper-deep)] cursor-pointer text-sm"
                             >
                               {r}
                             </li>
@@ -658,13 +667,13 @@ export default function EditSessionPage() {
                   <div className="flex items-center justify-between mb-1">
                     <label className={label + " mb-0"}>Location</label>
                     <button type="button" onClick={() => { setEditingSpotId(null); setSpotForm({ name: form.location || "", latitude: "", longitude: "", description: "" }); setShowSpotManager(true); }}
-                      className="text-[10px] text-[var(--action)] font-semibold flex items-center gap-0.5 hover:text-[var(--action)]">
+                      className="text-xs text-[var(--accent)] font-semibold flex items-center gap-0.5 hover:text-[var(--accent-hover)]">
                       <MapPin className="h-3 w-3" /> Manage
                     </button>
                   </div>
                   <input ref={locationInputRef} list="locations-list" className={input} placeholder="Below Jordanelle" value={form.location} onChange={(e) => updateForm("location", e.target.value)} />
                   {form.location && (() => { const s = spots.find(sp => sp.name === form.location); return s?.latitude ? (
-                    <p className="text-[10px] text-[var(--text-meta)] mt-1">{s.latitude.toFixed(5)}, {s.longitude?.toFixed(5)}</p>
+                    <p className="num text-xs text-[var(--text-3)] mt-1">{s.latitude.toFixed(5)}, {s.longitude?.toFixed(5)}</p>
                   ) : null; })()}
                   <datalist id="locations-list">
                     {spots.map(s => <option key={s.id} value={s.name} />)}
@@ -678,26 +687,26 @@ export default function EditSessionPage() {
           {/* Simple mode: fish count field */}
           {isSimpleMode && (
             <div className={section}>
-              <h2 className="text-sm font-bold text-[var(--text-body)] mb-4 flex items-center gap-2">
-                <Fish className="h-4 w-4 text-[var(--action)]" /> Fish Count
+              <h2 className="ea-overline mb-4 flex items-center gap-2">
+                <Fish className="h-4 w-4 text-[var(--accent)]" /> Fish Count
               </h2>
               <div className="flex items-center gap-3">
                 <input
                   type="number"
                   min="0"
-                  className={`${input} w-32 text-2xl font-bold text-[var(--text-primary)] font-['IBM_Plex_Mono'] text-center`}
+                  className={`${input} w-32 text-2xl font-semibold text-[var(--text-1)] num text-center`}
                   placeholder="0"
                   value={simpleFishCount}
                   onChange={(e) => setSimpleFishCount(e.target.value)}
                 />
-                <p className="text-xs text-[var(--text-meta)]">Total fish for this session.<br />Switch to Full to log individual catches with species, size &amp; fly.</p>
+                <p className="text-xs text-[var(--text-3)]">Total fish for this session.<br />Switch to Full to log individual catches with species, size &amp; fly.</p>
               </div>
             </div>
           )}
 
           {/* Full mode: Conditions */}
           {!isSimpleMode && <div className={section}>
-            <h2 className="text-sm font-bold text-[var(--text-body)] mb-4">🌊 Conditions</h2>
+            <h2 className="ea-overline mb-4">Conditions</h2>
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className={label}>Water Temp (°F)</label>
@@ -721,8 +730,8 @@ export default function EditSessionPage() {
 
           {/* Full mode: Map Location */}
           {!isSimpleMode && <div className={section}>
-            <h2 className="text-sm font-bold text-[var(--text-body)] mb-1 flex items-center gap-2">📍 Map Location</h2>
-            <p className="text-xs text-[var(--text-meta)] mb-3">Click or drag pin to reposition</p>
+            <h2 className="ea-overline mb-1 flex items-center gap-2"><MapPin className="h-4 w-4 text-[var(--accent)]" /> Map Location</h2>
+            <p className="text-xs text-[var(--text-3)] mb-3">Click or drag pin to reposition</p>
             <SessionLocationPicker
               initialLat={latitude}
               initialLng={longitude}
@@ -736,26 +745,26 @@ export default function EditSessionPage() {
           {/* Full mode: Fish Caught */}
           {!isSimpleMode && <div className={section}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-[var(--text-body)] flex items-center gap-2"><Fish className="h-4 w-4 text-[var(--action)]" /> Fish Caught ({catches.filter(c => c.species).reduce((s, c) => s + (c.quantities || 1), 0)})</h2>
+              <h2 className="ea-overline flex items-center gap-2"><Fish className="h-4 w-4 text-[var(--accent)]" /> Fish Caught ({catches.filter(c => c.species).reduce((s, c) => s + (c.quantities || 1), 0)})</h2>
               <button type="button" onClick={() => setCatches((p) => [...p, emptyCatch()])}
-                className="flex items-center gap-1 text-xs font-semibold text-[var(--action)] hover:text-[var(--action)]">
+                className="flex items-center gap-1 text-xs font-semibold text-[var(--accent)] hover:text-[var(--accent-hover)]">
                 <Plus className="h-3.5 w-3.5" /> Add Fish
               </button>
             </div>
 
             {catches.length === 0 ? (
               <button type="button" onClick={() => setCatches([emptyCatch()])}
-                className="w-full rounded-lg border-2 border-dashed border-[var(--border-rule)] py-6 text-sm text-[var(--text-meta)] hover:border-[var(--action)]/40 hover:text-[var(--action)] transition-colors">
+                className="w-full rounded-[var(--radius-md)] border-2 border-dashed border-[var(--border-strong)] py-6 text-sm text-[var(--text-3)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors">
                 + Log a fish
               </button>
             ) : (
               <div className="space-y-3">
                 {catches.map((c, i) => (
-                  <div key={i} className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)]/50 p-3">
+                  <div key={i} className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--paper-deep)] p-3">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-semibold text-[var(--text-body)]">Fish #{i + 1}</span>
+                      <span className="text-xs font-semibold text-[var(--text-2)]">Fish #{i + 1}</span>
                       <button type="button" onClick={() => setCatches((p) => p.filter((_, idx) => idx !== i))}
-                        className="text-[var(--text-meta)] hover:text-red-400 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
+                        className="text-[var(--text-3)] hover:text-[var(--danger)] transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
                     </div>
                     <div className="grid grid-cols-3 gap-2">
                       <div className="col-span-2">
@@ -774,8 +783,8 @@ export default function EditSessionPage() {
                       <div className="col-span-2">
                         <label className={label}>Fly Pattern</label>
                         {c.configuration_id && !c.fly_pattern_id && !c.canonical_fly_id && c.fly_name && (
-                          <p className="text-[10px] text-[var(--text-meta)] mb-1">
-                            Current: <span className="text-[var(--signal-live)]">{c.fly_name}</span> — pick a new fly to replace
+                          <p className="text-xs text-[var(--text-3)] mb-1">
+                            Current: <span className="text-[var(--accent)]">{c.fly_name}</span> — pick a new fly to replace
                           </p>
                         )}
                         <FlyPicker
@@ -829,7 +838,7 @@ export default function EditSessionPage() {
                             setNewFlyForm({ name: "", type: "", size: "" });
                             setShowNewFly(true);
                           }}
-                          className="mt-1 text-[10px] text-[var(--text-meta)] hover:text-[var(--action)]"
+                          className="mt-1 text-xs text-[var(--text-3)] hover:text-[var(--accent)]"
                         >
                           + Add a new pattern
                         </button>
@@ -867,34 +876,34 @@ export default function EditSessionPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           {/* Existing uploaded photos */}
                           {(c.fish_image_urls || []).map((url, pi) => (
-                            <div key={`existing-${pi}`} className="relative h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 border border-[var(--border-rule)] group">
+                            <div key={`existing-${pi}`} className="relative h-14 w-14 rounded-[var(--radius-md)] overflow-hidden flex-shrink-0 border border-[var(--border)] group">
                               <img src={url} alt="Fish" className="object-cover w-full h-full" />
                               <button
                                 type="button"
                                 onClick={() => removeCatchPhoto(i, url)}
-                                className="absolute top-0 right-0 bg-black/60 rounded-bl-lg p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="absolute top-0 right-0 bg-[var(--ink)]/60 rounded-bl-[var(--radius-md)] p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                               >
-                                <X className="h-3 w-3 text-white" />
+                                <X className="h-3 w-3 text-[var(--paper)]" />
                               </button>
                             </div>
                           ))}
                           {/* Pending local photos */}
                           {(c.pendingPhotos || []).map((file, fi) => (
-                            <div key={`pending-${fi}`} className="relative h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 border border-[var(--action)]/40 group">
+                            <div key={`pending-${fi}`} className="relative h-14 w-14 rounded-[var(--radius-md)] overflow-hidden flex-shrink-0 border border-[var(--accent)]/40 group">
                               <img src={URL.createObjectURL(file)} alt="Pending" className="object-cover w-full h-full" />
                               <button
                                 type="button"
                                 onClick={() => removePendingPhoto(i, fi)}
-                                className="absolute top-0 right-0 bg-black/60 rounded-bl-lg p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="absolute top-0 right-0 bg-[var(--ink)]/60 rounded-bl-[var(--radius-md)] p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                               >
-                                <X className="h-3 w-3 text-white" />
+                                <X className="h-3 w-3 text-[var(--paper)]" />
                               </button>
                             </div>
                           ))}
                           {/* Add photo button */}
                           {(c.fish_image_urls || []).length + (c.pendingPhotos || []).length < 3 && (
-                            <label className="h-14 w-14 rounded-lg border-2 border-dashed border-[var(--border-rule)] hover:border-[var(--action)]/50 flex items-center justify-center flex-shrink-0 transition-colors cursor-pointer">
-                              <Camera className="h-5 w-5 text-[var(--text-meta)] hover:text-[var(--action)]" />
+                            <label className="h-14 w-14 rounded-[var(--radius-md)] border-2 border-dashed border-[var(--border-strong)] hover:border-[var(--accent)] flex items-center justify-center flex-shrink-0 transition-colors cursor-pointer">
+                              <Camera className="h-5 w-5 text-[var(--text-3)] hover:text-[var(--accent)]" />
                               <input type="file" accept="image/*" className="hidden"
                                 onChange={(e) => { const f = e.target.files?.[0]; if (f) addCatchPhoto(i, f); e.target.value = ""; }} />
                             </label>
@@ -911,7 +920,7 @@ export default function EditSessionPage() {
           {/* Full mode: Gear, Flies, Tags */}
           {!isSimpleMode && <>
             <div className={section}>
-              <h2 className="text-sm font-bold text-[var(--text-body)] mb-3 flex items-center gap-2">🎣 Gear</h2>
+              <h2 className="ea-overline mb-3">Gear</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <GearPicker type="rod" label="Rod" value={gearRodId} onChange={setGearRodId} />
                 <GearPicker type="reel" label="Reel" value={gearReelId} onChange={setGearReelId} />
@@ -922,20 +931,20 @@ export default function EditSessionPage() {
             </div>
 
             <div className={section}>
-              <h2 className="text-sm font-bold text-[var(--text-body)] mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-amber-500" /> Flies & Rig</h2>
+              <h2 className="ea-overline mb-3 flex items-center gap-2"><Feather className="h-4 w-4 text-[var(--accent)]" /> Flies & Rig</h2>
               <textarea rows={3} className={input} placeholder="Perdigon size 16 with 2.8mm tungsten on point, Silver Bullet dropper. 5x tippet, 9ft 5wt…" value={form.flies_notes} onChange={(e) => updateForm("flies_notes", e.target.value)} />
             </div>
 
             <div className={section}>
-              <h2 className="text-sm font-bold text-[var(--text-body)] mb-3">🏷 Tags</h2>
+              <h2 className="ea-overline mb-3">Tags</h2>
               <input className={input} placeholder="utah, provo, nymphing, spring runoff" value={form.trip_tags} onChange={(e) => updateForm("trip_tags", e.target.value)} />
-              <p className="text-xs text-[var(--text-meta)] mt-1.5">Separate tags with commas</p>
+              <p className="ea-field-helper">Separate tags with commas</p>
             </div>
           </>}
 
           {/* Notes — always visible */}
           <div className={section}>
-            <h2 className="text-sm font-bold text-[var(--text-body)] mb-3">📝 Session Notes</h2>
+            <h2 className="ea-overline mb-3">Session Notes</h2>
             <textarea rows={5} className={input} placeholder="How did the day go? What worked, what didn't, water conditions, hatch activity…" value={form.notes} onChange={(e) => updateForm("notes", e.target.value)} />
           </div>
 
@@ -946,26 +955,26 @@ export default function EditSessionPage() {
 
           {/* Private Memo */}
           <div>
-            <h2 className="text-sm font-bold text-[var(--text-meta)] mb-3 flex items-center gap-1.5">🔒 Private Memo</h2>
+            <h2 className="ea-overline mb-3 flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Private Memo</h2>
             <textarea rows={3} className={input} placeholder="Personal notes only you can see — never shared on public sessions…" value={form.private_memo} onChange={(e) => updateForm("private_memo", e.target.value)} />
-            <p className="text-[10px] text-[var(--text-meta)] mt-1">Only visible to you, even on public sessions.</p>
+            <p className="ea-field-helper">Only visible to you, even on public sessions.</p>
           </div>
 
         </form>
 
         {/* Spot Manager Modal */}
         {showSpotManager && (
-          <div className="fixed inset-0 z-[200] bg-black/50 flex items-end sm:items-center justify-center p-4">
-            <div className="bg-[var(--surface-raised)] rounded-2xl w-full max-w-md shadow-2xl">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-rule)]">
-                <h3 className="font-bold text-[var(--text-primary)]">{editingSpotId ? "Edit Spot" : "Add Location"}</h3>
-                <button onClick={() => { setShowSpotManager(false); setEditingSpotId(null); }}>
-                  <X className="h-5 w-5 text-[var(--text-meta)]" />
+          <div className="fixed inset-0 z-[200] bg-[var(--ink)]/50 flex items-end sm:items-center justify-center p-4">
+            <div className="bg-[var(--surface)] rounded-[var(--radius-card)] w-full max-w-md shadow-[var(--shadow-float)]">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
+                <h3 className="font-display text-lg font-semibold text-[var(--text-1)]">{editingSpotId ? "Edit Spot" : "Add Location"}</h3>
+                <button onClick={() => { setShowSpotManager(false); setEditingSpotId(null); }} aria-label="Close">
+                  <X className="h-5 w-5 text-[var(--text-3)]" />
                 </button>
               </div>
               <div className="p-5 space-y-3">
                 <div>
-                  <label className={label}>Location Name <span className="text-red-400">*</span></label>
+                  <label className={label}>Location Name <span className="text-[var(--danger)]">*</span></label>
                   <input className={input} placeholder="Below Jordanelle" value={spotForm.name} onChange={e => setSpotForm(p => ({ ...p, name: e.target.value }))} />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -978,29 +987,29 @@ export default function EditSessionPage() {
                     <input className={input} placeholder="-111.4285" type="number" step="any" value={spotForm.longitude} onChange={e => setSpotForm(p => ({ ...p, longitude: e.target.value }))} />
                   </div>
                 </div>
-                <p className="text-xs text-[var(--text-meta)]">Tip: long-press a spot in Google Maps → copy coordinates</p>
+                <p className="text-xs text-[var(--text-3)]">Tip: long-press a spot in Google Maps → copy coordinates</p>
                 <div>
                   <label className={label}>Notes (optional)</label>
                   <input className={input} placeholder="Public access, park at turnout" value={spotForm.description} onChange={e => setSpotForm(p => ({ ...p, description: e.target.value }))} />
                 </div>
                 <button onClick={saveSpot} disabled={!spotForm.name || spotSaving}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[var(--action)] py-3 text-white font-semibold hover:bg-[var(--surface-page)] disabled:opacity-50 transition-colors">
+                  className="ea-btn ea-btn-primary w-full">
                   <Check className="h-4 w-4" /> {spotSaving ? "Saving…" : editingSpotId ? "Save Changes" : "Add Location"}
                 </button>
               </div>
               {spots.length > 0 && (
-                <div className="border-t border-[var(--border-rule)] px-5 pb-5">
-                  <p className="text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wide pt-4 mb-2">Your Spots</p>
+                <div className="border-t border-[var(--border)] px-5 pb-5">
+                  <p className="ea-overline pt-4 mb-2">Your Spots</p>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
                     {spots.map(s => (
-                      <div key={s.id} className="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-[var(--surface-page)] text-sm">
+                      <div key={s.id} className="flex items-center justify-between rounded-[var(--radius-md)] px-2 py-1.5 hover:bg-[var(--paper-deep)] text-sm">
                         <div>
-                          <button type="button" onClick={() => { updateForm("location", s.name); setShowSpotManager(false); }} className="font-medium text-[var(--text-primary)] hover:text-[var(--action)] text-left">{s.name}</button>
-                          {s.latitude && <p className="text-xs text-[var(--text-meta)]">{s.latitude.toFixed(4)}, {s.longitude?.toFixed(4)}</p>}
+                          <button type="button" onClick={() => { updateForm("location", s.name); setShowSpotManager(false); }} className="font-medium text-[var(--text-1)] hover:text-[var(--accent)] text-left">{s.name}</button>
+                          {s.latitude && <p className="num text-xs text-[var(--text-3)]">{s.latitude.toFixed(4)}, {s.longitude?.toFixed(4)}</p>}
                         </div>
                         <div className="flex items-center gap-3 ml-2">
-                          <button type="button" onClick={() => startEditSpot(s)} className="text-xs text-[var(--text-meta)] hover:text-[var(--action)]">Edit</button>
-                          <button type="button" onClick={() => deleteSpot(s.id)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
+                          <button type="button" onClick={() => startEditSpot(s)} className="text-xs text-[var(--text-3)] hover:text-[var(--accent)]">Edit</button>
+                          <button type="button" onClick={() => deleteSpot(s.id)} className="text-xs text-[var(--danger)] hover:text-[var(--danger)]">Remove</button>
                         </div>
                       </div>
                     ))}
@@ -1013,17 +1022,17 @@ export default function EditSessionPage() {
 
         {/* New Fly Modal */}
         {showNewFly && (
-          <div className="fixed inset-0 z-[200] bg-black/50 flex items-end sm:items-center justify-center p-4">
-            <div className="bg-[var(--surface-raised)] rounded-2xl w-full max-w-md shadow-2xl">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-rule)]">
-                <h3 className="font-bold text-[var(--text-primary)]">Add New Fly</h3>
-                <button onClick={() => { setShowNewFly(false); setNewFlyCatchIdx(null); }}>
-                  <X className="h-5 w-5 text-[var(--text-meta)]" />
+          <div className="fixed inset-0 z-[200] bg-[var(--ink)]/50 flex items-end sm:items-center justify-center p-4">
+            <div className="bg-[var(--surface)] rounded-[var(--radius-card)] w-full max-w-md shadow-[var(--shadow-float)]">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
+                <h3 className="font-display text-lg font-semibold text-[var(--text-1)]">Add New Fly</h3>
+                <button onClick={() => { setShowNewFly(false); setNewFlyCatchIdx(null); }} aria-label="Close">
+                  <X className="h-5 w-5 text-[var(--text-3)]" />
                 </button>
               </div>
               <div className="p-5 space-y-3">
                 <div>
-                  <label className={label}>Name <span className="text-red-400">*</span></label>
+                  <label className={label}>Name <span className="text-[var(--danger)]">*</span></label>
                   <input
                     className={input}
                     placeholder="e.g. Perdigon, Pheasant Tail"
@@ -1058,7 +1067,7 @@ export default function EditSessionPage() {
                   type="button"
                   onClick={saveNewFly}
                   disabled={!newFlyForm.name.trim() || newFlySaving}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[var(--action)] py-3 text-white font-semibold hover:bg-[#d4822f] disabled:opacity-50 transition-colors"
+                  className="ea-btn ea-btn-primary w-full"
                 >
                   <Check className="h-4 w-4" /> {newFlySaving ? "Creating…" : "Create & Select"}
                 </button>
@@ -1068,15 +1077,17 @@ export default function EditSessionPage() {
         )}
 
         {/* Sticky save bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-[var(--surface-raised)] border-t border-[var(--border-rule)] px-4 py-3 flex gap-3 z-50 shadow-lg">
-          <button type="button" onClick={handleDelete} disabled={deleting}
-            className="flex items-center justify-center rounded-xl border border-red-200 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50 flex-shrink-0">
-            {deleting ? "…" : <Trash2 className="h-4 w-4" />}
-          </button>
-          <button onClick={handleSubmit} disabled={saving}
-            className="flex-1 rounded-xl bg-[var(--action)] py-3 text-white font-semibold text-sm hover:bg-[#d4822f] transition-colors disabled:opacity-60 shadow-sm">
-            {savingPhotos ? "Saving photos…" : saving ? "Saving…" : "Save Changes"}
-          </button>
+        <div className="fixed bottom-0 left-0 right-0 bg-[var(--surface)] border-t border-[var(--border)] px-4 py-3 flex gap-3 z-50">
+          <div className="mx-auto flex w-full max-w-[var(--prose)] gap-3">
+            <button type="button" onClick={handleDelete} disabled={deleting} aria-label="Delete session"
+              className="ea-btn ea-btn-secondary flex-shrink-0 px-3 text-[var(--danger)] hover:border-[var(--danger)]/50">
+              {deleting ? "…" : <Trash2 className="h-4 w-4" />}
+            </button>
+            <button onClick={handleSubmit} disabled={saving}
+              className="ea-btn ea-btn-primary flex-1">
+              {savingPhotos ? "Saving photos…" : saving ? "Saving…" : "Save Changes"}
+            </button>
+          </div>
         </div>
 
       </div>

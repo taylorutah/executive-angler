@@ -90,8 +90,8 @@ export default function NewSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] pt-6 pb-12">
-      <div className="container mx-auto px-4 max-w-3xl">
+    <div className="min-h-screen bg-[var(--paper)] pt-6 pb-12">
+      <div className="mx-auto max-w-[var(--prose)] px-4">
         <PageHeader eyebrow="Journal" title="Log a session" />
 
 
@@ -100,7 +100,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Title (optional)
             </label>
@@ -108,7 +108,7 @@ export default function NewSessionPage() {
               type="text"
               id="title"
               name="title"
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             />
           </div>
 
@@ -116,7 +116,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="sessionDate"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Date
             </label>
@@ -126,7 +126,7 @@ export default function NewSessionPage() {
               name="sessionDate"
               defaultValue={new Date().toISOString().split("T")[0]}
               required
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             />
           </div>
 
@@ -134,7 +134,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="river"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               River
             </label>
@@ -149,10 +149,10 @@ export default function NewSessionPage() {
                 onFocus={() => setRiverOpen(true)}
                 onBlur={() => setTimeout(() => setRiverOpen(false), 150)}
                 autoComplete="off"
-                className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)] bg-[var(--surface-raised)] text-[var(--text-primary)]"
+                className="ea-input"
               />
               {riverOpen && rivers.filter(r => r.toLowerCase().includes(riverValue.toLowerCase())).length > 0 && (
-                <ul className="absolute z-50 w-full mt-1 max-h-52 overflow-y-auto rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] shadow-lg">
+                <ul className="absolute z-50 w-full mt-1 max-h-52 overflow-y-auto rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-float)]">
                   {rivers
                     .filter(r => !riverValue || r.toLowerCase().includes(riverValue.toLowerCase()))
                     .slice(0, 20)
@@ -160,7 +160,7 @@ export default function NewSessionPage() {
                       <li
                         key={r}
                         onMouseDown={() => { setRiverValue(r); setRiverOpen(false); }}
-                        className="px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--border-rule)] cursor-pointer text-sm"
+                        className="px-4 py-2 text-[var(--text-1)] hover:bg-[var(--paper-deep)] cursor-pointer text-sm"
                       >
                         {r}
                       </li>
@@ -174,7 +174,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Location
             </label>
@@ -184,7 +184,7 @@ export default function NewSessionPage() {
               name="location"
               list="locations"
               required
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             />
             <datalist id="locations">
               {locations.map((loc) => (
@@ -197,7 +197,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="waterTemp"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Water Temp (optional)
             </label>
@@ -206,7 +206,7 @@ export default function NewSessionPage() {
               id="waterTemp"
               name="waterTemp"
               placeholder="e.g. 52°F"
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             />
           </div>
 
@@ -214,14 +214,14 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="waterClarity"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Water Clarity (optional)
             </label>
             <select
               id="waterClarity"
               name="waterClarity"
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             >
               <option value="">Select...</option>
               <option value="Clear">Clear</option>
@@ -235,7 +235,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="weather"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Weather (optional)
             </label>
@@ -243,7 +243,7 @@ export default function NewSessionPage() {
               type="text"
               id="weather"
               name="weather"
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             />
           </div>
 
@@ -251,7 +251,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="fliesNotes"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Flies Notes (optional)
             </label>
@@ -260,7 +260,7 @@ export default function NewSessionPage() {
               name="fliesNotes"
               rows={3}
               placeholder="Rig notes, setup..."
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             />
           </div>
 
@@ -268,7 +268,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="tags"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Tags (optional)
             </label>
@@ -277,7 +277,7 @@ export default function NewSessionPage() {
               id="tags"
               name="tags"
               placeholder="utah, provo, spring"
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             />
           </div>
 
@@ -285,7 +285,7 @@ export default function NewSessionPage() {
           <div>
             <label
               htmlFor="notes"
-              className="block text-sm font-medium text-[var(--action)] mb-2"
+              className="ea-label"
             >
               Notes (optional)
             </label>
@@ -293,20 +293,20 @@ export default function NewSessionPage() {
               id="notes"
               name="notes"
               rows={6}
-              className="w-full px-4 py-3 border border-[var(--border-rule)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+              className="ea-input"
             />
           </div>
 
           {/* Privacy */}
-          <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5">
+          <div className="ea-card">
             <SessionPrivacyToggle value={privacy} onChange={setPrivacy} />
           </div>
 
           {/* Gear */}
-          <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5">
-            <h2 className="text-sm font-bold text-[var(--action)] mb-4 flex items-center gap-2">
-              🎣 Gear
-              <span className="text-xs font-normal text-[var(--text-meta)] normal-case">Pre-filled from your defaults</span>
+          <div className="ea-card">
+            <h2 className="ea-overline mb-4 flex items-center gap-2">
+              Gear
+              <span className="text-xs font-normal text-[var(--text-3)] normal-case tracking-normal">Pre-filled from your defaults</span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <GearPicker type="rod" label="Rod" value={gearRodId} onChange={setGearRodId} />
@@ -321,7 +321,7 @@ export default function NewSessionPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[var(--action)] text-white font-medium py-4 px-6 rounded-lg hover:bg-[var(--surface-page)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+            className="ea-btn ea-btn-primary ea-btn-lg w-full"
           >
             {loading ? "Saving..." : "Save Session"}
           </button>

@@ -219,22 +219,22 @@ export default function FlyPicker({
             setOpen(true);
             setTimeout(() => inputRef.current?.focus(), 0);
           }}
-          className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[var(--surface-raised)] border border-[var(--border-rule)] hover:border-[var(--action)]/40 text-left transition-colors"
+          className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-[var(--radius-md)] bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--accent)]/50 text-left transition-colors"
         >
           <div className="flex items-center gap-2 min-w-0">
-            <Feather className="h-3.5 w-3.5 text-[var(--action)] shrink-0" />
-            <span className="text-sm text-[var(--text-primary)] truncate">{value.name}</span>
+            <Feather className="h-3.5 w-3.5 text-[var(--accent)] shrink-0" />
+            <span className="text-sm text-[var(--text-1)] truncate">{value.name}</span>
             {value.size && (
-              <span className="text-[10px] text-[var(--text-meta)] shrink-0">#{value.size}</span>
+              <span className="num text-xs text-[var(--text-3)] shrink-0">#{value.size}</span>
             )}
             {value.source === "personal" && (
-              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--action)] bg-[var(--action)]/10 px-1.5 py-0.5 rounded-full shrink-0">
+              <span className="rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-2 py-0.5 text-xs font-medium text-[var(--accent)] shrink-0">
                 Yours
               </span>
             )}
           </div>
           <X
-            className="h-3.5 w-3.5 text-[var(--text-meta)] hover:text-[var(--text-primary)] shrink-0"
+            className="h-3.5 w-3.5 text-[var(--text-3)] hover:text-[var(--text-1)] shrink-0"
             onClick={(e) => {
               e.stopPropagation();
               onChange(null);
@@ -248,7 +248,7 @@ export default function FlyPicker({
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <div className="relative">
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-meta)] pointer-events-none" />
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-3)] pointer-events-none" />
         <input
           ref={inputRef}
           type="text"
@@ -256,15 +256,15 @@ export default function FlyPicker({
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          className="w-full pl-8 pr-3 py-2 rounded-lg bg-[var(--surface-raised)] border border-[var(--border-rule)] text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]/50"
+          className="w-full pl-8 pr-3 py-2 rounded-[var(--radius-md)] bg-[var(--surface)] border border-[var(--border)] text-sm text-[var(--text-1)] placeholder-[var(--text-3)] focus:outline-none focus:border-[var(--accent)]"
         />
         {(bundleLoading || catalogLoading) && (
-          <Loader2 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-meta)] animate-spin" />
+          <Loader2 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-3)] animate-spin" />
         )}
       </div>
 
       {open && (
-        <div className="absolute z-30 left-0 right-0 mt-1 rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] shadow-xl overflow-hidden">
+        <div className="absolute z-30 left-0 right-0 mt-1 rounded-[var(--radius-md)] bg-[var(--surface)] border border-[var(--border)] shadow-[var(--shadow-float)] overflow-hidden">
           {/* Step 2: size grid for the pushed pattern. */}
           {pushed ? (
             <SizeGrid
@@ -330,7 +330,7 @@ export default function FlyPicker({
                   rows.length === 0 &&
                   library.length === 0 &&
                   extraCatalogRows.length === 0 && (
-                    <p className="px-3 py-3 text-xs text-[var(--text-meta)]">
+                    <p className="px-3 py-3 text-xs text-[var(--text-3)]">
                       {query
                         ? `No matches for "${query}"`
                         : activeBoxId
@@ -360,7 +360,7 @@ function BoxChipBar({
 }) {
   if (!bundle || bundle.boxes.length === 0) return null;
   return (
-    <div className="flex items-center gap-1.5 px-2 py-2 border-b border-[var(--border-rule)] overflow-x-auto">
+    <div className="flex items-center gap-1.5 px-2 py-2 border-b border-[var(--border)] overflow-x-auto">
       <ChipButton active={activeBoxId == null} onClick={() => onSelect(null)}>
         All flies
       </ChipButton>
@@ -390,10 +390,10 @@ function ChipButton({
     <button
       type="button"
       onClick={onClick}
-      className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
+      className={`shrink-0 px-2.5 py-1 rounded-[var(--radius-pill)] text-xs font-medium transition-colors ${
         active
-          ? "bg-[var(--action)] text-[var(--surface-page)]"
-          : "bg-transparent border border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]/40 hover:text-[var(--text-primary)]"
+          ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+          : "bg-transparent border border-[var(--border)] text-[var(--text-2)] hover:border-[var(--accent)]/50 hover:text-[var(--text-1)]"
       }`}
     >
       {children}
@@ -417,7 +417,7 @@ function RowSection({
   return (
     <div>
       {title && (
-        <p className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-[var(--text-meta)]">
+        <p className="ea-overline px-3 pt-2 pb-1">
           {title}
         </p>
       )}
@@ -428,35 +428,35 @@ function RowSection({
             key={`${r.source}-${r.pattern_id}`}
             type="button"
             onClick={() => onPick(r)}
-            className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-[var(--surface-raised)] ${
-              selected ? "bg-[var(--surface-raised)]" : ""
+            className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors hover:bg-[var(--paper-deep)] ${
+              selected ? "bg-[var(--paper-deep)]" : ""
             }`}
           >
-            <div className="h-7 w-7 rounded bg-[var(--surface-raised)] border border-[var(--border-rule)] overflow-hidden shrink-0 flex items-center justify-center">
+            <div className="h-7 w-7 rounded-[var(--radius-sm)] bg-[var(--paper-deep)] border border-[var(--border)] overflow-hidden shrink-0 flex items-center justify-center">
               {r.hero_image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={r.hero_image_url} alt="" className="w-full h-full object-cover" />
               ) : (
-                <Feather className="h-3 w-3 text-[var(--text-meta)]" />
+                <Feather className="h-3 w-3 text-[var(--text-3)]" />
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-[var(--text-primary)] truncate">{r.name}</p>
-              <p className="text-[10px] text-[var(--text-meta)] capitalize truncate">
+              <p className="text-sm text-[var(--text-1)] truncate">{r.name}</p>
+              <p className="text-xs text-[var(--text-3)] capitalize truncate">
                 {r.category ?? (r.isOrphan ? "Personal" : "")}
                 {r.sizes.length > 0 && (
-                  <span className="ml-1 text-[var(--text-meta)]">
+                  <span className="ml-1">
                     · {r.sizes.length} size{r.sizes.length === 1 ? "" : "s"}
                   </span>
                 )}
               </p>
             </div>
             {r.source === "personal" && !r.isOrphan && (
-              <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--action)] bg-[var(--action)]/10 px-1.5 py-0.5 rounded-full shrink-0">
+              <span className="rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-2 py-0.5 text-xs font-medium text-[var(--accent)] shrink-0">
                 Yours
               </span>
             )}
-            {selected && <Check className="h-3.5 w-3.5 text-[var(--action)] shrink-0" />}
+            {selected && <Check className="h-3.5 w-3.5 text-[var(--accent)] shrink-0" />}
           </button>
         );
       })}
@@ -479,15 +479,15 @@ function SizeGrid({
 }) {
   return (
     <div className="max-h-80 overflow-y-auto">
-      <div className="flex items-center gap-2 px-2 py-2 border-b border-[var(--border-rule)]">
+      <div className="flex items-center gap-2 px-2 py-2 border-b border-[var(--border)]">
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-[var(--text-body)] hover:bg-[var(--surface-raised)] hover:text-[var(--text-primary)]"
+          className="flex items-center gap-1 px-2 py-1 rounded-[var(--radius-md)] text-xs text-[var(--text-2)] hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)]"
         >
           <ChevronLeft className="h-3.5 w-3.5" /> Back
         </button>
-        <p className="text-sm text-[var(--text-primary)] font-semibold truncate flex-1">{row.name}</p>
+        <p className="text-sm text-[var(--text-1)] font-semibold truncate flex-1">{row.name}</p>
       </div>
       <div className="grid grid-cols-3 gap-1.5 p-2">
         {row.sizes.map((s) => {
@@ -502,15 +502,15 @@ function SizeGrid({
               key={s.variant_id ?? `canonical-${s.size}`}
               type="button"
               onClick={() => onPick(s)}
-              className={`px-2 py-2 rounded-lg text-sm font-semibold transition-colors ${
+              className={`px-2 py-2 rounded-[var(--radius-md)] text-sm font-semibold transition-colors ${
                 isCurrent
-                  ? "bg-[var(--action)] text-[var(--surface-page)]"
-                  : "bg-[var(--surface-raised)] border border-[var(--border-rule)] text-[var(--text-primary)] hover:border-[var(--action)]/40"
+                  ? "border border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]"
+                  : "bg-[var(--surface)] border border-[var(--border)] text-[var(--text-1)] hover:border-[var(--accent)]/50"
               }`}
             >
-              <div>#{s.size}</div>
+              <div className="num">#{s.size}</div>
               {s.bead_weight_mm != null && (
-                <div className="text-[9px] text-[var(--text-meta)] font-normal mt-0.5">
+                <div className="text-xs text-[var(--text-3)] font-normal mt-0.5">
                   {s.bead_weight_mm}mm bead
                 </div>
               )}
