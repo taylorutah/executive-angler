@@ -111,8 +111,8 @@ export default async function MessagesPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[var(--surface-page)]">
-      <div className="mx-auto max-w-5xl px-4 pt-6 pb-16">
+    <main className="min-h-screen bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 pt-6 pb-16">
         <MessagesClient threads={enrichedThreads} currentUserId={uid} />
       </div>
     </main>

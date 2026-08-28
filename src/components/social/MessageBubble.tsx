@@ -55,10 +55,10 @@ export function MessageBubble({
               alt={senderName || "User"}
               width={32}
               height={32}
-              className="rounded-full object-cover"
+              className="ea-photo rounded-[var(--radius-card)] object-cover"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-[var(--surface-card)] flex items-center justify-center text-xs text-[var(--text-body)] font-medium">
+            <div className="w-8 h-8 rounded-[var(--radius-card)] bg-[var(--accent-soft)] border border-[var(--border)] flex items-center justify-center font-display text-xs font-semibold text-[var(--accent)]">
               {(senderName || "?")[0]?.toUpperCase()}
             </div>
           )}
@@ -69,16 +69,16 @@ export function MessageBubble({
       {/* Bubble */}
       <div className="flex flex-col gap-0.5">
         <div
-          className={`px-3 py-2 rounded-2xl text-sm leading-relaxed break-words ${
+          className={`px-3 py-2 rounded-[var(--radius-card)] text-sm leading-relaxed break-words ${
             isOwn
-              ? "bg-[var(--action)] text-white rounded-br-md"
-              : "bg-[var(--surface-card)] text-[var(--text-primary)] rounded-bl-md"
+              ? "bg-[var(--accent)] text-[var(--on-action)] rounded-br-[var(--radius-sm)]"
+              : "bg-[var(--surface)] border border-[var(--border)] text-[var(--text-1)] rounded-bl-[var(--radius-sm)]"
           }`}
         >
           {body}
         </div>
         <span
-          className={`text-[10px] font-['IBM_Plex_Mono'] text-[var(--text-meta)] ${
+          className={`text-xs text-[var(--text-3)] ${
             isOwn ? "text-right" : "text-left"
           }`}
         >

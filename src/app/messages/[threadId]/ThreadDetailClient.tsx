@@ -104,10 +104,11 @@ export function ThreadDetailClient({
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--border-rule)] bg-[var(--surface-raised)] safe-area-top">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--border)] bg-[var(--surface)] safe-area-top">
         <Link
           href="/messages"
-          className="p-1 text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+          className="p-1 text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard"
+          aria-label="Back to messages"
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
@@ -117,14 +118,14 @@ export function ThreadDetailClient({
             alt={otherName}
             width={32}
             height={32}
-            className="rounded-full object-cover"
+            className="ea-photo rounded-[var(--radius-card)] object-cover"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-[var(--surface-card)] flex items-center justify-center text-xs text-[var(--text-body)] font-medium">
+          <div className="w-8 h-8 rounded-[var(--radius-card)] bg-[var(--accent-soft)] border border-[var(--border)] flex items-center justify-center font-display text-xs font-semibold text-[var(--accent)]">
             {otherName[0]?.toUpperCase()}
           </div>
         )}
-        <span className="text-sm font-semibold text-[var(--text-primary)]">
+        <span className="text-sm font-semibold text-[var(--text-1)]">
           {otherName}
         </span>
       </div>
@@ -132,7 +133,7 @@ export function ThreadDetailClient({
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {messages.length === 0 && (
-          <p className="text-center text-sm text-[var(--text-meta)] py-12">
+          <p className="text-center text-sm text-[var(--text-3)] py-12">
             No messages yet. Say hello!
           </p>
         )}
@@ -157,7 +158,7 @@ export function ThreadDetailClient({
       </div>
 
       {/* Input */}
-      <div className="px-4 py-3 border-t border-[var(--border-rule)] bg-[var(--surface-raised)] safe-area-bottom">
+      <div className="px-4 py-3 border-t border-[var(--border)] bg-[var(--surface)] safe-area-bottom">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -171,12 +172,13 @@ export function ThreadDetailClient({
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors"
+            className="ea-input flex-1"
           />
           <button
             type="submit"
             disabled={!body.trim() || sending}
-            className="p-2 rounded-lg bg-[var(--action)] text-white hover:bg-[#d4832e] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            aria-label="Send message"
+            className="h-10 w-10 inline-flex items-center justify-center flex-shrink-0 rounded-[var(--radius-md)] bg-[var(--accent)] text-[var(--on-action)] hover:bg-[var(--accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150 ease-standard"
           >
             {sending ? (
               <Loader2 className="h-4 w-4 animate-spin" />

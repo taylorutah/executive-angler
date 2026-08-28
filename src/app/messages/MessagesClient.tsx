@@ -81,30 +81,31 @@ function NewMessageModal({
   }, [query, currentUserId]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl shadow-2xl overflow-hidden">
+    <div className="ea-modal-overlay z-50 flex items-center justify-center p-4">
+      <div className="ea-modal p-0 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-rule)]">
-          <h3 className="text-sm font-semibold text-[var(--text-primary)]">New Message</h3>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+          <h3 className="font-ui text-base font-semibold text-[var(--text-1)]">New Message</h3>
           <button
             onClick={onClose}
-            className="p-1 text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+            className="p-1 text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard"
+            aria-label="Close"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Search */}
-        <div className="px-4 py-3 border-b border-[var(--border-rule)]">
+        <div className="px-4 py-3 border-b border-[var(--border)]">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-3)]" />
             <input
               ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search anglers by name..."
-              className="w-full pl-9 pr-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors"
+              className="ea-input pl-9"
             />
           </div>
         </div>
@@ -113,11 +114,11 @@ function NewMessageModal({
         <div className="max-h-64 overflow-y-auto">
           {searching && (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-5 w-5 animate-spin text-[var(--text-body)]" />
+              <Loader2 className="h-5 w-5 animate-spin text-[var(--text-2)]" />
             </div>
           )}
           {!searching && query.length >= 2 && results.length === 0 && (
-            <p className="text-center text-sm text-[var(--text-meta)] py-8">
+            <p className="text-center text-sm text-[var(--text-3)] py-8">
               No anglers found
             </p>
           )}
@@ -132,7 +133,7 @@ function NewMessageModal({
                     r.avatar_url
                   )
                 }
-                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--surface-card)] transition-colors text-left"
+                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--paper-deep)] transition-colors duration-150 ease-standard text-left"
               >
                 {r.avatar_url ? (
                   <Image
@@ -140,25 +141,25 @@ function NewMessageModal({
                     alt={r.display_name || "Angler"}
                     width={36}
                     height={36}
-                    className="rounded-full object-cover"
+                    className="ea-photo rounded-[var(--radius-card)] object-cover"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-[var(--surface-card)] border border-[var(--border-rule)] flex items-center justify-center text-xs text-[var(--text-body)] font-medium">
+                  <div className="w-9 h-9 rounded-[var(--radius-card)] bg-[var(--accent-soft)] border border-[var(--border)] flex items-center justify-center font-display text-xs font-semibold text-[var(--accent)]">
                     {(r.display_name || r.username || "?")[0]?.toUpperCase()}
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-medium text-[var(--text-primary)]">
+                  <p className="text-sm font-medium text-[var(--text-1)]">
                     {r.display_name || r.username || "Angler"}
                   </p>
                   {r.username && (
-                    <p className="text-xs text-[var(--text-body)]">@{r.username}</p>
+                    <p className="text-xs text-[var(--text-3)]">@{r.username}</p>
                   )}
                 </div>
               </button>
             ))}
           {!searching && query.length < 2 && (
-            <p className="text-center text-sm text-[var(--text-meta)] py-8">
+            <p className="text-center text-sm text-[var(--text-3)] py-8">
               Type at least 2 characters to search
             </p>
           )}
@@ -305,10 +306,11 @@ function ConversationPanel({
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--border)]">
         <button
           onClick={onBack}
-          className="lg:hidden p-1 text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+          className="lg:hidden p-1 text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard"
+          aria-label="Back to messages"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
@@ -318,14 +320,14 @@ function ConversationPanel({
             alt={otherName}
             width={32}
             height={32}
-            className="rounded-full object-cover"
+            className="ea-photo rounded-[var(--radius-card)] object-cover"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-[var(--surface-card)] flex items-center justify-center text-xs text-[var(--text-body)] font-medium">
+          <div className="w-8 h-8 rounded-[var(--radius-card)] bg-[var(--accent-soft)] border border-[var(--border)] flex items-center justify-center font-display text-xs font-semibold text-[var(--accent)]">
             {otherName[0]?.toUpperCase()}
           </div>
         )}
-        <span className="text-sm font-semibold text-[var(--text-primary)]">
+        <span className="text-sm font-semibold text-[var(--text-1)]">
           {otherName}
         </span>
       </div>
@@ -334,11 +336,11 @@ function ConversationPanel({
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {loading && (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-5 w-5 animate-spin text-[var(--text-body)]" />
+            <Loader2 className="h-5 w-5 animate-spin text-[var(--text-2)]" />
           </div>
         )}
         {!loading && messages.length === 0 && (
-          <p className="text-center text-sm text-[var(--text-meta)] py-12">
+          <p className="text-center text-sm text-[var(--text-3)] py-12">
             No messages yet. Say hello!
           </p>
         )}
@@ -363,7 +365,7 @@ function ConversationPanel({
       </div>
 
       {/* Input */}
-      <div className="px-4 py-3 border-t border-[var(--border-rule)] bg-[var(--surface-raised)]">
+      <div className="px-4 py-3 border-t border-[var(--border)]">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -377,12 +379,13 @@ function ConversationPanel({
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors"
+            className="ea-input flex-1"
           />
           <button
             type="submit"
             disabled={!body.trim() || sending}
-            className="p-2 rounded-lg bg-[var(--action)] text-white hover:bg-[#d4832e] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            aria-label="Send message"
+            className="h-10 w-10 inline-flex items-center justify-center flex-shrink-0 rounded-[var(--radius-md)] bg-[var(--accent)] text-[var(--on-action)] hover:bg-[var(--accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150 ease-standard"
           >
             <Send className="h-4 w-4" />
           </button>
@@ -533,20 +536,21 @@ export function MessagesClient({
         />
       )}
 
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-8rem)] bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-8rem)] bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
         {/* Thread List — hidden on mobile when conversation is open */}
         <div
-          className={`w-full lg:w-80 lg:border-r border-[var(--border-rule)] flex-shrink-0 flex flex-col ${
+          className={`w-full lg:w-80 lg:border-r border-[var(--border)] flex-shrink-0 flex flex-col ${
             selectedThread ? "hidden lg:flex" : "flex"
           }`}
         >
           {/* List Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-rule)]">
-            <h1 className="text-lg font-bold text-[var(--text-primary)]">Messages</h1>
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+            <h1 className="font-display text-xl font-semibold text-[var(--text-1)]">Messages</h1>
             <button
               onClick={() => setShowNewMessage(true)}
-              className="p-2 rounded-lg bg-[var(--action)] text-white hover:bg-[#d4832e] transition-colors"
+              className="h-8 w-8 inline-flex items-center justify-center rounded-[var(--radius-md)] bg-[var(--accent)] text-[var(--on-action)] hover:bg-[var(--accent-hover)] transition-colors duration-150 ease-standard"
               title="New message"
+              aria-label="New message"
             >
               <Plus className="h-4 w-4" />
             </button>
@@ -556,9 +560,9 @@ export function MessagesClient({
           <div className="flex-1 overflow-y-auto">
             {threads.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-                <MessageCircle className="h-10 w-10 text-[var(--border-rule)] mb-3" />
-                <p className="text-sm text-[var(--text-body)] mb-1">No messages yet</p>
-                <p className="text-xs text-[var(--text-meta)]">
+                <MessageCircle className="h-10 w-10 text-[var(--text-3)] mb-3" />
+                <p className="text-sm text-[var(--text-2)] mb-1">No messages yet</p>
+                <p className="text-xs text-[var(--text-3)]">
                   Start a conversation with a fellow angler
                 </p>
               </div>
@@ -573,10 +577,10 @@ export function MessagesClient({
                 <button
                   key={thread.id}
                   onClick={() => handleSelectThread(thread)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors border-b border-[var(--border-rule)]/50 ${
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-150 ease-standard border-b border-[var(--border)] ${
                     isActive
-                      ? "bg-[var(--surface-card)]"
-                      : "hover:bg-[var(--surface-page)]/50"
+                      ? "bg-[var(--accent-soft)]"
+                      : "hover:bg-[var(--paper-deep)]"
                   }`}
                 >
                   {/* Avatar */}
@@ -587,15 +591,15 @@ export function MessagesClient({
                         alt={name}
                         width={40}
                         height={40}
-                        className="rounded-full object-cover"
+                        className="ea-photo rounded-[var(--radius-card)] object-cover"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-[var(--surface-card)] border border-[var(--border-rule)] flex items-center justify-center text-sm text-[var(--text-body)] font-medium">
+                      <div className="w-10 h-10 rounded-[var(--radius-card)] bg-[var(--accent-soft)] border border-[var(--border)] flex items-center justify-center font-display text-sm font-semibold text-[var(--accent)]">
                         {name[0]?.toUpperCase()}
                       </div>
                     )}
                     {hasUnread && (
-                      <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[var(--action)] rounded-full border-2 border-[var(--surface-raised)]" />
+                      <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[var(--accent)] rounded-full border-2 border-[var(--surface)]" />
                     )}
                   </div>
 
@@ -605,20 +609,20 @@ export function MessagesClient({
                       <span
                         className={`text-sm truncate ${
                           hasUnread
-                            ? "font-semibold text-[var(--text-primary)]"
-                            : "font-medium text-[#C9D1D9]"
+                            ? "font-semibold text-[var(--text-1)]"
+                            : "font-medium text-[var(--text-2)]"
                         }`}
                       >
                         {name}
                       </span>
-                      <span className="text-[10px] font-['IBM_Plex_Mono'] text-[var(--text-meta)] flex-shrink-0 ml-2">
+                      <span className="text-xs text-[var(--text-3)] flex-shrink-0 ml-2">
                         {timeAgo(thread.last_message_at)}
                       </span>
                     </div>
                     {thread.last_message_body && (
                       <p
                         className={`text-xs truncate mt-0.5 ${
-                          hasUnread ? "text-[#C9D1D9]" : "text-[var(--text-meta)]"
+                          hasUnread ? "text-[var(--text-2)]" : "text-[var(--text-3)]"
                         }`}
                       >
                         {thread.last_message_body}
@@ -628,7 +632,7 @@ export function MessagesClient({
 
                   {/* Unread badge */}
                   {hasUnread && (
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[var(--action)] text-white text-[10px] font-['IBM_Plex_Mono'] font-bold flex items-center justify-center">
+                    <span className="flex-shrink-0 min-w-5 h-5 px-1 rounded-full bg-[var(--accent)] text-[var(--on-action)] text-xs font-medium num flex items-center justify-center">
                       {thread.unread_count}
                     </span>
                   )}
@@ -655,8 +659,8 @@ export function MessagesClient({
             />
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-              <MessageCircle className="h-12 w-12 text-[var(--border-rule)] mb-3" />
-              <p className="text-sm text-[var(--text-body)]">
+              <MessageCircle className="h-12 w-12 text-[var(--text-3)] mb-3" />
+              <p className="text-sm text-[var(--text-2)]">
                 Select a conversation or start a new one
               </p>
             </div>
