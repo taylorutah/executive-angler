@@ -86,8 +86,9 @@ describe("v4.1 geometry tokens", () => {
   it("locks house copy to one 65ch Newsreader measure and ink Fraunces heads", () => {
     assert.match(
       css,
-      /\.house-measure,\n\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: 65ch;/,
+      /\.house-measure \{\n  max-width: 65ch;\n  font-family:\s*var\(--font-body\);/,
     );
+    assert.match(css, /\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: none;/);
     assert.match(css, /\.house-measure h1,[\s\S]*?color:\s*var\(--text-primary\)/);
     assert.match(css, /\.house-measure \.prose \{\n  font-family:\s*var\(--font-body\)/);
   });

@@ -1300,10 +1300,17 @@ input.ea-focus-ring:focus-visible,
   color: var(--text-body);
 }
 
-.house-measure,
+/* One Newsreader 65ch sheet. Dek is Archivo; it does not get its own measure. */
+.house-measure {
+  max-width: 65ch;
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  font-size: 19px;
+}
+
 .house-measure .prose,
 .house-measure .desk-dek-ui {
-  max-width: 65ch;
+  max-width: none;
 }
 
 /* Ink Fraunces headings beat leftover copper utilities and unlayered .prose. */
@@ -1322,7 +1329,6 @@ input.ea-focus-ring:focus-visible,
 .house-measure .prose {
   font-family: var(--font-body);
   font-optical-sizing: auto;
-  max-width: 65ch;
 }
 
 .house-measure .desk-dek-ui {

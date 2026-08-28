@@ -161,5 +161,3 @@ export default function ContactForm({ initialSubject }: Props) {
     </form>
   );
 }
-
-export { SUBJECT_OPTIONS } from "./subjects";

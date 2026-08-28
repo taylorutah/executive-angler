@@ -109,7 +109,8 @@ describe("public chrome locks", () => {
       assert.equal(src.includes("revalidate"), false, `${rel} is ISR and can ship a stale house prerender`);
     }
     const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
-    assert.match(css, /\.house-measure,\n\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: 65ch;/);
+    assert.match(css, /\.house-measure \{\n  max-width: 65ch;/);
+    assert.match(css, /\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: none;/);
     assert.match(visual, /getByRole\("link", \{ name: "Sign in" \}\)/);
     assert.match(visual, /header \.animate-pulse/);
   });
