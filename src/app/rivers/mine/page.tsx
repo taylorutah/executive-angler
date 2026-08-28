@@ -26,13 +26,13 @@ export default async function MyRiversPage() {
   ];
 
   return (
-    <article className="min-h-[70vh] bg-[var(--surface-page)]">
-      <div className="mx-auto max-w-[780px] px-4 py-12 sm:px-6 sm:py-16">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--action)]">
+    <article className="min-h-[70vh] bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--prose)] px-4 py-12 sm:px-6 sm:py-16">
+        <p className="ea-overline">
           Watchlist
         </p>
-        <h1 className="mt-2 font-heading text-4xl text-[var(--text-primary)]">Your rivers</h1>
-        <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--text-body)]">
+        <h1 className="mt-2 font-display text-2xl font-semibold text-[var(--text-1)] sm:text-3xl">Your rivers</h1>
+        <p className="mt-3 max-w-xl leading-relaxed text-[var(--text-2)]">
           The sections you watch. Flow shows up on Today. Nothing here is public.
         </p>
 

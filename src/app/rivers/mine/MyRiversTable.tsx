@@ -154,7 +154,7 @@ export default function MyRiversTable({ sections }: { sections: WatchedSection[]
         ]}
       />
 
-      <p className="mt-4 text-[13px] leading-relaxed text-[var(--text-meta)]">
+      <p className="mt-4 text-[13px] leading-relaxed text-[var(--text-3)]">
         Water alerts are off until you turn them on. They name the river and the
         gauge, never a person or a catch.
       </p>
