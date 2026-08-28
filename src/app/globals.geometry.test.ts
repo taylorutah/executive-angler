@@ -12,6 +12,8 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /--vellum:\s*#F2EDE4/i);
     assert.match(css, /--ink:\s*#2C211B/i);
     assert.match(css, /--graphite:\s*#4F4540/i);
+    assert.match(css, /--slate:\s*#6D645F/i);
+    assert.match(css, /--rule:\s*#E2DACD/i);
     assert.match(css, /--copper-700:\s*#B4410D/i);
     assert.match(css, /--teal-700:\s*#086B6C/i);
     assert.match(css, /--copper:\s*var\(--copper-700\)/);
