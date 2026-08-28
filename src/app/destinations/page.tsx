@@ -67,23 +67,23 @@ export default async function DestinationsPage() {
 
   return (
     <>
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-body)]">
+      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <p className="ea-overline">
             Places
           </p>
-          <h1 className="mt-3 font-heading text-4xl font-bold text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
+          <h1 className="mt-3 text-[var(--text-1)]">
             {destinations.length} destinations
           </h1>
-          <p className="mt-5 max-w-[68ch] text-lg leading-relaxed text-[var(--text-body)]">
+          <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
             {destinations.length} destinations. Filter by region, season, species, and
             trip length.
           </p>
         </div>
       </section>
 
-      <section className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <Suspense>
             <EntityListView
               items={items}
