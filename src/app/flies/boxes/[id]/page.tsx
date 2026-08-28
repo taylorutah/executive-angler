@@ -75,33 +75,33 @@ export default async function BoxDetailV3({ params }: Props) {
     .filter((x): x is Entry => x !== null);
 
   return (
-    <main className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)] pt-14">
-      <header className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 flex items-start gap-6">
+    <main className="min-h-screen bg-[var(--paper)] text-[var(--text-1)]">
+      <header className="border-b border-[var(--border)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-5 flex items-start gap-6">
           <div className="min-w-0 flex-1">
             <Link
               href="/flies?tab=boxes"
-              className="inline-flex items-center gap-1 text-xs text-[var(--text-meta)] hover:text-[var(--signal-live)] transition-colors mb-2"
+              className="inline-flex items-center gap-1 text-xs text-[var(--text-2)] hover:text-[var(--accent)] transition-colors mb-2"
             >
               <ChevronLeft className="h-3 w-3" /> All boxes
             </Link>
             <div className="flex items-baseline gap-3">
-              <h1 className="font-heading text-3xl text-[var(--text-primary)] tracking-tight">
+              <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] lg:text-3xl">
                 {box.name}
               </h1>
-              <span className="font-['IBM_Plex_Mono'] text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--signal-live)]">
+              <span className="ea-badge">
                 {TIER_LABELS[box.tier]}
               </span>
               {box.is_default && (
-                <span className="rounded bg-[var(--signal-live)]/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
+                <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-3 py-1 text-[12px] font-medium text-[var(--accent)]">
                   Default
                 </span>
               )}
             </div>
             {box.description && (
-              <p className="mt-2 text-sm text-[var(--text-body)] max-w-2xl">{box.description}</p>
+              <p className="mt-2 text-sm text-[var(--text-2)] max-w-2xl">{box.description}</p>
             )}
-            <p className="mt-3 font-['IBM_Plex_Mono'] text-[11px] text-[var(--text-meta)]">
+            <p className="mt-3 text-[13px] text-[var(--text-3)] num">
               {entries.length} {entries.length === 1 ? "version" : "versions"} ·
               {box.total_capacity ? ` capacity ${box.total_capacity} · ` : " "}
               tap any row to open the fly
@@ -116,17 +116,17 @@ export default async function BoxDetailV3({ params }: Props) {
                     <Link
                       key={b.id}
                       href={`/flies/boxes/${b.id}`}
-                      className={`group flex items-center gap-1.5 rounded-md border px-2 py-1 sm:rounded-lg sm:px-3 sm:py-2 transition-colors ${
+                      className={`group flex items-center gap-1.5 rounded-[var(--radius-md)] border px-3 py-2 transition-colors ${
                         isActive
-                          ? "border-[var(--action)] bg-[var(--action)]/10"
-                          : "border-[var(--border-rule)] bg-[var(--surface-page)] hover:border-[var(--action)]/40"
+                          ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+                          : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border-strong)]"
                       }`}
                     >
-                      <Box className={`h-3 w-3 flex-shrink-0 ${isActive ? "text-[var(--action)]" : "text-[var(--text-meta)]"}`} />
-                      <span className={`max-w-[140px] truncate text-xs font-semibold ${isActive ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"}`}>
+                      <Box className={`h-3.5 w-3.5 flex-shrink-0 ${isActive ? "text-[var(--accent)]" : "text-[var(--text-3)]"}`} />
+                      <span className={`max-w-[140px] truncate text-[13px] font-medium ${isActive ? "text-[var(--accent)]" : "text-[var(--text-2)]"}`}>
                         {b.name}
                       </span>
-                      {b.is_default && <Star className="h-3 w-3 fill-[var(--signal-live)] text-[var(--signal-live)]" />}
+                      {b.is_default && <Star className="h-3 w-3 fill-[var(--accent)] text-[var(--accent)]" />}
                     </Link>
                   );
                 })}
@@ -136,13 +136,13 @@ export default async function BoxDetailV3({ params }: Props) {
         </div>
       </header>
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+      <section className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6">
         {entries.length === 0 ? (
-          <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] p-8 text-center">
-            <p className="text-sm text-[var(--text-body)]">This box is empty.</p>
-            <p className="mt-2 text-xs text-[var(--text-meta)]">
+          <div className="ea-empty rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+            <p>This box is empty.</p>
+            <p className="text-sm text-[var(--text-3)]">
               Open any fly in the{" "}
-              <Link href="/flies/library" className="text-[var(--signal-live)] hover:text-[var(--action)]">library</Link>{" "}
+              <Link href="/flies/library" className="text-[var(--accent)] hover:underline">library</Link>{" "}
               and use the box-picker on a version to add it here.
             </p>
           </div>

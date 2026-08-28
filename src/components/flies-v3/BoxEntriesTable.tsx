@@ -13,7 +13,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Trash2, X } from "@/icons";
+import { Heart, Trash2, Wrench, X } from "@/icons";
 import { summarizeVersion } from "./summarize-version";
 import type { SlotOverrides } from "@/types/flies";
 
@@ -123,8 +123,8 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
   return (
     <>
       {selected.size > 0 && (
-        <div className="sticky top-14 z-30 mb-2 flex items-center justify-between gap-3 rounded-md border border-rose-500/40 bg-rose-500/10 px-3 py-2 shadow-sm">
-          <span className="text-xs font-medium text-rose-300">
+        <div className="sticky top-[var(--header-h)] z-30 mb-2 flex items-center justify-between gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 shadow-[var(--shadow-float)]">
+          <span className="text-xs font-medium text-[var(--text-1)] num">
             {selected.size} selected
           </span>
           <div className="flex items-center gap-2">
@@ -132,17 +132,17 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
               type="button"
               onClick={removeBulk}
               disabled={busyIds.size > 0}
-              className="inline-flex items-center gap-1.5 rounded-md bg-rose-500 px-3 py-1 text-xs font-medium text-white hover:bg-rose-600 disabled:opacity-60"
+              className="ea-btn ea-btn-danger ea-btn-sm"
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <Trash2 className="h-3.5 w-3.5" aria-hidden />
               Remove from {boxName}
             </button>
             <button
               type="button"
               onClick={clearSelection}
-              className="inline-flex items-center gap-1 rounded-md border border-[var(--border-strong)] px-2 py-1 text-xs text-[var(--text-body)] hover:bg-[var(--border-rule)]"
+              className="ea-btn ea-btn-secondary ea-btn-sm"
             >
-              <X className="h-3 w-3" />
+              <X className="h-3.5 w-3.5" aria-hidden />
               Clear
             </button>
           </div>
@@ -150,14 +150,14 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
       )}
 
       {error && (
-        <p className="mb-2 text-xs text-rose-400">{error}</p>
+        <p className="mb-2 text-xs text-[var(--danger)]">{error}</p>
       )}
 
-      <div className="overflow-hidden rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)]">
-        <table className="w-full text-sm">
-          <thead className="bg-[var(--surface-raised)] text-[var(--text-meta)] text-[10px] uppercase tracking-wide">
+      <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+        <table className="ea-table">
+          <thead>
             <tr>
-              <th className="w-10 px-3 py-2 text-left">
+              <th className="w-10">
                 <input
                   type="checkbox"
                   checked={allSelected}
@@ -166,18 +166,18 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                   }}
                   onChange={toggleAll}
                   aria-label="Select all"
-                  className="h-4 w-4 accent-[var(--action)] cursor-pointer"
+                  className="h-4 w-4 rounded-[var(--radius-sm)] border-[var(--border-strong)] text-[var(--accent)] focus:ring-[var(--accent)] cursor-pointer"
                 />
               </th>
-              <th className="text-left px-4 py-2 font-medium">Fly</th>
-              <th className="text-left px-4 py-2 font-medium">Version</th>
-              <th className="text-right px-4 py-2 font-medium">Tied</th>
-              <th className="text-right px-4 py-2 font-medium">Target</th>
-              <th className="text-right px-4 py-2 font-medium">Δ</th>
-              <th className="w-12 px-2 py-2"></th>
+              <th className="text-left">Fly</th>
+              <th className="text-left">Version</th>
+              <th className="text-right">Tied</th>
+              <th className="text-right">Target</th>
+              <th className="text-right">Δ</th>
+              <th className="w-12"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#21262D]">
+          <tbody>
             {entries.map((e) => {
               const cfg = e.configuration;
               const deficit = Math.max(0, cfg.target_count - cfg.tied_count - cfg.bought_count);
@@ -186,46 +186,44 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
               return (
                 <tr
                   key={e.id}
-                  className={`transition-colors ${
-                    isSelected ? "bg-[var(--action)]/5" : "hover:bg-[var(--surface-raised)]/60"
-                  } ${isBusy ? "opacity-50" : ""}`}
+                  className={`${isSelected ? "bg-[var(--accent-soft)]" : ""} ${isBusy ? "opacity-50" : ""}`}
                 >
-                  <td className="px-3 py-2">
+                  <td>
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggleSelect(cfg.id)}
                       aria-label={`Select ${cfg.fly.name}`}
-                      className="h-4 w-4 accent-[var(--action)] cursor-pointer"
+                      className="h-4 w-4 rounded-[var(--radius-sm)] border-[var(--border-strong)] text-[var(--accent)] focus:ring-[var(--accent)] cursor-pointer"
                     />
                   </td>
-                  <td className="px-4 py-2">
-                    <Link href={`/flies/${cfg.fly.slug}`} className="flex items-center gap-2.5 hover:text-[var(--action)]">
-                      <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded bg-[var(--border-rule)]">
+                  <td>
+                    <Link href={`/flies/${cfg.fly.slug}`} className="flex items-center gap-2.5 hover:text-[var(--accent)]">
+                      <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-[var(--radius-sm)] bg-[var(--paper-deep)]">
                         {cfg.fly.hero_image_url && (
                           <Image src={cfg.fly.hero_image_url} alt={cfg.fly.name} fill className="object-cover" sizes="32px" />
                         )}
                       </div>
                       <span className="font-medium">{cfg.fly.name}</span>
-                      {cfg.is_favorite && <span className="text-rose-400 text-xs">♥</span>}
-                      {cfg.is_tie_next && <span className="text-[var(--action)] text-xs">⚒</span>}
+                      {cfg.is_favorite && <Heart className="h-3.5 w-3.5 fill-[var(--accent)] text-[var(--accent)]" aria-label="Favorite" />}
+                      {cfg.is_tie_next && <Wrench className="h-3.5 w-3.5 text-[var(--accent)]" aria-label="In tie-next" />}
                     </Link>
                   </td>
-                  <td className="px-4 py-2 text-[var(--text-body)]">{summarizeVersion(cfg)}</td>
-                  <td className="px-4 py-2 text-right tabular-nums">{cfg.tied_count}</td>
-                  <td className="px-4 py-2 text-right tabular-nums">{cfg.target_count}</td>
-                  <td className={`px-4 py-2 text-right tabular-nums ${deficit > 0 ? "text-[var(--action)]" : "text-[var(--text-meta)]"}`}>
+                  <td className="text-[var(--text-2)]">{summarizeVersion(cfg)}</td>
+                  <td className="text-right">{cfg.tied_count}</td>
+                  <td className="text-right">{cfg.target_count}</td>
+                  <td className={`text-right ${deficit > 0 ? "text-[var(--accent)]" : "text-[var(--text-3)]"}`}>
                     {deficit > 0 ? `+${deficit}` : "—"}
                   </td>
-                  <td className="px-2 py-2 text-right">
+                  <td className="text-right">
                     <button
                       type="button"
                       onClick={() => removeOne(cfg.id)}
                       disabled={isBusy}
                       title={`Remove from ${boxName}`}
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[var(--border-strong)] text-[var(--text-meta)] hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/40 disabled:opacity-60"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-3)] hover:bg-[var(--danger)]/10 hover:text-[var(--danger)] hover:border-[var(--danger)]/40 disabled:opacity-50 transition-colors"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-3.5 w-3.5" aria-hidden />
                     </button>
                   </td>
                 </tr>
