@@ -15,18 +15,22 @@ interface RiverHeroImageProps {
   heroImageCredit?: string;
   heroImageCreditUrl?: string;
   galleryPhotos: ApprovedPhoto[];
-  /** River name — painted over the photograph in Fraunces. */
+  /** River name — set in Fraunces on the paper band below the photograph. */
   title: string;
-  /** Destination / water-type line under the name. */
+  /** Destination / water-type overline above the name. */
   subtitle?: string;
   meta?: string;
   children?: React.ReactNode;
 }
 
 /**
- * Full-bleed river hero. The name sits in the 0.8-alpha band of `.hero-overlay`
- * (8.45:1 on Vellum if the photo never loads). Do not move the title up
- * into the thinner scrim, and do not repaint it dark.
+ * Flat river hero (DESIGN.md § Imagery): graded photograph in its own band,
+ * then overline/title/meta on paper below. No scrim, no text over the
+ * photo — gradients are banned and metadata never sits on imagery.
+ *
+ * The "N photographs" chip sits on the photo as a solid ink chip (the one
+ * sanctioned flat pattern for photo affordances). AdminHeroEditor mounts in
+ * the top-right corner via children.
  */
 export default function RiverHeroImage({
   heroImageUrl,
@@ -41,7 +45,6 @@ export default function RiverHeroImage({
 }: RiverHeroImageProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [loaded, setLoaded] = useState(false);
   const showPhoto = isUsableImageUrl(heroImageUrl) && !failed;
 
   const heroAsPhoto: ApprovedPhoto | null = showPhoto
@@ -59,50 +62,58 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <section className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
-        {showPhoto ? (
-          <div className="absolute inset-0">
+      <section className="w-full">
+        <div className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
+          {showPhoto ? (
             <Image
               src={heroImageUrl}
               alt={heroImageAlt}
               fill
-              className="object-cover"
+              className="object-cover [filter:var(--photo-grade)]"
               priority
               sizes="100vw"
               placeholder="blur"
               blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
-              onLoad={() => setLoaded(true)}
               onError={() => setFailed(true)}
             />
-          </div>
-        ) : (
-          <PlateFallback title="" meta={meta} />
-        )}
+          ) : (
+            <PlateFallback title="" meta={meta} />
+          )}
 
-        {/* Unconditional scrim — title is items-end in the 0.8 band. */}
-        <div className="hero-overlay absolute inset-0 pointer-events-none" />
+          {totalCount > 1 && (
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(true)}
+              className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)] hover:opacity-90 transition-opacity"
+              aria-label={`View ${totalCount} photos`}
+            >
+              <Images className="h-3.5 w-3.5" />
+              {totalCount} photographs
+            </button>
+          )}
 
-        <div className="absolute inset-0 flex items-end">
-          <div className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
-            {subtitle ? (
-              <p className="mb-2 text-[13px] font-medium uppercase tracking-[0.14em] text-white">
-                {subtitle}
+          {children && (
+            <div className="absolute top-3 right-3 z-20">{children}</div>
+          )}
+        </div>
+
+        <div className="border-b border-[var(--border)]">
+          <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+            {subtitle ? <p className="ea-overline">{subtitle}</p> : null}
+            <h1 className="mt-2 max-w-4xl text-[var(--text-1)]">{title}</h1>
+            {meta ? (
+              <p className="mt-3 text-[var(--text-14)] text-[var(--text-2)]">
+                {meta}
               </p>
             ) : null}
-            <h1
-              className="max-w-4xl font-heading font-bold leading-[1.08] tracking-tight text-white"
-              style={{ fontSize: "clamp(2.25rem, 5vw, 4.25rem)" }}
-            >
-              {title}
-            </h1>
-            {loaded && showPhoto && heroImageCredit ? (
-              <p className="mt-3 text-[11px] tracking-wide text-white/80">
+            {showPhoto && heroImageCredit ? (
+              <p className="mt-3 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
                 {heroImageCreditUrl ? (
                   <a
                     href={heroImageCreditUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white"
+                    className="underline underline-offset-4 hover:text-[var(--text-1)]"
                   >
                     {heroImageCredit}
                   </a>
@@ -113,22 +124,6 @@ export default function RiverHeroImage({
             ) : null}
           </div>
         </div>
-
-        {totalCount > 1 && (
-          <button
-            type="button"
-            onClick={() => setLightboxOpen(true)}
-            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 text-[11px] font-medium text-white/90 underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white"
-            aria-label={`View ${totalCount} photos`}
-          >
-            <Images className="h-3.5 w-3.5" />
-            {totalCount} photographs
-          </button>
-        )}
-
-        {children && (
-          <div className="absolute top-3 right-3 z-20">{children}</div>
-        )}
       </section>
 
       {lightboxOpen && allPhotos.length > 0 && (

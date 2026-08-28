@@ -113,27 +113,6 @@
   --elev-2: var(--shadow-float);
   --signal-ring: 0 0 0 3px rgb(30 77 59 / 0.15);
 
-  /* Hero scrims — photo-legibility washes over hero imagery.
-     CONFLICT: the brief bans gradients; these survive because hero
-     text-over-photo is functional. Awaiting client ruling (DESIGN.md). */
-  --scrim-light: linear-gradient(
-    to bottom,
-    rgb(15 43 31 / 0) 0%,
-    rgb(15 43 31 / 0.10) 50%,
-    rgb(15 43 31 / 0.45) 100%
-  );
-  --scrim-standard: linear-gradient(
-    to bottom,
-    rgb(15 43 31 / 0.10) 0%,
-    rgb(15 43 31 / 0.40) 60%,
-    rgb(15 43 31 / 0.70) 100%
-  );
-  --scrim-heavy: linear-gradient(
-    to bottom,
-    rgb(15 43 31 / 0.30) 0%,
-    rgb(15 43 31 / 0.50) 40%,
-    rgb(15 43 31 / 0.80) 100%
-  );
 }
 
 /* ── Semantic layer: daylight is the only register (DESIGN.md §1.2) ── */
@@ -624,22 +603,6 @@
   .ea-photo-wide { aspect-ratio: 3 / 2; }
   .ea-photo-card { aspect-ratio: 4 / 3; }
   .ea-photo-avatar { aspect-ratio: 1 / 1; }
-
-  /* ── Hero scrims (flagged — see token block note) ──────────────── */
-  .hero-overlay {
-    background: linear-gradient(
-      to bottom,
-      rgb(15 43 31 / 0) 0%,
-      rgb(15 43 31 / 0) 48%,
-      rgb(15 43 31 / 0.62) 70%,
-      rgb(15 43 31 / 0.84) 82%,
-      rgb(15 43 31 / 0.88) 100%
-    );
-  }
-
-  .hero-overlay-light {
-    background: var(--scrim-light);
-  }
 
   /* Card hover: border emphasis, never a shadow */
   .card-hover {

@@ -19,8 +19,6 @@ interface SafeEntityImageProps {
   loading?: "lazy" | "eager";
   /** object-contain + padding for illustrations */
   contain?: boolean;
-  /** Overlay painted only after the photo has loaded. */
-  scrimClassName?: string;
 }
 
 /**
@@ -38,10 +36,8 @@ export default function SafeEntityImage({
   priority,
   loading,
   contain,
-  scrimClassName,
 }: SafeEntityImageProps) {
   const [failed, setFailed] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
   if (!isUsableImageUrl(src) || failed) {
     return <PlateFallback title={title} meta={meta} />;
@@ -63,12 +59,8 @@ export default function SafeEntityImage({
           className ??
           (contain ? "object-contain p-3" : "object-cover")
         }
-        onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
       />
-      {loaded && scrimClassName ? (
-        <div className={`absolute inset-0 pointer-events-none ${scrimClassName}`} />
-      ) : null}
     </>
   );
 }

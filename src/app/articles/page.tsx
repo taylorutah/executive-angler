@@ -90,7 +90,6 @@ export default async function ArticlesPage() {
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       priority
-                      scrimClassName="bg-gradient-to-t from-black/40 to-transparent"
                     />
                     <span className="absolute top-4 left-4 px-3 py-1 bg-[var(--action)] text-white text-xs font-semibold uppercase tracking-wide rounded-chip">
                       {heroArticle.category}

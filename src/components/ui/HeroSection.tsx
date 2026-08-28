@@ -8,7 +8,6 @@ interface HeroSectionProps {
   title: string;
   subtitle?: string;
   height?: string;
-  overlay?: "dark" | "light";
   children?: React.ReactNode;
   imageContain?: boolean;
   /** Photo credit — photographer name or "© Name" */
@@ -16,64 +15,90 @@ interface HeroSectionProps {
   /** Optional link to photographer's site or portfolio */
   imageCreditUrl?: string;
   /**
-   * "chip" (default) — the existing solid-ink rounded credit pill, used by
-   * fly-shops/species/lodges heroes. "overlay" — a plain white/80 text line
-   * under the title, in the same scrim band. Do not use "chip" on the place
-   * page; a solid pill reads as app chrome over the essay-style hero.
+   * "chip" (default) — the solid-ink credit pill on the photograph, used by
+   * fly-shops/species/lodges heroes. "overlay" — a plain metadata line under
+   * the subtitle in the paper band. Do not use "chip" on the place page; a
+   * solid pill reads as app chrome next to the essay-style hero.
    */
   creditStyle?: "chip" | "overlay";
 }
 
+/**
+ * Flat hero (DESIGN.md § Imagery): graded photograph in its own band, title
+ * and subtitle on paper below. No scrims, no text over the photo — gradients
+ * are banned and overlines/metadata never sit on imagery.
+ */
 export default function HeroSection({
   imageUrl,
   imageAlt,
   title,
   subtitle,
   height = "h-[60vh]",
-  overlay = "dark",
-  children,
   imageContain = false,
   imageCredit,
   imageCreditUrl,
   creditStyle = "chip",
+  children,
 }: HeroSectionProps) {
   const showCredit = Boolean(imageCredit) && isUsableImageUrl(imageUrl);
 
   return (
-    <section className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-[var(--surface-card)]" : ""}`}>
-      <SafeEntityImage
-        src={imageUrl}
-        alt={imageAlt}
-        title=""
-        contain={imageContain}
-        className={imageContain ? "object-contain" : "object-cover"}
-        priority
-        sizes="100vw"
-      />
+    <section className="w-full">
       <div
-        className={`absolute inset-0 ${
-          overlay === "dark" ? "hero-overlay" : "hero-overlay-light"
-        }`}
-      />
-      <div className="absolute inset-0 flex items-end">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
-          <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl font-heading font-bold tracking-tight drop-shadow-lg">
-            {title}
-          </h1>
+        className={`relative ${height} w-full overflow-hidden${imageContain ? " bg-[var(--surface-card)]" : ""}`}
+      >
+        <SafeEntityImage
+          src={imageUrl}
+          alt={imageAlt}
+          title=""
+          contain={imageContain}
+          className={
+            imageContain
+              ? "object-contain"
+              : "object-cover [filter:var(--photo-grade)]"
+          }
+          priority
+          sizes="100vw"
+        />
+        {showCredit && creditStyle === "chip" && (
+          <div className="absolute bottom-3 right-4 z-10">
+            {imageCreditUrl ? (
+              <a
+                href={imageCreditUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)] hover:opacity-90 transition-opacity"
+              >
+                <Camera className="h-3.5 w-3.5" />
+                {imageCredit}
+              </a>
+            ) : (
+              <span className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)]">
+                <Camera className="h-3.5 w-3.5" />
+                {imageCredit}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="border-b border-[var(--border)]">
+        <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+          <h1 className="max-w-4xl text-[var(--text-1)]">{title}</h1>
           {subtitle && (
-            <p className="mt-4 text-lg sm:text-xl text-white/90 max-w-2xl font-light leading-relaxed">
+            <p className="mt-4 max-w-2xl text-[var(--text-18)] leading-relaxed text-[var(--text-2)]">
               {subtitle}
             </p>
           )}
           {children}
           {showCredit && creditStyle === "overlay" && (
-            <p className="mt-3 text-[11px] tracking-wide text-white/80">
+            <p className="mt-3 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
               {imageCreditUrl ? (
                 <a
                   href={imageCreditUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white"
+                  className="underline underline-offset-4 hover:text-[var(--text-1)]"
                 >
                   {imageCredit}
                 </a>
@@ -84,27 +109,6 @@ export default function HeroSection({
           )}
         </div>
       </div>
-
-      {showCredit && creditStyle === "chip" && (
-        <div className="absolute bottom-3 right-4 z-10">
-          {imageCreditUrl ? (
-            <a
-              href={imageCreditUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[var(--ink)] text-[var(--card)] hover:opacity-90 transition-opacity text-[10px] font-medium"
-            >
-              <Camera className="h-2.5 w-2.5" />
-              {imageCredit}
-            </a>
-          ) : (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[var(--ink)] text-[var(--card)] text-[10px] font-medium">
-              <Camera className="h-2.5 w-2.5" />
-              {imageCredit}
-            </span>
-          )}
-        </div>
-      )}
     </section>
   );
 }

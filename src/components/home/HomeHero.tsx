@@ -15,17 +15,16 @@ interface Props {
 }
 
 /**
- * One photograph, full strength, ~72vh. Search is the only CTA.
- * Eyebrow sits on the photograph — not in an opaque plate.
- * Text is protected locally. No full-bleed wash — that darkens the photograph
- * and the §2 census reads a gradient shorthand as duskFullBleed.
+ * Flat hero (DESIGN.md § Imagery): the photograph stands alone in its own
+ * band, graded; headline, dek, and search sit on paper below. No scrim, no
+ * text-shadow, no text over the photo — gradients are banned.
  */
 export default function HomeHero({ cfs }: Props) {
   const eyebrow = formatHeroEyebrow(cfs);
   const caption = formatHeroCaption(cfs);
 
   return (
-    <section data-lane="resource" className="relative min-h-[72vh] w-full overflow-hidden">
+    <section data-lane="resource" className="w-full">
       {/*
         Public JPEG, not /_next/image. The file is already 1920px — at or
         above rendered CSS width. Vercel Image Optimization fetches the
@@ -33,10 +32,8 @@ export default function HomeHero({ cfs }: Props) {
         photograph vanishes on the protected deploy while localhost and
         a direct /images/... request in the browser stay fine.
         A quality of 85 is not in the Next 16 allowlist (default [75]).
-        The photograph stays an absolute layer so the contrast census can
-        see the raster (eyebrow = unverifiable, not white-on-paper).
       */}
-      <div className="absolute inset-0">
+      <div className="relative h-[52vh] min-h-[320px] w-full overflow-hidden">
         <Image
           src={HERO_IMAGE.src}
           alt={HERO_IMAGE.alt}
@@ -45,31 +42,19 @@ export default function HomeHero({ cfs }: Props) {
           fetchPriority="high"
           unoptimized
           sizes="100vw"
-          className="object-cover object-[center_68%]"
+          className="object-cover object-[center_68%] [filter:var(--photo-grade)]"
         />
       </div>
 
-      <div className="relative z-10 flex min-h-[72vh] flex-col justify-end">
-        <div className="mx-auto w-full max-w-7xl px-4 pb-10 pt-[18vh] sm:px-6 sm:pb-14 lg:px-8">
-          <p
-            className="mb-5 font-ui text-[11px] font-medium uppercase tracking-[0.2em] text-white"
-            style={{ textShadow: "0 1px 2px rgb(15 43 31 / 0.85)" }}
-          >
+      <div className="border-b border-[var(--border)]">
+        <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <p className="mb-5 font-ui text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--text-3)]">
             {eyebrow}
           </p>
 
-          <div className="relative max-w-5xl">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-x-4 -inset-y-3 sm:-inset-x-6"
-              style={{
-                backgroundColor: "rgba(250, 246, 240, 0)",
-                backgroundImage:
-                  "linear-gradient(to bottom, rgb(15 43 31 / 0.22) 0%, rgb(15 43 31 / 0.72) 32%, rgb(15 43 31 / 0.84) 100%)",
-              }}
-            />
+          <div className="max-w-5xl">
             <h1
-              className="relative font-heading font-bold tracking-tight text-white"
+              className="font-heading font-bold tracking-tight text-[var(--text-1)]"
               style={{ fontSize: "clamp(3rem, 6.4vw, 6.25rem)", lineHeight: 0.95 }}
             >
               {HERO_HEADLINE_LEAD}
@@ -77,7 +62,7 @@ export default function HomeHero({ cfs }: Props) {
               <em className="italic">{HERO_HEADLINE_CLOSE}</em>
             </h1>
             <p
-              className="relative mt-6 max-w-[40rem] text-[21px] leading-relaxed text-white"
+              className="mt-6 max-w-[40rem] text-[21px] leading-relaxed text-[var(--text-2)]"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heroDek(cfs)}
@@ -112,7 +97,7 @@ export default function HomeHero({ cfs }: Props) {
             </button>
           </form>
 
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/90">
+          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
             {caption}
           </p>
         </div>
