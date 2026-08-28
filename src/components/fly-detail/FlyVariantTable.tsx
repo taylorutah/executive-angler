@@ -1,9 +1,12 @@
 "use client";
 
 /**
- * Dusk variant table — the one public workbench module on a fly page.
- * Public HTML is the size/bead/body spec. Stock and "add to box" hydrate
- * after auth so the cached page never contains another angler's counts.
+ * Variant table — the one public workbench module on a fly page, rendered
+ * to the DESIGN.md §4 table spec (`.ea-table`: 12px/0.06em uppercase header
+ * in --text-3, 1px row borders, 12px cell padding, row hover --paper-deep,
+ * tabular numerals). Public HTML is the size/bead/body spec. Stock and
+ * "add to box" hydrate after auth so the cached page never contains
+ * another angler's counts.
  */
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -171,24 +174,24 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
 
   return (
     <InstrumentWellFrame>
-      <InstrumentWell label={`Variants — ${flyName}`} className="p-5 sm:p-6">
-        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <InstrumentWell label={`Variants — ${flyName}`} className="p-4 sm:p-6">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-meta)]">
+            <p className="ea-overline">
               Workbench
             </p>
             <h2
               id="fly-variants-heading"
-              className="font-heading text-2xl text-[var(--text-primary)] sm:text-3xl"
+              className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]"
             >
               Variants
             </h2>
           </div>
           {!user && (
-            <p className="text-[13px] text-[var(--text-body)]">
+            <p className="text-[13px] text-[var(--text-2)]">
               <Link
                 href={loginHref}
-                className="text-[var(--action)] underline-offset-4 hover:underline"
+                className="text-[var(--accent)] underline-offset-4 hover:underline"
               >
                 Sign in
               </Link>{" "}
@@ -197,49 +200,48 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
           )}
         </div>
 
-        <div className="overflow-x-auto border border-[var(--border-rule)]">
-          <table className="w-full min-w-[32rem] text-left text-[13px] leading-[1.35]">
+        <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+          <table className="ea-table min-w-[32rem] text-left">
             <thead>
-              <tr className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
-                <th className="px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--text-meta)]">
+              <tr>
+                <th>
                   Size
                 </th>
-                <th className="px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                <th>
                   Bead
                 </th>
-                <th className="px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                <th>
                   Body
                 </th>
-                <th className="px-3 py-2 text-right font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                <th className="text-right">
                   In box
                 </th>
-                <th className="px-3 py-2 text-right font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                <th className="text-right">
                   Add to box
                 </th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, i) => {
-                const zebra = i % 2 === 0 ? "bg-[var(--surface-page)]" : "bg-[var(--surface-raised)]";
+              {rows.map((row) => {
                 return (
-                  <tr key={row.key} className={`${zebra} h-8`}>
-                    <td className="px-3 font-mono text-[12px] text-[var(--text-primary)]">
+                  <tr key={row.key}>
+                    <td className="align-middle text-[var(--text-1)]">
                       {row.size}
                     </td>
-                    <td className="px-3 text-[var(--text-body)]">{row.bead}</td>
-                    <td className="px-3 text-[var(--text-body)]">{row.body}</td>
-                    <td className="px-3 text-right">
+                    <td className="align-middle text-[var(--text-2)]">{row.bead}</td>
+                    <td className="align-middle text-[var(--text-2)]">{row.body}</td>
+                    <td className="align-middle text-right">
                       {user && row.stock != null ? (
-                        <span className="num text-[var(--text-primary)]">{row.stock}</span>
+                        <span className="num text-[var(--text-1)]">{row.stock}</span>
                       ) : (
-                        <span className="text-[var(--text-meta)]">—</span>
+                        <span className="text-[var(--text-3)]">—</span>
                       )}
                     </td>
-                    <td className="px-3 text-right">
+                    <td className="align-middle text-right">
                       {!user ? (
                         <Link
                           href={loginHref}
-                          className="text-[13px] text-[var(--action)] underline-offset-4 hover:underline"
+                          className="text-[13px] text-[var(--accent)] underline-offset-4 hover:underline"
                         >
                           Sign in
                         </Link>
@@ -250,11 +252,11 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                             disabled={busyKey === row.key || row.stock === 0}
                             onClick={() => setTied(row, (row.stock ?? 0) - 1)}
                             aria-label={`Remove one ${flyName} ${row.size}`}
-                            className="inline-flex h-7 w-7 items-center justify-center border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-[var(--action)] disabled:opacity-40"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50"
                           >
                             −
                           </button>
-                          <span className="num w-6 text-center text-[var(--text-primary)]">
+                          <span className="num w-6 text-center text-[var(--text-1)]">
                             {row.stock}
                           </span>
                           <button
@@ -262,7 +264,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                             disabled={busyKey === row.key}
                             onClick={() => setTied(row, (row.stock ?? 0) + 1)}
                             aria-label={`Add one ${flyName} ${row.size}`}
-                            className="inline-flex h-7 w-7 items-center justify-center border border-[var(--border-strong)] text-[var(--text-primary)] hover:border-[var(--action)] disabled:opacity-40"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50"
                           >
                             +
                           </button>
@@ -272,7 +274,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                           type="button"
                           disabled={!!busyKey}
                           onClick={() => addSize(row.size)}
-                          className="bg-[var(--action)] px-2.5 py-1 text-[12px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] disabled:opacity-50"
+                          className="ea-btn ea-btn-sm ea-btn-primary"
                         >
                           {busyKey === row.size ? "Adding…" : "Add"}
                         </button>
@@ -286,14 +288,14 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
         </div>
 
         {error && (
-          <p className="mt-3 text-[12px] text-[var(--state-negative)]" role="status">
+          <p className="mt-3 text-[12px] text-[var(--danger)]" role="status">
             {error}
           </p>
         )}
 
         {picker && (
           <div
-            className="fixed inset-0 z-50 flex items-end justify-center bg-[var(--surface-page)]/70 sm:items-center"
+            className="ea-modal-overlay z-50 flex items-end justify-center sm:items-center"
             role="dialog"
             aria-modal="true"
             aria-labelledby="variant-box-picker"
@@ -301,13 +303,13 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
           >
             <div onClick={(e) => e.stopPropagation()}>
             <InstrumentWell
-              className="w-full max-w-md bg-[var(--surface-raised)] p-5"
+              className="w-full max-w-md bg-[var(--surface)] p-6 shadow-[var(--shadow-float)]"
               label="Which box?"
             >
-              <h3 id="variant-box-picker" className="font-heading text-lg">
+              <h3 id="variant-box-picker" className="font-heading text-lg text-[var(--text-1)]">
                 Which box?
               </h3>
-              <p className="mt-1 text-[13px] text-[var(--text-meta)]">
+              <p className="mt-1 text-[13px] text-[var(--text-3)]">
                 Add {flyName} {picker.size} to one of your boxes.
               </p>
               <ul className="mt-4 space-y-1">
@@ -316,11 +318,11 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                     <button
                       type="button"
                       onClick={() => addSize(picker.size, b.id)}
-                      className="flex w-full items-center justify-between border border-[var(--border-rule)] px-3 py-2 text-left text-[13px] hover:border-[var(--action)]"
+                      className="flex w-full items-center justify-between rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-2 text-left text-[13px] hover:border-[var(--accent)]"
                     >
                       <span>{b.name}</span>
                       {b.tier && (
-                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                        <span className="ea-overline">
                           {b.tier}
                         </span>
                       )}
@@ -331,7 +333,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
               <button
                 type="button"
                 onClick={() => setPicker(null)}
-                className="mt-4 w-full border border-[var(--border-rule)] px-3 py-2 text-[12px] text-[var(--text-body)] hover:border-[var(--action)]"
+                className="mt-4 w-full rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-2 text-[14px] font-medium text-[var(--text-2)] hover:border-[var(--accent)]"
               >
                 Cancel
               </button>

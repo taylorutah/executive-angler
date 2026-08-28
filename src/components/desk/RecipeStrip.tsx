@@ -18,39 +18,39 @@ interface Props {
 
 /**
  * Hook / thread / bead / dubbing as a bill of materials.
- * Plex Mono for sizes. Brand Bible v4.1 §12 RecipeStrip.
+ * Tabular numerals (`.num`) for sizes — mono is retired (DESIGN.md §2).
  */
 export default function RecipeStrip({ materials, notes }: Props) {
   const hasMaterials = materials.length > 0;
 
   return (
-    <section aria-labelledby="recipe-strip-heading" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section aria-labelledby="recipe-strip-heading" className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
       <h2
         id="recipe-strip-heading"
-        className="font-heading text-2xl text-[var(--text-primary)]"
+        className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]"
       >
         Recipe
       </h2>
       {hasMaterials ? (
-        <ul className="mt-4 max-w-2xl divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+        <ul className="mt-4 max-w-2xl divide-y divide-[var(--border)] border-y border-[var(--border)]">
           {materials.map((m, i) => {
             const slotLabel = formatSlotLabel(String(m.slot ?? "Material"));
             const detail = [m.material, m.brand].filter(Boolean).join(" · ");
             const sizeMatch = detail.match(/#\d+/);
             return (
-              <li key={i} className="flex items-baseline gap-3 py-2.5 text-[14px]">
-                <span className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+              <li key={i} className="flex items-baseline gap-3 py-3 text-[14px]">
+                <span className="ea-overline w-24 shrink-0">
                   {slotLabel}
                 </span>
                 {m.href ? (
                   <Link
                     href={m.href}
-                    className="text-[var(--text-primary)] underline-offset-4 hover:text-[var(--action)] hover:underline"
+                    className="text-[var(--text-1)] underline-offset-4 hover:text-[var(--accent)] hover:underline"
                   >
                     {sizeMatch ? (
                       <>
                         {detail.slice(0, sizeMatch.index)}
-                        <span className="font-mono">{sizeMatch[0]}</span>
+                        <span className="num">{sizeMatch[0]}</span>
                         {detail.slice((sizeMatch.index ?? 0) + sizeMatch[0].length)}
                       </>
                     ) : (
@@ -58,11 +58,11 @@ export default function RecipeStrip({ materials, notes }: Props) {
                     )}
                   </Link>
                 ) : (
-                  <span className="text-[var(--text-primary)]">
+                  <span className="text-[var(--text-1)]">
                     {sizeMatch ? (
                       <>
                         {detail.slice(0, sizeMatch.index)}
-                        <span className="font-mono">{sizeMatch[0]}</span>
+                        <span className="num">{sizeMatch[0]}</span>
                         {detail.slice((sizeMatch.index ?? 0) + sizeMatch[0].length)}
                       </>
                     ) : (
@@ -71,17 +71,17 @@ export default function RecipeStrip({ materials, notes }: Props) {
                   </span>
                 )}
                 {m.description && (
-                  <span className="text-[13px] text-[var(--text-body)]">{m.description}</span>
+                  <span className="text-[13px] text-[var(--text-2)]">{m.description}</span>
                 )}
               </li>
             );
           })}
         </ul>
       ) : (
-        <p className="mt-3 text-[15px] text-[var(--text-body)]">Recipe not filled in yet.</p>
+        <p className="mt-3 text-[14px] text-[var(--text-2)]">Recipe not filled in yet.</p>
       )}
       {notes && (
-        <div className="prose mt-6 max-w-[68ch]">
+        <div className="prose mt-6 max-w-[var(--prose)]">
           <p className="whitespace-pre-line">{notes}</p>
         </div>
       )}
