@@ -216,14 +216,14 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
       onFiltersOpenChange={setFiltersOpen}
       toolbarExtra={
         <div className="flex flex-wrap items-center gap-2">
-          <span className="w-20 shrink-0 text-xs font-medium uppercase tracking-wider text-[var(--text-body)]">
+          <span className="ea-overline w-20 shrink-0">
             Near me
           </span>
           <button
             type="button"
             onClick={handleNearMe}
             disabled={locating}
-            className="border border-[var(--action)] px-3 py-1.5 text-sm font-medium text-[var(--action)] hover:bg-[var(--action)] hover:text-[var(--on-action)] disabled:opacity-50"
+            className="rounded-[var(--radius-md)] border border-[var(--accent)] px-3 py-1.5 text-sm font-medium text-[var(--accent)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--on-action)] disabled:opacity-50"
           >
             {locating ? "Locating…" : "Use location"}
           </button>
@@ -236,13 +236,13 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
             placeholder="ZIP"
             maxLength={5}
             aria-label="ZIP code"
-            className="w-24 border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-1.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-body)] focus:border-[var(--signal-live)] focus:outline-none focus:ring-2 focus:ring-[var(--signal-live)]/30"
+            className="w-24 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:outline-none focus:shadow-[var(--signal-ring)]"
           />
           <button
             type="button"
             onClick={handleZipSearch}
             disabled={zipLoading || !zipInput.trim()}
-            className="border border-[var(--border-rule)] px-3 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)] disabled:opacity-40"
+            className="rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-1.5 text-sm text-[var(--text-2)] transition-colors hover:border-[var(--border-strong)] hover:text-[var(--text-1)] disabled:opacity-40"
           >
             {zipLoading ? "…" : "Go"}
           </button>
@@ -250,21 +250,21 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
             type="button"
             aria-pressed={showMap}
             onClick={() => setShowMap((v) => !v)}
-            className={`border px-3 py-1.5 text-sm font-medium ${
+            className={`rounded-[var(--radius-md)] border px-3 py-1.5 text-sm font-medium transition-colors ${
               showMap
-                ? "border-[var(--action)] bg-[var(--action)] text-[var(--on-action)]"
-                : "border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--action)]"
+                ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--on-action)]"
+                : "border-[var(--border)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
             }`}
           >
             Map
           </button>
-          {geoError && <p className="w-full text-sm text-[var(--state-negative)]">{geoError}</p>}
+          {geoError && <p className="w-full text-sm text-[var(--danger)]">{geoError}</p>}
         </div>
       }
       resultsOverride={
         showMap ? (
           <div>
-            <div className="h-[350px] md:h-[520px]">
+            <div className="h-[350px] md:h-[520px] overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)]">
               <DynamicRiversMapView
                 rivers={mapRivers}
                 selectedState={selectedStateObj}
@@ -272,7 +272,7 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
                 className="h-full w-full overflow-hidden"
               />
             </div>
-            <p className="mt-3 text-sm text-[var(--text-body)]">
+            <p className="mt-3 text-sm text-[var(--text-2)]">
               {mapRivers.length} river{mapRivers.length === 1 ? "" : "s"} on the map
               {nearbyIds.size > 0 ? " · within about 200 miles" : ""}
             </p>
