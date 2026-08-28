@@ -26,6 +26,9 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /--color-teal:\s*var\(--teal\)/);
     assert.match(css, /--color-riverbed:\s*var\(--riverbed\)/);
     assert.match(css, /--color-chalk:\s*var\(--chalk\)/);
+    assert.match(livePip, /width="6"/);
+    assert.match(livePip, /height="6"/);
+    assert.match(livePip, /fill="#086B6C"/);
   });
 
   it("ships the corrected radius scale", () => {
