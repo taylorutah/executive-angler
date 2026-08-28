@@ -17,10 +17,10 @@ interface Props {
 export default function SearchResultRow({ item, cfs, exactFly, active }: Props) {
   return (
     <div
-      className={`group flex items-center gap-4 px-2 py-2.5 transition-colors duration-[120ms] ease-out ${
+      className={`group flex items-center gap-4 px-2 py-2.5 transition-colors duration-150 ease-standard ${
         active
-          ? "bg-[var(--surface-raised)] ring-1 ring-[var(--signal-live)]"
-          : "hover:bg-[var(--surface-raised)]"
+          ? "bg-[var(--accent-soft)] ring-1 ring-[var(--accent)]"
+          : "hover:bg-[var(--paper-deep)]"
       }`}
     >
       <Link
@@ -30,13 +30,13 @@ export default function SearchResultRow({ item, cfs, exactFly, active }: Props) 
         <Media item={item} />
         <div className="min-w-0 flex-1">
           <p
-            className={`truncate font-heading text-[18px] font-semibold leading-snug text-[var(--text-primary)] ${
-              exactFly ? "underline decoration-[var(--action)] decoration-1 underline-offset-4" : ""
+            className={`truncate font-display text-[18px] font-semibold leading-snug text-[var(--text-1)] ${
+              exactFly ? "underline decoration-[var(--accent)] decoration-1 underline-offset-4" : ""
             }`}
           >
             {item.title}
           </p>
-          <p className="mt-0.5 truncate text-[13px] text-[var(--text-body)]">
+          <p className="mt-0.5 truncate text-[13px] text-[var(--text-2)]">
             {rowSubtitle(item)}
           </p>
         </div>
@@ -49,14 +49,14 @@ export default function SearchResultRow({ item, cfs, exactFly, active }: Props) 
 function Media({ item }: { item: SearchDocument }) {
   if (item.type === "fly") {
     return (
-      <div className="relative h-16 w-16 shrink-0 overflow-hidden bg-[var(--surface-page)]">
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[var(--radius-md)] bg-[var(--paper)]">
         <SafeEntityImage
           src={item.imageUrl}
           alt={item.title}
           title={item.title}
           meta={item.subtitle}
           contain
-          className="object-contain p-1"
+          className="ea-photo object-contain p-1"
           sizes="64px"
         />
       </div>
@@ -65,13 +65,13 @@ function Media({ item }: { item: SearchDocument }) {
 
   if (item.type === "destination") {
     return (
-      <div className="relative h-14 w-[88px] shrink-0 overflow-hidden bg-[var(--surface-raised)]">
+      <div className="relative h-14 w-[88px] shrink-0 overflow-hidden rounded-[var(--radius-md)] bg-[var(--paper-deep)]">
         <SafeEntityImage
           src={item.imageUrl}
           alt={item.title}
           title={item.title}
           meta={item.subtitle}
-          className="object-cover"
+          className="ea-photo object-cover"
           sizes="88px"
         />
       </div>
@@ -80,8 +80,8 @@ function Media({ item }: { item: SearchDocument }) {
 
   if (item.type === "article" || item.type === "hatch") {
     return (
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-[var(--surface-raised)]">
-        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--text-body)]">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--paper-deep)]">
+        <span className="text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">
           {item.type === "article" ? "Note" : "Hatch"}
         </span>
       </div>
@@ -89,13 +89,13 @@ function Media({ item }: { item: SearchDocument }) {
   }
 
   return (
-    <div className="relative h-12 w-12 shrink-0 overflow-hidden bg-[var(--surface-raised)]">
+    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[var(--radius-md)] bg-[var(--paper-deep)]">
       <SafeEntityImage
         src={item.imageUrl}
         alt={item.title}
         title={item.title}
         meta={item.subtitle}
-        className="object-cover"
+        className="ea-photo object-cover"
         sizes="48px"
       />
     </div>
@@ -116,7 +116,7 @@ function WorthChoosing({
   if (item.type === "article") {
     const minutes = item.readingTimeMinutes;
     return (
-      <span className="num shrink-0 text-[13px] text-[var(--text-body)]">
+      <span className="num shrink-0 text-[13px] text-[var(--text-2)]">
         {minutes != null ? formatReadingTime(minutes) : TYPE_LABELS.article}
       </span>
     );
@@ -124,7 +124,7 @@ function WorthChoosing({
 
   if (item.type === "fly") {
     return (
-      <span className="hidden shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-body)] sm:inline">
+      <span className="hidden shrink-0 text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-3)] sm:inline">
         {item.sizes ? `#${item.sizes}` : item.category ?? "Fly"}
       </span>
     );
@@ -132,7 +132,7 @@ function WorthChoosing({
 
   if (item.type === "hatch" && item.riverCount != null) {
     return (
-      <span className="num hidden shrink-0 text-[13px] text-[var(--text-body)] sm:inline">
+      <span className="num hidden shrink-0 text-[13px] text-[var(--text-2)] sm:inline">
         {item.riverCount} {item.riverCount === 1 ? "river" : "rivers"}
       </span>
     );
@@ -141,7 +141,7 @@ function WorthChoosing({
   if (item.type === "destination") return null;
 
   return (
-    <span className="hidden shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-body)] sm:inline">
+    <span className="hidden shrink-0 text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-3)] sm:inline">
       {TYPE_LABELS[item.type]}
     </span>
   );
@@ -149,31 +149,29 @@ function WorthChoosing({
 
 /**
  * Daylight, like everything else — the dusk register is deleted machinery.
- * A search row is a
- * pointer to read, not a gauge to watch. teal-700 (`--signal-live` in
- * Daylight) clears 4.5:1 on vellum and card without it. `--text-body`
- * carries the unit/status label instead of `--text-meta` — it is read as
- * data here, not a throwaway caption.
+ * A search row is a pointer to read, not a gauge to watch. `--accent`
+ * clears 4.5:1 on paper-deep. `--text-2` carries the unit/status label
+ * instead of `--text-3` — it is read as data here, not a throwaway caption.
  */
 function LiveFlow({ cfs }: { cfs?: number }) {
   if (cfs == null) {
     return (
-      <span className="hidden shrink-0 border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-body)] sm:inline">
+      <span className="hidden shrink-0 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--paper-deep)] px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-2)] sm:inline">
         Gauge offline
       </span>
     );
   }
 
   return (
-    <span className="inline-flex shrink-0 items-center gap-1.5 border border-[var(--border-rule)] bg-[var(--surface-raised)] px-2 py-1">
+    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--paper-deep)] px-2.5 py-1">
       <span
         aria-hidden
-        className="h-1.5 w-1.5 rounded-full bg-[var(--signal-live)]"
+        className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]"
       />
-      <span className="num text-[14px] font-semibold text-[var(--signal-live)]">
+      <span className="num text-[14px] font-semibold text-[var(--accent)]">
         {Math.round(cfs).toLocaleString("en-US")}
       </span>
-      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-body)]">
+      <span className="text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--text-2)]">
         cfs
       </span>
     </span>

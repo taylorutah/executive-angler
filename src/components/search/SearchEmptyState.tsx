@@ -25,10 +25,10 @@ export default function SearchEmptyState({
 }: Props) {
   return (
     <div className="space-y-12">
-      <p className="text-[15px] text-[var(--text-body)]">{catalogLine}</p>
+      <p className="text-[var(--text-2)]">{catalogLine}</p>
 
       <section>
-        <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-body)]">
+        <h2 className="ea-overline mb-3">
           Try a real query
         </h2>
         <div className="flex flex-wrap gap-2">
@@ -37,7 +37,7 @@ export default function SearchEmptyState({
               key={q}
               type="button"
               onClick={() => onExample(q)}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} border border-[var(--border-rule)] bg-[var(--surface-card)] px-3 py-1.5 text-[13px] text-[var(--text-primary)] hover:border-[var(--border-strong)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-[13px] text-[var(--text-1)] hover:border-[var(--border-strong)]`}
             >
               {q}
             </button>
@@ -47,10 +47,10 @@ export default function SearchEmptyState({
 
       {mostRead.length > 0 && (
         <section>
-          <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-body)]">
+          <h2 className="ea-overline mb-3">
             Most-read rivers
           </h2>
-          <div className="divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+          <div className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
             {mostRead.map((item) => (
               <SearchResultRow
                 key={item.href}
@@ -64,10 +64,10 @@ export default function SearchEmptyState({
 
       {hatchingNow.length > 0 && (
         <section>
-          <h2 className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-body)]">
+          <h2 className="ea-overline mb-3">
             Hatching now
           </h2>
-          <div className="divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+          <div className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
             {hatchingNow.map((item) => (
               <SearchResultRow key={item.href} item={item} />
             ))}

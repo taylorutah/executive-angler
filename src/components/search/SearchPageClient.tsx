@@ -230,18 +230,18 @@ export default function SearchPageClient() {
 
       {!emptyQuery && ranked.total === 0 && (
         <div className="py-10">
-          <p className="font-heading text-[22px] font-semibold text-[var(--text-primary)]">
+          <p className="font-display text-xl font-semibold text-[var(--text-1)]">
             Nothing matched
           </p>
-          <p className="mt-2 text-[15px] text-[var(--text-body)]">
+          <p className="mt-2 text-[var(--text-2)]">
             No rivers, flies, hatches, places, or field notes for that.
           </p>
           {ranked.suggestion && (
-            <p className="mt-3 text-[14px] text-[var(--text-body)]">
+            <p className="mt-3 text-sm text-[var(--text-2)]">
               Did you mean{" "}
               <button
                 type="button"
-                className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:decoration-[var(--action)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)] hover:decoration-[var(--accent)]`}
                 onClick={() => setQuery(ranked.suggestion!.title)}
               >
                 {ranked.suggestion.title}
@@ -255,7 +255,7 @@ export default function SearchPageClient() {
                 key={q}
                 type="button"
                 onClick={() => setQuery(q)}
-                className={`ea-focus-ring ${FOCUS_VISIBLE} border border-[var(--border-rule)] bg-[var(--surface-card)] px-3 py-1.5 text-[13px] text-[var(--text-primary)] hover:border-[var(--border-strong)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-[13px] text-[var(--text-1)] hover:border-[var(--border-strong)]`}
               >
                 {q}
               </button>
@@ -265,7 +265,7 @@ export default function SearchPageClient() {
       )}
 
       {!emptyQuery && ranked.total > 0 && typeParam !== "all" && alsoMatching.length > 0 && (
-        <p className="mb-6 text-[13px] text-[var(--text-body)]">
+        <p className="mb-6 text-[13px] text-[var(--text-2)]">
           Narrowed to {TYPE_LABELS[typeParam].toLowerCase()}. Also{" "}
           {alsoMatching.map((g, i) => (
             <span key={g.type}>
@@ -273,7 +273,7 @@ export default function SearchPageClient() {
               <button
                 type="button"
                 onClick={() => setType(g.type)}
-                className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:decoration-[var(--action)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)] hover:decoration-[var(--accent)]`}
               >
                 {g.total} {TYPE_LABELS[g.type].toLowerCase()}
               </button>
@@ -313,9 +313,9 @@ export function SearchPageFallback() {
       </span>
       <div aria-hidden className="relative">
         <Search
-          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-body)]"
+          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-3)]"
         />
-        <div className="w-full border border-[var(--border-rule)] bg-[var(--surface-card)] py-4 pl-12 pr-4 text-[18px] text-[var(--text-body)]">
+        <div className="w-full rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] py-4 pl-12 pr-4 text-[18px] text-[var(--text-3)]">
           Search a river, a fly, a hatch, a place.
         </div>
       </div>
@@ -323,7 +323,7 @@ export function SearchPageFallback() {
         {["All", ...GROUP_ORDER.map((t) => TYPE_LABELS[t])].map((label) => (
           <span
             key={label}
-            className="border border-[var(--border-rule)] bg-[var(--surface-card)] px-3 py-1.5 text-[13px] text-[var(--text-body)]"
+            className="rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-[13px] text-[var(--text-2)]"
           >
             {label}
           </span>

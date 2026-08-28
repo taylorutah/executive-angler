@@ -26,25 +26,25 @@ export default function SearchResultGroup({
   return (
     <section>
       <div className="mb-2 flex items-baseline justify-between gap-3">
-        <h2 className="font-heading text-[22px] font-semibold text-[var(--text-primary)]">
+        <h2 className="font-display text-xl font-semibold text-[var(--text-1)]">
           {TYPE_LABELS[group.type]}
         </h2>
         <div className="flex items-baseline gap-3">
-          <span className="num text-[13px] text-[var(--text-body)]">
+          <span className="num text-[13px] text-[var(--text-2)]">
             {group.total}
           </span>
           {showSeeAll ? (
             <button
               type="button"
               onClick={onSeeAll}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} text-[13px] text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:decoration-[var(--action)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} text-[13px] text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)] hover:decoration-[var(--accent)]`}
             >
               See all {group.total}
             </button>
           ) : null}
         </div>
       </div>
-      <div className="divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+      <div className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
         {group.items.map(({ doc }) => (
           <SearchResultRow
             key={doc.href}
