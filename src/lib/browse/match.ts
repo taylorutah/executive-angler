@@ -90,3 +90,51 @@ export function parseSizes(value: string): number[] {
   }
   return out;
 }
+
+/**
+ * Edit distance ≤ 1 check (insert/delete/substitute one character). Linear
+ * time, no DP. Used for typo-tolerant search ("wolly" matches "woolly").
+ *
+ * Verbatim copy of EntityListView's private helper so the articles browser
+ * searches identically. EntityListView keeps its own copy — shared browse
+ * components are frozen to token-level changes this phase.
+ */
+export function withinOneEdit(a: string, b: string): boolean {
+  if (Math.abs(a.length - b.length) > 1) return false;
+  if (a === b) return true;
+  if (a.length > b.length) {
+    const tmp = a;
+    a = b;
+    b = tmp;
+  }
+  let i = 0;
+  let j = 0;
+  let edits = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) {
+      i++;
+      j++;
+      continue;
+    }
+    if (++edits > 1) return false;
+    if (a.length === b.length) {
+      i++;
+      j++;
+    } else {
+      j++;
+    }
+  }
+  return true;
+}
+
+/** Typo-tolerant haystack match — same rule as EntityListView search. */
+export function haystackMatchesQuery(haystack: string, queryWords: string[]): boolean {
+  // Tokenize haystack once for fuzzy comparisons.
+  const tokens = haystack.split(/[^a-z0-9]+/).filter((t) => t.length >= 3);
+  for (const q of queryWords) {
+    if (haystack.includes(q)) continue;
+    if (q.length >= 4 && tokens.some((t) => withinOneEdit(t, q))) continue;
+    return false;
+  }
+  return true;
+}

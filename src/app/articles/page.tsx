@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Link from "next/link";
-import { ChevronRight } from "@/icons";
-import EntityListView from "@/components/ui/EntityListView";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import ArticlesBrowser from "./ArticlesBrowser";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllArticles } from "@/lib/db";
 import { articleListConfig } from "@/lib/list-configs";
@@ -31,7 +28,6 @@ export default async function ArticlesPage() {
   const articles = await getAllArticles();
   const featured = articles.filter((a) => a.featured);
   const heroArticle = featured[0];
-  const supportArticles = featured.slice(1, 3);
 
   const items: (CardData & { _filterValues: Record<string, string> })[] = articles.map(
     (article) => ({
@@ -53,129 +49,43 @@ export default async function ArticlesPage() {
 
   return (
     <>
-      {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
+      {/* ── Photo band — flat hero (DESIGN.md §6): the photograph stands in
+          its own band, no text over it. The heading sits on paper below. ── */}
+      {heroArticle && (
+        <div className="ea-photo-hero relative min-h-[280px] w-full overflow-hidden">
+          <SafeEntityImage
+            src={heroArticle.heroImageUrl}
+            alt={heroArticle.title}
+            title={heroArticle.title}
+            meta={heroArticle.category}
+            className="ea-photo"
+            sizes="100vw"
+            priority
+          />
+        </div>
+      )}
+
+      {/* ── Editorial header — on paper, left-aligned ────────────────────── */}
+      <section className="bg-[var(--paper)] border-b border-[var(--border)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+          <p className="ea-overline">
             Field Notes
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
+          <h1 className="mt-3 text-[var(--text-1)]">
             Stories from the Water
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
-            Expert instruction, destination dispatches, and stories from the world's greatest
+          <p className="mt-5 max-w-[var(--prose)] text-lg text-[var(--text-2)] leading-relaxed">
+            Expert instruction, destination dispatches, and stories from the world&apos;s greatest
             fisheries — curated for the discerning fly fisher.
           </p>
         </div>
       </section>
 
-      {/* ── Featured Articles Spotlight ───────────────────────────────────── */}
-      {heroArticle && (
-        <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
-              Editor&apos;s Picks
-            </p>
-
-            {/* Hero article — editorial split */}
-            <ScrollAnimation>
-              <Link href={`/articles/${heroArticle.slug}`} className="group block mb-6">
-                <div className="grid lg:grid-cols-2 rounded-2xl overflow-hidden shadow-xl">
-                  <div className="relative h-72 lg:h-[420px]">
-                    <SafeEntityImage
-                      src={heroArticle.heroImageUrl}
-                      alt={heroArticle.title}
-                      title={heroArticle.title}
-                      meta={`${heroArticle.category} · ${heroArticle.readingTimeMinutes} min`}
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      priority
-                    />
-                    <span className="absolute top-4 left-4 px-3 py-1 bg-[var(--action)] text-white text-xs font-semibold uppercase tracking-wide rounded-chip">
-                      {heroArticle.category}
-                    </span>
-                  </div>
-                  <div className="bg-[var(--surface-raised)] p-8 lg:p-12 flex flex-col justify-center">
-                    <h2 className="font-heading text-2xl lg:text-3xl font-bold text-[var(--action)] group-hover:text-[var(--action)] transition-colors leading-tight">
-                      {heroArticle.title}
-                    </h2>
-                    {heroArticle.subtitle && (
-                      <p className="mt-2 text-base font-medium text-[var(--action)]">
-                        {heroArticle.subtitle}
-                      </p>
-                    )}
-                    <p className="mt-4 text-[var(--text-body)] leading-relaxed text-sm sm:text-base line-clamp-3">
-                      {heroArticle.excerpt}
-                    </p>
-                    <div className="mt-5 flex items-center gap-3 text-sm text-[var(--text-meta)]">
-                      <span>{heroArticle.readingTimeMinutes} min read</span>
-                      <span>·</span>
-                      <span>{heroArticle.author}</span>
-                    </div>
-                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--action)] group-hover:underline">
-                      Read Article <ChevronRight className="h-4 w-4" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </ScrollAnimation>
-
-            {/* 2 support articles */}
-            {supportArticles.length > 0 && (
-              <div className="grid sm:grid-cols-2 gap-6">
-                {supportArticles.map((article, i) => (
-                  <ScrollAnimation key={article.id} delay={(i + 1) * 0.1}>
-                    <Link
-                      href={`/articles/${article.slug}`}
-                      className="group block bg-[var(--surface-raised)] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-                    >
-                      <div className="relative h-48">
-                        <SafeEntityImage
-                          src={article.heroImageUrl}
-                          alt={article.title}
-                          title={article.title}
-                          meta={`${article.category} · ${article.readingTimeMinutes} min`}
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 640px) 100vw, 50vw"
-                          priority={i < 2}
-                        />
-                        <span className="absolute top-3 left-3 px-2.5 py-1 bg-[var(--action)] text-white text-[10px] font-semibold uppercase tracking-wide rounded-chip">
-                          {article.category}
-                        </span>
-                      </div>
-                      <div className="p-6">
-                        <h3 className="font-heading text-lg font-bold text-[var(--action)] group-hover:text-[var(--action)] transition-colors leading-snug">
-                          {article.title}
-                        </h3>
-                        <p className="mt-2 text-sm text-[var(--text-body)] line-clamp-2">
-                          {article.excerpt}
-                        </p>
-                        <p className="mt-3 text-xs text-[var(--text-meta)]">
-                          {article.readingTimeMinutes} min read · {article.author}
-                        </p>
-                      </div>
-                    </Link>
-                  </ScrollAnimation>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">The Full Journal</h2>
-          <p className="text-sm text-[var(--text-body)] mt-1">
-            {articles.length} articles across techniques, destinations, gear &amp; more
-          </p>
-        </div>
-      </div>
-      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ── Story grid — four wide, every article in one continuous grid ──── */}
+      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <Suspense>
-            <EntityListView items={items} config={articleListConfig} storageKey="articles" />
+            <ArticlesBrowser items={items} config={articleListConfig} storageKey="articles" />
           </Suspense>
         </div>
       </section>
