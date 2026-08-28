@@ -24,7 +24,10 @@ const CARD_FILES = [
 
 describe("public chrome locks", () => {
   it("uses one forest horizontal wordmark on cream public headers", () => {
-    assert.match(header, /duskApp = Boolean\(user\) && registerForPath\(pathname\) === "dusk"/);
+    assert.match(
+      header,
+      /duskApp = duskPath && \(Boolean\(user\) \|\| \(isLoading && hasSessionHint\(\)\)\)/,
+    );
     assert.match(header, /logo-horizontal-white\.svg/);
     assert.match(header, /logo-horizontal-forest\.svg/);
     assert.equal(header.includes("/images/logo.svg"), false);
@@ -37,9 +40,20 @@ describe("public chrome locks", () => {
 
   it("keeps signed-out /today on the cream public bar and out of the visual gate", () => {
     assert.match(header, /duskApp \? "" : "ea-header-public"/);
+    assert.match(header, /hasSessionHint/);
     assert.match(visual, /SIGNED_IN_ROUTES = \["\/journal"\]/);
     assert.equal(/SIGNED_IN_ROUTES[\s\S]*?"\/today"/.test(visual), false);
     assert.equal(/PUBLIC_ROUTES[\s\S]*?"\/today"/.test(visual), false);
+  });
+
+  it("remaps daylight meta and signal tokens on the cream public header", () => {
+    const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
+    const block = css.match(/\.ea-header-public \{[\s\S]*?\n\}/);
+    assert.ok(block, "ea-header-public rule missing");
+    assert.match(block[0], /--text-meta:\s*var\(--slate\)/);
+    assert.match(block[0], /--signal-live:\s*var\(--teal-700\)/);
+    assert.match(block[0], /--text-body:\s*var\(--graphite\)/);
+    assert.match(block[0], /background:\s*var\(--paper\)/);
   });
 
   it("ships Privacy and Terms in the House footer column", () => {

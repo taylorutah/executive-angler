@@ -16,6 +16,15 @@ import { useRouteChangeReset } from "./nav/useRouteChangeReset";
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 import { registerForPath } from "@/lib/register";
 
+/** Chrome hint only — not an auth check. Matches sb-*-auth-token cookies. */
+export function hasSessionHint(): boolean {
+  if (typeof document === "undefined") return false;
+  return document.cookie.split(";").some((part) => {
+    const name = part.trim().split("=")[0] ?? "";
+    return name.includes("-auth-token");
+  });
+}
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
@@ -50,7 +59,10 @@ export default function Header() {
 
   const nouns = user ? MEMBER_NOUNS : PUBLIC_NOUNS;
   const onHome = pathname === "/";
-  const duskApp = Boolean(user) && registerForPath(pathname) === "dusk";
+  const duskPath = registerForPath(pathname) === "dusk";
+  // Session cookie keeps dusk chrome up while getUser runs. Without it,
+  // signed-in /journal first-paints paper tokens on riverbed (2.2:1).
+  const duskApp = duskPath && (Boolean(user) || (isLoading && hasSessionHint()));
   const logoSrc = duskApp
     ? "/images/logo-horizontal-white.svg"
     : "/images/logo-horizontal-forest.svg";
