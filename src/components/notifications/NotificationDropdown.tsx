@@ -101,7 +101,7 @@ function FollowRequestActions({
   }
 
   return (
-    <div className="flex gap-2 mt-1.5">
+    <div className="flex gap-2 mt-2">
       <button
         onClick={(e) => {
           e.preventDefault();
@@ -109,7 +109,7 @@ function FollowRequestActions({
           handleAction("accept");
         }}
         disabled={acting}
-        className="px-2.5 py-1 text-[10px] font-semibold rounded-md bg-[var(--action)] text-white hover:bg-[#d17d28] transition-colors disabled:opacity-50"
+        className="px-3 py-1 text-[var(--text-12)] font-semibold rounded-md bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-50"
       >
         Accept
       </button>
@@ -120,7 +120,7 @@ function FollowRequestActions({
           handleAction("decline");
         }}
         disabled={acting}
-        className="px-2.5 py-1 text-[10px] font-semibold rounded-md bg-[var(--border-rule)] text-[var(--text-body)] hover:bg-[var(--state-negative)] hover:text-white transition-colors disabled:opacity-50"
+        className="px-3 py-1 text-[var(--text-12)] font-semibold rounded-md bg-[var(--paper-deep)] text-[var(--text-2)] hover:bg-[var(--danger)] hover:text-white transition-colors disabled:opacity-50"
       >
         Decline
       </button>
@@ -159,28 +159,28 @@ export function NotificationBell() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative flex items-center justify-center p-2 rounded-md text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--paper-deep)] transition-colors duration-150 ease-standard"
+        className="relative flex items-center justify-center p-2 rounded-md text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors duration-150 ease-standard"
         aria-label="Notifications"
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--state-negative)] px-1 text-[12px] font-semibold text-white leading-none">
+          <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--danger)] px-1 text-[var(--text-12)] font-semibold text-white leading-none">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl shadow-2xl z-50 overflow-hidden">
+        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] shadow-[var(--shadow-float)] z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-rule)]">
-            <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+            <h3 className="text-sm font-semibold text-[var(--text-1)]">
               Notifications
             </h3>
             {unreadCount > 0 && (
               <button
                 onClick={() => markAllAsRead()}
-                className="flex items-center gap-1 text-[10px] font-medium text-[var(--signal-live)] hover:text-[var(--text-primary)] transition-colors"
+                className="flex items-center gap-1 text-[var(--text-12)] font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
               >
                 <CheckCheck className="h-3 w-3" />
                 Mark all read
@@ -192,8 +192,8 @@ export function NotificationBell() {
           <div className="max-h-[400px] overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="py-10 text-center">
-                <Bell className="h-8 w-8 text-[var(--text-meta)] mx-auto mb-2" />
-                <p className="text-sm text-[var(--text-body)]">No notifications yet</p>
+                <Bell className="h-8 w-8 text-[var(--text-3)] mx-auto mb-2" />
+                <p className="text-sm text-[var(--text-2)]">No notifications yet</p>
               </div>
             ) : (
               notifications.slice(0, 20).map((n) => (
@@ -204,14 +204,14 @@ export function NotificationBell() {
                     if (!n.read) markAsRead(n.id);
                     setOpen(false);
                   }}
-                  className={`flex gap-3 px-4 py-3 hover:bg-[var(--surface-card)] transition-colors border-l-2 ${
+                  className={`flex gap-3 px-4 py-3 hover:bg-[var(--paper-deep)] transition-colors border-l-2 ${
                     n.read
                       ? "border-l-transparent"
-                      : "border-l-[#0BA5C7] bg-[var(--signal-live)]/5"
+                      : "border-l-[var(--accent)] bg-[var(--accent-soft)]"
                   }`}
                 >
                   {/* Actor avatar */}
-                  <div className="h-8 w-8 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="h-8 w-8 rounded-full overflow-hidden bg-[var(--paper-deep)] flex items-center justify-center flex-shrink-0 mt-1">
                     {n.actor_profile?.avatar_url ? (
                       <Image
                         src={n.actor_profile.avatar_url}
@@ -221,7 +221,7 @@ export function NotificationBell() {
                         className="object-cover w-full h-full"
                       />
                     ) : (
-                      <span className="text-xs font-bold text-[var(--text-body)]">
+                      <span className="text-xs font-semibold text-[var(--text-2)]">
                         {(
                           n.actor_profile?.display_name ||
                           n.actor_profile?.username ||
@@ -235,15 +235,15 @@ export function NotificationBell() {
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[var(--text-body)]">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[var(--text-2)]">
                         {getNotificationIcon(n.type)}
                       </span>
-                      <p className="text-xs text-[var(--text-primary)] leading-snug line-clamp-2">
+                      <p className="text-xs text-[var(--text-1)] leading-snug line-clamp-2">
                         {getNotificationText(n)}
                       </p>
                     </div>
-                    <p className="text-[10px] text-[var(--text-meta)] mt-0.5">
+                    <p className="text-[var(--text-12)] text-[var(--text-3)] mt-1">
                       {timeAgo(n.created_at)}
                     </p>
 
@@ -262,7 +262,7 @@ export function NotificationBell() {
                   {/* Unread dot */}
                   {!n.read && (
                     <div className="flex-shrink-0 mt-2">
-                      <div className="h-2 w-2 rounded-full bg-[var(--signal-live)]" />
+                      <div className="h-2 w-2 rounded-full bg-[var(--accent)]" />
                     </div>
                   )}
                 </Link>
@@ -272,11 +272,11 @@ export function NotificationBell() {
 
           {/* Footer */}
           {notifications.length > 0 && (
-            <div className="border-t border-[var(--border-rule)] px-4 py-2.5">
+            <div className="border-t border-[var(--border)] px-4 py-3">
               <Link
                 href="/notifications"
                 onClick={() => setOpen(false)}
-                className="text-xs font-medium text-[var(--signal-live)] hover:text-[var(--text-primary)] transition-colors"
+                className="text-xs font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
               >
                 See all notifications
               </Link>
