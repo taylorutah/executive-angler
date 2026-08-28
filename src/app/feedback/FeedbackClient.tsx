@@ -19,19 +19,19 @@ interface Feedback {
 }
 
 const CATEGORIES = [
-  { key: "feature", label: "Feature Request", icon: <Lightbulb className="h-5 w-5" />, color: "text-[var(--action)]", bg: "bg-[var(--action)]/10 border-[var(--action)]/30", description: "I wish Executive Angler could..." },
-  { key: "improvement", label: "Improvement", icon: <Sparkles className="h-5 w-5" />, color: "text-[var(--signal-live)]", bg: "bg-[var(--signal-live)]/10 border-[var(--signal-live)]/30", description: "This exists but could be better..." },
-  { key: "bug", label: "Bug Report", icon: <Bug className="h-5 w-5" />, color: "text-red-400", bg: "bg-red-400/10 border-red-400/30", description: "Something isn't working right..." },
-  { key: "other", label: "General Feedback", icon: <MessageSquarePlus className="h-5 w-5" />, color: "text-[var(--state-positive)]", bg: "bg-[var(--state-positive)]/10 border-[var(--state-positive)]/30", description: "Anything else on your mind..." },
+  { key: "feature", label: "Feature Request", icon: <Lightbulb size={20} />, description: "I wish Executive Angler could..." },
+  { key: "improvement", label: "Improvement", icon: <Sparkles size={20} />, description: "This exists but could be better..." },
+  { key: "bug", label: "Bug Report", icon: <Bug size={20} />, description: "Something isn't working right..." },
+  { key: "other", label: "General Feedback", icon: <MessageSquarePlus size={20} />, description: "Anything else on your mind..." },
 ];
 
 const STATUS_DISPLAY: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  submitted: { label: "Received", color: "text-[var(--signal-live)]", icon: <Clock className="h-3 w-3" /> },
-  in_review: { label: "Under Review", color: "text-[var(--action)]", icon: <Wrench className="h-3 w-3" /> },
-  approved: { label: "Planned", color: "text-[var(--state-positive)]", icon: <ThumbsUp className="h-3 w-3" /> },
-  published: { label: "Shipped!", color: "text-[var(--state-positive)]", icon: <CheckCircle className="h-3 w-3" /> },
-  rejected: { label: "Not Planned", color: "text-[var(--text-meta)]", icon: <AlertCircle className="h-3 w-3" /> },
-  needs_info: { label: "Need More Details", color: "text-yellow-400", icon: <AlertCircle className="h-3 w-3" /> },
+  submitted: { label: "Received", color: "text-[var(--text-2)]", icon: <Clock size={12} /> },
+  in_review: { label: "Under Review", color: "text-[var(--accent)]", icon: <Wrench size={12} /> },
+  approved: { label: "Planned", color: "text-[var(--success)]", icon: <ThumbsUp size={12} /> },
+  published: { label: "Shipped!", color: "text-[var(--success)]", icon: <CheckCircle size={12} /> },
+  rejected: { label: "Not Planned", color: "text-[var(--text-3)]", icon: <AlertCircle size={12} /> },
+  needs_info: { label: "Need More Details", color: "text-[var(--warning)]", icon: <AlertCircle size={12} /> },
 };
 
 export default function FeedbackClient({
@@ -85,37 +85,39 @@ export default function FeedbackClient({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+    <div className="py-14 sm:py-24">
+      <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[var(--action)]/10 mb-4">
-            <Lightbulb className="h-7 w-7 text-[var(--action)]" />
-          </div>
-          <h1 className="font-serif text-3xl text-[var(--text-primary)] mb-2">Ideas & Feedback</h1>
-          <p className="text-[var(--text-body)] max-w-md mx-auto">
-            Executive Angler is built by anglers, for anglers. Your ideas shape what we build next.
-          </p>
-        </div>
+        <p className="ea-overline">
+          Ideas &amp; feedback
+        </p>
+        <h1 className="mt-4 font-display text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
+          Ideas &amp; Feedback
+        </h1>
+        <p className="mt-4 text-lg text-[var(--text-2)]">
+          Executive Angler is built by anglers, for anglers. Your ideas shape what we build next.
+        </p>
 
         {/* Success state */}
         {success ? (
-          <div className="bg-[var(--surface-raised)] border border-[var(--state-positive)]/30 rounded-xl p-8 text-center">
-            <CheckCircle className="h-12 w-12 text-[var(--state-positive)] mx-auto mb-4" />
-            <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">Thanks for the feedback!</h2>
-            <p className="text-sm text-[var(--text-body)] mb-6">
+          <div className="ea-empty mt-10 rounded-card border border-[var(--border)] bg-[var(--surface)]">
+            <CheckCircle size={24} className="text-[var(--success)]" />
+            <h2 className="font-display text-xl font-semibold text-[var(--text-1)]">
+              Thanks for the feedback!
+            </h2>
+            <p>
               We read every submission. If we have questions, we&apos;ll reach out through the app.
             </p>
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-wrap justify-center gap-3">
               <button
                 onClick={() => setSuccess(false)}
-                className="px-5 py-2.5 bg-[var(--action)] text-white rounded-lg text-sm font-semibold hover:bg-[var(--action-hover)] transition-colors"
+                className="ea-btn ea-btn-primary"
               >
                 Submit Another
               </button>
               <Link
                 href="/dashboard"
-                className="px-5 py-2.5 bg-[var(--border-rule)] text-[var(--text-primary)] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors"
+                className="ea-btn ea-btn-secondary"
               >
                 Back to Dashboard
               </Link>
@@ -124,27 +126,28 @@ export default function FeedbackClient({
         ) : (
           <>
             {/* Category picker */}
-            <div className="mb-6">
-              <p className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">What kind of feedback?</p>
-              <div className="grid grid-cols-2 gap-3">
+            <div className="mt-10">
+              <p className="ea-label">What kind of feedback?</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {CATEGORIES.map(cat => (
                   <button
                     key={cat.key}
                     onClick={() => setCategory(cat.key)}
-                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all text-left ${
+                    aria-pressed={category === cat.key}
+                    className={`flex items-start gap-3 rounded-card border p-4 text-left transition-colors ${
                       category === cat.key
-                        ? cat.bg + " border-opacity-100"
-                        : "bg-[var(--surface-raised)] border-[var(--border-rule)] hover:border-[var(--text-meta)]"
+                        ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+                        : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border-strong)]"
                     }`}
                   >
-                    <span className={category === cat.key ? cat.color : "text-[var(--text-meta)]"}>
+                    <span className={category === cat.key ? "text-[var(--accent)]" : "text-[var(--text-3)]"}>
                       {cat.icon}
                     </span>
                     <div>
-                      <p className={`text-sm font-semibold ${category === cat.key ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"}`}>
+                      <p className={`text-sm font-semibold ${category === cat.key ? "text-[var(--text-1)]" : "text-[var(--text-2)]"}`}>
                         {cat.label}
                       </p>
-                      <p className="text-[10px] text-[var(--text-meta)] mt-0.5">{cat.description}</p>
+                      <p className="mt-0.5 text-xs text-[var(--text-3)]">{cat.description}</p>
                     </div>
                   </button>
                 ))}
@@ -153,10 +156,10 @@ export default function FeedbackClient({
 
             {/* Form */}
             {category && (
-              <div className="space-y-4 mb-6">
+              <div className="mt-8 space-y-6">
                 <div>
-                  <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
-                    Title <span className="text-red-400">*</span>
+                  <label className="ea-label">
+                    Title <span className="text-[var(--danger)]">*</span>
                   </label>
                   <input
                     type="text"
@@ -169,40 +172,40 @@ export default function FeedbackClient({
                           ? "e.g., Hatch calendar with insect emergence data"
                           : "e.g., Make the catch logging form faster"
                     }
-                    className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+                    className="ea-input"
                     maxLength={120}
                   />
-                  <p className="text-[10px] text-[var(--text-meta)] mt-1 text-right">{title.length}/120</p>
+                  <p className="num mt-1 text-right text-xs text-[var(--text-3)]">{title.length}/120</p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
-                    Details <span className="text-[var(--text-meta)]">(optional)</span>
+                  <label className="ea-label">
+                    Details <span className="font-normal normal-case tracking-normal text-[var(--text-3)]">(optional)</span>
                   </label>
                   <textarea
                     value={details}
                     onChange={e => setDetails(e.target.value)}
                     placeholder="Give us the full picture. What problem does this solve? How would it work? The more detail, the better we can build it."
                     rows={5}
-                    className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] resize-none"
+                    className="ea-input resize-none"
                   />
                 </div>
 
                 {error && (
-                  <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg">
-                    <p className="text-sm text-red-400">{error}</p>
+                  <div className="rounded-surface border border-[var(--danger)] bg-[var(--surface)] px-4 py-3">
+                    <p className="text-sm text-[var(--danger)]">{error}</p>
                   </div>
                 )}
 
                 <button
                   onClick={handleSubmit}
                   disabled={submitting || !title.trim()}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--action)] text-white text-base font-bold rounded-xl hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="ea-btn ea-btn-primary ea-btn-lg w-full"
                 >
                   {submitting ? (
-                    <><Loader2 className="h-5 w-5 animate-spin" /> Submitting...</>
+                    <><Loader2 size={16} className="animate-spin" /> Submitting...</>
                   ) : (
-                    <><Send className="h-5 w-5" /> Submit Feedback</>
+                    <><Send size={16} /> Submit Feedback</>
                   )}
                 </button>
               </div>
@@ -212,41 +215,42 @@ export default function FeedbackClient({
 
         {/* Previous submissions */}
         {existing.length > 0 && (
-          <div className="mt-10">
+          <div className="mt-12">
             <button
               onClick={() => setShowHistory(!showHistory)}
-              className="flex items-center gap-2 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors mb-3"
+              aria-expanded={showHistory}
+              className="mb-3 flex items-center gap-2 text-sm font-medium text-[var(--text-2)] underline-offset-4 transition-colors hover:text-[var(--text-1)] hover:underline"
             >
-              <ChevronDown className={`h-4 w-4 transition-transform ${showHistory ? "rotate-180" : ""}`} />
+              <ChevronDown size={16} className={`transition-transform ${showHistory ? "rotate-180" : ""}`} />
               Your previous feedback ({existing.length})
             </button>
 
             {showHistory && (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {existing.map(fb => {
                   const statusCfg = STATUS_DISPLAY[fb.status] || STATUS_DISPLAY.submitted;
                   const catInfo = CATEGORIES.find(c => c.key === fb.entity_data?.category);
 
                   return (
-                    <div key={fb.id} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4">
+                    <div key={fb.id} className="ea-card">
                       <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className={catInfo?.color || "text-[var(--text-body)]"}>
-                              {catInfo?.icon || <MessageSquarePlus className="h-4 w-4" />}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-[var(--text-3)]">
+                              {catInfo?.icon || <MessageSquarePlus size={16} />}
                             </span>
-                            <h3 className="text-sm font-semibold text-[var(--text-primary)]">{fb.name}</h3>
+                            <h3 className="text-sm font-semibold text-[var(--text-1)]">{fb.name}</h3>
                           </div>
-                          <p className="text-xs text-[var(--text-meta)] mt-1">
+                          <p className="mt-1 text-xs text-[var(--text-3)]">
                             {new Date(fb.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                           </p>
                           {fb.admin_feedback && (
-                            <div className="mt-2 px-3 py-2 bg-[var(--action)]/5 border border-[var(--action)]/20 rounded-lg">
-                              <p className="text-xs text-[var(--action)]"><strong>Team response:</strong> {fb.admin_feedback}</p>
+                            <div className="mt-3 rounded-surface border border-[var(--border)] bg-[var(--accent-soft)] px-3 py-2">
+                              <p className="text-xs text-[var(--text-1)]"><strong>Team response:</strong> {fb.admin_feedback}</p>
                             </div>
                           )}
                         </div>
-                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${statusCfg.color} bg-current/10 shrink-0`}>
+                        <span className={`ea-chip shrink-0 ${statusCfg.color}`}>
                           {statusCfg.icon}
                           {statusCfg.label}
                         </span>
