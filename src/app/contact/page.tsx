@@ -1,5 +1,6 @@
 import { SITE_NAME } from "@/lib/constants";
-import ContactForm, { SUBJECT_OPTIONS } from "./ContactForm";
+import ContactForm from "./ContactForm";
+import { SUBJECT_OPTIONS } from "./subjects";
 
 interface Props {
   searchParams: Promise<{ subject?: string }>;

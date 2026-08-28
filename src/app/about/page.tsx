@@ -3,8 +3,6 @@ import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle, catalogCounts } from "@/lib/seo";
 
-export const revalidate = 3600;
-
 export async function generateMetadata(): Promise<Metadata> {
   const counts = await catalogCounts();
   const desc = `${SITE_NAME} combines world-class fishing editorial with a private journal. Explore ${counts.destinations} destinations, ${counts.rivers} rivers, and ${counts.flies} fly patterns.`;

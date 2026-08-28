@@ -3,15 +3,7 @@
 import { useState } from "react";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
-
-const SUBJECT_OPTIONS = [
-  "General Inquiry",
-  "Content Correction",
-  "Lodge or Guide Listing",
-  "Partnership",
-  "Advertising",
-  "Technical Issue",
-] as const;
+import { SUBJECT_OPTIONS } from "./subjects";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -170,4 +162,4 @@ export default function ContactForm({ initialSubject }: Props) {
   );
 }
 
-export { SUBJECT_OPTIONS };
+export { SUBJECT_OPTIONS } from "./subjects";

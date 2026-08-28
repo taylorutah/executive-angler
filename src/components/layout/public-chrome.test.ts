@@ -106,6 +106,7 @@ describe("public chrome locks", () => {
       assert.match(src, /house-measure/);
       assert.equal(src.includes("max-w-3xl"), false, `${rel} still uses a leftover max-w-3xl rail`);
       assert.equal(src.includes("max-w-md"), false, `${rel} still uses a leftover max-w-md dek`);
+      assert.equal(src.includes("revalidate"), false, `${rel} is ISR and can ship a stale house prerender`);
     }
     const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
     assert.match(css, /\.house-measure,\n\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: 65ch;/);
