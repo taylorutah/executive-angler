@@ -19,19 +19,19 @@ export default function StatBlock({
   if (stats.length < 2) return null;
 
   return (
-    <aside className="my-10 border-y border-[var(--border-rule)] py-5 not-italic">
+    <aside className="my-10 border-y border-[var(--border)] py-5 not-italic">
       {caption && (
-        <p className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)] mb-4">
+        <p className="ea-overline mb-4">
           {caption}
         </p>
       )}
       <dl className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5">
         {stats.map((stat) => (
           <div key={stat.label}>
-            <dt className="font-ui text-[11px] uppercase tracking-[0.1em] text-[var(--text-meta)]">
+            <dt className="ea-stat-label">
               {stat.label}
             </dt>
-            <dd className="mt-1 num text-lg text-[var(--text-primary)]">
+            <dd className="mt-1 num text-[var(--text-18)] text-[var(--text-1)]">
               {stat.value}
             </dd>
           </div>

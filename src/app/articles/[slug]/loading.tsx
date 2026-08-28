@@ -1,68 +1,35 @@
 export default function Loading() {
   return (
-    <>
-      {/* Hero skeleton */}
-      <div className="h-[60vh] bg-[var(--surface-card)] animate-pulse" />
+    <div className="bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6 animate-pulse">
+        {/* Hero skeleton — 3:2 band on the prose column */}
+        <div className="ea-photo-wide w-full bg-[var(--paper-deep)]" />
 
-      {/* Breadcrumb skeleton */}
-      <div className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <div className="h-4 bg-[var(--surface-card)] rounded w-48 animate-pulse" />
+        {/* Breadcrumb skeleton */}
+        <div className="flex items-center justify-between py-6 border-b border-[var(--border)]">
+          <div className="h-4 w-48 rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="h-6 w-6 rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+        </div>
+
+        {/* Header skeleton */}
+        <div className="pt-8 sm:pt-12">
+          <div className="h-3 w-20 rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="mt-3 h-10 w-full rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="mt-4 h-6 w-2/3 rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="mt-6 h-4 w-1/3 rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+        </div>
+
+        {/* Body skeleton */}
+        <div className="mt-12 space-y-4 pb-24">
+          <div className="h-4 w-full rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="h-4 w-full rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="h-4 w-5/6 rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="h-4 w-full rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="h-4 w-4/6 rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="h-4 w-full rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
+          <div className="h-4 w-3/6 rounded-[var(--radius-sm)] bg-[var(--paper-deep)]" />
         </div>
       </div>
-
-      {/* Content skeleton */}
-      <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Main content */}
-            <div className="lg:col-span-2 space-y-8 animate-pulse">
-              <div className="space-y-4">
-                <div className="h-7 bg-[var(--surface-card)] rounded w-1/3" />
-                <div className="h-4 bg-[var(--border-rule)] rounded w-full" />
-                <div className="h-4 bg-[var(--border-rule)] rounded w-full" />
-                <div className="h-4 bg-[var(--border-rule)] rounded w-5/6" />
-                <div className="h-4 bg-[var(--border-rule)] rounded w-4/6" />
-              </div>
-              <div className="h-[350px] bg-[var(--surface-card)] rounded-xl" />
-              <div className="space-y-4">
-                <div className="h-7 bg-[var(--surface-card)] rounded w-1/4" />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="rounded-xl bg-[var(--surface-raised)] shadow-md overflow-hidden">
-                      <div className="h-40 bg-[var(--surface-card)]" />
-                      <div className="p-4 space-y-2">
-                        <div className="h-4 bg-[var(--surface-card)] rounded w-3/4" />
-                        <div className="h-3 bg-[var(--border-rule)] rounded w-1/2" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-6 animate-pulse">
-              <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm space-y-3">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="flex justify-between">
-                    <div className="h-4 bg-[var(--border-rule)] rounded w-1/3" />
-                    <div className="h-4 bg-[var(--surface-card)] rounded w-2/5" />
-                  </div>
-                ))}
-              </div>
-              <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
-                <div className="h-5 bg-[var(--surface-card)] rounded w-1/2 mb-4" />
-                <div className="grid grid-cols-4 gap-1.5">
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <div key={i} className="h-8 bg-[var(--border-rule)] rounded" />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
+    </div>
   );
 }

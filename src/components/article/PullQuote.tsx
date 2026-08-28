@@ -11,12 +11,12 @@ export default function PullQuote({
   attribution?: string;
 }) {
   return (
-    <figure className="my-10 border-l-2 border-[var(--action)] pl-6">
-      <blockquote className="font-display text-2xl sm:text-[1.75rem] leading-[1.3] text-[var(--text-primary)]">
+    <figure className="my-10 border-l-2 border-[var(--accent)] pl-6">
+      <blockquote className="font-display text-[var(--text-24)] sm:text-[var(--text-30)] font-medium leading-[1.2] text-[var(--text-1)]">
         {children}
       </blockquote>
       {attribution && (
-        <figcaption className="mt-3 font-ui text-[13px] text-[var(--text-meta)]">
+        <figcaption className="mt-3 text-[var(--text-13)] text-[var(--text-3)]">
           {attribution}
         </figcaption>
       )}
