@@ -30,7 +30,7 @@ Canonical implementation: `src/app/globals.css` (tokens, base, components) + `sr
 | `--border-strong` | `#CFC9BB` | emphasized hairline |
 | `--text-1` | `#171C19` | primary text |
 | `--text-2` | `#525B55` | body/secondary text, labels |
-| `--text-3` | `#969E97` | sparse overlines/metadata only (see §9 note) |
+| `--text-3` | `#6E746F` | overlines/metadata — amended 2026-08-28 (client-approved): `#969E97` measured 2.61:1 on `--paper`; this is the lightest same-hue value passing WCAG AA at 4.54:1 |
 | `--accent` | `#1E4D3B` | deep river green — primary actions, links, active states |
 | `--accent-hover` | `#16382B` | accent hover/active |
 | `--accent-soft` | `#EAF1ED` | active nav, selected rows |
