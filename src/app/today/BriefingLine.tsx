@@ -18,7 +18,7 @@ export default function BriefingLine({ title, summary, defaultOpen = true, child
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <section className="border-t border-[var(--border-rule)]">
+    <section className="border-t border-[var(--border)]">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -26,24 +26,24 @@ export default function BriefingLine({ title, summary, defaultOpen = true, child
         className="ea-focus-ring flex w-full items-start justify-between gap-4 py-5 text-left"
       >
         <span className="min-w-0">
-          <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+          <span className="ea-overline block">
             {title}
           </span>
           {summary ? (
-            <span className="mt-1 block text-[15px] leading-snug text-[var(--text-body)]">
+            <span className="mt-1 block leading-snug text-[var(--text-2)]">
               {summary}
             </span>
           ) : null}
         </span>
         <ChevronDown
-          className={`mt-0.5 h-4 w-4 shrink-0 text-[var(--text-meta)] transition-transform duration-[140ms] ease-out ${
+          className={`mt-0.5 h-4 w-4 shrink-0 text-[var(--text-3)] transition-transform duration-150 ease-standard ${
             open ? "rotate-180" : ""
           }`}
           aria-hidden
         />
       </button>
       <div
-        className={`overflow-hidden transition-[max-height,opacity] duration-[140ms] ease-out ${
+        className={`overflow-hidden transition-[max-height,opacity] duration-150 ease-standard ${
           open ? "max-h-[20000px] opacity-100 pb-6" : "max-h-0 opacity-0"
         }`}
       >

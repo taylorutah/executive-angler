@@ -50,7 +50,7 @@ function flowDelta(now: number, then: number): string {
 }
 
 function EmptyLine({ children }: { children: ReactNode }) {
-  return <p className="text-[15px] leading-relaxed text-[var(--text-meta)]">{children}</p>;
+  return <p className="text-sm leading-relaxed text-[var(--text-2)]">{children}</p>;
 }
 
 export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
@@ -64,15 +64,13 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
   const firstRun = data.water.length === 0 && data.sessionCount === 0;
 
   return (
-    <article className="min-h-[70vh] bg-[var(--surface-page)]">
-      <div className="mx-auto max-w-[780px] px-4 py-12 sm:px-6 sm:py-16">
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
-          {today}
-        </p>
-        <h1 className="mt-2 font-heading text-4xl text-[var(--text-primary)] sm:text-5xl">
+    <article className="min-h-[70vh] bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--prose)] px-4 py-12 sm:px-6 sm:py-16">
+        <p className="ea-overline">{today}</p>
+        <h1 className="mt-2 font-display text-2xl font-semibold text-[var(--text-1)] sm:text-3xl">
           Today
         </h1>
-        <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--text-body)]">
+        <p className="mt-3 leading-relaxed text-[var(--text-2)]">
           A briefing, not a dashboard. Your water, your record, what to tie, what to read.
         </p>
 
@@ -99,31 +97,31 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
             {data.unfinished.length === 0 ? (
               <EmptyLine>Sessions you close out stay off this line.</EmptyLine>
             ) : (
-              <ul className="divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+              <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
                 {data.unfinished.map((item) => (
                   <li key={`${item.kind}-${item.href}-${item.label}`}>
                     <Link
                       href={item.href}
                       className="ea-focus-ring flex items-center justify-between gap-4 py-3"
                     >
-                      <span className="min-w-0 text-[15px] text-[var(--text-primary)]">
+                      <span className="min-w-0 text-[var(--text-1)]">
                         {item.label}
                         {item.date ? (
-                          <span className="ml-2 text-[13px] text-[var(--text-meta)]">
+                          <span className="ml-2 text-[13px] text-[var(--text-3)]">
                             {item.date}
                           </span>
                         ) : null}
                       </span>
                       <span className="flex shrink-0 items-center gap-2">
                         {item.fishCount != null && item.fishCount > 0 ? (
-                          <span className="num text-[13px] text-[var(--text-primary)]">
+                          <span className="num text-[13px] text-[var(--text-1)]">
                             {item.fishCount}
                           </span>
                         ) : null}
                         <Icon
                           name="lock"
                           size={14}
-                          className="text-[var(--text-meta)]"
+                          className="text-[var(--text-3)]"
                           aria-label="Private — only you see fish counts"
                         />
                       </span>
@@ -148,7 +146,7 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                 Pin a section from a river page or{" "}
                 <Link
                   href="/rivers/mine"
-                  className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:text-[var(--action)]"
+                  className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)]"
                 >
                   My Rivers
                 </Link>
@@ -156,7 +154,7 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
               </EmptyLine>
             ) : (
               <>
-                <ul className="divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+                <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
                   {data.water.map((river) => (
                     <li key={`${river.slug}-${river.section}`}>
                       <Link
@@ -164,27 +162,27 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                         className="ea-focus-ring block py-3.5"
                       >
                         <div className="flex items-baseline justify-between gap-4">
-                          <span className="text-[15px] text-[var(--text-primary)]">
+                          <span className="text-[var(--text-1)]">
                             {river.name}
                             {river.section ? (
-                              <span className="ml-2 text-[13px] text-[var(--text-meta)]">
+                              <span className="ml-2 text-[13px] text-[var(--text-3)]">
                                 {river.section}
                               </span>
                             ) : null}
                           </span>
                           {river.cfs != null ? (
-                            <span className="num shrink-0 text-[var(--signal-live)]">
+                            <span className="num shrink-0 text-[var(--accent)]">
                               {river.cfs.toLocaleString("en-US")}
-                              <span className="ml-1 text-[var(--text-meta)]">cfs</span>
+                              <span className="ml-1 text-[13px] text-[var(--text-3)]">cfs</span>
                             </span>
                           ) : (
-                            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                            <span className="text-xs uppercase tracking-[0.06em] text-[var(--text-3)]">
                               no reading
                             </span>
                           )}
                         </div>
                         {river.lastCfs != null && river.cfs != null ? (
-                          <p className="mt-1 text-[13px] text-[var(--text-body)]">
+                          <p className="mt-1 text-[13px] text-[var(--text-2)]">
                             {flowDelta(river.cfs, river.lastCfs)} than your last day here
                             {river.lastFishedDate
                               ? ` (${daysAgo(river.lastFishedDate)} days ago at ${river.lastCfs.toLocaleString("en-US")} cfs)`
@@ -192,12 +190,12 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                             .
                           </p>
                         ) : river.lastFishedDate ? (
-                          <p className="mt-1 text-[13px] text-[var(--text-body)]">
+                          <p className="mt-1 text-[13px] text-[var(--text-2)]">
                             You have not logged flow on your last day here (
                             {daysAgo(river.lastFishedDate)} days ago).
                           </p>
                         ) : (
-                          <p className="mt-1 text-[13px] text-[var(--text-meta)]">
+                          <p className="mt-1 text-[13px] text-[var(--text-3)]">
                             No logged day on this river yet.
                           </p>
                         )}
@@ -208,7 +206,7 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                 <p className="mt-4">
                   <Link
                     href="/rivers/mine"
-                    className="text-[13px] text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:text-[var(--action)]"
+                    className="text-[13px] text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)]"
                   >
                     Watchlist
                   </Link>
@@ -232,10 +230,10 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
               </EmptyLine>
             ) : (
               <div>
-                <p className="text-[15px] leading-relaxed text-[var(--text-body)]">
+                <p className="leading-relaxed text-[var(--text-2)]">
                   <Link
                     href={`/rivers/${data.worthGoing.slug}`}
-                    className="text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:text-[var(--action)]"
+                    className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)]"
                   >
                     {data.worthGoing.name}
                   </Link>
@@ -243,7 +241,7 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                     <>
                       {" "}
                       is{" "}
-                      <span className="num text-[var(--signal-live)]">
+                      <span className="num text-[var(--accent)]">
                         {data.worthGoing.cfs.toLocaleString("en-US")} cfs
                       </span>{" "}
                       now.
@@ -252,23 +250,23 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                     " has no live reading right now."
                   )}
                 </p>
-                <ol className="mt-5 divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+                <ol className="mt-5 divide-y divide-[var(--border)] border-y border-[var(--border)]">
                   {data.worthGoing.days.map((day) => (
                     <li key={day.date} className="py-3.5">
                       <div className="flex items-baseline justify-between gap-4">
-                        <span className="text-[15px] text-[var(--text-primary)]">
+                        <span className="text-[var(--text-1)]">
                           {day.weekday}
-                          <span className="ml-2 text-[13px] text-[var(--text-meta)]">{day.date}</span>
+                          <span className="ml-2 text-[13px] text-[var(--text-3)]">{day.date}</span>
                         </span>
                         {day.tempHighF != null ? (
-                          <span className="num text-[13px] text-[var(--text-body)]">
+                          <span className="num text-[13px] text-[var(--text-2)]">
                             {day.tempHighF}°F · {day.weatherLabel}
                           </span>
                         ) : (
-                          <span className="text-[13px] text-[var(--text-meta)]">{day.weatherLabel}</span>
+                          <span className="text-[13px] text-[var(--text-3)]">{day.weatherLabel}</span>
                         )}
                       </div>
-                      <p className="mt-1 text-[13px] leading-relaxed text-[var(--text-body)]">
+                      <p className="mt-1 text-[13px] leading-relaxed text-[var(--text-2)]">
                         {day.note}
                       </p>
                     </li>
@@ -277,7 +275,7 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                 <p className="mt-4">
                   <Link
                     href={`/plan/${data.worthGoing.slug}`}
-                    className="text-[13px] text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:text-[var(--action)]"
+                    className="text-[13px] text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-4 hover:text-[var(--accent)]"
                   >
                     Trip brief
                   </Link>
@@ -301,15 +299,15 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                 for them.
               </EmptyLine>
             ) : (
-              <ul className="divide-y divide-[var(--border-rule)] border-y border-[var(--border-rule)]">
+              <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
                 {data.tieNext.map((fly) => (
                   <li key={fly.href}>
                     <Link
                       href={fly.href}
                       className="ea-focus-ring flex items-baseline justify-between gap-4 py-3"
                     >
-                      <span className="text-[15px] text-[var(--text-primary)]">{fly.name}</span>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+                      <span className="text-[var(--text-1)]">{fly.name}</span>
+                      <span className="text-xs uppercase tracking-[0.06em] text-[var(--text-3)]">
                         {fly.status === "at_vise" ? "at the vise" : "wanted"}
                       </span>
                     </Link>
@@ -338,11 +336,11 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                   <li key={note.href}>
                     <Link
                       href={note.href}
-                      className="ea-focus-ring block hover:text-[var(--action)]"
+                      className="ea-focus-ring block hover:text-[var(--accent)]"
                     >
-                      <p className="font-heading text-2xl text-[var(--text-primary)]">{note.title}</p>
+                      <p className="font-display text-2xl text-[var(--text-1)]">{note.title}</p>
                       {note.excerpt ? (
-                        <p className="mt-1 text-[15px] leading-relaxed text-[var(--text-body)]">
+                        <p className="mt-1 leading-relaxed text-[var(--text-2)]">
                           {note.excerpt}
                         </p>
                       ) : null}
