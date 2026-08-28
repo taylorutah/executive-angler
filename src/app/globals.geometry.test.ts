@@ -83,6 +83,15 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /\.desk-sheet-name \{[\s\S]*?grid-column:\s*6 \/ span 7/);
   });
 
+  it("locks house copy to one 65ch Newsreader measure and ink Fraunces heads", () => {
+    assert.match(
+      css,
+      /\.house-measure,\n\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: 65ch;/,
+    );
+    assert.match(css, /\.house-measure h1,[\s\S]*?color:\s*var\(--text-primary\)/);
+    assert.match(css, /\.house-measure \.prose \{\n  font-family:\s*var\(--font-body\)/);
+  });
+
   it("squares Mapbox attribution to --radius-instrument", () => {
     assert.match(
       css,

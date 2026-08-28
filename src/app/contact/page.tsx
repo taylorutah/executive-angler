@@ -12,7 +12,7 @@ export default async function ContactPage({ searchParams }: Props) {
     SUBJECT_OPTIONS.find((s) => s.toLowerCase() === requested.toLowerCase()) ?? "";
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
+    <div className="bg-[var(--paper)]">
       <div className="desk-sheet">
         <div className="desk-form">
           <p className="desk-eyebrow">House</p>

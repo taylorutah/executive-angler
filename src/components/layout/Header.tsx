@@ -140,11 +140,7 @@ export default function Header() {
                 </div>
               )}
 
-              {isLoading ? (
-                <div className="hidden lg:flex items-center">
-                  <div className="h-8 w-8 rounded-full bg-[var(--surface-card)] animate-pulse" />
-                </div>
-              ) : user ? (
+              {user ? (
                 <div className="hidden lg:flex items-center gap-1">
                   <ExploreMenu />
                   <NotificationBell />
@@ -211,6 +207,10 @@ export default function Header() {
                       </div>
                     )}
                   </div>
+                </div>
+              ) : isLoading && sessionHint ? (
+                <div className="hidden lg:flex items-center">
+                  <div className="h-8 w-8 rounded-full bg-[var(--surface-card)] animate-pulse" />
                 </div>
               ) : (
                 <Link href="/login" className="ea-nav-link ea-focus-ring">

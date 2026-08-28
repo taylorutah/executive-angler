@@ -17,7 +17,7 @@ export default async function LoginPage({ searchParams }: Props) {
     safeNext(sp.next) ?? safeNext(sp.redirect) ?? POST_LOGIN_PATH;
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
+    <div className="bg-[var(--paper)]">
       <div className="desk-sheet">
         <div className="desk-form">
           <h1

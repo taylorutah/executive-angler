@@ -24,7 +24,7 @@ export default function LoginForm({ redirect, authError }: Props) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
-  const [captchaResolved, setCaptchaResolved] = useState(false);
+  const [, setCaptchaResolved] = useState(false);
 
   const authErrorMessage =
     authError === "auth_failed" || authError === "auth_callback_failed"
@@ -92,7 +92,7 @@ export default function LoginForm({ redirect, authError }: Props) {
             </label>
             <Link
               href="/forgot-password"
-              className="hover-copper text-xs text-[var(--action)] hover:underline"
+              className="hover-copper text-xs text-[var(--action)] underline underline-offset-4"
             >
               Forgot password?
             </Link>
@@ -122,7 +122,7 @@ export default function LoginForm({ redirect, authError }: Props) {
         )}
         <Button
           type="submit"
-          disabled={loading || !captchaResolved}
+          disabled={loading}
           variant="solid"
           size="lg"
           fullWidth
@@ -136,7 +136,7 @@ export default function LoginForm({ redirect, authError }: Props) {
         Don&apos;t have an account?{" "}
         <Link
           href={redirect !== POST_LOGIN_PATH ? `/signup?next=${encodeURIComponent(redirect)}` : "/signup"}
-          className="hover-copper text-[var(--action)] hover:underline"
+          className="hover-copper text-[var(--action)] underline underline-offset-4"
         >
           Create one
         </Link>

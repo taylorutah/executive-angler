@@ -149,6 +149,8 @@ async function capture(page: Page, route: string, vp: Viewport) {
   if (route.startsWith("/login")) {
     await page.getByRole("heading", { name: "Sign in" }).waitFor({ timeout: 15_000 });
     await page.getByLabel("Email").waitFor({ timeout: 15_000 });
+    await page.getByRole("link", { name: "Sign in" }).waitFor({ timeout: 15_000 });
+    await expect(page.locator("header .animate-pulse")).toHaveCount(0);
   }
   if (route.startsWith("/flies/comparadun") || route.startsWith("/flies/pheasant-tail")) {
     await page.getByRole("heading", { name: "Recipe" }).waitFor({ timeout: 15_000 });

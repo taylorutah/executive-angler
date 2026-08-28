@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const counts = await catalogCounts();
   return (
-    <div className="bg-[var(--surface-page)]">
+    <div className="bg-[var(--paper)]">
       <div className="desk-sheet">
         <div className="house-measure">
         <p className="desk-eyebrow">

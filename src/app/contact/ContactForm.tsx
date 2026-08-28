@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
+import { Button } from "@/components/ui/Button";
 
 const SUBJECT_OPTIONS = [
   "General Inquiry",
@@ -155,15 +156,16 @@ export default function ContactForm({ initialSubject }: Props) {
         </div>
       )}
 
-      <div className="flex items-center justify-between">
-        <button
-          type="submit"
-          disabled={sending || !captchaResolved}
-          className="inline-flex items-center rounded-[2px] bg-[var(--action)] px-6 py-3 font-ui text-[14px] font-medium text-[var(--on-action)] disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {sending ? "Sending…" : "Send message"}
-        </button>
-      </div>
+      <Button
+        type="submit"
+        disabled={sending}
+        variant="solid"
+        size="lg"
+        fullWidth
+        loading={sending}
+      >
+        {sending ? "Sending…" : "Send message"}
+      </Button>
     </form>
   );
 }

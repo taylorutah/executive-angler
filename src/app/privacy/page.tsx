@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="bg-[var(--surface-page)]">
+    <div className="bg-[var(--paper)]">
       <div className="desk-sheet">
         <div className="house-measure">
         <h1

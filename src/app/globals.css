@@ -1300,8 +1300,33 @@ input.ea-focus-ring:focus-visible,
   color: var(--text-body);
 }
 
-.house-measure {
+.house-measure,
+.house-measure .prose,
+.house-measure .desk-dek-ui {
   max-width: 65ch;
+}
+
+/* Ink Fraunces headings beat leftover copper utilities and unlayered .prose. */
+.house-measure h1,
+.house-measure h2,
+.house-measure h3,
+.house-measure .prose h1,
+.house-measure .prose h2,
+.house-measure .prose h3,
+.desk-form h1,
+.desk-form h2 {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+}
+
+.house-measure .prose {
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  max-width: 65ch;
+}
+
+.house-measure .desk-dek-ui {
+  font-family: var(--font-ui);
 }
 
 .desk-form {

@@ -70,6 +70,12 @@ describe("public chrome locks", () => {
     assert.match(house, /label: "Terms", href: "\/terms"/);
   });
 
+  it("pulses the header avatar only when a session cookie is already hinted", () => {
+    assert.match(header, /: isLoading && sessionHint \? \(/);
+    assert.match(header, /animate-pulse/);
+    assert.equal(header.includes("isLoading ? ("), false);
+  });
+
   it("keeps house and login headings charcoal Fraunces, not copper", () => {
     for (const rel of [
       "src/app/about/page.tsx",
@@ -77,9 +83,13 @@ describe("public chrome locks", () => {
       "src/app/terms/page.tsx",
       "src/app/contact/page.tsx",
       "src/app/login/page.tsx",
+      "src/app/signup/page.tsx",
+      "src/app/forgot-password/page.tsx",
     ]) {
       const src = readFileSync(join(root, rel), "utf8");
       assert.match(src, /desk-sheet/);
+      assert.match(src, /bg-\[var\(--paper\)\]/);
+      assert.equal(src.includes("Loading"), false, `${rel} still SSRs a Loading pulse`);
       assert.equal(
         /<h1[^>]*text-\[var\(--action\)\]/.test(src),
         false,
@@ -91,6 +101,16 @@ describe("public chrome locks", () => {
         `${rel} paints h2 copper`,
       );
     }
+    for (const rel of ["src/app/about/page.tsx", "src/app/privacy/page.tsx", "src/app/terms/page.tsx"]) {
+      const src = readFileSync(join(root, rel), "utf8");
+      assert.match(src, /house-measure/);
+      assert.equal(src.includes("max-w-3xl"), false, `${rel} still uses a leftover max-w-3xl rail`);
+      assert.equal(src.includes("max-w-md"), false, `${rel} still uses a leftover max-w-md dek`);
+    }
+    const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
+    assert.match(css, /\.house-measure,\n\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: 65ch;/);
+    assert.match(visual, /getByRole\("link", \{ name: "Sign in" \}\)/);
+    assert.match(visual, /header \.animate-pulse/);
   });
 
   it("puts the long 600ms ease on every public card", () => {
