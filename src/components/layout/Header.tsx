@@ -69,13 +69,15 @@ export default function Header() {
               className="ea-focus-ring flex flex-shrink-0 cursor-pointer select-none items-center"
               aria-label="Executive Angler — home"
             >
-              {/* Native SVG — next/image's 160×32 box cropped ANGLER at 390. */}
+              {/* One mark, both viewports. Native SVG — next/image's 160×32
+                  box cropped ANGLER at 390 into a one-line copper smear. */}
               <img
                 src={logoSrc}
                 alt="Executive Angler"
                 width={136}
                 height={26}
-                className="pointer-events-none h-[26px] w-auto"
+                data-wordmark={duskApp ? "white-horizontal" : "forest-horizontal"}
+                className="pointer-events-none h-[26px] w-[136px] max-h-[26px] object-contain object-left"
               />
             </Link>
 

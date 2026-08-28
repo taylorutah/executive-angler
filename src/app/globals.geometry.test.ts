@@ -33,12 +33,17 @@ describe("v4.1 geometry tokens", () => {
     assert.equal(css.includes("var(--enter-stagger)"), false);
   });
 
-  it("keeps the home fold dek cream and sizes it off .prose", () => {
-    assert.match(css, /\.hero-dek[\s\S]*?color:\s*var\(--hero-type\)/);
+  it("keeps the home fold dek cream Archivo, off .prose and Newsreader", () => {
+    const dek = css.match(/\.hero-dek,\s*\n\.prose\.hero-dek \{[\s\S]*?\n\}/);
+    assert.ok(dek, "hero-dek rule missing");
+    assert.match(dek[0], /font-family:\s*var\(--font-ui\)/);
+    assert.match(dek[0], /color:\s*var\(--hero-type\)/);
+    assert.equal(dek[0].includes("--font-body"), false);
     assert.match(css, /@media \(max-width:\s*639px\)[\s\S]*?\.hero-overlay-home/);
     assert.equal(css.includes("--hover-duration: 600ms"), true);
     assert.match(css, /\.photo-lift[\s\S]*?var\(--hover-duration\)/);
     assert.match(css, /\.hover-copper[\s\S]*?var\(--hover-duration\)/);
+    assert.match(css, /\.card-hover[\s\S]*?var\(--hover-duration\)/);
   });
 
   it("squares Mapbox attribution to --radius-instrument", () => {

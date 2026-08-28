@@ -612,13 +612,12 @@
   color: var(--text-body);
 }
 
-/* Home fold dek sits on the photograph. Never pair this with .prose —
-   unlayered .prose { color: graphite } painted the PMD line dark-on-dark
-   at 390 (1.5:1). Size lives here too so utilities cannot lose to .prose. */
+/* Home fold dek sits on the photograph. Archivo — Newsreader is prose-only
+   (.prose / .article-body). Never pair this with .prose: unlayered
+   .prose { color: graphite } painted the PMD line dark-on-dark at 390. */
 .hero-dek,
 .prose.hero-dek {
-  font-family: var(--font-body);
-  font-optical-sizing: auto;
+  font-family: var(--font-ui);
   font-size: 14px;
   line-height: 20px;
   color: var(--hero-type);
