@@ -69,18 +69,8 @@ function getNotificationIcon(type: NotificationType) {
   }
 }
 
-function getNotificationIconBg(type: NotificationType): string {
-  switch (type) {
-    case "follow_request":
-    case "follow_accepted":
-      return "bg-[var(--action)]/15 text-[var(--action)]";
-    case "kudos":
-      return "bg-[var(--state-negative)]/15 text-[var(--state-negative)]";
-    case "comment":
-      return "bg-[var(--signal-live)]/15 text-[var(--signal-live)]";
-    case "mention":
-      return "bg-purple-500/15 text-purple-400";
-  }
+function getNotificationIconBg(): string {
+  return "bg-[var(--accent-soft)] text-[var(--accent)]";
 }
 
 function getNotificationText(n: AppNotification): string {
@@ -153,7 +143,7 @@ function FollowRequestActions({
     return (
       <span
         className={`text-xs font-medium ${
-          resolved === "accepted" ? "text-green-500" : "text-[var(--text-body)]"
+          resolved === "accepted" ? "text-[var(--success)]" : "text-[var(--text-2)]"
         }`}
       >
         {resolved === "accepted" ? "Accepted" : "Declined"}
@@ -169,7 +159,7 @@ function FollowRequestActions({
           handleAction("accept");
         }}
         disabled={acting}
-        className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--action)] text-white hover:bg-[#d17d28] transition-colors disabled:opacity-50"
+        className="ea-btn ea-btn-primary ea-btn-sm"
       >
         Accept
       </button>
@@ -179,7 +169,7 @@ function FollowRequestActions({
           handleAction("decline");
         }}
         disabled={acting}
-        className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--border-rule)] text-[var(--text-body)] hover:bg-[var(--state-negative)] hover:text-white transition-colors disabled:opacity-50"
+        className="ea-btn ea-btn-secondary ea-btn-sm"
       >
         Decline
       </button>
@@ -296,8 +286,8 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Notifications</h1>
-          <p className="text-sm text-[var(--text-body)] mt-1">
+          <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] sm:text-3xl">Notifications</h1>
+          <p className="text-sm text-[var(--text-2)] mt-1">
             {unreadCount > 0
               ? `${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`
               : "All caught up"}
@@ -306,7 +296,7 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
         {unreadCount > 0 && (
           <button
             onClick={markAllAsRead}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[var(--signal-live)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-card)] rounded-lg transition-colors"
+            className="ea-btn ea-btn-ghost ea-btn-sm"
           >
             <CheckCheck className="h-4 w-4" />
             Mark all read
@@ -316,10 +306,10 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
 
       {/* Notifications list */}
       {notifications.length === 0 ? (
-        <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-12 text-center">
-          <Bell className="h-12 w-12 text-[var(--text-meta)] mx-auto mb-3" />
-          <p className="text-[var(--text-body)] text-sm">No notifications yet</p>
-          <p className="text-[var(--text-meta)] text-xs mt-1">
+        <div className="ea-card p-12 text-center">
+          <Bell className="h-12 w-12 text-[var(--text-3)] mx-auto mb-3" />
+          <p className="text-[var(--text-2)] text-sm">No notifications yet</p>
+          <p className="text-[var(--text-3)] text-xs mt-1">
             When someone follows you, gives kudos, or comments on your sessions,
             you&apos;ll see it here.
           </p>
@@ -331,40 +321,38 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
             if (!items || items.length === 0) return null;
             return (
               <div key={groupLabel}>
-                <h2 className="text-xs font-semibold text-[var(--text-meta)] uppercase tracking-wider mb-2 px-1">
+                <h2 className="ea-overline mb-2 px-1">
                   {groupLabel}
                 </h2>
-                <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] overflow-hidden divide-y divide-[#21262D]">
+                <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] overflow-hidden divide-y divide-[var(--border)]">
                   {items.map((n) => (
                     <div
                       key={n.id}
-                      className={`flex gap-3 px-4 py-3.5 transition-colors border-l-2 ${
+                      className={`flex gap-3 px-4 py-3.5 transition-colors duration-150 ease-standard border-l-2 ${
                         n.read
-                          ? "border-l-transparent hover:bg-[var(--surface-card)]"
-                          : "border-l-[#0BA5C7] bg-[var(--signal-live)]/5 hover:bg-[var(--signal-live)]/10"
+                          ? "border-l-transparent hover:bg-[var(--paper-deep)]"
+                          : "border-l-[var(--accent)] bg-[var(--accent-soft)]"
                       }`}
                     >
                       {/* Icon */}
                       <div
-                        className={`h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0 ${getNotificationIconBg(
-                          n.type
-                        )}`}
+                        className={`h-9 w-9 rounded-[var(--radius-md)] flex items-center justify-center flex-shrink-0 ${getNotificationIconBg()}`}
                       >
                         {getNotificationIcon(n.type)}
                       </div>
 
                       {/* Actor avatar */}
-                      <div className="h-9 w-9 rounded-full overflow-hidden bg-[var(--border-rule)] flex items-center justify-center flex-shrink-0">
+                      <div className="h-9 w-9 rounded-[var(--radius-card)] overflow-hidden bg-[var(--accent-soft)] border border-[var(--border)] flex items-center justify-center flex-shrink-0">
                         {n.actor_profile?.avatar_url ? (
                           <Image
                             src={n.actor_profile.avatar_url}
                             alt=""
                             width={36}
                             height={36}
-                            className="object-cover w-full h-full"
+                            className="ea-photo object-cover w-full h-full"
                           />
                         ) : (
-                          <span className="text-xs font-bold text-[var(--text-body)]">
+                          <span className="font-display text-xs font-semibold text-[var(--accent)]">
                             {(
                               n.actor_profile?.display_name ||
                               n.actor_profile?.username ||
@@ -385,10 +373,10 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
                           }}
                           className="block"
                         >
-                          <p className="text-sm text-[var(--text-primary)] leading-snug">
+                          <p className="text-sm text-[var(--text-1)] leading-snug">
                             {getNotificationText(n)}
                           </p>
-                          <p className="text-xs text-[var(--text-meta)] mt-0.5">
+                          <p className="text-xs text-[var(--text-3)] mt-0.5">
                             {timeAgo(n.created_at)}
                           </p>
                         </Link>
@@ -409,7 +397,7 @@ export function NotificationsClient({ initialNotifications, userId }: Props) {
                         {!n.read ? (
                           <button
                             onClick={() => markAsRead(n.id)}
-                            className="p-1 text-[var(--signal-live)] hover:text-[var(--text-primary)] transition-colors"
+                            className="p-1 text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors duration-150 ease-standard"
                             title="Mark as read"
                           >
                             <Check className="h-3.5 w-3.5" />
