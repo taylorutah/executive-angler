@@ -22,19 +22,19 @@ export default function WhereToGo({ destinations, month }: Props) {
   if (destinations.length === 0) return null;
 
   return (
-    <section data-lane="resource" className="bg-[var(--surface-page)] py-16 sm:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 flex items-baseline justify-between gap-4">
+    <section data-lane="resource" className="bg-[var(--paper)] py-14 sm:py-24">
+      <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
+        <div className="mb-8 flex items-baseline justify-between gap-4">
           <SectionMark n="03" label="Where to go" />
           <Link
             href="/destinations"
-            className="shrink-0 text-[14px] text-[var(--action)] underline-offset-4 hover:underline"
+            className="shrink-0 text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
           >
             All destinations <span aria-hidden>&rarr;</span>
           </Link>
         </div>
 
-        <ul className="grid gap-10 lg:grid-cols-3">
+        <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {destinations.map((destination) => {
             const season = seasonLine(destination.bestMonths, month);
             const caption = destination.tagline ?? destination.region;
@@ -42,21 +42,21 @@ export default function WhereToGo({ destinations, month }: Props) {
             return (
               <li key={destination.id}>
                 <Link href={`/destinations/${destination.slug}`} className="group block">
-                  <div className="photo-card relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-rule)]">
+                  <div className="photo-card relative aspect-[4/3] w-full overflow-hidden rounded-surface border border-[var(--border)]">
                     <SafeEntityImage
                       src={destination.heroImageUrl}
                       alt={photoAlt(destination.heroImageAlt, fallback)}
                       title={destination.name}
-                      className="object-cover"
+                      className="ea-photo"
                       sizes="(max-width: 1024px) 100vw, 33vw"
                     />
                   </div>
-                  <h3 className="mt-5 font-heading text-3xl font-bold leading-tight text-[var(--text-primary)]">
+                  <h3 className="mt-5 font-display text-3xl font-semibold leading-tight text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
                     {destination.name}
                   </h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-body)]">{caption}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--text-2)]">{caption}</p>
                   {season && (
-                    <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+                    <p className="ea-overline mt-2">
                       {season}
                     </p>
                   )}

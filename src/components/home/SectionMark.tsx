@@ -3,12 +3,12 @@ interface Props {
   label: string;
 }
 
-/** Index in the margin — 01 / 02 / 03. Ink, not copper. */
+/** Index in the margin — 01 / 02 / 03. Overline spec: 12px, 0.06em, --text-3. */
 export default function SectionMark({ n, label }: Props) {
   return (
-    <p className="mb-5 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
-      <span className="text-[var(--text-primary)]">{n}</span>
-      <span aria-hidden className="h-px w-8 bg-[var(--border-rule)]" />
+    <p className="ea-overline mb-5 flex items-center gap-3">
+      <span className="text-[var(--text-1)]">{n}</span>
+      <span aria-hidden className="h-px w-8 bg-[var(--border)]" />
       <span>{label}</span>
     </p>
   );

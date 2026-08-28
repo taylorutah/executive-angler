@@ -21,21 +21,21 @@ export default function FlyPlate({ flies, flyCount }: Props) {
   if (flies.length === 0) return null;
 
   return (
-    <section data-lane="resource" className="bg-[var(--surface-page)] py-16 sm:py-24">
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
+    <section data-lane="resource" className="bg-[var(--paper-deep)] py-14 sm:py-24">
+      <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
         <div className="mb-8 flex items-baseline justify-between gap-4">
           <SectionMark n="02" label="The plate" />
           <Link
             href="/flies/library"
-            className="shrink-0 text-[14px] text-[var(--action)] underline-offset-4 hover:underline"
+            className="shrink-0 text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
           >
             {flyCount > 0 ? `All ${flyCount} patterns` : "All patterns"}{" "}
             <span aria-hidden>&rarr;</span>
           </Link>
         </div>
 
-        <div className="lg:grid lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-10">
-          <p className="mb-8 max-w-[20ch] font-mono text-[11px] uppercase leading-relaxed tracking-[0.16em] text-[var(--text-meta)] lg:mb-0 lg:pt-2">
+        <div className="lg:grid lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-8">
+          <p className="ea-overline mb-8 max-w-[20ch] leading-relaxed lg:mb-0 lg:pt-2">
             Plate I
             <br />
             Twelve patterns from the library, as specified.
@@ -43,15 +43,15 @@ export default function FlyPlate({ flies, flyCount }: Props) {
             Size and imitation from the record.
           </p>
 
-          <ul className="grid grid-cols-3 border-t border-l border-[var(--border-rule)] sm:grid-cols-4 lg:grid-cols-6">
+          <ul className="grid grid-cols-3 border-t border-l border-[var(--border)] bg-[var(--paper)] sm:grid-cols-4 lg:grid-cols-6">
             {flies.map((fly) => {
               const size = sizeLabel(fly.sizes);
               const imitates = fly.imitates?.[0];
               const scale = specimenScale(fly.sizes);
               return (
-                <li key={fly.id} className="border-b border-r border-[var(--border-rule)]">
+                <li key={fly.id} className="border-b border-r border-[var(--border)]">
                   <Link href={`/flies/${fly.slug}`} className="group block p-3 sm:p-4">
-                    <div className="relative flex aspect-square w-full items-center justify-center bg-[var(--surface-raised)]">
+                    <div className="relative flex aspect-square w-full items-center justify-center bg-[var(--paper-deep)]">
                       <div
                         className="relative"
                         style={{ width: `${scale * 100}%`, height: `${scale * 100}%` }}
@@ -66,10 +66,10 @@ export default function FlyPlate({ flies, flyCount }: Props) {
                         />
                       </div>
                     </div>
-                    <h3 className="mt-3 font-heading text-[11px] font-semibold uppercase leading-tight tracking-[0.14em] text-[var(--text-primary)]">
+                    <h3 className="mt-3 text-sm font-semibold leading-tight text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
                       {fly.name}
                     </h3>
-                    <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--text-meta)]">
+                    <p className="mt-1 text-xs text-[var(--text-3)]">
                       {[size, imitates].filter(Boolean).join(" · ")}
                     </p>
                   </Link>

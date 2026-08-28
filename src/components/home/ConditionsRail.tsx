@@ -31,10 +31,10 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
   return (
     <div
       data-home-rail
-      className="sticky top-[56px] z-40 h-10 bg-[var(--surface-page)] border-b border-[var(--border-rule)]"
+      className="sticky top-[56px] z-40 h-10 bg-[var(--paper)] border-b border-[var(--border)]"
     >
-      <div className="mx-auto flex h-full max-w-7xl items-center gap-5 overflow-x-auto px-4 sm:px-6 lg:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <span className="hidden shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-meta)] lg:inline">
+      <div className="mx-auto flex h-full max-w-[var(--container)] items-center gap-4 overflow-x-auto px-4 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <span className="ea-overline hidden shrink-0 lg:inline">
           On the water
         </span>
         {rivers.map((river) => {
@@ -48,40 +48,40 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
             <Link
               key={river.id}
               href={`/rivers/${river.slug}`}
-              className="group flex shrink-0 items-center gap-2 whitespace-nowrap text-[12px] text-[var(--text-body)] transition-colors hover:text-[var(--text-primary)]"
+              className="group flex shrink-0 items-center gap-2 whitespace-nowrap text-xs text-[var(--text-2)] transition-colors hover:text-[var(--text-1)]"
             >
               {live && (
                 <span
                   aria-hidden
-                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--signal-live)]"
+                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]"
                 />
               )}
-              <span className="font-medium text-[var(--text-primary)] group-hover:text-[var(--action)]">
+              <span className="font-medium text-[var(--text-1)] group-hover:text-[var(--accent)]">
                 {river.label}
               </span>
               {live ? (
                 <>
-                  <span className="num text-[var(--signal-live)]">
+                  <span className="num text-[var(--accent)]">
                     {snapshot.cfs!.toLocaleString("en-US")}
-                    <span className="ml-0.5 text-[var(--text-meta)]">cfs</span>
+                    <span className="ml-0.5 text-[var(--text-3)]">cfs</span>
                   </span>
-                  {delta && <span className="num text-[11px] text-[var(--text-meta)]">{delta}</span>}
+                  {delta && <span className="num text-[var(--text-3)]">{delta}</span>}
                   {observed && (
-                    <span className="hidden font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--text-meta)] xl:inline">
+                    <span className="ea-overline hidden xl:inline">
                       {observed} USGS
                     </span>
                   )}
                 </>
               ) : lastSeen ? (
-                <span className="num text-[var(--text-meta)]">
+                <span className="num text-[var(--text-3)]">
                   {snapshot.cfs!.toLocaleString("en-US")}
                   <span className="ml-0.5">cfs</span>
-                  <span className="ml-1.5 font-mono text-[10px] uppercase tracking-[0.1em]">
+                  <span className="ea-overline ml-1.5">
                     {lastSeenLabel(snapshot)}
                   </span>
                 </span>
               ) : (
-                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--text-meta)]">
+                <span className="ea-overline">
                   no reading
                 </span>
               )}

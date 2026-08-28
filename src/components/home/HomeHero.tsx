@@ -47,57 +47,49 @@ export default function HomeHero({ cfs }: Props) {
       </div>
 
       <div className="border-b border-[var(--border)]">
-        <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-          <p className="mb-5 font-ui text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--text-3)]">
+        <div className="mx-auto w-full max-w-[var(--container)] px-4 py-12 sm:px-6 sm:py-16">
+          <p className="ea-overline mb-5">
             {eyebrow}
           </p>
 
-          <div className="max-w-5xl">
-            <h1
-              className="font-heading font-bold tracking-tight text-[var(--text-1)]"
-              style={{ fontSize: "clamp(3rem, 6.4vw, 6.25rem)", lineHeight: 0.95 }}
-            >
-              {HERO_HEADLINE_LEAD}
-              {" — "}
-              <em className="italic">{HERO_HEADLINE_CLOSE}</em>
-            </h1>
-            <p
-              className="mt-6 max-w-[40rem] text-[21px] leading-relaxed text-[var(--text-2)]"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              {heroDek(cfs)}
-            </p>
-          </div>
+          <h1 className="text-[var(--text-1)]">
+            {HERO_HEADLINE_LEAD}
+            {" — "}
+            <em className="italic">{HERO_HEADLINE_CLOSE}</em>
+          </h1>
+          <p className="mt-6 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
+            {heroDek(cfs)}
+          </p>
 
           <form
             action="/search"
             method="get"
             role="search"
-            className="mt-8 flex w-full max-w-[640px] items-center gap-2 border border-[var(--rule)] bg-[var(--card)] px-4 py-3 focus-within:border-[var(--ink)]"
-            style={{ borderRadius: "var(--radius-instrument)" }}
+            className="mt-8 flex w-full max-w-[var(--prose)] items-center gap-2"
           >
-            <Icon name="search" className="h-5 w-5 shrink-0 text-[var(--text-meta)]" />
-            <label htmlFor="home-search" className="sr-only">
-              {SEARCH_PLACEHOLDER}
-            </label>
-            <input
-              id="home-search"
-              type="search"
-              name="q"
-              placeholder={SEARCH_PLACEHOLDER}
-              autoComplete="off"
-              className="min-w-0 flex-1 bg-transparent text-[15px] text-[var(--ink)] placeholder:text-[var(--text-meta)] focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="shrink-0 bg-[var(--ink)] px-4 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-[var(--graphite)]"
-              style={{ borderRadius: "var(--radius-instrument)" }}
-            >
+            <div className="relative min-w-0 flex-1">
+              <Icon
+                name="search"
+                className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-3)]"
+              />
+              <label htmlFor="home-search" className="sr-only">
+                {SEARCH_PLACEHOLDER}
+              </label>
+              <input
+                id="home-search"
+                type="search"
+                name="q"
+                placeholder={SEARCH_PLACEHOLDER}
+                autoComplete="off"
+                className="ea-input pl-10"
+              />
+            </div>
+            <button type="submit" className="ea-btn ea-btn-primary shrink-0">
               Look up
             </button>
           </form>
 
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
+          <p className="ea-overline mt-4">
             {caption}
           </p>
         </div>

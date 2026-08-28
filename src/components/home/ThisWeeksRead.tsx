@@ -21,42 +21,39 @@ export default function ThisWeeksRead({ lead, rest }: Props) {
   const leadBy = byline(lead);
 
   return (
-    <section data-lane="resource" className="bg-[var(--surface-page)] py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-meta)]">
+    <section data-lane="resource" className="bg-[var(--paper)] py-14 sm:py-24">
+      <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
+        <p className="ea-overline">
           Field note
         </p>
-        <h2 className="mb-8 font-heading text-3xl font-bold text-[var(--text-primary)] sm:text-4xl">
+        <h2 className="mt-2 font-display text-3xl font-semibold text-[var(--text-1)]">
           This week&apos;s read
         </h2>
 
         <Link
           href={`/articles/${lead.slug}`}
-          className="group grid items-center gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
+          className="group mt-8 grid items-center gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
         >
-          <div className="photo-card relative aspect-[16/10] w-full overflow-hidden border border-[var(--border-rule)]">
+          <div className="photo-card relative aspect-[3/2] w-full overflow-hidden rounded-surface border border-[var(--border)]">
             <SafeEntityImage
               src={lead.heroImageUrl}
               alt={photoAlt(lead.heroImageAlt, lead.title)}
               title={lead.title}
-              className="object-cover"
+              className="ea-photo"
               sizes="(max-width: 1024px) 100vw, 55vw"
             />
           </div>
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+            <p className="ea-overline">
               {lead.category}
             </p>
-            <h3 className="mt-2 font-heading text-3xl font-bold leading-tight text-[var(--text-primary)] sm:text-[2.25rem]">
+            <h3 className="mt-2 font-display text-2xl font-semibold leading-tight text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
               {lead.title}
             </h3>
-            <p
-              className="prose mt-4 text-[var(--text-body)]"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
+            <p className="mt-4 text-[var(--text-2)]">
               {lead.excerpt}
             </p>
-            <p className="mt-5 font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--text-primary)]">
+            <p className="ea-overline mt-5">
               By {leadBy.author}
               {leadBy.date ? ` · ${leadBy.date}` : ""}
             </p>
@@ -64,22 +61,22 @@ export default function ThisWeeksRead({ lead, rest }: Props) {
         </Link>
 
         {rest.length > 0 && (
-          <ul className="mt-10 border-t border-[var(--border-rule)] pt-6">
+          <ul className="mt-8 border-t border-[var(--border)] pt-6">
             {rest.map((article) => {
               const line = byline(article);
               return (
                 <li
                   key={article.id}
-                  className="border-b border-[var(--border-rule)] py-4 first:pt-0 last:border-b-0"
+                  className="border-b border-[var(--border)] py-4 first:pt-0 last:border-b-0"
                 >
                   <Link
                     href={`/articles/${article.slug}`}
                     className="group flex flex-wrap items-baseline justify-between gap-3"
                   >
-                    <h3 className="font-heading text-xl font-bold text-[var(--text-primary)]">
+                    <h3 className="font-display text-xl font-semibold text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
                       {article.title}
                     </h3>
-                    <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-meta)]">
+                    <p className="ea-overline">
                       By {line.author}
                       {line.date ? ` · ${line.date}` : ""}
                     </p>

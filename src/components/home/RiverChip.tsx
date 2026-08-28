@@ -24,7 +24,7 @@ const TREND_WORD = {
 
 /**
  * Name, state, live CFS, 24h delta with the word, sparkline, hatch.
- * One chip — not a dark card of its own.
+ * One chip — not a dark card of its own. Three sizes: 20 name, 16 CFS, 12 meta.
  */
 export default function RiverChip({ river, snapshot, history, month }: Props) {
   const hatches = hatchesForMonth(river.hatchChart, month).slice(0, 3);
@@ -39,14 +39,14 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
   return (
     <Link
       href={`/rivers/${river.slug}`}
-      className="group grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-4 gap-y-2 border border-[var(--border-rule)] px-4 py-3 transition-[border-color] duration-[140ms] ease-out hover:border-[var(--border-strong)] sm:grid-cols-[minmax(7rem,1.1fr)_5.5rem_60px_minmax(4.5rem,0.9fr)_minmax(0,1.1fr)] sm:items-center"
+      className="group grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-4 gap-y-2 border border-[var(--border)] px-4 py-3 transition-colors hover:border-[var(--border-strong)] sm:grid-cols-[minmax(7rem,1.1fr)_5.5rem_60px_minmax(4.5rem,0.9fr)_minmax(0,1.1fr)] sm:items-center"
     >
       <span>
-        <span className="block font-heading text-lg font-bold text-[var(--text-primary)] sm:text-xl">
+        <span className="block font-display text-xl font-semibold text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
           {river.name}
         </span>
         {river.state ? (
-          <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+          <span className="ea-overline mt-0.5 block">
             {river.state}
           </span>
         ) : null}
@@ -55,15 +55,15 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
       <span className="text-right">
         {cfs != null ? (
           <span
-            className={`num text-[17px] ${live ? "text-[var(--signal-live)]" : "text-[var(--text-primary)]"}`}
+            className={`num text-base font-semibold ${live ? "text-[var(--accent)]" : "text-[var(--text-1)]"}`}
           >
             {cfs.toLocaleString("en-US")}
-            <span className="ml-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--text-meta)]">
+            <span className="ea-overline ml-1">
               {live ? "cfs" : "cfs last seen"}
             </span>
           </span>
         ) : (
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+          <span className="ea-overline">
             no instantaneous reading
           </span>
         )}
@@ -74,12 +74,12 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
       </span>
 
       <span
-        className={`font-mono text-[11px] uppercase tracking-[0.12em] ${
+        className={`text-xs font-medium uppercase tracking-[0.06em] ${
           trend === "rising"
-            ? "text-[var(--state-positive)]"
+            ? "text-[var(--success)]"
             : trend === "dropping"
-              ? "text-[var(--state-negative)]"
-              : "text-[var(--text-body)]"
+              ? "text-[var(--danger)]"
+              : "text-[var(--text-2)]"
         }`}
       >
         {trend ? (
@@ -90,7 +90,7 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
         ) : null}
       </span>
 
-      <span className="col-span-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)] sm:col-span-1">
+      <span className="col-span-2 text-xs text-[var(--text-3)] sm:col-span-1">
         {hatches.length > 0 ? hatches.join(" · ") : "No hatch listed this month"}
       </span>
     </Link>
