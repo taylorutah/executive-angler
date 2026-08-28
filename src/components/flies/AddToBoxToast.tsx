@@ -41,27 +41,27 @@ export default function AddToBoxToast({ info, onDone }: Props) {
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[70] max-w-md w-[calc(100%-2rem)] pointer-events-none">
-      <div className="pointer-events-auto rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] shadow-2xl px-4 py-3 flex items-center justify-between gap-3">
+      <div className="pointer-events-auto rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-float)] px-4 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--state-positive)]/15 text-[var(--state-positive)] flex-shrink-0">
             <Check className="h-3.5 w-3.5" />
           </span>
-          <span className="text-[var(--text-primary)] text-sm truncate">
+          <span className="text-[var(--text-1)] text-sm truncate">
             Added{" "}
-            <span className="text-[var(--action)]">{info.flyName}</span>
+            <span className="text-[var(--accent)]">{info.flyName}</span>
             {info.variantLabel && info.variantLabel !== info.flyName && (
-              <span className="text-[var(--text-body)] text-xs">
+              <span className="text-[var(--text-2)] text-xs">
                 {" "}
                 · {info.variantLabel}
               </span>
             )}{" "}
-            <span className="text-[var(--text-body)]">→ {boxLabel}</span>
+            <span className="text-[var(--text-2)]">→ {boxLabel}</span>
           </span>
         </div>
         {info.firstBoxId && (
           <Link
             href={`/flies/boxes/${info.firstBoxId}`}
-            className="inline-flex items-center gap-1 rounded-md border border-[var(--border-strong)] px-2.5 py-1 text-xs font-medium text-[var(--text-body)] hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)] transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-1 rounded-md border border-[var(--border-strong)] px-3 py-1 text-xs font-medium text-[var(--text-2)] hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)] transition-colors flex-shrink-0"
             onClick={onDone}
           >
             <BoxIcon className="h-3 w-3" />

@@ -111,7 +111,7 @@ export default function FlyBoxAddButton({
             e.stopPropagation();
           }
         }}
-        className={`inline-flex items-center text-xs font-medium text-[var(--text-body)] hover:text-[var(--action)] underline-offset-2 hover:underline ${className ?? ""}`}
+        className={`inline-flex items-center text-xs font-medium text-[var(--text-2)] hover:text-[var(--accent)] underline-offset-2 hover:underline ${className ?? ""}`}
         title="Sign in to save this fly to your box"
       >
         Sign in to save
@@ -128,10 +128,10 @@ export default function FlyBoxAddButton({
           onMouseDown={stopPropagation ? (e) => e.stopPropagation() : undefined}
           aria-label={inBox ? `In box (${variantCount}) — add another variant` : "Add to fly box"}
           title={inBox ? `In your box · ${variantCount}` : "Add to fly box"}
-          className={`inline-flex items-center justify-center h-7 w-7 rounded-full transition-colors ${
+          className={`inline-flex items-center justify-center h-7 w-7 rounded-[var(--radius-md)] border transition-colors ${
             inBox
-              ? "bg-[var(--action)]/15 text-[var(--action)] border border-[var(--action)]/30 hover:bg-[var(--action)]/25"
-              : "bg-[var(--surface-raised)]/90 text-[var(--text-body)] border border-[var(--border-rule)] hover:text-[var(--action)] hover:border-[var(--action)]/50 backdrop-blur-sm"
+              ? "border-[var(--border)] bg-[var(--accent-soft)] text-[var(--accent)] hover:border-[var(--border-strong)]"
+              : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:text-[var(--accent)] hover:border-[var(--border-strong)]"
           } ${className ?? ""}`}
         >
           {checking ? (
@@ -150,9 +150,9 @@ export default function FlyBoxAddButton({
         <button
           type="button"
           onClick={handleClick}
-          className={`w-full text-left px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--border-rule)] flex items-center gap-2 transition-colors ${className ?? ""}`}
+          className={`w-full text-left px-3 py-2 text-sm text-[var(--text-1)] hover:bg-[var(--paper-deep)] flex items-center gap-2 transition-colors ${className ?? ""}`}
         >
-          <Plus className="h-4 w-4 text-[var(--action)]" />
+          <Plus className="h-4 w-4 text-[var(--accent)]" />
           {inBox ? `Add another variant (${variantCount} in box)` : "Add to fly box"}
         </button>
       );
