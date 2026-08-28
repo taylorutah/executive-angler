@@ -58,7 +58,7 @@ export default function FlyboxEmpty() {
         </a>
       </p>
       {error ? (
-        <p className="mt-3 text-[13px] text-[var(--text-meta)]">{error}</p>
+        <p className="ea-field-error mt-3">{error}</p>
       ) : null}
     </FirstRunEmpty>
   );

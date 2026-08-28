@@ -127,7 +127,7 @@ export default function BoxesTable({
               >
                 <Star
                   className={`h-3.5 w-3.5 ${
-                    b.is_default ? "fill-current text-[var(--action)]" : "text-[var(--text-meta)]"
+                    b.is_default ? "fill-current text-[var(--accent)]" : "text-[var(--text-3)]"
                   }`}
                 />
               </button>

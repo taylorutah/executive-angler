@@ -49,8 +49,8 @@ export default async function FlyboxPage() {
       showWorkbench={tiesOwnFlies}
     >
       {boxes.length === 0 ? (
-        <div className="px-4 py-8 sm:px-6">
-          <h1 className="font-heading text-4xl text-[var(--text-primary)]">Fly box</h1>
+        <div className="py-8">
+          <h2 className="font-display text-2xl font-semibold text-[var(--text-1)]">Fly box</h2>
           <FlyboxEmpty />
         </div>
       ) : (
