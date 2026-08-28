@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Fish, MapPin, Droplets, Thermometer, Cloud, Heart, MessageCircle, Lock } from "@/icons";
+import { Fish, MapPin, Droplets, Thermometer, Cloud, Heart, MessageCircle, Lock, Feather, Package } from "@/icons";
 import { parseLocalDate } from "@/lib/date";
 
 interface Catch {
@@ -61,36 +61,13 @@ interface Props {
   commentCount?: number;
 }
 
-// Accent border colors — rotates by river name for visual variety
-const ACCENT_COLORS = [
-  "border-[var(--action)]",
-  "border-[var(--signal-live)]",
-  "border-[var(--action)]",
-  "border-[var(--signal-live)]",
-  "border-[var(--text-meta)]",
-  "border-[var(--action)]",
-  "border-[var(--signal-live)]",
-  "border-[var(--text-meta)]",
-];
-
-function accentColor(name?: string) {
-  if (!name) return ACCENT_COLORS[0];
-  const idx = name.split("").reduce((s, c) => s + c.charCodeAt(0), 0) % ACCENT_COLORS.length;
-  return ACCENT_COLORS[idx];
-}
-
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
 export function SessionCard({ session, catches: catchesProp, feedDisplay = "collage", kudosCount = 0, commentCount = 0 }: Props) {
   const parsedDate = parseLocalDate(session.date);
   const formattedDate = parsedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
-  const month = MONTHS[parsedDate.getMonth()];
-  const day = parsedDate.getDate();
-  const year = parsedDate.getFullYear();
 
   const catches = catchesProp || session.catches || [];
   const totalFish = session.total_fish ?? catches.reduce((s, c) => s + (c.quantities || 1), 0);
-  const fishPhotos = catches.map(c => c.fish_image_url).filter(Boolean).slice(0, 4) as string[];
+  const photoCatches = catches.filter((c) => Boolean(c.fish_image_url));
   const topFlies = (() => {
     const map = new Map<string, number>();
     for (const c of catches) {
@@ -115,9 +92,8 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
     } catch { return null; }
   })();
 
-  const hasPhotos = feedDisplay === "collage" && fishPhotos.length > 0;
+  const hasPhotos = feedDisplay === "collage" && photoCatches.length > 0;
   const hasConditions = session.water_temp_f || session.water_clarity || session.weather;
-  const accent = accentColor(session.river_name);
 
   const speciesAgg = (() => {
     const map = new Map<string, { species: string; count: number; maxLength: number | null }>();
@@ -144,181 +120,164 @@ export function SessionCard({ session, catches: catchesProp, feedDisplay = "coll
   const speciesRows = speciesAgg.slice(0, 4);
   const overflowCount = speciesAgg.length - speciesRows.length;
 
+  const gearLine = (() => {
+    const snap = session.gear_snapshot;
+    if (!snap) return null;
+    const parts: string[] = [];
+    if (snap.rod?.name) parts.push(snap.rod.name);
+    if (snap.reel?.name) parts.push(snap.reel.name);
+    if (snap.line?.name) parts.push(snap.line.name);
+    return parts.length ? parts.join(" · ") : null;
+  })();
+
+  const visiblePhotos = photoCatches.slice(0, 3);
+  const hiddenPhotoCount = photoCatches.length - visiblePhotos.length;
+
   return (
-    <Link href={`/journal/${session.id}`} className="block group">
-      <article className={`bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] overflow-hidden hover:shadow-md hover:border-[var(--action)]/30 transition-all duration-200 border-l-4 ${accent}`}>
+    <Link href={`/journal/${session.id}`} className="block group rounded-card">
+      <article className="ea-card card-hover h-full">
 
-        {/* Always-present layout: date column on left + content on right + optional map thumb */}
-        <div className="flex gap-0">
-
-          {/* Date stamp — always visible */}
-          <div className="flex flex-col items-center justify-start pt-4 px-3 min-w-[52px]">
-            <span className="text-[10px] font-bold text-[var(--text-body)] uppercase tracking-wider font-['IBM_Plex_Mono']">{month}</span>
-            <span className="text-2xl font-bold text-[var(--text-primary)] leading-none font-['IBM_Plex_Mono']">{day}</span>
-            <span className="text-[10px] text-[var(--text-body)] mt-0.5 font-['IBM_Plex_Mono']">{year}</span>
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 min-w-0 p-4 pl-3 border-l border-[var(--border-rule)]">
-
-            {/* Title + fish badge */}
-            <div className="flex items-start justify-between gap-2 mb-1">
-              <h3 className="font-semibold text-[var(--text-primary)] text-sm leading-snug group-hover:text-[var(--action)] transition-colors line-clamp-1">
-                {title}
-              </h3>
-              <div className="flex items-center gap-1.5 flex-shrink-0">
-                {session.is_demo && (
-                  <span
-                    title="Sample session — delete anytime from the edit screen"
-                    className="text-[9px] font-bold tracking-wider bg-[var(--signal-live)]/15 text-[var(--signal-live)] border border-[var(--signal-live)]/30 rounded-full px-1.5 py-0.5 uppercase"
-                  >
-                    Sample
-                  </span>
-                )}
-                {/* Lock icon when this session is NOT broadcast to the feed.
-                    Default state (broadcast_presence undefined or false) is
-                    "private" per the 2026-05-04 privacy overhaul. */}
-                {session.broadcast_presence !== true && !session.is_demo && (
-                  <Lock className="h-3 w-3 text-[var(--text-meta)]" />
-                )}
-                {totalFish > 0 && (
-                  <span className="flex items-center gap-1 bg-[var(--action)]/15 text-[var(--action)] rounded-full px-2 py-0.5 text-xs font-semibold font-['IBM_Plex_Mono']">
-                    <Fish className="h-3 w-3" />{totalFish}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Location + time */}
-            <div className="flex items-center gap-2 text-[11px] text-[var(--text-body)] mb-2 flex-wrap">
-              {session.location && (
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-3 w-3 flex-shrink-0" />
-                  <span className="truncate">{session.location}</span>
-                </span>
-              )}
-              {startTime && (
-                <span className="font-['IBM_Plex_Mono'] text-[var(--text-body)]">{startTime}</span>
-              )}
-            </div>
-
-            {/* Date row */}
-            <p className="text-[11px] text-[var(--text-body)] mb-2">{formattedDate}</p>
-
-            {/* Notes excerpt */}
-            {session.notes && (
-              <p className="text-[12px] text-[var(--text-body)] leading-relaxed line-clamp-2 mb-2">{session.notes}</p>
+        {/* Date overline + state badges */}
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="ea-overline">{formattedDate}</p>
+          <div className="flex items-center gap-2 shrink-0">
+            {session.is_demo && (
+              <span
+                title="Sample session — delete anytime from the edit screen"
+                className="ea-badge"
+              >
+                Sample
+              </span>
             )}
-
-            {/* Conditions */}
-            {hasConditions && (
-              <div className="flex flex-wrap gap-2 text-[11px] text-[var(--text-body)] mb-2">
-                {session.water_temp_f && <span className="flex items-center gap-0.5 font-['IBM_Plex_Mono']"><Thermometer className="h-3 w-3" />{session.water_temp_f}</span>}
-                {session.water_clarity && <span className="flex items-center gap-0.5"><Droplets className="h-3 w-3" />{session.water_clarity}</span>}
-                {session.weather && <span className="flex items-center gap-0.5"><Cloud className="h-3 w-3" />{session.weather}</span>}
-              </div>
+            {/* Lock icon when this session is NOT broadcast to the feed.
+                Default state (broadcast_presence undefined or false) is
+                "private" per the 2026-05-04 privacy overhaul. */}
+            {session.broadcast_presence !== true && !session.is_demo && (
+              <Lock size={14} className="text-[var(--text-3)]" aria-label="Private session" />
             )}
-
-            {/* Flies */}
-            {topFlies.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-2">
-                {topFlies.map(({ name, count }) => (
-                  <span key={name} className="text-[10px] bg-[var(--action)]/10 text-[var(--action)] border border-[var(--action)]/20 rounded-full px-2 py-0.5">🪰 {name}{count > 1 ? ` × ${count}` : ""}</span>
-                ))}
-              </div>
-            )}
-
-            {/* Tags fallback */}
-            {topFlies.length === 0 && tags.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-2">
-                {tags.slice(0, 3).map(tag => (
-                  <span key={tag} className="text-[10px] bg-[var(--surface-card)] text-[var(--text-body)] rounded-full px-2 py-0.5">{tag}</span>
-                ))}
-              </div>
-            )}
-
-            {/* Gear strip — compact one-liner showing rod + reel */}
-            {(() => {
-              const snap = session.gear_snapshot;
-              if (!snap) return null;
-              const parts: string[] = [];
-              if (snap.rod?.name) parts.push(snap.rod.name);
-              if (snap.reel?.name) parts.push(snap.reel.name);
-              if (snap.line?.name) parts.push(snap.line.name);
-              if (!parts.length) return null;
-              return (
-                <div className="flex items-center gap-1.5 mb-2 text-[10px] text-[var(--text-meta)]">
-                  <span className="text-[var(--text-body)]/50">⚙</span>
-                  <span className="truncate">{parts.join(" · ")}</span>
-                </div>
-              );
-            })()}
-
-            {/* Catch summary — one chip per species with count + max length
-                baked in. Matches the fly-chip language already on the card
-                (rounded pill, tinted bg, mono numerics) but in teal so fish
-                read as distinct from flies. */}
-            {!hasPhotos && speciesRows.length > 0 && (
-              <div className="mb-2 mt-2 flex flex-wrap gap-1.5">
-                {speciesRows.map(row => (
-                  <span
-                    key={row.species}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[var(--signal-live)]/30 bg-[var(--signal-live)]/10 px-2.5 py-1 text-[11px] text-[var(--signal-live)]"
-                  >
-                    <Fish className="h-3 w-3 flex-shrink-0" />
-                    <span className="font-medium">{row.species}</span>
-                    <span className="font-['IBM_Plex_Mono'] font-bold tabular-nums">
-                      {row.count}
-                    </span>
-                    {row.maxLength != null && (
-                      <span className="font-['IBM_Plex_Mono'] tabular-nums text-[var(--signal-live)]/80">
-                        {row.count > 1 ? `max ${row.maxLength}″` : `${row.maxLength}″`}
-                      </span>
-                    )}
-                  </span>
-                ))}
-                {overflowCount > 0 && (
-                  <span className="inline-flex items-center px-1.5 py-1 text-[11px] text-[var(--text-meta)]">
-                    +{overflowCount} more
-                  </span>
-                )}
-              </div>
-            )}
-
-            {/* Photo collage — BELOW title/description */}
-            {hasPhotos && (
-              <div className={`grid gap-0.5 h-36 overflow-hidden rounded-lg mt-1 ${
-                fishPhotos.length === 1 ? "grid-cols-1" :
-                fishPhotos.length === 2 ? "grid-cols-2" :
-                fishPhotos.length === 3 ? "grid-cols-3" :
-                "grid-cols-2 grid-rows-2"
-              }`}>
-                {fishPhotos.map((url, i) => (
-                  <div key={i} className="relative overflow-hidden">
-                    <Image src={url} alt="Fish" fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="200px" />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Social engagement — kudos + comments */}
-            {(kudosCount > 0 || commentCount > 0) && (
-              <div className="flex items-center gap-4 mt-2 pt-2 border-t border-[var(--border-rule)]">
-                {kudosCount > 0 && (
-                  <span className="flex items-center gap-1 text-[11px] text-[var(--text-body)]">
-                    <Heart className="h-3 w-3 text-[var(--state-negative)]" fill="#DA3633" />{kudosCount}
-                  </span>
-                )}
-                {commentCount > 0 && (
-                  <span className="flex items-center gap-1 text-[11px] text-[var(--text-body)]">
-                    <MessageCircle className="h-3 w-3" />{commentCount}
-                  </span>
-                )}
-              </div>
-            )}
-
           </div>
         </div>
+
+        {/* Water / location name */}
+        <h3 className="mt-1 font-display text-xl font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors line-clamp-1">
+          {title}
+        </h3>
+
+        {/* Location · start time · fish count */}
+        {(session.location || startTime || totalFish > 0) && (
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--text-2)]">
+            {session.location && (
+              <span className="flex items-center gap-1 min-w-0">
+                <MapPin size={14} className="shrink-0 text-[var(--text-3)]" />
+                <span className="truncate">{session.location}</span>
+              </span>
+            )}
+            {session.location && (startTime || totalFish > 0) && <span aria-hidden className="text-[var(--text-3)]">·</span>}
+            {startTime && <span className="num">{startTime}</span>}
+            {startTime && totalFish > 0 && <span aria-hidden className="text-[var(--text-3)]">·</span>}
+            {totalFish > 0 && (
+              <span className="flex items-center gap-1 font-medium text-[var(--text-1)]">
+                <Fish size={14} className="text-[var(--text-2)]" />
+                <span className="num">{totalFish} fish</span>
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Conditions + flies — one chip row, one chip language */}
+        {(hasConditions || topFlies.length > 0 || (topFlies.length === 0 && tags.length > 0)) && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {session.water_temp_f && (
+              <span className="ea-chip"><Thermometer size={14} /><span className="num">{session.water_temp_f}</span></span>
+            )}
+            {session.water_clarity && (
+              <span className="ea-chip"><Droplets size={14} />{session.water_clarity}</span>
+            )}
+            {session.weather && (
+              <span className="ea-chip"><Cloud size={14} />{session.weather}</span>
+            )}
+            {topFlies.map(({ name, count }) => (
+              <span key={name} className="ea-chip">
+                <Feather size={14} />{name}{count > 1 ? <span className="num">&nbsp;×&nbsp;{count}</span> : null}
+              </span>
+            ))}
+            {topFlies.length === 0 && tags.slice(0, 3).map((tag) => (
+              <span key={tag} className="ea-chip">{tag}</span>
+            ))}
+          </div>
+        )}
+
+        {/* Notes excerpt */}
+        {session.notes && (
+          <p className="mt-3 text-sm text-[var(--text-2)] line-clamp-2">{session.notes}</p>
+        )}
+
+        {/* Gear — rod, reel, line as one truncated line */}
+        {gearLine && (
+          <p className="mt-2 flex items-center gap-1 text-xs text-[var(--text-3)]">
+            <Package size={14} className="shrink-0" />
+            <span className="truncate">{gearLine}</span>
+          </p>
+        )}
+
+        {/* Catch summary — one line when there are no photos to show */}
+        {!hasPhotos && speciesRows.length > 0 && (
+          <p className="mt-2 flex items-center gap-1 text-xs text-[var(--text-2)]">
+            <Fish size={14} className="shrink-0 text-[var(--text-3)]" />
+            <span className="truncate num">
+              {speciesRows.map((row) =>
+                `${row.species} ×${row.count}${row.maxLength != null ? (row.count > 1 ? `, max ${row.maxLength}″` : `, ${row.maxLength}″`) : ""}`
+              ).join(" · ")}
+              {overflowCount > 0 ? ` · +${overflowCount} more` : ""}
+            </span>
+          </p>
+        )}
+
+        {/* Photo thumbs — 4:3, graded, up to three with a count chip */}
+        {hasPhotos && (
+          <div className={`mt-3 grid gap-1 ${
+            visiblePhotos.length === 1 ? "grid-cols-1" :
+            visiblePhotos.length === 2 ? "grid-cols-2" :
+            "grid-cols-3"
+          }`}>
+            {visiblePhotos.map((c, i) => (
+              <div key={c.id ?? i} className="relative overflow-hidden rounded-surface">
+                <Image
+                  src={c.fish_image_url as string}
+                  alt={`${c.species ? `${c.species} ` : "Fish "}caught on ${title}`}
+                  width={400}
+                  height={300}
+                  className="ea-photo ea-photo-card w-full h-auto"
+                  sizes="(max-width: 640px) 92vw, 560px"
+                />
+                {i === visiblePhotos.length - 1 && hiddenPhotoCount > 0 && (
+                  <span className="absolute bottom-2 right-2 rounded-instrument bg-[var(--ink)] px-2 py-1 text-xs font-medium text-[var(--paper)] num">
+                    +{hiddenPhotoCount}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Kudos + comments */}
+        {(kudosCount > 0 || commentCount > 0) && (
+          <div className="mt-3 flex items-center gap-4 border-t border-[var(--border)] pt-3">
+            {kudosCount > 0 && (
+              <span className="flex items-center gap-1 text-xs text-[var(--text-2)]">
+                <Heart size={14} filled className="text-[var(--danger)]" />
+                <span className="num">{kudosCount}</span>
+              </span>
+            )}
+            {commentCount > 0 && (
+              <span className="flex items-center gap-1 text-xs text-[var(--text-2)]">
+                <MessageCircle size={14} />
+                <span className="num">{commentCount}</span>
+              </span>
+            )}
+          </div>
+        )}
+
       </article>
     </Link>
   );
