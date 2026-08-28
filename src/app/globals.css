@@ -30,6 +30,8 @@
   --copper-hover-400: #FE9A77;
   --teal-700: #086B6C;
   --teal-300: #00BCC5;
+  --copper: var(--copper-700);
+  --teal: var(--teal-700);
   --rise-700: #1F7A3D;
   --rise-400: #3FB863;
   --cut-700: #B3261E;
@@ -170,6 +172,22 @@
   --font-display: var(--font-fraunces), "Fraunces", serif;
   --font-body: var(--font-newsreader), "Newsreader", serif;
   --font-ui: var(--font-archivo), "Archivo", system-ui, sans-serif;
+
+  /* Cover Tokens — Figma 2:2. Named swatches only.
+     Paper #FAF6F0 · Vellum #F2EDE4 · Ink #2C211B · Graphite #4F4540
+     Copper #B4410D = actions only · Teal #086B6C = live data only
+     Riverbed #0B1112 · Chalk #EEF2F1
+     Radius 2–6. Display serif + Archivo UI. */
+  --color-paper: var(--paper);
+  --color-vellum: var(--vellum);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-copper: var(--copper);
+  --color-teal: var(--teal);
+  --color-riverbed: var(--riverbed);
+  --color-chalk: var(--chalk);
+  --radius-2: 2px;
+  --radius-6: 6px;
 
   --color-bg: var(--surface-page);
   --color-surface: var(--surface-raised);
@@ -391,13 +409,12 @@
      contrast gate clears over a light photograph (teal needs ~0.80).
      390 uses the unlayered override below — the mobile crop is a
      darker river and the dek sat in a thinner stop. */
+  /* Home / 1440 fold 40:2 — riverbed wash from the top of the plate. */
   .hero-overlay-home {
     background: linear-gradient(
-      to top,
-      rgb(11 17 18 / 0.90) 0%,
-      rgb(11 17 18 / 0.86) 36%,
-      rgb(11 17 18 / 0.82) 58%,
-      rgb(11 17 18 / 0.28) 78%,
+      to bottom,
+      rgb(11 17 18 / 0.76) 0%,
+      rgb(11 17 18 / 0.16) 45%,
       rgb(11 17 18 / 0) 100%
     );
   }
@@ -612,24 +629,17 @@
   color: var(--text-body);
 }
 
-/* Home fold dek sits on the photograph. Archivo — Newsreader is prose-only
-   (.prose / .article-body). Never pair this with .prose: unlayered
-   .prose { color: graphite } painted the PMD line dark-on-dark at 390. */
+/* Home / 1440 fold 40:2: Newsreader 18/28 cream on the plate.
+   .prose keeps the face legal. Color stays --hero-type so unlayered
+   .prose { graphite } cannot paint the line. */
 .hero-dek,
 .prose.hero-dek {
-  font-family: var(--font-ui);
-  font-size: 14px;
-  line-height: 20px;
+  font-family: var(--font-body);
+  font-optical-sizing: auto;
+  font-size: 18px;
+  line-height: 28px;
   color: var(--hero-type);
   max-width: 720px;
-}
-
-@media (min-width: 640px) {
-  .hero-dek,
-  .prose.hero-dek {
-    font-size: 18px;
-    line-height: 28px;
-  }
 }
 
 /* 390 fold: keep chalk / dek / teal CFS in a ≥0.86 riverbed band.
@@ -1103,6 +1113,8 @@ select:focus {
   --state-positive: var(--rise-700);
   --state-negative: var(--cut-700);
   background: var(--paper);
+  /* Home / 1440 fold 40:2 — paper bar always carries the rule. */
+  border-bottom: 1px solid var(--rule);
 }
 
 .ea-nav-link {

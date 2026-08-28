@@ -21,21 +21,18 @@ export default function FlyPlate({ flies, flyCount }: Props) {
   if (flies.length === 0) return null;
 
   return (
-    <section data-lane="resource" className="bg-[var(--surface-page)] pb-10 pt-12">
+    <section data-lane="resource" className="bg-[var(--paper)] pb-10 pt-12">
       <HomeGutter>
         <h2
-          className="font-heading text-[28px] font-semibold leading-none text-[var(--text-primary)] sm:text-[36px]"
+          className="font-heading text-[36px] font-semibold leading-none text-[var(--ink)]"
           style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
         >
           The plate
         </h2>
-        <p className="mt-4 font-ui text-[14px] text-[var(--text-body)]">
-          <span className="sm:hidden">On the water this week.</span>
-          <span className="hidden sm:inline">
-            {flyCount > 0
-              ? "Twelve patterns on the water this week."
-              : "Patterns from the library."}
-          </span>
+        <p className="mt-4 font-ui text-[14px] text-[var(--graphite)]">
+          {flyCount > 0
+            ? "Twelve patterns on the water this week."
+            : "Patterns from the library."}
         </p>
 
         <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
@@ -54,11 +51,11 @@ export default function FlyPlate({ flies, flyCount }: Props) {
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                     />
                   </div>
-                  <h3 className="hover-copper mt-1.5 font-ui text-[12px] font-medium text-[var(--text-primary)] group-hover:text-[var(--action)]">
+                  <h3 className="hover-copper mt-1.5 font-ui text-[12px] font-medium text-[var(--ink)] group-hover:text-[var(--copper)]">
                     {fly.name}
                   </h3>
                   {size && (
-                    <p className="mt-0.5 font-ui text-[11px] text-[var(--text-meta)]">{size}</p>
+                    <p className="mt-0.5 font-ui text-[11px] text-[var(--slate)]">{size}</p>
                   )}
                 </Link>
               </li>

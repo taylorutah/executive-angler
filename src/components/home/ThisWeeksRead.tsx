@@ -25,7 +25,7 @@ export default function ThisWeeksRead({ lead }: Props) {
   const line = byline(lead);
 
   return (
-    <section data-lane="resource" className="bg-[var(--surface-page)] pb-12 pt-2">
+    <section data-lane="resource" className="bg-[var(--paper)] pb-12 pt-2">
       <HomeGutter>
         <Link
           href={`/articles/${lead.slug}`}
@@ -40,25 +40,25 @@ export default function ThisWeeksRead({ lead }: Props) {
               sizes="(max-width: 1024px) 100vw, 62vw"
             />
           </div>
-          <div className="max-w-[454px] pt-0 lg:pt-1">
-            <p className="font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--text-meta)]">
+          <div className="flex max-w-[454px] flex-col gap-3 pt-0 lg:pt-1">
+            <p className="font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--slate)]">
               Field note
             </p>
             <h2
-              className="hover-copper mt-3 font-heading text-[32px] font-semibold leading-[38px] text-[var(--text-primary)] group-hover:text-[var(--action)]"
+              className="hover-copper font-heading text-[36px] font-semibold leading-[42px] text-[var(--ink)] group-hover:text-[var(--copper)]"
               style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
               {lead.title}
             </h2>
-            <p className="mt-3 font-ui text-[13px] text-[var(--text-meta)]">
+            <p className="font-ui text-[12px] text-[var(--slate)]">
               {[line.date, line.author].filter(Boolean).join("  ·  ")}
             </p>
             {lead.excerpt && (
-              <p className="prose mt-3 text-[16px] leading-[26px] text-[var(--text-body)]">
+              <p className="prose text-[16px] leading-[26px] text-[var(--graphite)]">
                 {lead.excerpt}
               </p>
             )}
-            <p className="mt-3 font-ui text-[13px] font-medium text-[var(--action)]">
+            <p className="font-ui text-[13px] font-medium text-[var(--copper)]">
               Read the note →
             </p>
           </div>

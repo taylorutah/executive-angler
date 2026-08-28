@@ -28,10 +28,10 @@ export default function WhereToGo({ places }: Props) {
   if (places.length === 0) return null;
 
   return (
-    <section data-lane="resource" className="bg-[var(--surface-page)] pb-12 pt-4">
+    <section data-lane="resource" className="bg-[var(--paper)] pb-12 pt-4">
       <HomeGutter>
         <h2
-          className="font-heading text-[36px] font-semibold leading-none text-[var(--text-primary)]"
+          className="font-heading text-[36px] font-semibold leading-none text-[var(--ink)]"
           style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
         >
           Where to go
@@ -50,12 +50,12 @@ export default function WhereToGo({ places }: Props) {
                   />
                 </div>
                 <h3
-                  className="hover-copper mt-2 font-heading text-[20px] font-semibold leading-[25px] text-[var(--text-primary)] group-hover:text-[var(--action)]"
+                  className="hover-copper mt-2 font-heading text-[22px] font-semibold leading-none text-[var(--ink)] group-hover:text-[var(--copper)]"
                   style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
                 >
                   {place.name}
                 </h3>
-                <p className="mt-2 font-ui text-[13px] text-[var(--text-meta)]">{place.caption}</p>
+                <p className="mt-2 font-ui text-[13px] text-[var(--slate)]">{place.caption}</p>
               </Link>
             </li>
           ))}

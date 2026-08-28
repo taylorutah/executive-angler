@@ -53,6 +53,33 @@ const BANNED_EXCERPT =
 
 const WHERE_SLUGS = ["green-river", "arkansas-river-colorado", "bighorn-river"] as const;
 
+/** Home / 1440 full 40:24 captions. Stretch · place, not invented spots. */
+const PLACE_CAPTIONS: Record<(typeof WHERE_SLUGS)[number], string> = {
+  "green-river": "A-Section · Utah",
+  "arkansas-river-colorado": "Salida, Colorado",
+  "bighorn-river": "Fort Smith, Montana",
+};
+
+/** Home / 1440 full 40:24 plate order. Only used when the library has the fly. */
+const PLATE_NAMES = [
+  "Hare's Ear",
+  "Elk Hair Caddis",
+  "Parachute Adams",
+  "Zebra Midge",
+  "Pheasant Tail",
+  "Woolly Bugger",
+  "PMD Sparkle Dun",
+  "Chubby Chernobyl",
+  "RS2",
+  "Griffith's Gnat",
+  "Prince Nymph",
+  "Sparkle Dun",
+] as const;
+
+function nameKey(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
 function isPublicRead(article: Article): boolean {
   return !BANNED_EXCERPT.test(article.excerpt ?? "");
 }
@@ -77,6 +104,16 @@ function pickPlate(
 ): CanonicalFly[] {
   const seen = new Set<string>();
   const plate: CanonicalFly[] = [];
+  const byName = new Map(all.map((fly) => [nameKey(fly.name), fly]));
+  for (const name of PLATE_NAMES) {
+    if (plate.length === 12) break;
+    const fly = byName.get(nameKey(name));
+    if (!fly || seen.has(fly.id) || !fly.heroImageUrl) continue;
+    if (!imageAvailable(fly.heroImageUrl, used)) continue;
+    seen.add(fly.id);
+    claimImageUrl(fly.heroImageUrl, used);
+    plate.push(fly);
+  }
   for (const fly of [...featured, ...all]) {
     if (plate.length === 12) break;
     if (!fly.heroImageUrl || seen.has(fly.id)) continue;
@@ -96,7 +133,12 @@ function placeFromRiver(
   if (!imageAvailable(river.heroImageUrl, used)) return null;
   claimImageUrl(river.heroImageUrl, used);
   const dest = destById.get(river.destinationId);
-  const caption = dest?.state || dest?.region || dest?.name || river.name;
+  const caption =
+    PLACE_CAPTIONS[river.slug as (typeof WHERE_SLUGS)[number]] ??
+    dest?.state ??
+    dest?.region ??
+    dest?.name ??
+    river.name;
   return {
     href: `/rivers/${river.slug}`,
     name: river.name,

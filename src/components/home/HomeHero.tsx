@@ -50,7 +50,7 @@ export default function HomeHero({ cfs }: Props) {
         className="hero-overlay-home pointer-events-none absolute inset-0"
       />
 
-      <div className="relative z-10 flex h-full flex-col justify-end px-5 pb-8 pt-12 sm:px-8 sm:pb-10 xl:px-20 xl:pb-10">
+      <div className="relative z-10 flex h-full flex-col justify-end gap-7 px-5 pb-8 pt-12 sm:px-8 sm:pb-10 xl:px-20 xl:pb-10">
         <div className="flex w-full max-w-[720px] flex-col gap-3.5">
           <p className="font-ui text-[10px] font-medium uppercase tracking-[1.2px] text-[var(--hero-type)] sm:text-[11px]">
             {HERO_STRETCH.toUpperCase()}
@@ -75,7 +75,7 @@ export default function HomeHero({ cfs }: Props) {
             {HERO_HEADLINE_CLOSE}
           </h1>
 
-          <p className="hero-dek">
+          <p className="prose hero-dek">
             {heroDek(cfs)}
           </p>
 
@@ -83,7 +83,7 @@ export default function HomeHero({ cfs }: Props) {
             action="/search"
             method="get"
             role="search"
-            className="flex h-11 w-full max-w-[640px] items-center overflow-hidden rounded-[2px] border border-[var(--border-rule)] bg-[color-mix(in_srgb,var(--paper)_92%,transparent)] px-4 sm:h-12"
+            className="flex h-11 w-full max-w-[640px] items-center overflow-hidden rounded-[2px] border border-[var(--rule)] bg-[rgb(250_246_240/0.92)] px-4 sm:h-12"
           >
             <label htmlFor="home-search" className="sr-only">
               {SEARCH_PLACEHOLDER}
@@ -94,12 +94,12 @@ export default function HomeHero({ cfs }: Props) {
               name="q"
               placeholder={SEARCH_PLACEHOLDER}
               autoComplete="off"
-              className="h-full min-w-0 flex-1 bg-transparent font-ui text-[14px] text-[var(--ink)] placeholder:text-[var(--text-meta)] focus:outline-none"
+              className="h-full min-w-0 flex-1 bg-transparent font-ui text-[14px] text-[var(--ink)] placeholder:text-[var(--slate)] focus:outline-none"
             />
           </form>
         </div>
 
-        <p className="mt-7 max-w-[720px] font-ui text-[11px] text-[var(--hero-type)]">{caption}</p>
+        <p className="max-w-[720px] font-ui text-[11px] text-[var(--hero-type)]">{caption}</p>
       </div>
     </section>
   );
