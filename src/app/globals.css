@@ -276,19 +276,6 @@
     :root { --gutter: 24px; }
   }
 
-  /* App banner offset hooks (banner is unmounted; rules are harmless) */
-  :root {
-    --app-banner-height: 0px;
-  }
-
-  header[class*="fixed"] {
-    top: var(--app-banner-height, 0px) !important;
-  }
-
-  main[class*="pt-"] {
-    padding-top: calc(var(--header-h) + var(--app-banner-height, 0px)) !important;
-  }
-
   body {
     background-color: var(--surface-page);
     color: var(--foreground);
