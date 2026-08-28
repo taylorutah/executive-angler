@@ -455,9 +455,9 @@ export default function WorkbenchClient({
   }, [inventory]);
 
   const Wrapper = embedded ? 'div' : 'div';
-  const wrapperClass = embedded ? '' : 'min-h-screen bg-bg text-text-primary';
-  const headerClass = embedded ? '' : 'border-b border-border';
-  const headerInnerClass = embedded ? 'pb-2' : 'max-w-7xl mx-auto px-4 lg:px-6 py-4';
+  const wrapperClass = embedded ? '' : 'min-h-screen bg-[var(--paper)] text-[var(--text-1)]';
+  const headerClass = embedded ? '' : 'border-b border-[var(--border)]';
+  const headerInnerClass = embedded ? 'pb-2' : 'max-w-[var(--container)] mx-auto px-4 lg:px-6 py-4';
 
   return (
     <Wrapper className={wrapperClass}>
@@ -465,21 +465,21 @@ export default function WorkbenchClient({
       <div className={headerClass}>
         <div className={headerInnerClass}>
           {!embedded && (
-            <div className="flex items-end justify-between border-b border-border pb-3">
+            <div className="flex items-end justify-between border-b border-[var(--border)] pb-3">
               <div>
-                <div className="flex items-center gap-1.5 text-text-muted text-[10px] font-bold uppercase tracking-widest mb-1">
-                  <Link href="/journal/flies" className="hover:text-accent">Fly Box</Link>
+                <div className="ea-overline flex items-center gap-1.5 mb-1">
+                  <Link href="/journal/flies" className="hover:text-[var(--accent)]">Fly Box</Link>
                   <span>/</span>
                   <span>Tying Workbench</span>
                 </div>
-                <h1 className="font-[family-name:var(--font-heading)] text-2xl text-text-primary leading-tight">
+                <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] leading-tight lg:text-3xl">
                   Tying Workbench
                 </h1>
               </div>
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <span className="font-mono text-xl text-accent font-semibold tabular-nums">{inventory.length}</span>
-                  <span className="text-text-muted text-[11px] uppercase tracking-widest ml-1">materials</span>
+                  <span className="num text-xl text-[var(--accent)] font-semibold">{inventory.length}</span>
+                  <span className="ea-stat-label ml-1">materials</span>
                 </div>
                 <Button href="/journal/flies/new" variant="solid" size="md" icon={Plus}>
                   New Fly
@@ -488,11 +488,11 @@ export default function WorkbenchClient({
             </div>
           )}
 
-          {/* Tabs — horizontal scroll on mobile, wrap on desktop */}
+          {/* Tabs — horizontal scroll on mobile */}
           <div
             role="tablist"
             aria-label="Workbench mode"
-            className="mt-4 -mx-4 sm:mx-0 px-4 sm:px-0 flex items-center gap-1.5 overflow-x-auto sm:flex-wrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="ea-segmented mt-4 max-w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             {([
               { id: 'pickFly' as Tab, label: 'Pick a Pattern', icon: Target, hint: 'Start from a fly you want to tie — we’ll show every material needed and flag what you already own vs. still need to pick up. No inventory required to begin.' },
@@ -505,13 +505,9 @@ export default function WorkbenchClient({
                   onClick={() => setTab(id)}
                   role="tab"
                   aria-selected={tab === id}
-                  className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-[12px] font-semibold uppercase tracking-wide whitespace-nowrap transition-colors ${
-                    tab === id
-                      ? 'bg-accent text-bg'
-                      : 'bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-raised'
-                  }`}
+                  className="ea-segment"
                 >
-                  <Icon size={16} />
+                  <Icon size={16} aria-hidden />
                   {label}
                 </button>
                 <span className="hidden sm:inline-flex">
@@ -528,9 +524,9 @@ export default function WorkbenchClient({
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4">
         <div className="mb-4">
           <TipCard storageKey="workbench-intro-v2" title="Two ways to start — no inventory required">
-            <p><span className="text-[var(--text-primary)] font-semibold">Start with a fly →</span> Open <em>Pick a Pattern</em>, choose what you want to tie, and we’ll list every material you need. Owned items show a green check; missing ones get a one-tap <em>Add</em>.</p>
-            <p><span className="text-[var(--text-primary)] font-semibold">Or start with your box →</span> Drop what you already own into <em>My Inventory</em>, then flip to <em>What Can I Tie?</em> to see recipes ranked by the % of materials you have.</p>
-            <p className="text-[var(--text-meta)]">Add materials as you go — the Workbench works either direction.</p>
+            <p><span className="text-[var(--text-1)] font-semibold">Start with a fly →</span> Open <em>Pick a Pattern</em>, choose what you want to tie, and we’ll list every material you need. Owned items show a green check; missing ones get a one-tap <em>Add</em>.</p>
+            <p><span className="text-[var(--text-1)] font-semibold">Or start with your box →</span> Drop what you already own into <em>My Inventory</em>, then flip to <em>What Can I Tie?</em> to see recipes ranked by the % of materials you have.</p>
+            <p className="text-[var(--text-3)]">Add materials as you go — the Workbench works either direction.</p>
           </TipCard>
         </div>
 
@@ -540,21 +536,21 @@ export default function WorkbenchClient({
             {/* Filters */}
             <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] gap-2 sm:gap-3 mb-6">
               <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-3)]" />
                 <input
                   type="text"
                   placeholder="Search patterns (Perdigon, Pheasant Tail...)"
                   value={flyQuery}
                   onChange={e => setFlyQuery(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') fetchFlyList(flyQuery, flyCategory); }}
-                  className="w-full h-9 bg-surface border border-border rounded-md pl-9 pr-3 text-[13px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
+                  className="w-full h-10 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] pl-9 pr-3 text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:border-[var(--accent)] focus:shadow-[var(--signal-ring)]"
                 />
               </div>
               <div className="grid grid-cols-[1fr_auto] gap-2 sm:contents">
                 <select
                   value={flyCategory}
                   onChange={e => setFlyCategory(e.target.value)}
-                  className="h-9 bg-surface border border-border rounded-md px-2.5 text-[13px] text-text-primary focus:outline-none focus:border-accent"
+                  className="h-10 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] px-2.5 text-sm text-[var(--text-1)] focus:outline-none focus:border-[var(--accent)] focus:shadow-[var(--signal-ring)]"
                 >
                   <option value="">All Types</option>
                   <option value="nymph">Nymph</option>
@@ -572,16 +568,16 @@ export default function WorkbenchClient({
 
             {flyListLoading ? (
               <div className="flex items-center justify-center py-20">
-                <Loader2 size={24} className="animate-spin text-accent" />
+                <Loader2 size={24} className="animate-spin text-[var(--accent)]" />
               </div>
             ) : flyList.length === 0 ? (
-              <div className="text-center py-16">
-                <Target size={48} className="mx-auto mb-4 text-text-muted" />
-                <p className="text-text-secondary">No patterns match that search.</p>
+              <div className="ea-empty rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+                <Target size={24} className="text-[var(--text-3)]" />
+                <p>No patterns match that search.</p>
               </div>
             ) : (
               <div className="space-y-3">
-                <p className="text-text-muted text-sm mb-1">
+                <p className="text-[var(--text-3)] text-sm mb-1">
                   Pick a fly to see the material list — green checks mean you already own it, orange pluses add it to your inventory.
                 </p>
                 {flyList.map(fly => (
@@ -606,13 +602,13 @@ export default function WorkbenchClient({
           <div>
             {invLoading ? (
               <div className="flex items-center justify-center py-20">
-                <Loader2 size={24} className="animate-spin text-accent" />
+                <Loader2 size={24} className="animate-spin text-[var(--accent)]" />
               </div>
             ) : inventory.length === 0 ? (
-              <div className="text-center py-16 max-w-md mx-auto">
-                <Package size={48} className="mx-auto mb-4 text-text-muted" />
-                <h2 className="font-[family-name:var(--font-heading)] text-xl mb-2">No materials tracked yet</h2>
-                <p className="text-text-secondary mb-6">
+              <div className="ea-empty rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+                <Package size={24} className="text-[var(--text-3)]" />
+                <h2 className="font-display text-xl font-semibold text-[var(--text-1)]">No materials tracked yet</h2>
+                <p>
                   You don’t need an inventory to start — pick a fly and add materials as you go. Or browse the catalog and log what you already own.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
@@ -655,18 +651,18 @@ export default function WorkbenchClient({
           <div>
             {matchesLoading ? (
               <div className="flex items-center justify-center py-20">
-                <Loader2 size={24} className="animate-spin text-accent" />
+                <Loader2 size={24} className="animate-spin text-[var(--accent)]" />
               </div>
             ) : matchesError ? (
-              <div className="text-center py-20">
-                <AlertCircle size={48} className="mx-auto mb-4 text-danger" />
-                <p className="text-text-secondary">{matchesError}</p>
+              <div className="ea-empty rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+                <AlertCircle size={24} className="text-[var(--danger)]" />
+                <p>{matchesError}</p>
               </div>
             ) : matches.length === 0 ? (
-              <div className="text-center py-16 max-w-md mx-auto">
-                <Wrench size={48} className="mx-auto mb-4 text-text-muted" />
-                <h2 className="font-[family-name:var(--font-heading)] text-xl mb-2">No matches yet</h2>
-                <p className="text-text-secondary mb-6">
+              <div className="ea-empty rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+                <Wrench size={24} className="text-[var(--text-3)]" />
+                <h2 className="font-display text-xl font-semibold text-[var(--text-1)]">No matches yet</h2>
+                <p>
                   This tab ranks recipes once you’ve logged some materials. Don’t want to build an inventory first? Start from a pattern instead — the Workbench will tell you what you need.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
@@ -680,8 +676,8 @@ export default function WorkbenchClient({
               </div>
             ) : (
               <div className="space-y-3">
-                <p className="text-text-secondary text-sm mb-4">
-                  Based on your <span className="text-accent font-mono">{inventory.length}</span> materials:
+                <p className="text-[var(--text-2)] text-sm mb-4">
+                  Based on your <span className="text-[var(--accent)] num">{inventory.length}</span> materials:
                 </p>
                 {matches.map((m, i) => (
                   <MatchCard key={i} match={m} />
@@ -697,20 +693,20 @@ export default function WorkbenchClient({
             {/* Filters */}
             <div className="flex flex-wrap gap-3 mb-6">
               <div className="relative flex-1 min-w-[200px]">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-3)]" />
                 <input
                   type="text"
                   placeholder="Search by name, brand, type..."
                   value={browseSearch}
                   onChange={e => setBrowseSearch(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') { setBrowsePage(0); fetchBrowse(browseCategory, browseSearch, 0); } }}
-                  className="w-full h-9 bg-surface border border-border rounded-md pl-9 pr-3 text-[13px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
+                  className="w-full h-10 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] pl-9 pr-3 text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:border-[var(--accent)] focus:shadow-[var(--signal-ring)]"
                 />
               </div>
               <select
                 value={browseCategory}
                 onChange={e => { setBrowsePage(0); setBrowseCategory(e.target.value); }}
-                className="h-9 bg-surface border border-border rounded-md px-2.5 text-[13px] text-text-primary focus:outline-none focus:border-accent"
+                className="h-10 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] px-2.5 text-sm text-[var(--text-1)] focus:outline-none focus:border-[var(--accent)] focus:shadow-[var(--signal-ring)]"
               >
                 <option value="">All Categories</option>
                 {CATEGORIES.map(c => (
@@ -742,11 +738,11 @@ export default function WorkbenchClient({
 
             {browseLoading ? (
               <div className="flex items-center justify-center py-20">
-                <Loader2 size={24} className="animate-spin text-accent" />
+                <Loader2 size={24} className="animate-spin text-[var(--accent)]" />
               </div>
             ) : (
               <>
-                <p className="text-text-muted text-sm mb-4">
+                <p className="text-[var(--text-3)] text-sm mb-4">
                   {browseTotal === 0
                     ? 'No materials found'
                     : `Showing ${browsePage * BROWSE_PAGE_SIZE + 1}–${browsePage * BROWSE_PAGE_SIZE + browseMaterials.length} of ${browseTotal} materials`}
@@ -793,22 +789,22 @@ export default function WorkbenchClient({
                       <button
                         onClick={() => goTo(Math.max(0, currentPage - 1))}
                         disabled={currentPage === 0}
-                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-sm text-text-primary disabled:opacity-40 disabled:cursor-not-allowed hover:border-accent"
+                        className="h-8 px-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] text-sm text-[var(--text-1)] disabled:opacity-50 disabled:cursor-not-allowed hover:border-[var(--accent)] transition-colors"
                       >
                         Previous
                       </button>
                       {pages.map((p, i) => (
                         p === '…' ? (
-                          <span key={`e-${i}`} className="px-2 text-text-muted text-sm">…</span>
+                          <span key={`e-${i}`} className="px-2 text-[var(--text-3)] text-sm">…</span>
                         ) : (
                           <button
                             key={p}
                             onClick={() => goTo(p)}
                             aria-current={p === currentPage ? 'page' : undefined}
-                            className={`min-w-[36px] px-3 py-1.5 rounded-lg border text-sm ${
+                            className={`min-w-[32px] h-8 px-3 rounded-[var(--radius-md)] border text-sm transition-colors ${
                               p === currentPage
-                                ? 'bg-accent text-bg border-accent font-medium'
-                                : 'bg-surface text-text-primary border-border hover:border-accent'
+                                ? 'bg-[var(--accent-soft)] text-[var(--accent)] border-[var(--accent)] font-medium'
+                                : 'bg-[var(--surface)] text-[var(--text-1)] border-[var(--border)] hover:border-[var(--accent)]'
                             }`}
                           >
                             {p + 1}
@@ -818,7 +814,7 @@ export default function WorkbenchClient({
                       <button
                         onClick={() => goTo(Math.min(totalPages - 1, currentPage + 1))}
                         disabled={currentPage >= totalPages - 1}
-                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-sm text-text-primary disabled:opacity-40 disabled:cursor-not-allowed hover:border-accent"
+                        className="h-8 px-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] text-sm text-[var(--text-1)] disabled:opacity-50 disabled:cursor-not-allowed hover:border-[var(--accent)] transition-colors"
                       >
                         Next
                       </button>
@@ -838,28 +834,28 @@ export default function WorkbenchClient({
           ? Object.values(sizeRows).filter(r => r.checked).length
           : 0;
         return (
-          <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-            <div className="bg-surface rounded-md border border-border p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+          <div className="ea-modal-overlay z-50 flex items-center justify-center p-4">
+            <div className="ea-modal max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-[family-name:var(--font-heading)] text-lg">
+                <h3 className="font-display text-lg font-semibold text-[var(--text-1)]">
                   {isSized ? 'Inventory by Size' : 'Add to Inventory'}
                 </h3>
-                <button onClick={() => setAddingMaterial(null)} className="text-text-muted hover:text-text-primary">
+                <button onClick={() => setAddingMaterial(null)} className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors">
                   <X size={20} />
                 </button>
               </div>
 
-              <p className="text-text-secondary text-sm mb-1">{addingMaterial.brand}</p>
-              <p className="text-text-primary font-medium mb-4">{addingMaterial.name}</p>
+              <p className="text-[var(--text-2)] text-sm mb-1">{addingMaterial.brand}</p>
+              <p className="text-[var(--text-1)] font-medium mb-4">{addingMaterial.name}</p>
 
               <div className="space-y-3">
                 {addingMaterial.colors && addingMaterial.colors.length > 0 && (
                   <div>
-                    <label className="text-text-muted text-xs uppercase tracking-wider block mb-1">Color</label>
+                    <label className="ea-label">Color</label>
                     <select
                       value={addColor}
                       onChange={e => handleColorChange(e.target.value)}
-                      className="w-full bg-surface-raised border border-border rounded-lg px-3 py-2 text-sm text-text-primary"
+                      className="ea-input"
                     >
                       <option value="">Any / Not specified</option>
                       {addingMaterial.colors.map(c => (
@@ -871,14 +867,14 @@ export default function WorkbenchClient({
 
                 {isSized ? (
                   <div>
-                    <label className="text-text-muted text-xs uppercase tracking-wider block mb-2">
+                    <label className="ea-label">
                       Sizes you have on hand
                     </label>
-                    <div className="border border-border rounded-lg divide-y divide-border overflow-hidden">
+                    <div className="border border-[var(--border)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] overflow-hidden">
                       {addingMaterial.sizes!.map(size => {
                         const row = sizeRows[size] || { checked: false, quantity: '' };
                         return (
-                          <div key={size} className="flex items-center gap-3 px-3 py-2 bg-surface-raised">
+                          <div key={size} className="flex items-center gap-3 px-3 py-2">
                             <label className="flex items-center gap-2 cursor-pointer min-w-[70px]">
                               <input
                                 type="checkbox"
@@ -887,9 +883,9 @@ export default function WorkbenchClient({
                                   ...prev,
                                   [size]: { ...prev[size], checked: e.target.checked, quantity: prev[size]?.quantity || '' },
                                 }))}
-                                className="accent-accent w-4 h-4"
+                                className="h-4 w-4 rounded-[var(--radius-sm)] border-[var(--border-strong)] text-[var(--accent)] focus:ring-[var(--accent)]"
                               />
-                              <span className="text-text-primary text-sm font-mono">Size {size}</span>
+                              <span className="text-[var(--text-1)] text-sm num">Size {size}</span>
                             </label>
                             <input
                               type="text"
@@ -900,25 +896,25 @@ export default function WorkbenchClient({
                                 ...prev,
                                 [size]: { ...prev[size], checked: prev[size]?.checked ?? true, quantity: e.target.value },
                               }))}
-                              className="flex-1 bg-surface border border-border rounded px-2 py-1 text-sm text-text-primary placeholder:text-text-muted disabled:opacity-40"
+                              className="flex-1 h-8 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-sm)] px-2 text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:border-[var(--accent)] disabled:opacity-50"
                             />
                           </div>
                         );
                       })}
                     </div>
-                    <p className="text-text-muted text-[11px] mt-2">
+                    <p className="ea-field-helper">
                       Tick each size you stock and (optionally) jot quantity. Leave unchecked to remove it.
                     </p>
                   </div>
                 ) : (
                   <div>
-                    <label className="text-text-muted text-xs uppercase tracking-wider block mb-1">Quantity (optional)</label>
+                    <label className="ea-label">Quantity (optional)</label>
                     <input
                       type="text"
                       placeholder="e.g. 1 spool, 3 packs"
                       value={addQty}
                       onChange={e => setAddQty(e.target.value)}
-                      className="w-full bg-surface-raised border border-border rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted"
+                      className="ea-input"
                     />
                   </div>
                 )}
@@ -928,7 +924,7 @@ export default function WorkbenchClient({
                 <button
                   onClick={() => setAddingMaterial(null)}
                   disabled={savingInventory}
-                  className="flex-1 bg-surface-raised text-text-secondary px-4 py-2 rounded-lg text-sm hover:text-text-primary disabled:opacity-50"
+                  className="ea-btn ea-btn-secondary flex-1"
                 >
                   Cancel
                 </button>
@@ -969,15 +965,15 @@ export default function WorkbenchClient({
 
       {/* ─── Submit New Material Modal ──────────────────────────── */}
       {showSubmitMaterial && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-surface rounded-md border border-border p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="ea-modal-overlay z-50 flex items-center justify-center p-4">
+          <div className="ea-modal max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-[family-name:var(--font-heading)] text-lg">Add New Material</h3>
-              <button onClick={() => setShowSubmitMaterial(false)} className="text-text-muted hover:text-text-primary">
+              <h3 className="font-display text-lg font-semibold text-[var(--text-1)]">Add New Material</h3>
+              <button onClick={() => setShowSubmitMaterial(false)} className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors">
                 <X size={20} />
               </button>
             </div>
-            <p className="text-text-muted text-xs mb-4">
+            <p className="ea-field-helper mb-4">
               It&apos;s available to you immediately. We&apos;ll review and promote good submissions to the public catalog.
             </p>
             <SubmitMaterialForm
@@ -999,18 +995,20 @@ export default function WorkbenchClient({
         <div
           role="status"
           aria-live="polite"
-          className={`fixed bottom-4 right-4 z-[60] max-w-sm px-4 py-3 rounded-lg shadow-lg border text-sm font-medium ${
-            toast.kind === 'success'
-              ? 'bg-[#0d2d1f] border-[var(--state-positive)] text-[#7EE2A8]'
-              : 'bg-[#2d0d0d] border-[var(--state-negative)] text-[#FFA8A8]'
-          }`}
+          className="ea-toast fixed bottom-4 right-4 z-[60] max-w-sm"
         >
           <div className="flex items-start gap-2">
-            {toast.kind === 'success'
-              ? <Check size={16} className="mt-0.5 flex-shrink-0" />
-              : <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />}
+            <span className={`mt-0.5 flex h-6 w-6 items-center justify-center rounded-full flex-shrink-0 ${
+              toast.kind === 'success'
+                ? 'bg-[var(--state-positive)]/15 text-[var(--state-positive)]'
+                : 'bg-[var(--state-negative)]/15 text-[var(--state-negative)]'
+            }`}>
+              {toast.kind === 'success'
+                ? <Check size={14} aria-hidden />
+                : <AlertCircle size={14} aria-hidden />}
+            </span>
             <span className="flex-1">{toast.message}</span>
-            <button onClick={() => setToast(null)} className="opacity-60 hover:opacity-100 flex-shrink-0">
+            <button onClick={() => setToast(null)} className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors flex-shrink-0">
               <X size={14} />
             </button>
           </div>
@@ -1050,42 +1048,42 @@ function InventoryGroup({
   const groups = Object.values(byMaterial);
 
   return (
-    <div className="bg-surface rounded-md border border-border overflow-hidden">
+    <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] overflow-hidden">
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-raised transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 hover:bg-[var(--paper-deep)] transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Layers size={14} className="text-accent" />
-          <span className="text-sm font-semibold uppercase tracking-wider text-text-secondary">
+          <Layers size={14} className="text-[var(--accent)]" />
+          <span className="ea-overline">
             {label}
           </span>
-          <span className="text-text-muted text-xs font-mono">
+          <span className="text-[var(--text-3)] text-xs num">
             ({groups.length} {groups.length === 1 ? 'product' : 'products'} · {items.length} {items.length === 1 ? 'variant' : 'variants'})
           </span>
         </div>
-        {collapsed ? <ChevronDown size={16} className="text-text-muted" /> : <ChevronUp size={16} className="text-text-muted" />}
+        {collapsed ? <ChevronDown size={16} className="text-[var(--text-3)]" /> : <ChevronUp size={16} className="text-[var(--text-3)]" />}
       </button>
       {!collapsed && (
-        <div className="divide-y divide-border">
+        <div className="divide-y divide-[var(--border)]">
           {groups.map(({ material, rows }) => (
             <div key={rows[0].material_id} className="px-4 py-3">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex-1 min-w-0">
-                  <p className="text-text-primary text-sm font-medium truncate">
+                  <p className="text-[var(--text-1)] text-sm font-medium truncate">
                     {material?.name || 'Unknown'}
                   </p>
                   {material?.brand && (
-                    <p className="text-text-muted text-xs">{material.brand}</p>
+                    <p className="text-[var(--text-3)] text-xs">{material.brand}</p>
                   )}
                 </div>
                 {material && onAddVariant && (
                   <button
                     onClick={() => onAddVariant(material)}
-                    className="text-text-muted hover:text-accent text-[11px] flex items-center gap-1 flex-shrink-0"
+                    className="text-[var(--text-3)] hover:text-[var(--accent)] text-xs flex items-center gap-1 flex-shrink-0 transition-colors"
                     title="Add another color/size to your inventory"
                   >
-                    <Plus size={10} /> Variant
+                    <Plus size={12} /> Variant
                   </button>
                 )}
               </div>
@@ -1096,18 +1094,18 @@ function InventoryGroup({
                   return (
                     <span
                       key={row.id}
-                      className="inline-flex items-center gap-1 bg-surface-raised border border-border rounded px-2 py-0.5 text-[11px] text-text-secondary"
+                      className="ea-chip"
                     >
-                      {row.color_owned && <span className="text-signal">{row.color_owned}</span>}
-                      {row.size_owned && <span className="font-mono">Size {row.size_owned}</span>}
+                      {row.color_owned && <span className="text-[var(--accent)]">{row.color_owned}</span>}
+                      {row.size_owned && <span className="num">Size {row.size_owned}</span>}
                       {!row.color_owned && !row.size_owned && row.quantity && <span>{row.quantity}</span>}
                       {!row.color_owned && !row.size_owned && !row.quantity && <span>{chipText}</span>}
                       <button
                         onClick={() => onRemove(row.id)}
-                        className="text-text-muted hover:text-danger ml-0.5"
+                        className="text-[var(--text-3)] hover:text-[var(--danger)] ml-0.5 transition-colors"
                         title="Remove this variant"
                       >
-                        <X size={10} />
+                        <X size={12} />
                       </button>
                     </span>
                   );
@@ -1126,43 +1124,43 @@ function MatchCard({ match }: { match: MatchResult }) {
   const isPerfect = match.match_percentage === 100;
 
   return (
-    <div className={`bg-surface rounded-md border overflow-hidden ${
-      isPerfect ? 'border-success' : 'border-border'
+    <div className={`bg-[var(--surface)] rounded-[var(--radius-card)] border overflow-hidden ${
+      isPerfect ? 'border-[var(--success)]' : 'border-[var(--border)]'
     }`}>
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center gap-4 px-4 py-3 text-left hover:bg-surface-raised transition-colors"
+        className="w-full flex items-center gap-4 px-4 py-3 text-left hover:bg-[var(--paper-deep)] transition-colors"
       >
         {match.fly_image && (
-          <div className="w-10 h-10 rounded-lg overflow-hidden bg-surface-raised flex-shrink-0">
+          <div className="w-10 h-10 rounded-[var(--radius-sm)] overflow-hidden bg-[var(--paper-deep)] flex-shrink-0">
             <Image src={match.fly_image} alt={match.fly_name} width={40} height={40} className="w-full h-full object-cover" />
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <p className="text-text-primary text-sm font-medium truncate">{match.fly_name}</p>
+          <p className="text-[var(--text-1)] text-sm font-medium truncate">{match.fly_name}</p>
           {match.fly_type && (
-            <p className="text-text-muted text-xs capitalize">{match.fly_type}</p>
+            <p className="text-[var(--text-3)] text-xs capitalize">{match.fly_type}</p>
           )}
         </div>
         <div className="flex items-center gap-3">
-          <div className={`font-mono text-lg font-semibold ${
-            isPerfect ? 'text-success' : match.match_percentage >= 75 ? 'text-accent' : 'text-text-muted'
+          <div className={`num text-lg font-semibold ${
+            isPerfect ? 'text-[var(--success)]' : match.match_percentage >= 75 ? 'text-[var(--accent)]' : 'text-[var(--text-3)]'
           }`}>
             {match.match_percentage}%
           </div>
-          {isPerfect && <Check size={16} className="text-success" />}
-          {expanded ? <ChevronUp size={14} className="text-text-muted" /> : <ChevronDown size={14} className="text-text-muted" />}
+          {isPerfect && <Check size={16} className="text-[var(--success)]" />}
+          {expanded ? <ChevronUp size={14} className="text-[var(--text-3)]" /> : <ChevronDown size={14} className="text-[var(--text-3)]" />}
         </div>
       </button>
       {expanded && match.missing_ingredients.length > 0 && (
-        <div className="px-4 pb-3 border-t border-border pt-3">
-          <p className="text-text-muted text-xs uppercase tracking-wider mb-2">Missing:</p>
+        <div className="px-4 pb-3 border-t border-[var(--border)] pt-3">
+          <p className="ea-overline mb-2">Missing:</p>
           <div className="space-y-1">
             {match.missing_ingredients.map((m, i) => (
               <div key={i} className="flex items-center gap-2 text-sm">
-                <X size={12} className="text-danger flex-shrink-0" />
-                <span className="text-text-secondary">
-                  <span className="text-text-muted">{formatRoleLabel(m.role)}:</span> {m.material_name}
+                <X size={12} className="text-[var(--danger)] flex-shrink-0" />
+                <span className="text-[var(--text-2)]">
+                  <span className="text-[var(--text-3)]">{formatRoleLabel(m.role)}:</span> {m.material_name}
                 </span>
               </div>
             ))}
@@ -1170,7 +1168,7 @@ function MatchCard({ match }: { match: MatchResult }) {
           {match.fly_slug && (
             <Link
               href={`/flies/${match.fly_slug}`}
-              className="flex items-center gap-1 text-signal text-xs mt-3 hover:underline"
+              className="flex items-center gap-1 text-[var(--accent)] text-xs mt-3 hover:underline"
             >
               View pattern <ArrowRight size={12} />
             </Link>
@@ -1178,10 +1176,10 @@ function MatchCard({ match }: { match: MatchResult }) {
         </div>
       )}
       {expanded && match.missing_ingredients.length === 0 && match.fly_slug && (
-        <div className="px-4 pb-3 border-t border-border pt-3">
+        <div className="px-4 pb-3 border-t border-[var(--border)] pt-3">
           <Link
             href={`/flies/${match.fly_slug}`}
-            className="flex items-center gap-1 text-signal text-xs hover:underline"
+            className="flex items-center gap-1 text-[var(--accent)] text-xs hover:underline"
           >
             View pattern & tying steps <ArrowRight size={12} />
           </Link>
@@ -1209,62 +1207,62 @@ function PickFlyCard({
   viewerIsAdmin?: boolean;
 }) {
   const pct = fly.coverage_percentage;
-  const pctColor = pct === 100 ? 'text-success' : pct >= 50 ? 'text-accent' : 'text-text-muted';
+  const pctColor = pct === 100 ? 'text-[var(--success)]' : pct >= 50 ? 'text-[var(--accent)]' : 'text-[var(--text-3)]';
 
   return (
-    <div className="bg-surface rounded-md border border-border overflow-hidden">
+    <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-center gap-4 px-4 py-3 text-left hover:bg-surface-raised transition-colors"
+        className="w-full flex items-center gap-4 px-4 py-3 text-left hover:bg-[var(--paper-deep)] transition-colors"
       >
         {fly.hero_image_url && (
-          <div className="w-12 h-12 rounded-lg overflow-hidden bg-surface-raised flex-shrink-0">
+          <div className="w-12 h-12 rounded-[var(--radius-sm)] overflow-hidden bg-[var(--paper-deep)] flex-shrink-0">
             <Image src={fly.hero_image_url} alt={fly.name} width={48} height={48} className="w-full h-full object-cover" />
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <p className="text-text-primary text-sm font-medium truncate">{fly.name}</p>
-          <p className="text-text-muted text-xs capitalize">
+          <p className="text-[var(--text-1)] text-sm font-medium truncate">{fly.name}</p>
+          <p className="text-[var(--text-3)] text-xs capitalize">
             {fly.category} · {fly.required_count} material{fly.required_count === 1 ? '' : 's'} needed
           </p>
         </div>
         <div className="flex items-center gap-3">
           {fly.required_count > 0 && (
-            <div className={`font-mono text-sm font-semibold ${pctColor}`}>
+            <div className={`num text-sm font-semibold ${pctColor}`}>
               {fly.owned_required_count}/{fly.required_count}
             </div>
           )}
           {expanded
-            ? <ChevronUp size={14} className="text-text-muted" />
-            : <ChevronDown size={14} className="text-text-muted" />}
+            ? <ChevronUp size={14} className="text-[var(--text-3)]" />
+            : <ChevronDown size={14} className="text-[var(--text-3)]" />}
         </div>
       </button>
 
       {expanded && (
-        <div className="px-4 pb-4 border-t border-border pt-3">
+        <div className="px-4 pb-4 border-t border-[var(--border)] pt-3">
           {loading ? (
             <div className="flex items-center justify-center py-6">
-              <Loader2 size={18} className="animate-spin text-accent" />
+              <Loader2 size={18} className="animate-spin text-[var(--accent)]" />
             </div>
           ) : !requirements ? (
-            <p className="text-text-muted text-xs py-4">Unable to load materials.</p>
+            <p className="text-[var(--text-3)] text-xs py-4">Unable to load materials.</p>
           ) : requirements.ingredients.length === 0 ? (
-            <p className="text-text-muted text-xs py-4">No structured recipe yet for this pattern — open the fly page for the full write-up.</p>
+            <p className="text-[var(--text-3)] text-xs py-4">No structured recipe yet for this pattern — open the fly page for the full write-up.</p>
           ) : (
             <>
-              <p className="text-text-muted text-[11px] uppercase tracking-wider mb-2">Materials</p>
+              <p className="ea-overline mb-2">Materials</p>
               <div className="space-y-1.5">
                 {requirements.ingredients.map(ing => (
                   <div key={ing.id} className="flex items-center gap-2 text-sm">
                     {ing.owned ? (
-                      <Check size={14} className="text-success flex-shrink-0" />
+                      <Check size={14} className="text-[var(--success)] flex-shrink-0" />
                     ) : (
-                      <div className="w-[14px] h-[14px] rounded-full border border-border flex-shrink-0" />
+                      <div className="w-[14px] h-[14px] rounded-full border border-[var(--border-strong)] flex-shrink-0" />
                     )}
-                    <span className="text-text-muted text-xs w-20 flex-shrink-0">{formatRoleLabel(ing.role)}</span>
-                    <span className="text-text-primary flex-1 truncate">
+                    <span className="text-[var(--text-3)] text-xs w-20 flex-shrink-0">{formatRoleLabel(ing.role)}</span>
+                    <span className="text-[var(--text-1)] flex-1 truncate">
                       {ing.material?.name || ing.material_name || '—'}
-                      {ing.is_optional && <span className="text-text-muted text-xs ml-1">(optional)</span>}
+                      {ing.is_optional && <span className="text-[var(--text-3)] text-xs ml-1">(optional)</span>}
                     </span>
                     {!ing.owned && ing.material && (
                       <button
@@ -1272,36 +1270,36 @@ function PickFlyCard({
                           e.stopPropagation();
                           onAddMaterial(ing.material as TyingMaterial, ing.size_choice);
                         }}
-                        className="flex items-center gap-1 text-accent text-xs font-medium hover:underline flex-shrink-0"
+                        className="flex items-center gap-1 text-[var(--accent)] text-xs font-medium hover:underline flex-shrink-0"
                       >
                         <Plus size={12} /> Add
                       </button>
                     )}
                     {!ing.owned && !ing.material && (
-                      <span className="text-text-muted text-[11px] flex-shrink-0">free-text</span>
+                      <span className="text-[var(--text-3)] text-xs flex-shrink-0">free-text</span>
                     )}
                   </div>
                 ))}
               </div>
 
-              <div className="flex gap-3 mt-4 pt-3 border-t border-border">
+              <div className="flex gap-3 mt-4 pt-3 border-t border-[var(--border)]">
                 <Link
                   href={`/flies/${requirements.fly.slug}`}
-                  className="flex items-center gap-1 text-signal text-xs hover:underline"
+                  className="flex items-center gap-1 text-[var(--accent)] text-xs hover:underline"
                 >
                   View pattern & tying steps <ArrowRight size={12} />
                 </Link>
                 {viewerIsAdmin ? (
                   <Link
                     href={`/admin/flies/${requirements.fly.slug}/edit?from=${encodeURIComponent("/flies?tab=workbench")}`}
-                    className="flex items-center gap-1 text-accent text-xs font-medium hover:underline ml-auto"
+                    className="flex items-center gap-1 text-[var(--accent)] text-xs font-medium hover:underline ml-auto"
                   >
                     Edit canonical recipe <ArrowRight size={12} />
                   </Link>
                 ) : (
                   <Link
                     href={`/flies/${requirements.fly.slug}`}
-                    className="flex items-center gap-1 text-accent text-xs font-medium hover:underline ml-auto"
+                    className="flex items-center gap-1 text-[var(--accent)] text-xs font-medium hover:underline ml-auto"
                   >
                     Start tying this <ArrowRight size={12} />
                   </Link>
@@ -1331,25 +1329,25 @@ function MaterialCard({
   const isOwned = ownedCount > 0;
   const hasSizes = !!(material.sizes && material.sizes.length > 0);
   return (
-    <div className={`bg-surface rounded-md border p-3 flex flex-col ${isPending ? 'border-[var(--action)]/40' : 'border-border'}`}>
+    <div className={`bg-[var(--surface)] rounded-[var(--radius-card)] border p-3 flex flex-col ${isPending ? 'border-[var(--accent)]/40' : 'border-[var(--border)]'}`}>
       <div className="flex items-start justify-between">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <p className="text-text-primary text-sm font-medium truncate">{material.name}</p>
+          <p className="text-[var(--text-1)] text-sm font-medium truncate">{material.name}</p>
           {isPending && (
-            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--action)]/15 text-[var(--action)] font-semibold flex-shrink-0">
+            <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-3 py-1 text-[12px] font-medium text-[var(--accent)] flex-shrink-0">
               Pending
             </span>
           )}
         </div>
         <div className="flex gap-2 mt-1">
           {material.brand && (
-            <span className="text-text-muted text-xs">{material.brand}</span>
+            <span className="text-[var(--text-3)] text-xs">{material.brand}</span>
           )}
-          <span className="text-xs text-signal capitalize">{material.category}</span>
+          <span className="text-xs text-[var(--accent)] capitalize">{material.category}</span>
         </div>
         {material.colors && material.colors.length > 0 && (
-          <p className="text-text-muted text-xs mt-1 truncate">
+          <p className="text-[var(--text-3)] text-xs mt-1 truncate">
             {material.colors.slice(0, 4).join(', ')}{material.colors.length > 4 ? ` +${material.colors.length - 4}` : ''}
           </p>
         )}
@@ -1357,7 +1355,7 @@ function MaterialCard({
       <button
         onClick={onOpen}
         className={`flex items-center gap-1 text-xs font-medium ml-2 hover:underline whitespace-nowrap ${
-          isOwned ? 'text-success' : 'text-accent'
+          isOwned ? 'text-[var(--success)]' : 'text-[var(--accent)]'
         }`}
         title={isOwned ? 'Manage sizes' : 'Add to inventory'}
       >
@@ -1376,10 +1374,10 @@ function MaterialCard({
       {onVariant && (
         <button
           onClick={onVariant}
-          className="text-text-muted hover:text-accent text-[11px] mt-2 self-start flex items-center gap-1"
+          className="text-[var(--text-3)] hover:text-[var(--accent)] text-xs mt-2 self-start flex items-center gap-1 transition-colors"
           title="Add a new color, size, or clone this material"
         >
-          <Plus size={10} /> Variant
+          <Plus size={12} /> Variant
         </button>
       )}
     </div>

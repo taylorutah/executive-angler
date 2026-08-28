@@ -41,15 +41,15 @@ export default function FliesShell({
   children,
 }: Props) {
   return (
-    <div className="min-h-screen bg-[var(--color-bg)]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-20">
+    <div className="min-h-screen bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 pt-6 pb-20">
         {/* Page header */}
         <header className="mb-5 sm:mb-6">
-          <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">
+          <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] lg:text-3xl">
             Flies
           </h1>
           {counts && (
-            <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+            <p className="mt-1 text-sm text-[var(--text-2)]">
               <CountSegment value={counts.patterns} label="patterns" />
               <CountSegment value={counts.boxes} label="boxes" />
               <CountSegment value={counts.tieNext} label="in tie-next" />
@@ -59,15 +59,15 @@ export default function FliesShell({
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Link
               href="/flies/library"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--action)]/40 transition-colors"
+              className="ea-btn ea-btn-secondary ea-btn-sm"
             >
               Browse Library
             </Link>
             <Link
               href="/journal/flies/new"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--action)] px-4 py-2 text-sm font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] transition-colors shadow-sm"
+              className="ea-btn ea-btn-primary ea-btn-sm"
             >
-              <Plus className="h-4 w-4" /> New Pattern
+              <Plus className="h-4 w-4" aria-hidden /> New Pattern
             </Link>
           </div>
         </header>
@@ -85,8 +85,7 @@ function CountSegment({ value, label }: { value?: number; label: string }) {
   if (value === undefined) return null;
   return (
     <>
-      <span className="font-[var(--font-mono)] tabular-nums">{value}</span>{" "}
-      {label}
+      <span className="num">{value}</span> {label}
       {" · "}
     </>
   );
@@ -109,20 +108,21 @@ function FliesSubNav({
   return (
     <nav
       aria-label="Flies sections"
-      className="mb-5 -mx-4 sm:mx-0 px-4 sm:px-0 flex items-center gap-1 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      className="mb-5 -mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
     >
-      <div className="flex items-center gap-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-1 min-w-max">
+      <div className="flex items-center gap-1 border-b border-[var(--border)] min-w-max">
         {items
           .filter((it) => it.visible)
           .map((it) => (
             <Link
               key={it.key}
               href={it.href}
+              aria-current={active === it.key ? "page" : undefined}
               className={[
-                "rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors",
+                "px-3 py-2 text-sm font-medium whitespace-nowrap border-b-2 -mb-px transition-colors",
                 active === it.key
-                  ? "bg-[var(--color-bg)] text-[var(--color-text-primary)] shadow-sm"
-                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+                  ? "border-[var(--accent)] text-[var(--accent)]"
+                  : "border-transparent text-[var(--text-2)] hover:text-[var(--text-1)]",
               ].join(" ")}
             >
               {it.label}

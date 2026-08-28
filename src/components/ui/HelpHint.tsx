@@ -47,7 +47,7 @@ export default function HelpHint({
               <button
                 type="button"
                 aria-label={label}
-                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex ${btnSize} items-center justify-center rounded-full text-[var(--text-meta)] hover:text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors motion-reduce:transition-none ${className}`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex ${btnSize} items-center justify-center rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors motion-reduce:transition-none ${className}`}
               >
                 <Icn size={iconSize} aria-hidden />
               </button>
@@ -58,7 +58,7 @@ export default function HelpHint({
               side="top"
               align="center"
               sideOffset={4}
-              className="z-50 rounded bg-[var(--surface-page)] border border-[var(--border-rule)] px-2 py-1 text-xs text-[var(--text-body)] shadow-lg data-[state=delayed-open]:animate-in data-[state=closed]:animate-out"
+              className="z-50 rounded-[var(--radius-sm)] bg-[var(--surface)] border border-[var(--border)] px-2 py-1 text-xs text-[var(--text-2)] shadow-[var(--shadow-float)] data-[state=delayed-open]:animate-in data-[state=closed]:animate-out"
             >
               {label}
             </Tooltip.Content>
@@ -71,10 +71,10 @@ export default function HelpHint({
             align="center"
             sideOffset={8}
             collisionPadding={16}
-            className="z-50 max-w-xs rounded-lg bg-[var(--surface-page)] border border-[var(--border-rule)] p-3 text-sm text-[var(--text-body)] shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out"
+            className="z-50 max-w-xs rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] p-3 text-sm text-[var(--text-2)] shadow-[var(--shadow-float)] data-[state=open]:animate-in data-[state=closed]:animate-out"
           >
             <div className="space-y-1.5 leading-relaxed">{children}</div>
-            <Popover.Arrow className="fill-[var(--border-rule)]" />
+            <Popover.Arrow className="fill-[var(--border)]" />
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>

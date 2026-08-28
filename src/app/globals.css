@@ -518,7 +518,8 @@
       color var(--duration-fast) var(--ease-standard);
   }
   .ea-segment:hover { color: var(--text-1); }
-  .ea-segment[aria-pressed="true"] {
+  .ea-segment[aria-pressed="true"],
+  .ea-segment[aria-selected="true"] {
     background: var(--accent-soft);
     color: var(--accent);
   }

@@ -1,21 +1,21 @@
 /**
  * Executive Angler — Unified Button System
  *
- * Canonical button primitives mirroring the 10-style mockup PDF
- * (docs/design/button-mockups.pdf). All new code MUST use these
- * components instead of inline Tailwind on <button> / <Link>.
+ * Canonical button primitives on the §4 button spec (.ea-btn family in
+ * globals.css): 32/40/48 tall, radius-md, Inter 14–15/500, no shadows,
+ * no transforms. All new code MUST use these components instead of
+ * inline Tailwind on <button> / <Link>.
  *
- * Variants:
- *  - "solid"   (01) Strava-style copper slab, primary CTAs
- *  - "outline" (02) Copper-bordered ghost, secondary alongside a solid
- *  - "brand"   (03) Salesforce-style soft gradient for admin/forms
- *  - "neutral" (04) White surface with gray border, cancel/back
- *  - "pill"    (05) Soft-tint rounded-full chip CTA
- *  - "tile"    (06) Linear/Notion-style nav tile w/ badge — see <ButtonTile/>
- *  - "stat"    (07) Compact stat pill — see <StatPill/>
- *  - "glass"   (08) Frosted translucent surface for hero overlays
- *  - "hero"    (09) Heavy outline for landing CTAs
- *  - "split"   (10) Primary + dropdown — see <SplitButton/>
+ * Variants (legacy names kept; all resolve to the token language):
+ *  - "solid" / "brand"          → primary (accent fill)
+ *  - "outline" / "neutral" / "glass" / "hero" → secondary (hairline border)
+ *  - "ghost"                    → ghost (borderless)
+ *  - "destructive"              → danger fill
+ *  - "pill"                     → accent-soft tag CTA (radius-md — pill
+ *                                 radius is reserved for chips and tags)
+ *  - "tile"                     → nav tile w/ badge — see <ButtonTile/>
+ *  - "stat"                     → compact stat tag — see <StatPill/>
+ *  - "split"                    → primary + dropdown — see <SplitButton/>
  *
  * Sizes: "sm" | "md" | "lg"
  * Renders as <button> by default, or <a>/<Link> when `href` is provided.
@@ -46,7 +46,7 @@ interface CommonProps {
   className?: string;
   fullWidth?: boolean;
   loading?: boolean;
-  /** Opt into Strava-loud uppercase + tracking. Default is sentence case (field-journal voice). */
+  /** Opt into uppercase + tracking. Default is sentence case (field-journal voice). */
   loud?: boolean;
 }
 
@@ -62,52 +62,10 @@ type ButtonAsLink = CommonProps &
 
 export type ButtonProps = ButtonAsButton | ButtonAsLink;
 
-const SIZE_CLASSES: Record<Variant, Record<Size, string>> = {
-  solid: {
-    sm: "px-3.5 py-1.5 text-[11px]",
-    md: "px-[18px] py-2.5 text-[13px]",
-    lg: "px-6 py-3.5 text-[14px]",
-  },
-  outline: {
-    sm: "px-3 py-1 text-[11px]",
-    md: "px-4 py-2 text-[13px]",
-    lg: "px-[22px] py-3 text-[14px]",
-  },
-  brand: {
-    sm: "px-3.5 py-1 text-[12px]",
-    md: "px-[18px] py-[7px] text-[13px]",
-    lg: "px-[22px] py-2.5 text-[14px]",
-  },
-  neutral: {
-    sm: "px-3 py-1 text-[12px]",
-    md: "px-4 py-[7px] text-[13px]",
-    lg: "px-5 py-2.5 text-[14px]",
-  },
-  pill: {
-    sm: "px-3.5 py-1.5 text-[12px]",
-    md: "px-4 py-2 text-[13px]",
-    lg: "px-[22px] py-2.5 text-[14px]",
-  },
-  ghost: {
-    sm: "px-3 py-1.5 text-[12px]",
-    md: "px-4 py-2 text-[13px]",
-    lg: "px-5 py-2.5 text-[14px]",
-  },
-  glass: {
-    sm: "px-3 py-1.5 text-[12px]",
-    md: "px-4 py-2 text-[13px]",
-    lg: "px-[22px] py-3 text-[14px]",
-  },
-  hero: {
-    sm: "px-5 py-3 text-[14px]",
-    md: "px-7 py-4 text-[15px]",
-    lg: "px-8 py-[18px] text-[16px]",
-  },
-  destructive: {
-    sm: "px-3.5 py-1.5 text-[11px]",
-    md: "px-[18px] py-2.5 text-[13px]",
-    lg: "px-6 py-3.5 text-[14px]",
-  },
+const SIZE_CLASSES: Record<Size, string> = {
+  sm: "ea-btn-sm",
+  md: "",
+  lg: "ea-btn-lg",
 };
 
 const ICON_SIZE: Record<Size, string> = {
@@ -116,77 +74,24 @@ const ICON_SIZE: Record<Size, string> = {
   lg: "h-[18px] w-[18px]",
 };
 
-function variantClasses(variant: Variant, loud: boolean | undefined): string {
-  const caps = loud ? "uppercase tracking-[0.04em]" : "";
+function variantClasses(variant: Variant): string {
   switch (variant) {
     case "solid":
-      return [
-        "ea-btn-solid bg-[var(--action)] text-[var(--on-action)] border border-transparent",
-        loud ? "font-bold" : "font-semibold",
-        caps,
-        "rounded hover:bg-[var(--action-hover)] active:bg-[var(--action-hover)]",
-        "shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0",
-      ].join(" ");
-    case "outline":
-      return [
-        "bg-transparent text-[var(--action)] border-2 border-[var(--action)]",
-        loud ? "font-bold" : "font-semibold",
-        caps,
-        "rounded hover:bg-[var(--action)] hover:text-white",
-        "hover:shadow-md hover:-translate-y-px active:translate-y-0",
-      ].join(" ");
     case "brand":
-      return [
-        "bg-gradient-to-b from-[color-mix(in_oklch,var(--action)_72%,white)] to-[var(--action)] text-[var(--on-action)]",
-        "border border-[var(--action)] font-semibold",
-        "rounded shadow-[var(--elev-inset)]",
-        "hover:from-[var(--action)] hover:to-[var(--action-hover)]",
-        "hover:shadow-md hover:-translate-y-px active:translate-y-0",
-      ].join(" ");
-    case "ghost":
-      return [
-        "bg-transparent text-[var(--text-body)] border border-[var(--border-rule)] font-medium",
-        "rounded hover:text-[var(--text-primary)] hover:border-[var(--text-meta)]",
-      ].join(" ");
+      return "ea-btn-primary";
+    case "outline":
     case "neutral":
-      return [
-        "bg-white text-[#1A1A1A] border border-[#C9CCD1] font-medium",
-        "rounded shadow-[var(--elev-hairline)]",
-        "hover:bg-[#F5F5F5]",
-      ].join(" ");
-    case "pill":
-      return [
-        "bg-[var(--action)]/[0.16] text-[var(--action)] border border-[var(--action)]/30 font-semibold",
-        "rounded-full",
-        "hover:bg-[var(--action)]/[0.24]",
-      ].join(" ");
     case "glass":
-      return [
-        "bg-white/10 backdrop-blur-md text-white border border-white/25 font-semibold",
-        "rounded-lg",
-        "hover:bg-[var(--action)]/40 hover:border-[var(--action)]",
-      ].join(" ");
     case "hero":
-      return [
-        "bg-transparent text-[var(--text-primary)] border-[1.5px] border-[var(--text-primary)] font-bold",
-        "rounded-md",
-        "hover:bg-[var(--action)] hover:border-[var(--action)] hover:text-white",
-      ].join(" ");
+      return "ea-btn-secondary";
+    case "ghost":
+      return "ea-btn-ghost";
     case "destructive":
-      return [
-        "bg-red-900/30 text-red-400 border border-red-800/50",
-        loud ? "font-bold" : "font-semibold",
-        caps,
-        "rounded hover:bg-red-900/50 hover:text-red-300",
-      ].join(" ");
+      return "ea-btn-danger";
+    case "pill":
+      return "bg-[var(--accent-soft)] text-[var(--accent)] hover:bg-[color-mix(in_srgb,var(--accent)_18%,var(--surface))]";
   }
 }
-
-const BASE =
-  "ea-focus-ring inline-flex items-center justify-center gap-2 transition-all " +
-  "disabled:opacity-50 disabled:cursor-not-allowed " +
-  "focus-visible:outline-2 focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px] " +
-  "cursor-pointer select-none whitespace-nowrap motion-reduce:transition-none motion-reduce:transform-none";
 
 export function Button(props: ButtonProps) {
   const {
@@ -203,9 +108,10 @@ export function Button(props: ButtonProps) {
   } = props as CommonProps & Record<string, unknown>;
 
   const classes = [
-    BASE,
-    variantClasses(variant, loud),
-    SIZE_CLASSES[variant][size],
+    "ea-btn ea-focus-ring",
+    variantClasses(variant),
+    SIZE_CLASSES[size],
+    loud ? "uppercase tracking-[0.04em]" : "",
     fullWidth ? "w-full" : "",
     className,
   ]
@@ -258,7 +164,7 @@ export function Button(props: ButtonProps) {
   );
 }
 
-/* ───────────────────────── ButtonTile (variant 06) ───────────────────────── */
+/* ───────────────────────── ButtonTile ───────────────────────── */
 
 interface ButtonTileProps {
   href?: string;
@@ -276,7 +182,7 @@ export function ButtonTile({
   href,
   onClick,
   icon: Icon,
-  iconColor = "var(--action)",
+  iconColor = "var(--accent)",
   label,
   sub,
   badge,
@@ -291,21 +197,20 @@ export function ButtonTile({
 
   const classes =
     `relative inline-flex flex-col items-start gap-1.5 ${padding} ${minWidth} ` +
-    "bg-[var(--surface-raised)] text-[var(--text-primary)] border border-[var(--border-rule)] rounded-xl " +
-    "hover:border-[var(--action)] hover:bg-[var(--action)]/[0.08] transition-all " +
-    "ea-focus-ring cursor-pointer focus-visible:outline-2 " +
-    "focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px] " +
+    "bg-[var(--surface)] text-[var(--text-1)] border border-[var(--border)] rounded-[var(--radius-card)] " +
+    "hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors " +
+    "ea-focus-ring cursor-pointer " +
     "motion-reduce:transition-none " +
     className;
 
   const inner = (
     <>
       <Icon className={iconSize} style={{ color: iconColor }} aria-hidden />
-      <div className="text-[12.5px] font-semibold leading-tight">{label}</div>
-      {sub && <div className="text-[10.5px] text-[var(--text-body)] leading-tight">{sub}</div>}
+      <div className="text-[13px] font-medium leading-tight">{label}</div>
+      {sub && <div className="text-[12px] text-[var(--text-2)] leading-tight">{sub}</div>}
       {badge != null && badge > 0 && (
         <span
-          className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1.5 bg-[var(--action)] text-[var(--on-action)] text-[10px] font-bold rounded-full inline-flex items-center justify-center border-2 border-[var(--surface-page)] font-mono leading-none"
+          className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1.5 bg-[var(--accent)] text-[var(--on-action)] text-[12px] font-medium rounded-full inline-flex items-center justify-center border-2 border-[var(--paper)] num leading-none"
         >
           {badge}
         </span>
@@ -327,7 +232,7 @@ export function ButtonTile({
   );
 }
 
-/* ───────────────────────── StatPill (variant 07) ───────────────────────── */
+/* ───────────────────────── StatPill ───────────────────────── */
 
 interface StatPillProps {
   href?: string;
@@ -349,26 +254,24 @@ export function StatPill({
   className = "",
 }: StatPillProps) {
   const accentColor =
-    accent === "teal"
-      ? "text-[var(--signal-live)]"
-      : accent === "white"
-        ? "text-[var(--text-primary)]"
-        : "text-[var(--action)]";
+    accent === "white"
+      ? "text-[var(--text-1)]"
+      : "text-[var(--accent)]";
   const padding =
-    size === "sm" ? "px-2.5 py-1 text-[11px]" : size === "lg" ? "px-4 py-2.5 text-[14px]" : "px-3 py-1.5 text-[12px]";
+    size === "sm" ? "px-2.5 py-1 text-[12px]" : size === "lg" ? "px-4 py-2.5 text-[14px]" : "px-3 py-1.5 text-[12px]";
 
   const classes =
-    `inline-flex items-center gap-2 ${padding} font-mono ` +
-    "bg-[var(--surface-raised)] text-[var(--text-primary)] border border-[var(--border-rule)] rounded-full " +
-    "hover:border-[var(--action)]/60 hover:bg-[var(--surface-card)] transition-all cursor-pointer " +
-    "ea-focus-ring focus-visible:outline-2 focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px] " +
+    `inline-flex items-center gap-2 ${padding} ` +
+    "bg-[var(--surface)] text-[var(--text-1)] border border-[var(--border)] rounded-full " +
+    "hover:border-[var(--accent)] hover:bg-[var(--paper-deep)] transition-colors cursor-pointer " +
+    "ea-focus-ring " +
     "motion-reduce:transition-none " +
     className;
 
   const inner = (
     <>
-      <span className={`${accentColor} font-bold tabular-nums`}>{value}</span>
-      <span className="text-[var(--text-body)] lowercase">{label}</span>
+      <span className={`${accentColor} font-semibold num`}>{value}</span>
+      <span className="text-[var(--text-2)] lowercase">{label}</span>
     </>
   );
 
@@ -386,7 +289,7 @@ export function StatPill({
   );
 }
 
-/* ───────────────────────── SplitButton (variant 10) ─────────────────────── */
+/* ───────────────────────── SplitButton ─────────────────────── */
 
 import { ChevronDown } from "@/icons";
 
@@ -410,17 +313,17 @@ export function SplitButton({
   className = "",
 }: SplitButtonProps) {
   const padding =
-    size === "sm" ? "px-3 py-1.5 text-[12px]" : size === "lg" ? "px-[22px] py-3 text-[14px]" : "px-4 py-2 text-[13px]";
+    size === "sm" ? "h-8 px-3.5 text-sm" : size === "lg" ? "h-12 px-5 text-[15px]" : "h-10 px-4 text-sm";
   const caretPadding =
-    size === "sm" ? "px-2 py-1.5" : size === "lg" ? "px-3 py-3" : "px-2.5 py-2";
+    size === "sm" ? "h-8 px-2" : size === "lg" ? "h-12 px-3" : "h-10 px-2.5";
   const iconSize = ICON_SIZE[size];
 
   const wrap =
-    `inline-flex items-stretch rounded shadow-sm border border-[var(--action)] overflow-hidden ${className}`;
+    `inline-flex items-stretch rounded-[var(--radius-md)] border border-[var(--accent)] overflow-hidden ${className}`;
   const primaryCls =
-    `${padding} ${iconSize ? "" : ""} bg-[var(--action)] text-[var(--on-action)] font-semibold inline-flex items-center gap-2 hover:bg-[var(--action-hover)] cursor-pointer transition-colors`;
+    `${padding} bg-[var(--accent)] text-[var(--on-action)] font-medium inline-flex items-center gap-2 hover:bg-[var(--accent-hover)] cursor-pointer transition-colors`;
   const caretCls =
-    `${caretPadding} bg-[var(--action)] text-[var(--on-action)] border-l border-[var(--action)] inline-flex items-center hover:bg-[var(--action-hover)] cursor-pointer transition-colors`;
+    `${caretPadding} bg-[var(--accent)] text-[var(--on-action)] border-l border-[var(--accent-hover)] inline-flex items-center hover:bg-[var(--accent-hover)] cursor-pointer transition-colors`;
 
   return (
     <div className={wrap}>
