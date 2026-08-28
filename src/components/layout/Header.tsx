@@ -122,7 +122,7 @@ export default function Header() {
             <div className="ml-auto flex items-center gap-2">
               {user && <span className="ea-nav-divider hidden lg:block" aria-hidden />}
               {!onHome && (
-                <div className="hidden lg:block">
+                <div className={user ? undefined : "hidden lg:block"}>
                   <HeaderSearch />
                 </div>
               )}
