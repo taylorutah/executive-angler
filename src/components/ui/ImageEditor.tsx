@@ -153,25 +153,25 @@ export default function ImageEditor({
   return createPortal(
     <div
       ref={dialogRef}
-      className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6"
+      className="fixed inset-0 z-[9999] bg-[var(--ink)]/85 flex items-center justify-center p-3 sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
-      <div className="w-full max-w-4xl max-h-[calc(100vh-1.5rem)] flex flex-col bg-[var(--surface-raised)] rounded-2xl overflow-hidden border border-[var(--border-rule)] shadow-2xl">
+      <div className="w-full max-w-4xl max-h-[calc(100vh-1.5rem)] flex flex-col bg-[var(--surface)] rounded-[var(--radius-card)] overflow-hidden border border-[var(--border)] shadow-[var(--shadow-float)]">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-rule)] flex-shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)] flex-shrink-0">
           <div className="flex items-center gap-2 min-w-0">
-            <CropIcon className="h-5 w-5 text-[var(--action)] flex-shrink-0" />
-            <h2 className="text-sm font-bold text-[var(--text-primary)] truncate">{title}</h2>
-            <span className="hidden sm:inline text-[10px] text-[var(--text-meta)] ml-2">
+            <CropIcon className="h-5 w-5 text-[var(--accent)] flex-shrink-0" />
+            <h2 className="text-sm font-semibold text-[var(--text-1)] truncate">{title}</h2>
+            <span className="hidden sm:inline text-xs text-[var(--text-3)] ml-2">
               Drag · Scroll to zoom · R rotate · F flip
             </span>
           </div>
           <button
             type="button"
             onClick={onCancel}
-            className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-meta)] hover:text-[var(--text-primary)] flex-shrink-0`}
+            className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-3)] hover:text-[var(--text-1)] flex-shrink-0`}
             aria-label="Cancel"
             data-autofocus
           >
@@ -184,7 +184,7 @@ export default function ImageEditor({
             of the image, so a portrait source on a 21:9 hero crop still
             renders the full image at usable size. */}
         <div
-          className="relative w-full bg-black flex-shrink-0"
+          className="relative w-full bg-[var(--ink)] flex-shrink-0"
           style={{ height: "min(65vh, 560px)" }}
         >
           <Cropper
@@ -205,17 +205,17 @@ export default function ImageEditor({
             onCropComplete={onCropComplete}
             showGrid
             style={{
-              containerStyle: { background: "#000" },
-              cropAreaStyle: { border: "2px solid var(--action)" },
+              containerStyle: { background: "var(--ink)" },
+              cropAreaStyle: { border: "2px solid var(--accent)" },
             }}
           />
         </div>
 
         {/* Controls */}
-        <div className="px-4 py-3 border-t border-[var(--border-rule)] flex-shrink-0 space-y-3">
+        <div className="px-4 py-3 border-t border-[var(--border)] flex-shrink-0 space-y-3">
           {/* Zoom slider */}
           <div className="flex items-center gap-3">
-            <span className="text-xs text-[var(--text-body)] w-10">Zoom</span>
+            <span className="text-xs text-[var(--text-2)] w-10">Zoom</span>
             <input
               type="range"
               min={1}
@@ -223,10 +223,10 @@ export default function ImageEditor({
               step={0.05}
               value={zoom}
               onChange={(e) => setZoom(Number(e.target.value))}
-              className="flex-1 accent-[var(--action)]"
+              className="flex-1 accent-[var(--accent)]"
               aria-label="Zoom level"
             />
-            <span className="text-xs text-[var(--text-body)] font-mono w-12 text-right">
+            <span className="num text-xs text-[var(--text-2)] w-12 text-right">
               {zoom.toFixed(2)}×
             </span>
           </div>
@@ -267,7 +267,7 @@ export default function ImageEditor({
           </div>
 
           {error ? (
-            <div className="px-3 py-2 bg-red-950/30 border border-red-800 rounded-lg text-xs text-red-400">
+            <div className="px-3 py-2 bg-[var(--danger)]/10 border border-[var(--danger)]/40 rounded-[var(--radius-md)] text-xs text-[var(--danger)]">
               {error}
             </div>
           ) : null}
@@ -277,7 +277,7 @@ export default function ImageEditor({
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 px-4 py-2.5 bg-[var(--border-rule)] text-[var(--text-primary)] rounded-xl text-sm font-semibold hover:bg-[#2D333B] transition-colors"
+              className="ea-btn ea-btn-secondary flex-1"
             >
               Cancel
             </button>
@@ -285,7 +285,7 @@ export default function ImageEditor({
               type="button"
               onClick={apply}
               disabled={processing || !croppedArea}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[var(--action)] text-white rounded-xl text-sm font-bold hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50"
+              className="ea-btn ea-btn-primary flex-1"
             >
               {processing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -319,10 +319,10 @@ function ToolButton({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className={`inline-flex items-center px-2.5 py-1.5 rounded-lg border text-[var(--text-primary)] transition-colors ${
+      className={`inline-flex items-center px-2.5 py-1.5 rounded-[var(--radius-md)] border text-[var(--text-1)] transition-colors ${
         active
-          ? "border-[var(--action)] bg-[var(--action)]/15 text-[var(--action)]"
-          : "border-[var(--border-rule)] bg-[var(--surface-page)] hover:border-[var(--action)]/50 hover:text-[var(--action)]"
+          ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]"
+          : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)]/50 hover:text-[var(--accent)]"
       }`}
     >
       {children}

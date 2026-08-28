@@ -273,7 +273,7 @@ export default async function SessionDetailPage({ params }: Props) {
   return (
     <>
       {isOwner && (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 pt-6">
           <CatchLoggerEntry
             sessionId={id}
             myBoxes={myBoxes}

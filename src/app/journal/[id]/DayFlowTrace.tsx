@@ -19,10 +19,10 @@ export default function DayFlowTrace({ flow, catchMinutes, className = "" }: Pro
   if (!flow) {
     return (
       <div className={className}>
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-meta)]">
+        <p className="ea-overline">
           Flow that day
         </p>
-        <p className="mt-2 text-sm text-[var(--text-body)]">
+        <p className="mt-2 text-sm text-[var(--text-2)]">
           No gauge reading on record for this water.
         </p>
       </div>
@@ -50,7 +50,7 @@ export default function DayFlowTrace({ flow, catchMinutes, className = "" }: Pro
 
   return (
     <div className={className}>
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-meta)]">
+      <p className="ea-overline">
         Flow that day
       </p>
       <svg
@@ -59,33 +59,33 @@ export default function DayFlowTrace({ flow, catchMinutes, className = "" }: Pro
         role="img"
         aria-label={`Discharge at ${flow.gaugeName} through the day, ${Math.round(min)} to ${Math.round(max)} cubic feet per second, with a mark at each catch.`}
       >
-        <polygon points={area} fill="var(--signal-live)" opacity="0.14" />
-        <polyline points={line} fill="none" stroke="var(--signal-live)" strokeWidth="1.5" />
+        <polygon points={area} fill="var(--accent)" opacity="0.14" />
+        <polyline points={line} fill="none" stroke="var(--accent)" strokeWidth="1.5" />
         {catchMinutes.map((m, i) => (
           <circle
             key={i}
             cx={x(m)}
             cy={y(cfsAt(m))}
             r="3"
-            fill="var(--action)"
-            stroke="var(--surface-raised)"
+            fill="var(--accent)"
+            stroke="var(--paper-deep)"
             strokeWidth="1"
           />
         ))}
       </svg>
       <div className="mt-1 flex items-baseline justify-between">
         {Math.round(min) === Math.round(max) ? (
-          <span className="num text-xs text-[var(--text-meta)]">
+          <span className="num text-xs text-[var(--text-3)]">
             {Math.round(min).toLocaleString()} cfs, steady all day
           </span>
         ) : (
           <>
-            <span className="num text-xs text-[var(--text-meta)]">{Math.round(min).toLocaleString()} cfs</span>
-            <span className="num text-xs text-[var(--text-meta)]">{Math.round(max).toLocaleString()} cfs</span>
+            <span className="num text-xs text-[var(--text-3)]">{Math.round(min).toLocaleString()} cfs</span>
+            <span className="num text-xs text-[var(--text-3)]">{Math.round(max).toLocaleString()} cfs</span>
           </>
         )}
       </div>
-      <p className="mt-1 text-[11px] text-[var(--text-meta)]">
+      <p className="mt-1 text-xs text-[var(--text-3)]">
         USGS {flow.siteId} · {flow.gaugeName}
       </p>
     </div>

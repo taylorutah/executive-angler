@@ -136,62 +136,62 @@ export default function CatchLogger({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 p-0 sm:p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[var(--ink)]/50 p-0 sm:p-4" onClick={onClose}>
       <div
-        className="relative w-full sm:max-w-2xl rounded-t-2xl sm:rounded-2xl border border-[var(--border-rule)] bg-[var(--surface-page)] shadow-2xl flex flex-col max-h-[90vh]"
+        className="relative w-full sm:max-w-2xl rounded-t-[var(--radius-card)] sm:rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-float)] flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[var(--border-rule)] px-4 py-3">
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-1 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors"
           >
             <ChevronLeft className="h-4 w-4" /> Cancel
           </button>
-          <h2 className="text-[var(--text-primary)] font-semibold text-sm">Log catch</h2>
-          <span className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-widest text-[var(--text-meta)]">
+          <h2 className="text-[var(--text-1)] font-semibold text-sm">Log catch</h2>
+          <span className="ea-overline">
             {activeBoxName ?? "No box active"}
           </span>
         </div>
 
         {/* Sticky form: species + length + search */}
-        <div className="border-b border-[var(--border-rule)] px-4 py-3 space-y-2 bg-[var(--surface-page)]">
+        <div className="border-b border-[var(--border)] px-4 py-3 space-y-3 bg-[var(--surface)]">
           <div className="flex items-center gap-2">
             <div className="flex-1">
-              <label className="block text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)]">Species</label>
+              <label className="ea-label">Species</label>
               <input
                 type="text"
                 value={species}
                 onChange={(e) => setSpecies(e.target.value)}
                 list="catch-logger-species"
-                className="mt-1 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-sm text-[var(--text-primary)] focus:border-[var(--action)] outline-none"
+                className="ea-input"
               />
               <datalist id="catch-logger-species">
                 {COMMON_SPECIES.map((s) => <option key={s} value={s} />)}
               </datalist>
             </div>
             <div className="w-24">
-              <label className="block text-[9px] font-bold uppercase tracking-widest text-[var(--text-meta)]">Length (in)</label>
+              <label className="ea-label">Length (in)</label>
               <input
                 type="number"
                 step="0.5"
                 value={length}
                 onChange={(e) => setLength(e.target.value)}
                 placeholder="—"
-                className="mt-1 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-sm text-[var(--text-primary)] focus:border-[var(--action)] outline-none font-['IBM_Plex_Mono']"
+                className="ea-input num"
               />
             </div>
           </div>
 
           {/* Lost-the-fly toggle */}
-          <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
+          <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors">
             <input
               type="checkbox"
               checked={lost}
               onChange={(e) => setLost(e.target.checked)}
-              className="h-3.5 w-3.5 cursor-pointer accent-[var(--action)]"
+              className="h-3.5 w-3.5 cursor-pointer accent-[var(--accent)]"
             />
             <span>I lost the fly on this catch (decrement stock)</span>
           </label>
@@ -202,24 +202,24 @@ export default function CatchLogger({
               type="button"
               onClick={() => commit(lastCatch.variant_id!)}
               disabled={pending}
-              className="w-full flex items-center justify-center gap-2 rounded-md bg-[var(--action)]/10 border border-[var(--action)]/30 px-3 py-2 text-sm text-[var(--action)] hover:bg-[var(--action)]/20 transition-colors disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--accent-soft)] border border-[var(--accent)]/30 px-3 py-2 text-sm text-[var(--accent)] hover:border-[var(--accent)] transition-colors disabled:opacity-60"
             >
               <Repeat className="h-3.5 w-3.5" />
               Repeat last fly · {lastCatch.fly_name}
-              {lastCatch.fly_size && <span className="font-['IBM_Plex_Mono'] text-xs">#{lastCatch.fly_size}</span>}
+              {lastCatch.fly_size && <span className="num text-xs">#{lastCatch.fly_size}</span>}
             </button>
           )}
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-meta)]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-3)]" />
             <input
               ref={searchRef}
               type="text"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Search variants…"
-              className="w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface-raised)] pl-7 pr-2.5 py-1.5 text-sm text-[var(--text-primary)] focus:border-[var(--action)] outline-none placeholder:text-[#484F58]"
+              className="ea-input pl-8"
             />
           </div>
         </div>
@@ -227,21 +227,21 @@ export default function CatchLogger({
         {/* Variant grid */}
         <div className="flex-1 overflow-y-auto px-4 py-3">
           {activeBoxVariants.length === 0 ? (
-            <div className="py-12 text-center text-sm text-[var(--text-body)]">
+            <div className="py-12 text-center text-sm text-[var(--text-2)]">
               <p>No variants in your active box.</p>
-              <p className="text-xs text-[var(--text-meta)] mt-1">
-                <Link href="/flies?tab=boxes" className="text-[var(--signal-live)] hover:text-[var(--action)]">
+              <p className="text-xs text-[var(--text-3)] mt-1">
+                <Link href="/flies?tab=boxes" className="text-[var(--accent)] hover:text-[var(--accent-hover)]">
                   Pick a box
                 </Link>{" "}
                 or{" "}
-                <Link href="/flies" className="text-[var(--signal-live)] hover:text-[var(--action)]">
+                <Link href="/flies" className="text-[var(--accent)] hover:text-[var(--accent-hover)]">
                   browse patterns
                 </Link>{" "}
                 to add variants.
               </p>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="py-8 text-center text-xs text-[var(--text-meta)]">
+            <div className="py-8 text-center text-xs text-[var(--text-3)]">
               No variants match &ldquo;{filter}&rdquo;.
             </div>
           ) : (
@@ -257,40 +257,42 @@ export default function CatchLogger({
                     type="button"
                     onClick={() => commit(v.id)}
                     disabled={pending}
-                    className={`group relative aspect-square overflow-hidden rounded-lg border bg-[var(--surface-raised)] hover:border-[var(--action)] transition-all ${
-                      isCommitting ? "border-[var(--action)] ring-2 ring-[var(--action)]" : "border-[var(--border-strong)]"
+                    className={`group relative flex flex-col aspect-square overflow-hidden rounded-[var(--radius-card)] border bg-[var(--paper-deep)] text-left hover:border-[var(--accent)] transition-colors ${
+                      isCommitting ? "border-[var(--accent)] ring-2 ring-[var(--accent)]" : "border-[var(--border)]"
                     } ${pending && !isCommitting ? "opacity-40" : ""}`}
                     title={`Log a ${v.pattern?.name ?? ""} #${v.size}`}
                   >
-                    {url ? (
-                      <Image src={url} alt="" fill sizes="160px" className="object-cover" />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-[var(--surface-raised)]">
-                        <span className="font-heading text-[#484F58] text-2xl">
-                          {(v.pattern?.name ?? "?")[0]}
+                    <span className="relative w-full flex-1">
+                      {url ? (
+                        <Image src={url} alt="" fill sizes="160px" className="ea-photo" />
+                      ) : (
+                        <span className="absolute inset-0 flex items-center justify-center">
+                          <span className="font-display text-[var(--text-3)] text-2xl">
+                            {(v.pattern?.name ?? "?")[0]}
+                          </span>
                         </span>
-                      </div>
-                    )}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent px-2 pt-6 pb-1.5">
-                      <p className="text-[var(--text-primary)] text-[11px] font-medium truncate">
+                      )}
+                      {isCommitting && (
+                        <span className="absolute inset-0 flex items-center justify-center bg-[var(--ink)]/50">
+                          <span className="text-[var(--paper)] text-xs font-semibold">Logging…</span>
+                        </span>
+                      )}
+                    </span>
+                    <span className="w-full border-t border-[var(--border)] bg-[var(--surface)] px-2 py-1.5">
+                      <span className="block text-[var(--text-1)] text-xs font-medium truncate">
                         {v.pattern?.name ?? "Unknown"}
-                      </p>
-                      <p className="font-['IBM_Plex_Mono'] text-[10px] text-[var(--text-body)] flex items-center justify-between">
+                      </span>
+                      <span className="num text-xs text-[var(--text-3)] flex items-center justify-between">
                         <span>#{v.size}</span>
                         {target > 0 ? (
-                          <span className={stocked < target ? "text-[var(--action)]" : "text-[var(--signal-live)]"}>
+                          <span className={stocked < target ? "text-[var(--warning)]" : "text-[var(--accent)]"}>
                             {stocked}/{target}
                           </span>
                         ) : (
-                          <span className="text-[var(--text-meta)]">{stocked}</span>
+                          <span>{stocked}</span>
                         )}
-                      </p>
-                    </div>
-                    {isCommitting && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                        <span className="text-white text-xs font-bold">Logging…</span>
-                      </div>
-                    )}
+                      </span>
+                    </span>
                   </button>
                 );
               })}
@@ -299,7 +301,7 @@ export default function CatchLogger({
         </div>
 
         {error && (
-          <div className="border-t border-[#7F1D1D]/50 bg-[#7F1D1D]/10 px-4 py-2 text-xs text-[#F87171]">
+          <div className="border-t border-[var(--danger)]/40 bg-[var(--danger)]/10 px-4 py-2 text-xs text-[var(--danger)]">
             {error}
           </div>
         )}

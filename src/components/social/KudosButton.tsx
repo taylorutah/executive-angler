@@ -121,7 +121,7 @@ export function KudosButton({
       <>
         <Heart className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />
         {count > 0 && (
-          <span className={`font-['IBM_Plex_Mono'] ${compact ? "text-[10px]" : "text-xs"}`}>
+          <span className="num text-xs">
             {count}
           </span>
         )}
@@ -132,14 +132,14 @@ export function KudosButton({
         <Link
           href={loginHref}
           aria-label="Sign in to give kudos"
-          className="flex items-center gap-1 text-[var(--text-meta)] hover:text-[var(--state-negative)] transition-colors"
+          className="flex items-center gap-1 text-[var(--text-3)] hover:text-[var(--danger)] transition-colors"
         >
           {inner}
         </Link>
       );
     }
     return (
-      <div className="flex items-center gap-1 text-[var(--text-meta)]">
+      <div className="flex items-center gap-1 text-[var(--text-3)]">
         {inner}
       </div>
     );
@@ -151,8 +151,8 @@ export function KudosButton({
       disabled={loading}
       className={`flex items-center gap-1 transition-colors duration-150 ${
         liked
-          ? "text-[var(--state-negative)]"
-          : "text-[var(--text-meta)] hover:text-[var(--state-negative)]"
+          ? "text-[var(--danger)]"
+          : "text-[var(--text-3)] hover:text-[var(--danger)]"
       } ${loading ? "opacity-50" : ""}`}
       aria-label={liked ? "Remove kudos" : "Give kudos"}
     >
@@ -161,7 +161,7 @@ export function KudosButton({
         fill={liked ? "currentColor" : "none"}
       />
       {count > 0 && (
-        <span className={`font-['IBM_Plex_Mono'] ${compact ? "text-[10px]" : "text-xs"}`}>
+        <span className="num text-xs">
           {count}
         </span>
       )}

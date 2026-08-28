@@ -50,23 +50,23 @@ export default function CatchLoggerEntry({
   };
 
   return (
-    <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] p-3 sm:p-4 mb-4">
+    <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 mb-4">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="h-9 w-9 flex-shrink-0 rounded bg-[var(--surface-page)] flex items-center justify-center">
-            <Box className="h-4 w-4 text-[var(--signal-live)]" />
+          <div className="h-9 w-9 flex-shrink-0 rounded-[var(--radius-md)] bg-[var(--paper-deep)] flex items-center justify-center">
+            <Box className="h-4 w-4 text-[var(--accent)]" />
           </div>
           <div className="min-w-0">
-            <p className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-widest text-[var(--text-meta)]">
+            <p className="ea-overline">
               Active box
             </p>
             <button
               type="button"
               onClick={() => setPickerOpen((o) => !o)}
-              className="text-[var(--text-primary)] text-sm font-medium truncate hover:text-[var(--action)] transition-colors"
+              className="text-[var(--text-1)] text-sm font-medium truncate hover:text-[var(--accent)] transition-colors"
             >
               {activeBoxName ?? "Pick a box…"}
-              <span className="ml-1 text-[var(--text-meta)] text-xs">change</span>
+              <span className="ml-1 text-[var(--text-3)] text-xs">change</span>
             </button>
           </div>
         </div>
@@ -74,16 +74,16 @@ export default function CatchLoggerEntry({
           type="button"
           onClick={() => setOpen(true)}
           disabled={!activeBoxId || activeBoxVariants.length === 0}
-          className="inline-flex items-center gap-1.5 rounded-md bg-[var(--action)] px-3 py-2 text-sm font-medium text-white hover:bg-[#d17d28] transition-colors disabled:bg-[var(--surface-card)] disabled:text-[var(--text-meta)] disabled:cursor-not-allowed"
+          className="ea-btn ea-btn-primary ea-btn-sm"
         >
           <Plus className="h-4 w-4" /> Log catch
         </button>
       </div>
 
       {pickerOpen && (
-        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 border-t border-[var(--border-rule)] pt-3">
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 border-t border-[var(--border)] pt-3">
           {myBoxes.length === 0 ? (
-            <p className="text-xs text-[var(--text-meta)]">No boxes yet. Add variants on a Pattern detail page first.</p>
+            <p className="text-xs text-[var(--text-3)]">No boxes yet. Add variants on a Pattern detail page first.</p>
           ) : (
             myBoxes.map((b) => (
               <button
@@ -91,21 +91,21 @@ export default function CatchLoggerEntry({
                 type="button"
                 onClick={() => pickBox(b.id)}
                 disabled={pending}
-                className={`text-left rounded-md border px-3 py-2 transition-colors ${
+                className={`text-left rounded-[var(--radius-md)] border px-3 py-2 transition-colors ${
                   b.id === activeBoxId
-                    ? "border-[var(--action)] bg-[var(--action)]/10"
-                    : "border-[var(--border-strong)] bg-[var(--surface-page)] hover:border-[var(--text-meta)]"
+                    ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+                    : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border-strong)]"
                 }`}
               >
-                <p className="text-[var(--text-primary)] text-sm font-medium truncate">
+                <p className="text-[var(--text-1)] text-sm font-medium truncate">
                   {b.name}
                   {b.is_default && (
-                    <span className="ml-2 rounded bg-[var(--signal-live)]/15 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
+                    <span className="ea-badge ml-2">
                       Default
                     </span>
                   )}
                 </p>
-                <p className="font-['IBM_Plex_Mono'] text-[10px] uppercase tracking-widest text-[var(--text-meta)]">
+                <p className="ea-overline mt-0.5">
                   {b.tier}
                 </p>
               </button>
@@ -115,7 +115,7 @@ export default function CatchLoggerEntry({
       )}
 
       {activeBoxId && activeBoxVariants.length === 0 && !pickerOpen && (
-        <p className="mt-2 text-xs text-[var(--text-meta)]">
+        <p className="mt-2 text-xs text-[var(--text-3)]">
           This box is empty. Pick another box above, or add variants from a Pattern detail page.
         </p>
       )}

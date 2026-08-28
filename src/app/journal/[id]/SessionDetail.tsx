@@ -164,35 +164,35 @@ function FishLightbox({ photos, initialIndex, onClose }: {
   }, [onClose, goNext, goPrev]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
-      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><X className="h-5 w-5" /></button>
+    <div className="fixed inset-0 z-50 bg-[var(--ink)]/90 flex items-center justify-center" onClick={onClose}>
+      <button onClick={onClose} aria-label="Close" className="absolute top-4 right-4 p-2 rounded-[var(--radius-md)] bg-[var(--paper)]/10 text-[var(--paper)] transition-colors hover:bg-[var(--paper)]/20"><X className="h-5 w-5" /></button>
       {photos.length > 1 && (
         <>
-          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><ChevronLeft className="h-5 w-5" /></button>
-          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><ChevronRight className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goPrev(); }} aria-label="Previous photograph" className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-[var(--radius-md)] bg-[var(--paper)]/10 text-[var(--paper)] transition-colors hover:bg-[var(--paper)]/20"><ChevronLeft className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goNext(); }} aria-label="Next photograph" className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-[var(--radius-md)] bg-[var(--paper)]/10 text-[var(--paper)] transition-colors hover:bg-[var(--paper)]/20"><ChevronRight className="h-5 w-5" /></button>
         </>
       )}
       <div className="max-w-2xl w-full mx-16" onClick={e => e.stopPropagation()}>
         {imageUrl ? (
-          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden">
-            <Image src={imageUrl} alt={c.species || "Fish"} fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" />
+          <div className="relative w-full aspect-[4/3] rounded-[var(--radius-card)] overflow-hidden">
+            <Image src={imageUrl} alt={c.species || "Fish"} fill sizes="(max-width: 768px) 100vw, 672px" className="ea-photo" />
           </div>
         ) : (
-          <div className="w-full aspect-[4/3] rounded-xl bg-[var(--surface-card)] flex items-center justify-center">
-            <Fish className="h-16 w-16 text-[var(--text-body)]" />
+          <div className="w-full aspect-[4/3] rounded-[var(--radius-card)] bg-[var(--paper-deep)] flex items-center justify-center">
+            <Fish className="h-16 w-16 text-[var(--text-3)]" />
           </div>
         )}
         <div className="mt-4 text-center">
-          <p className="text-white text-xl font-semibold">{c.species || "Unknown"}{c.length_inches ? ` · ${c.length_inches}"` : ""}</p>
-          <div className="flex items-center justify-center gap-3 mt-1 text-sm text-white/60 flex-wrap">
-            {c.fly_pattern?.name && <span>🪰 {c.fly_pattern.name}</span>}
+          <p className="font-display text-xl font-semibold text-[var(--paper)]">{c.species || "Unknown"}{c.length_inches ? ` · ${c.length_inches}"` : ""}</p>
+          <div className="flex items-center justify-center gap-3 mt-1 text-sm text-[var(--paper)]/70 flex-wrap">
+            {c.fly_pattern?.name && <span>{c.fly_pattern.name}</span>}
             {c.fly_position && <span>· {c.fly_position}</span>}
             {c.fly_size && <span>· Size {c.fly_size}</span>}
             {c.bead_size && <span>· {c.bead_size} bead</span>}
             {c.time_caught && <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{formatCatchTime(c.time_caught)}</span>}
           </div>
         </div>
-        {photos.length > 1 && <p className="text-center text-white/30 text-xs mt-3">{idx + 1} / {photos.length}</p>}
+        {photos.length > 1 && <p className="text-center text-[var(--paper)]/50 text-xs mt-3 num">{idx + 1} / {photos.length}</p>}
       </div>
     </div>
   );
@@ -225,8 +225,8 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
   }, [onClose, goNext, goPrev]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={onClose}>
-      <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><X className="h-5 w-5" /></button>
+    <div className="fixed inset-0 z-50 bg-[var(--ink)]/90 flex items-center justify-center" onClick={onClose}>
+      <button onClick={onClose} aria-label="Close" className="absolute top-4 right-4 p-2 rounded-[var(--radius-md)] bg-[var(--paper)]/10 text-[var(--paper)] transition-colors hover:bg-[var(--paper)]/20"><X className="h-5 w-5" /></button>
       {onDelete && (
         <div className="absolute top-4 right-16">
           <Button
@@ -245,20 +245,20 @@ function SessionPhotoLightbox({ photos, initialIndex, onClose, onDelete }: {
       )}
       {photos.length > 1 && (
         <>
-          <button onClick={e => { e.stopPropagation(); goPrev(); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><ChevronLeft className="h-5 w-5" /></button>
-          <button onClick={e => { e.stopPropagation(); goNext(); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[var(--surface-raised)]/10 text-white hover:bg-[var(--surface-raised)]/20"><ChevronRight className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goPrev(); }} aria-label="Previous photograph" className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-[var(--radius-md)] bg-[var(--paper)]/10 text-[var(--paper)] transition-colors hover:bg-[var(--paper)]/20"><ChevronLeft className="h-5 w-5" /></button>
+          <button onClick={e => { e.stopPropagation(); goNext(); }} aria-label="Next photograph" className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-[var(--radius-md)] bg-[var(--paper)]/10 text-[var(--paper)] transition-colors hover:bg-[var(--paper)]/20"><ChevronRight className="h-5 w-5" /></button>
         </>
       )}
       <div className="max-w-3xl w-full mx-16" onClick={e => e.stopPropagation()}>
-        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden">
-          <Image src={photo.url} alt={photo.caption || "Session photo"} fill sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
+        <div className="relative w-full aspect-[4/3] rounded-[var(--radius-card)] overflow-hidden">
+          <Image src={photo.url} alt={photo.caption || "Session photo"} fill sizes="(max-width: 768px) 100vw, 768px" className="ea-photo" />
         </div>
         {photo.caption && (
           <div className="mt-4 text-center">
-            <p className="text-white text-lg">{photo.caption}</p>
+            <p className="text-lg text-[var(--paper)]">{photo.caption}</p>
           </div>
         )}
-        {photos.length > 1 && <p className="text-center text-white/30 text-xs mt-3">{idx + 1} / {photos.length}</p>}
+        {photos.length > 1 && <p className="text-center text-[var(--paper)]/50 text-xs mt-3 num">{idx + 1} / {photos.length}</p>}
       </div>
     </div>
   );
@@ -572,7 +572,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
   const subhead = session.title && session.title !== headline ? session.title : null;
   const place = [session.location, session.section].filter(Boolean).join(" · ");
 
-  const sectionLabel = "text-[11px] font-semibold uppercase tracking-wider text-[var(--text-meta)]";
+  const sectionLabel = "ea-overline";
 
   return (
     <>
@@ -588,19 +588,19 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
         />
       )}
 
-      <div className="min-h-screen bg-[var(--surface-page)]">
+      <div className="min-h-screen bg-[var(--paper)]">
         {/* A trip log is a record of a day, not a home. Every route out of it
             goes back to the surfaces that own it — /journal and /today. */}
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 pt-6 sm:px-6">
+        <div className="mx-auto flex max-w-[var(--container)] items-center justify-between px-4 pt-6 sm:px-6">
           <Link
             href="/journal"
-            className="flex items-center gap-1.5 text-sm text-[var(--text-body)] transition-colors hover:text-[var(--action)]"
+            className="flex items-center gap-1.5 text-sm text-[var(--text-2)] transition-colors hover:text-[var(--accent)]"
           >
             <ArrowLeft className="h-4 w-4" /> Journal
           </Link>
           <div className="flex items-center gap-3">
             {isOwner && notesSaved && (
-              <span className="flex items-center gap-1 text-xs font-medium text-[var(--state-positive)]">
+              <span className="flex items-center gap-1 text-xs font-medium text-[var(--success)]">
                 <Check className="h-3.5 w-3.5" /> Saved
               </span>
             )}
@@ -613,13 +613,13 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
         </div>
 
         {/* ─────────────── EDITORIAL HEADER ─────────────── */}
-        <header className="mx-auto max-w-6xl px-4 pb-10 pt-6 sm:px-6">
-          <p className="num text-sm text-[var(--text-meta)]">{formattedDate}</p>
-          <h1 className="font-heading mt-1 text-3xl leading-tight font-semibold text-[var(--text-primary)] sm:text-4xl">
+        <header className="mx-auto max-w-[var(--container)] px-4 pb-8 pt-6 sm:px-6">
+          <p className="ea-overline num">{formattedDate}</p>
+          <h1 className="font-display mt-1 text-3xl leading-tight font-semibold text-[var(--text-1)] sm:text-4xl">
             {headline}
           </h1>
-          {subhead && <p className="mt-1 text-lg text-[var(--text-body)]">{subhead}</p>}
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--text-meta)]">
+          {subhead && <p className="mt-1 text-lg text-[var(--text-2)]">{subhead}</p>}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--text-3)]">
             {place && (
               <span className="flex items-center gap-1">
                 <MapPin className="h-3.5 w-3.5" /> {place}
@@ -636,12 +636,9 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             )}
           </div>
           {tags.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <div className="mt-3 flex flex-wrap gap-2">
               {tags.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-[var(--border-rule)] px-2.5 py-0.5 text-[11px] text-[var(--text-body)]"
-                >
+                <span key={t} className="ea-chip">
                   {t}
                 </span>
               ))}
@@ -650,7 +647,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {/* One photograph. Not a strip, not a collage. */}
-            <figure className="relative aspect-[4/3] overflow-hidden rounded-lg bg-[var(--surface-raised)]">
+            <figure className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] bg-[var(--paper-deep)]">
               {heroPhoto ? (
                 <>
                   <button
@@ -668,23 +665,23 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       alt={heroPhoto.alt}
                       fill
                       sizes="(max-width: 768px) 100vw, 560px"
-                      className="object-cover"
+                      className="ea-photo"
                     />
                   </button>
                   {fishPhotoEntries.length + allSessionPhotos.length > 1 && (
-                    <figcaption className="pointer-events-none absolute bottom-2 left-2 rounded bg-[var(--surface-page)]/85 px-2 py-1 text-[11px] text-[var(--text-body)]">
+                    <figcaption className="pointer-events-none absolute bottom-2 left-2 rounded-[var(--radius-sm)] bg-[var(--ink)] px-2 py-1 text-xs font-medium text-[var(--paper)] num">
                       {fishPhotoEntries.length + allSessionPhotos.length} photographs from this day
                     </figcaption>
                   )}
                 </>
               ) : (
-                <div className="flex h-full flex-col items-center justify-center gap-2 border border-dashed border-[var(--border-rule)] px-6 text-center">
-                  <Camera className="h-5 w-5 text-[var(--text-meta)]" />
-                  <p className="text-sm text-[var(--text-meta)]">No photograph from this day.</p>
+                <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center">
+                  <Camera className="h-5 w-5 text-[var(--text-3)]" />
+                  <p className="text-sm text-[var(--text-3)]">No photograph from this day.</p>
                 </div>
               )}
               {isOwner && (
-                <label className="absolute right-2 top-2 flex cursor-pointer items-center gap-1.5 rounded bg-[var(--surface-page)]/90 px-2.5 py-1.5 text-xs text-[var(--text-body)] transition-colors hover:text-[var(--action)]">
+                <label className="absolute right-2 top-2 flex cursor-pointer items-center gap-1.5 rounded-[var(--radius-sm)] bg-[var(--ink)] px-2.5 py-1.5 text-xs font-medium text-[var(--paper)] transition-colors hover:bg-[var(--accent-hover)]">
                   {uploadingSessionPhoto ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
                   ) : (
@@ -708,7 +705,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             {/* The route, as a two-tone map: Vellum land, Teal water.
                 Coordinates are owner-only per the privacy ethic. */}
             {isOwner && session.latitude != null && session.longitude != null ? (
-              <div className="overflow-hidden rounded-lg">
+              <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)]">
                 <LazyMapView
                   latitude={session.latitude}
                   longitude={session.longitude}
@@ -727,9 +724,9 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 />
               </div>
             ) : (
-              <div className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-[var(--border-rule)] bg-[var(--surface-raised)] px-6 text-center">
-                <MapPin className="h-5 w-5 text-[var(--text-meta)]" />
-                <p className="text-sm text-[var(--text-meta)]">No route recorded for this day.</p>
+              <div className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-[var(--radius-card)] border border-dashed border-[var(--border-strong)] bg-[var(--paper-deep)] px-6 text-center">
+                <MapPin className="h-5 w-5 text-[var(--text-3)]" />
+                <p className="text-sm text-[var(--text-3)]">No route recorded for this day.</p>
               </div>
             )}
           </div>
@@ -738,28 +735,28 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
         {/* ─────────────── THE WORKBENCH ───────────────
             The register turns here: editorial above the rule, instrument
             below it. */}
-        <div className="border-t-2 border-[var(--border-strong)] bg-[var(--surface-raised)]">
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_16rem]">
+        <div className="border-t-2 border-[var(--border-strong)] bg-[var(--paper-deep)]">
+          <div className="mx-auto grid max-w-[var(--container)] gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_16rem]">
             <div className="min-w-0 space-y-8">
               {/* ── Catches ── */}
               <section>
                 <div className="flex items-baseline justify-between border-b border-[var(--border-strong)] pb-2">
                   <h2 className={sectionLabel}>Catches</h2>
-                  <span className="num text-xs text-[var(--text-meta)]">
+                  <span className="num text-xs text-[var(--text-3)]">
                     {totalFish} {totalFish === 1 ? "fish" : "fish"}
                   </span>
                 </div>
 
                 {catchRows.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[38rem] text-sm">
+                  <div className="overflow-x-auto pt-2">
+                    <table className="ea-table min-w-[38rem]">
                       <thead>
-                        <tr className="border-b border-[var(--border-rule)]">
-                          <th className={`h-8 px-2 text-left font-semibold ${sectionLabel}`}>Time</th>
-                          <th className={`h-8 px-2 text-left font-semibold ${sectionLabel}`}>Species</th>
-                          <th className={`h-8 px-2 text-right font-semibold ${sectionLabel}`}>Length</th>
-                          <th className={`h-8 px-2 text-left font-semibold ${sectionLabel}`}>Fly</th>
-                          <th className={`h-8 px-2 text-left font-semibold ${sectionLabel}`}>Section</th>
+                        <tr>
+                          <th>Time</th>
+                          <th>Species</th>
+                          <th className="text-right">Length</th>
+                          <th>Fly</th>
+                          <th>Section</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -767,19 +764,16 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                           const photoUrls =
                             catchPhotos[c.id] || c.fish_image_urls || (c.fish_image_url ? [c.fish_image_url] : []);
                           return (
-                            <tr
-                              key={c.id}
-                              className="h-8 border-b border-[var(--border-rule)] last:border-0 even:bg-[var(--surface-page)]"
-                            >
-                              <td className="num h-8 whitespace-nowrap px-2 text-[var(--text-body)]">{c.clock}</td>
-                              <td className="h-8 px-2 font-medium text-[var(--text-primary)]">
+                            <tr key={c.id}>
+                              <td className="num whitespace-nowrap text-[var(--text-2)]">{c.clock}</td>
+                              <td className="font-medium text-[var(--text-1)]">
                                 {photoUrls[0] ? (
                                   <button
                                     type="button"
                                     onClick={() =>
                                       setLightboxIdx(fishPhotoEntries.findIndex((p) => p.catchRef.id === c.id))
                                     }
-                                    className="mr-2 inline-block h-5 w-5 overflow-hidden rounded align-middle"
+                                    className="mr-2 inline-block h-5 w-5 overflow-hidden rounded-[var(--radius-sm)] align-middle"
                                     aria-label={`View photograph of ${c.species || "this fish"}`}
                                   >
                                     <Image
@@ -787,12 +781,12 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                                       alt=""
                                       width={20}
                                       height={20}
-                                      className="h-5 w-5 object-cover"
+                                      className="ea-photo h-5 w-5"
                                     />
                                   </button>
                                 ) : isOwner ? (
                                   <label
-                                    className="mr-2 inline-flex h-5 w-5 cursor-pointer items-center justify-center rounded align-middle text-[var(--text-meta)] hover:text-[var(--action)]"
+                                    className="mr-2 inline-flex h-5 w-5 cursor-pointer items-center justify-center rounded-[var(--radius-sm)] align-middle text-[var(--text-3)] hover:text-[var(--accent)]"
                                     title="Add a photograph of this fish"
                                   >
                                     {uploadingCatch === c.id ? (
@@ -812,24 +806,24 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                                     />
                                   </label>
                                 ) : (
-                                  <Fish className="mr-2 inline-block h-3.5 w-3.5 align-middle text-[var(--text-meta)]" />
+                                  <Fish className="mr-2 inline-block h-3.5 w-3.5 align-middle text-[var(--text-3)]" />
                                 )}
                                 {c.species || "Unlogged"}
                                 {(c.quantities || 1) > 1 && (
-                                  <span className="num ml-1 text-xs text-[var(--text-meta)]">×{c.quantities}</span>
+                                  <span className="num ml-1 text-xs text-[var(--text-3)]">×{c.quantities}</span>
                                 )}
                               </td>
-                              <td className="num h-8 px-2 text-right text-[var(--text-body)]">
+                              <td className="num text-right text-[var(--text-2)]">
                                 {c.length_inches ? `${c.length_inches}″` : "—"}
                               </td>
-                              <td className="h-8 max-w-[12rem] truncate px-2 text-[var(--text-body)]">
+                              <td className="max-w-[12rem] truncate text-[var(--text-2)]">
                                 {c.fly_pattern?.name || "—"}
-                                {c.fly_size && <span className="num ml-1 text-[var(--text-meta)]">#{String(c.fly_size).replace(/^#/, "")}</span>}
+                                {c.fly_size && <span className="num ml-1 text-[var(--text-3)]">#{String(c.fly_size).replace(/^#/, "")}</span>}
                                 {c.fly_position && (
-                                  <span className="ml-1 text-xs text-[var(--text-meta)]">{c.fly_position}</span>
+                                  <span className="ml-1 text-xs text-[var(--text-3)]">{c.fly_position}</span>
                                 )}
                               </td>
-                              <td className="h-8 px-2 text-[var(--text-body)]">{session.section || "—"}</td>
+                              <td className="text-[var(--text-2)]">{session.section || "—"}</td>
                             </tr>
                           );
                         })}
@@ -838,8 +832,8 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   </div>
                 ) : isDriftMode ? (
                   <div className="flex items-baseline gap-3 py-6">
-                    <span className="num text-4xl font-semibold text-[var(--text-primary)]">{session.total_fish}</span>
-                    <p className="text-sm text-[var(--text-body)]">
+                    <span className="num font-display text-4xl font-semibold text-[var(--text-1)]">{session.total_fish}</span>
+                    <p className="text-sm text-[var(--text-2)]">
                       fish landed, counted rather than logged one by one. Edit the session to fill in species,
                       lengths and flies.
                     </p>
@@ -847,15 +841,15 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 ) : (
                   /* A day where nothing was caught is still a real day. */
                   <div className="py-8">
-                    <p className="font-heading text-xl text-[var(--text-primary)]">No fish.</p>
-                    <p className="mt-1 max-w-md text-sm text-[var(--text-body)]">
+                    <p className="font-display text-xl font-semibold text-[var(--text-1)]">No fish.</p>
+                    <p className="mt-1 max-w-md text-sm text-[var(--text-2)]">
                       The day is still on the record. What the water was doing, what you fished and what you
                       noticed are below — that is the part worth keeping.
                     </p>
                     {isOwner && (
                       <Link
                         href={`/journal/${session.id}/edit`}
-                        className="mt-3 inline-block text-sm text-[var(--action)] underline underline-offset-2"
+                        className="mt-3 inline-block text-sm text-[var(--accent)] underline underline-offset-2"
                       >
                         Add a catch
                       </Link>
@@ -864,14 +858,14 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 )}
 
                 {usedFlies.length > 0 && (
-                  <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-[var(--border-rule)] pt-3">
+                  <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-[var(--border)] pt-3">
                     <span className={sectionLabel}>Flies</span>
                     {/* Two multi-word patterns side by side read as one name
                         on whitespace alone — "Pheasant Tail Zebra Midge". */}
                     {usedFlies.map((f, i) => (
-                      <span key={f.name} className="flex items-center gap-1.5 text-sm text-[var(--text-body)]">
+                      <span key={f.name} className="flex items-center gap-1.5 text-sm text-[var(--text-2)]">
                         {i > 0 && (
-                          <span aria-hidden className="text-[var(--text-meta)]">·</span>
+                          <span aria-hidden className="text-[var(--text-3)]">·</span>
                         )}
                         {f.name}
                         {f.patternId && (
@@ -892,14 +886,14 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   {conditions.length > 0 ? (
                     <dl className="grid grid-cols-2 gap-x-6 sm:grid-cols-4">
                       {conditions.map((c) => (
-                        <div key={c.label} className="flex h-8 items-baseline justify-between border-b border-[var(--border-rule)]">
-                          <dt className="text-xs text-[var(--text-meta)]">{c.label}</dt>
-                          <dd className="num text-sm text-[var(--text-primary)]">{c.value}</dd>
+                        <div key={c.label} className="flex h-8 items-baseline justify-between border-b border-[var(--border)]">
+                          <dt className="text-xs text-[var(--text-3)]">{c.label}</dt>
+                          <dd className="num text-sm text-[var(--text-1)]">{c.value}</dd>
                         </div>
                       ))}
                     </dl>
                   ) : (
-                    <p className="py-3 text-sm text-[var(--text-meta)]">Nothing recorded.</p>
+                    <p className="py-3 text-sm text-[var(--text-3)]">Nothing recorded.</p>
                   )}
                 </section>
               )}
@@ -911,20 +905,20 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                   {gear.length > 0 ? (
                     <dl className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
                       {gear.map((g) => (
-                        <div key={g.label} className="flex h-8 items-baseline justify-between border-b border-[var(--border-rule)]">
-                          <dt className="text-xs text-[var(--text-meta)]">{g.label}</dt>
-                          <dd className="truncate pl-3 text-sm text-[var(--text-primary)]">
+                        <div key={g.label} className="flex h-8 items-baseline justify-between border-b border-[var(--border)]">
+                          <dt className="text-xs text-[var(--text-3)]">{g.label}</dt>
+                          <dd className="truncate pl-3 text-sm text-[var(--text-1)]">
                             {g.item.maker ? `${g.item.maker} ${g.item.name}` : g.item.name}
                           </dd>
                         </div>
                       ))}
                     </dl>
                   ) : (
-                    <p className="py-3 text-sm text-[var(--text-meta)]">Nothing recorded.</p>
+                    <p className="py-3 text-sm text-[var(--text-3)]">Nothing recorded.</p>
                   )}
                   {session.flies_notes && (
-                    <p className="mt-3 text-sm text-[var(--text-body)]">
-                      <span className="text-[var(--text-meta)]">Rig</span> {session.flies_notes}
+                    <p className="mt-3 text-sm text-[var(--text-2)]">
+                      <span className="text-[var(--text-3)]">Rig</span> {session.flies_notes}
                     </p>
                   )}
                 </section>
@@ -936,11 +930,11 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 <div className="pt-3">
                   {!isOwner ? (
                     notesValue ? (
-                      <p className="max-w-2xl text-sm leading-relaxed whitespace-pre-wrap text-[var(--text-body)]">
+                      <p className="max-w-2xl text-sm leading-relaxed whitespace-pre-wrap text-[var(--text-2)]">
                         {notesValue}
                       </p>
                     ) : (
-                      <p className="text-sm text-[var(--text-meta)]">No notes.</p>
+                      <p className="text-sm text-[var(--text-3)]">No notes.</p>
                     )
                   ) : editingNotes ? (
                     <div className="max-w-2xl">
@@ -955,7 +949,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                             setEditingNotes(false);
                           }
                         }}
-                        className="w-full resize-none rounded border border-[var(--action)] bg-[var(--surface-page)] px-3 py-2 text-sm leading-relaxed text-[var(--text-primary)] focus:outline-none"
+                        className="ea-input w-full resize-none leading-relaxed"
                       />
                       <div className="mt-2 flex items-center gap-3">
                         <Button onClick={saveNotes} disabled={notesSaving} loading={notesSaving} variant="solid" size="sm">
@@ -966,7 +960,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                             setNotesValue(session.notes || "");
                             setEditingNotes(false);
                           }}
-                          className="flex items-center gap-1 text-xs text-[var(--text-meta)] hover:text-[var(--text-body)]"
+                          className="flex items-center gap-1 text-xs text-[var(--text-3)] hover:text-[var(--text-2)]"
                         >
                           <RotateCcw className="h-3 w-3" /> Cancel
                         </button>
@@ -980,11 +974,11 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       title="Click to edit notes"
                     >
                       {notesValue ? (
-                        <span className="block text-sm leading-relaxed whitespace-pre-wrap text-[var(--text-body)]">
+                        <span className="block text-sm leading-relaxed whitespace-pre-wrap text-[var(--text-2)]">
                           {notesValue}
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1.5 text-sm text-[var(--text-meta)] hover:text-[var(--action)]">
+                        <span className="flex items-center gap-1.5 text-sm text-[var(--text-3)] hover:text-[var(--accent)]">
                           <Pencil className="h-3.5 w-3.5" /> Write what the day was like
                         </span>
                       )}
@@ -993,18 +987,18 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                 </div>
 
                 {isOwner && (
-                  <div className="mt-5 border-t border-[var(--border-rule)] pt-3">
+                  <div className="mt-5 border-t border-[var(--border)] pt-3">
                     <div className="mb-1.5 flex items-center gap-1.5">
-                      <Lock className="h-3 w-3 text-[var(--text-meta)]" />
+                      <Lock className="h-3 w-3 text-[var(--text-3)]" />
                       <span className={sectionLabel}>Private memo</span>
                       <HelpHint label="Private Memo vs Notes">
-                        <p className="font-semibold text-[var(--text-primary)]">Only you see this.</p>
+                        <p className="font-semibold text-[var(--text-1)]">Only you see this.</p>
                         <p>
                           Notes are part of the session record. The memo is for yourself — what to try next, why a
                           rig didn&apos;t work.
                         </p>
                       </HelpHint>
-                      {memoSaved && <span className="text-[10px] text-[var(--state-positive)]">Saved</span>}
+                      {memoSaved && <span className="text-xs text-[var(--success)]">Saved</span>}
                     </div>
                     {editingMemo ? (
                       <div className="max-w-2xl">
@@ -1020,7 +1014,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                             }
                           }}
                           placeholder="Personal notes only you can see…"
-                          className="w-full resize-none rounded border border-[var(--border-strong)] bg-[var(--surface-page)] px-3 py-2 text-sm leading-relaxed text-[var(--text-primary)] focus:outline-none"
+                          className="ea-input w-full resize-none leading-relaxed"
                         />
                         <div className="mt-2 flex items-center gap-3">
                           <Button onClick={saveMemo} disabled={memoSaving} loading={memoSaving} variant="neutral" size="sm">
@@ -1031,7 +1025,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                               setMemoValue(session.private_memo || "");
                               setEditingMemo(false);
                             }}
-                            className="text-xs text-[var(--text-meta)] hover:text-[var(--text-body)]"
+                            className="text-xs text-[var(--text-3)] hover:text-[var(--text-2)]"
                           >
                             Cancel
                           </button>
@@ -1041,7 +1035,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                       <button
                         type="button"
                         onClick={() => setEditingMemo(true)}
-                        className="block max-w-2xl text-left text-sm text-[var(--text-meta)] hover:text-[var(--text-body)]"
+                        className="block max-w-2xl text-left text-sm text-[var(--text-3)] hover:text-[var(--text-2)]"
                       >
                         {memoValue ? (
                           <span className="block leading-relaxed whitespace-pre-wrap italic">{memoValue}</span>
@@ -1059,7 +1053,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
               {/* Kudos and comments belong to a session the angler chose to
                   broadcast. Everything else is private by default. */}
               {isBroadcast && (
-                <div className="flex items-center gap-6 border-t border-[var(--border-rule)] pt-4">
+                <div className="flex items-center gap-6 border-t border-[var(--border)] pt-4">
                   <KudosButton sessionId={session.id} initialCount={0} loginHref={isAnonymous ? loginHref : undefined} />
                   <CommentsSection sessionId={session.id} initialCount={0} loginHref={isAnonymous ? loginHref : undefined} />
                 </div>
@@ -1070,48 +1064,48 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
             <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
               <div>
                 <p className={sectionLabel}>Fish landed</p>
-                <p className="num mt-1 text-4xl leading-none font-semibold text-[var(--text-primary)]">
+                <p className="num font-display mt-1 text-4xl leading-none font-semibold text-[var(--text-1)]">
                   {totalFish}
                 </p>
                 {speciesTally.length > 0 && (
                   <dl className="mt-3 space-y-1">
                     {speciesTally.map(([species, n]) => (
                       <div key={species} className="flex items-baseline justify-between gap-3">
-                        <dt className="truncate text-sm text-[var(--text-body)]">{species}</dt>
-                        <dd className="num text-sm text-[var(--text-primary)]">{n}</dd>
+                        <dt className="truncate text-sm text-[var(--text-2)]">{species}</dt>
+                        <dd className="num text-sm text-[var(--text-1)]">{n}</dd>
                       </div>
                     ))}
                   </dl>
                 )}
               </div>
 
-              <div className="border-t border-[var(--border-rule)] pt-4">
+              <div className="border-t border-[var(--border)] pt-4">
                 <p className={sectionLabel}>Best fish</p>
                 {bestFish ? (
                   <>
-                    <p className="num mt-1 text-3xl leading-none font-semibold text-[var(--text-primary)]">
+                    <p className="num font-display mt-1 text-3xl leading-none font-semibold text-[var(--text-1)]">
                       {bestFish.len.toFixed(1)}″
                     </p>
-                    <p className="mt-1 text-sm text-[var(--text-body)]">
+                    <p className="mt-1 text-sm text-[var(--text-2)]">
                       {bestFish.species}
-                      {bestFish.fly && <span className="text-[var(--text-meta)]"> · {bestFish.fly}</span>}
+                      {bestFish.fly && <span className="text-[var(--text-3)]"> · {bestFish.fly}</span>}
                     </p>
                   </>
                 ) : (
-                  <p className="mt-1 text-sm text-[var(--text-meta)]">Nothing measured.</p>
+                  <p className="mt-1 text-sm text-[var(--text-3)]">Nothing measured.</p>
                 )}
               </div>
 
-              {flowTrace && <div className="border-t border-[var(--border-rule)] pt-4">{flowTrace}</div>}
+              {flowTrace && <div className="border-t border-[var(--border)] pt-4">{flowTrace}</div>}
 
               {isOwner && (prevDay || nextDay) && (
-                <nav className="border-t border-[var(--border-rule)] pt-4" aria-label="Neighbouring days">
+                <nav className="border-t border-[var(--border)] pt-4" aria-label="Neighbouring days">
                   <p className={sectionLabel}>Other days</p>
                   <div className="mt-2 space-y-1.5">
                     {prevDay && (
                       <Link
                         href={`/journal/${prevDay.id}`}
-                        className="flex items-center gap-1.5 text-sm text-[var(--text-body)] transition-colors hover:text-[var(--action)]"
+                        className="flex items-center gap-1.5 text-sm text-[var(--text-2)] transition-colors hover:text-[var(--accent)]"
                       >
                         <ChevronLeft className="h-4 w-4 flex-shrink-0" />
                         <span className="num">{shortDay(prevDay.date)}</span>
@@ -1120,7 +1114,7 @@ export default function SessionDetail({ session, catches, flies, sessionPhotos =
                     {nextDay && (
                       <Link
                         href={`/journal/${nextDay.id}`}
-                        className="flex items-center gap-1.5 text-sm text-[var(--text-body)] transition-colors hover:text-[var(--action)]"
+                        className="flex items-center gap-1.5 text-sm text-[var(--text-2)] transition-colors hover:text-[var(--accent)]"
                       >
                         <span className="num">{shortDay(nextDay.date)}</span>
                         <ChevronRight className="h-4 w-4 flex-shrink-0" />

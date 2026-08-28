@@ -55,21 +55,21 @@ export default function UndoToast({ sessionId, info, onDone }: Props) {
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 max-w-md w-[calc(100%-2rem)]">
-      <div className="rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] shadow-2xl px-4 py-3 flex items-center justify-between gap-3">
+      <div className="ea-toast flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
           {undone ? (
-            <span className="text-[var(--text-body)] text-sm">Undone.</span>
+            <span className="text-[var(--text-2)] text-sm">Undone.</span>
           ) : error ? (
-            <span className="text-[#F87171] text-sm">{error}</span>
+            <span className="text-[var(--danger)] text-sm">{error}</span>
           ) : (
             <>
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--state-positive)]/15 text-[var(--state-positive)] flex-shrink-0">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--success)]/15 text-[var(--success)] flex-shrink-0">
                 <Check className="h-3.5 w-3.5" />
               </span>
-              <span className="text-[var(--text-primary)] text-sm truncate">
+              <span className="text-[var(--text-1)] text-sm truncate">
                 Logged {info.species} on{" "}
-                <span className="text-[var(--action)]">{info.flyName}</span>
-                <span className="font-['IBM_Plex_Mono'] text-xs text-[var(--text-body)]">{sizeLabel}</span>
+                <span className="text-[var(--accent)]">{info.flyName}</span>
+                <span className="num text-xs text-[var(--text-2)]">{sizeLabel}</span>
               </span>
             </>
           )}
@@ -79,7 +79,7 @@ export default function UndoToast({ sessionId, info, onDone }: Props) {
             type="button"
             onClick={undo}
             disabled={pending}
-            className="inline-flex items-center gap-1 rounded-md border border-[var(--border-strong)] px-2.5 py-1 text-xs font-medium text-[var(--text-body)] hover:bg-[var(--surface-card)] hover:text-[var(--text-primary)] transition-colors disabled:opacity-60"
+            className="inline-flex items-center gap-1 rounded-[var(--radius-md)] border border-[var(--border-strong)] px-2.5 py-1 text-xs font-medium text-[var(--text-2)] hover:bg-[var(--paper-deep)] hover:text-[var(--text-1)] transition-colors disabled:opacity-60"
           >
             <Undo2 className="h-3 w-3" />
             {pending ? "…" : "Undo"}
