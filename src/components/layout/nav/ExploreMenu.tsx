@@ -63,10 +63,10 @@ export default function ExploreMenu() {
         aria-haspopup="menu"
         aria-controls={open ? "explore-menu" : undefined}
         onClick={() => setOpen((o) => !o)}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} inline-flex h-9 items-center gap-1 rounded-md px-2.5 text-[15px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:text-[var(--text-primary)]`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} inline-flex h-8 items-center gap-1 rounded-md px-3 text-[14px] font-medium text-[var(--text-2)] transition-colors duration-150 ease-standard hover:text-[var(--text-1)]`}
       >
         Explore
-        <ChevronDown className={`h-4 w-4 transition-transform ${MOTION_SAFE} ${open ? "rotate-180" : ""}`} aria-hidden />
+        <ChevronDown className={`h-4 w-4 transition-transform duration-150 ease-standard ${MOTION_SAFE} ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
 
       {open && (
@@ -75,7 +75,7 @@ export default function ExploreMenu() {
           id="explore-menu"
           role="menu"
           aria-label="Explore"
-          className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] py-1 shadow-xl"
+          className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-card border border-[var(--border)] bg-[var(--surface)] py-1 shadow-2xl"
         >
           {EXPLORE_ITEMS.map((item, i) => (
             <Link
@@ -84,7 +84,7 @@ export default function ExploreMenu() {
               role="menuitem"
               data-autofocus={i === 0 ? "" : undefined}
               aria-current={isSectionActive(pathname, item.section) ? "page" : undefined}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} block px-4 py-2.5 text-[14px] text-[var(--text-body)] transition-colors duration-[120ms] ease-out hover:bg-[var(--surface-page)] hover:text-[var(--text-primary)] aria-[current=page]:text-[var(--text-primary)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} block px-4 py-3 text-[14px] text-[var(--text-1)] transition-colors duration-150 ease-standard hover:bg-[var(--paper-deep)] aria-[current=page]:text-[var(--accent)]`}
               onClick={() => setOpen(false)}
             >
               {item.label}

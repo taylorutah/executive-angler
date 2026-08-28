@@ -68,6 +68,7 @@
   --container: 1200px;
   --prose: 680px;
   --gutter: 16px;
+  --header-h: 68px;
 
   /* ── Imagery: the one consistent photo grade ─────────────────── */
   --photo-grade: saturate(0.88) contrast(1.03);
@@ -250,6 +251,9 @@
 
   /* 13px sits between Tailwind's xs(12) and sm(14); the brief needs it */
   --text-13: 13px;
+
+  /* The one lawful easing, as a utility */
+  --ease-standard: var(--ease-standard);
 }
 
 /* =================================================================
@@ -265,7 +269,7 @@
 @layer base {
   .ea-header-primary {
     background: var(--surface-page);
-    border-color: var(--border-rule);
+    border-bottom: 1px solid var(--border-rule);
   }
   .ea-header-category {
     background: var(--surface-raised);
@@ -318,7 +322,7 @@
   }
 
   main[class*="pt-"] {
-    padding-top: calc(56px + var(--app-banner-height, 0px)) !important;
+    padding-top: calc(var(--header-h) + var(--app-banner-height, 0px)) !important;
   }
 
   body {
@@ -1173,17 +1177,7 @@ select:focus {
   background-color: var(--surface-page);
 }
 
-/* Header height never changes; only the bottom rule arrives on scroll. */
-.ea-header-flat {
-  background: var(--surface-page);
-  border-bottom: 1px solid transparent;
-}
-
-.ea-header-scrolled {
-  background: var(--surface-page);
-  border-bottom: 1px solid var(--border-rule);
-}
-
+/* The bar carries its 1px bottom rule at all times (DESIGN.md §4 Nav). */
 .ea-nav-link {
   position: relative;
   display: inline-flex;
@@ -1203,9 +1197,11 @@ select:focus {
   color: var(--text-primary);
 }
 
-/* Current page: 2px accent underline on the bar's bottom rule. */
+/* Current page: 2px accent underline on the bar's bottom rule.
+   --signal-live === --accent in daylight; the alias keeps the state
+   legible where the bar renders on dusk routes. */
 .ea-nav-link[aria-current="page"] {
-  color: var(--accent);
+  color: var(--signal-live);
 }
 
 .ea-nav-link[aria-current="page"]::after {
@@ -1215,15 +1211,46 @@ select:focus {
   right: var(--space-3);
   bottom: -1px;
   height: 2px;
-  background: var(--accent);
+  background: var(--signal-live);
 }
 
 .ea-nav-divider {
   display: block;
   width: 1px;
   height: 20px;
-  margin: 0 10px;
+  margin: 0 var(--space-2);
   background: var(--border-rule);
+}
+
+/* ── Ink band: footer and closing CTA — the only dark surfaces ─────
+   --ink bg, --paper text at 80%, hairlines rgba(255,255,255,0.12). */
+.ea-band-ink {
+  background: var(--ink);
+  color: color-mix(in srgb, var(--paper) 80%, transparent);
+}
+.ea-band-ink .ea-band-heading {
+  font-family: var(--font-ui);
+  font-size: var(--text-12);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--paper) 55%, transparent);
+}
+.ea-band-ink a {
+  color: color-mix(in srgb, var(--paper) 80%, transparent);
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+.ea-band-ink a:hover {
+  color: var(--paper);
+}
+.ea-band-ink a:focus-visible {
+  outline-color: var(--paper);
+}
+.ea-band-ink .ea-band-rule {
+  background: rgba(255, 255, 255, 0.12);
+}
+.ea-band-ink .ea-band-meta {
+  color: color-mix(in srgb, var(--paper) 55%, transparent);
 }
 
 /* Every chrome control gets the same ring. !important beats Button's

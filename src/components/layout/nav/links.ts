@@ -16,9 +16,9 @@ export type NavItem = {
 
 export const SEARCH_PLACEHOLDER = "River, fly, hatch, destination";
 
-/** Visible ring at every keyboard stop — 2px --signal-live, 3px offset. */
+/** Visible ring at every keyboard stop — 2px --accent, 2px offset (DESIGN.md §7). */
 export const FOCUS_VISIBLE =
-  "focus-visible:outline-2 focus-visible:outline-[var(--signal-live)] focus-visible:outline-offset-[3px]";
+  "focus-visible:outline-2 focus-visible:outline-[var(--accent)] focus-visible:outline-offset-[2px]";
 
 /** Drop transitions/transforms when the user asked for less motion. */
 export const MOTION_SAFE =

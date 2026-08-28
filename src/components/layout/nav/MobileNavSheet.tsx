@@ -34,7 +34,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
   if (!open) return null;
 
   const rowClass = (active: boolean) =>
-    `ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} flex h-14 items-center justify-between gap-4 px-5 text-[16px] transition-colors duration-[120ms] ease-out ${
+    `ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} flex h-14 items-center justify-between gap-4 px-4 sm:px-6 text-[16px] transition-colors duration-150 ease-standard ${
       active ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"
     }`;
 
@@ -46,8 +46,8 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
       aria-label="Menu"
       className="lg:hidden fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-[var(--surface-page)]"
     >
-      <div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--border-rule)] px-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-meta)]">
+      <div className="flex h-[var(--header-h)] shrink-0 items-center justify-between border-b border-[var(--border-rule)] px-4">
+        <p className="ea-overline">
           Menu
         </p>
         <button
@@ -86,7 +86,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
 
         {!user && (
           <>
-            <div className="mx-5 my-2 h-px bg-[var(--border-rule)]" />
+            <div className="mx-4 sm:mx-6 my-2 h-px bg-[var(--border-rule)]" />
             <Link
               href={LEARN_LINK.href}
               aria-current={isSectionActive(pathname, LEARN_LINK.section) ? "page" : undefined}
@@ -95,8 +95,8 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
             >
               <span className="font-medium">{LEARN_LINK.label}</span>
             </Link>
-            <div className="mx-5 my-2 h-px bg-[var(--border-rule)]" />
-            <div className="space-y-3 px-5 py-3">
+            <div className="mx-4 sm:mx-6 my-2 h-px bg-[var(--border-rule)]" />
+            <div className="space-y-3 px-4 sm:px-6 py-3">
               <Link
                 href="/login"
                 onClick={onClose}
@@ -110,11 +110,11 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
 
         {user && (
           <>
-            <div className="mx-5 my-2 h-px bg-[var(--border-rule)]" />
+            <div className="mx-4 sm:mx-6 my-2 h-px bg-[var(--border-rule)]" />
             <Link
               href="/journal/new"
               onClick={onClose}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center gap-3 px-5 text-[16px] font-medium text-[var(--text-primary)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center gap-3 px-4 sm:px-6 text-[16px] font-medium text-[var(--text-primary)]`}
             >
               <FishSymbol className="h-5 w-5 text-[var(--action)]" aria-hidden />
               Log a session
@@ -122,18 +122,18 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
             <Link
               href="/journal/flies/new"
               onClick={onClose}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center gap-3 px-5 text-[16px] text-[var(--text-body)]`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center gap-3 px-4 sm:px-6 text-[16px] text-[var(--text-body)]`}
             >
               <Bug className="h-5 w-5 text-[var(--action)]" aria-hidden />
               New fly recipe
             </Link>
-            <div className="mx-5 my-2 h-px bg-[var(--border-rule)]" />
+            <div className="mx-4 sm:mx-6 my-2 h-px bg-[var(--border-rule)]" />
             {MEMBER_UTILITIES.map(({ label, href, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
                 onClick={onClose}
-                className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center gap-3 px-5 text-[16px] text-[var(--text-body)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} flex h-14 items-center gap-3 px-4 sm:px-6 text-[16px] text-[var(--text-body)]`}
               >
                 <Icon className="h-5 w-5" aria-hidden />
                 {label}

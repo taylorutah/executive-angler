@@ -150,7 +150,7 @@ export default function RootLayout({
             <main
               id={MAIN_CONTENT_ID}
               tabIndex={-1}
-              className="flex-1 pt-[56px] pb-14 lg:pb-0"
+              className="flex-1 pt-[var(--header-h)] pb-14 lg:pb-0"
             >
               {children}
             </main>

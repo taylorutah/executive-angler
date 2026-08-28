@@ -8,7 +8,6 @@ import { Icon } from "@/components/ui/Icon";
 import { useAuth } from "@/lib/auth-context";
 import { NotificationBell } from "@/components/notifications/NotificationDropdown";
 import { MessageIcon } from "@/components/notifications/MessageIcon";
-import { Button } from "@/components/ui/Button";
 import HeaderSearch from "./nav/HeaderSearch";
 import ExploreMenu from "./nav/ExploreMenu";
 import MobileNavSheet from "./nav/MobileNavSheet";
@@ -20,7 +19,6 @@ import { registerForPath } from "@/lib/register";
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { user, isLoading } = useAuth();
   const pathname = usePathname();
   const plusRef = useRef<HTMLDivElement>(null);
@@ -30,16 +28,6 @@ export default function Header() {
     setMobileOpen(false);
     setPlusOpen(false);
   });
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    const raf = requestAnimationFrame(onScroll);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -57,13 +45,9 @@ export default function Header() {
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 ea-header-primary ${
-          scrolled ? "ea-header-scrolled" : "ea-header-flat"
-        }`}
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-14 items-center gap-4">
+      <header className="fixed top-0 left-0 right-0 z-50 ea-header-primary">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
+          <div className="flex h-[var(--header-h)] items-center gap-4">
             {/* Mark */}
             <Link
               href={user ? POST_LOGIN_PATH : "/"}
@@ -82,7 +66,7 @@ export default function Header() {
             </Link>
 
             {/* ── Primary nouns ── */}
-            <nav aria-label="Primary" className="hidden lg:flex h-14 items-stretch">
+            <nav aria-label="Primary" className="hidden lg:flex h-[var(--header-h)] items-stretch">
               {nouns.map((item) => {
                 const active = isSectionActive(pathname, item.section);
                 return (
@@ -118,7 +102,7 @@ export default function Header() {
 
               {isLoading ? (
                 <div className="hidden lg:flex items-center">
-                  <div className="h-8 w-8 rounded-full bg-[var(--surface-card)] animate-pulse" />
+                  <div className="h-8 w-8 rounded-full bg-[var(--surface-raised)] animate-pulse" />
                 </div>
               ) : user ? (
                 <div className="hidden lg:flex items-center gap-1">
@@ -130,7 +114,7 @@ export default function Header() {
                     aria-label="Your account"
                     className="ea-focus-ring ml-1 flex items-center rounded-full"
                   >
-                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-[var(--surface-card)]">
+                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--border)] bg-[var(--surface)]">
                       {user.avatarUrl ? (
                         <Image
                           src={user.avatarUrl}
@@ -140,7 +124,7 @@ export default function Header() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <span className="text-xs font-bold text-[var(--text-body)]">
+                        <span className="text-[12px] font-semibold text-[var(--text-2)]">
                           {(user.displayName || user.email || "A")[0].toUpperCase()}
                         </span>
                       )}
@@ -154,34 +138,34 @@ export default function Header() {
                       aria-label="Quick actions"
                       aria-expanded={plusOpen}
                       aria-haspopup="menu"
-                      className={`ea-focus-ring flex h-9 w-9 items-center justify-center rounded-full bg-[var(--action)] text-[var(--on-action)] transition-transform duration-200 ${
+                      className={`ea-focus-ring flex h-8 w-8 items-center justify-center rounded-md bg-[var(--action)] text-[var(--on-action)] transition-transform duration-200 ease-standard ${
                         plusOpen ? "rotate-45" : ""
                       }`}
                     >
-                      <Icon name="plus" className="h-5 w-5" />
+                      <Icon name="plus" className="h-4 w-4" />
                     </button>
 
                     {plusOpen && (
                       <div
                         role="menu"
                         aria-label="Quick actions"
-                        className="absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] shadow-2xl"
+                        className="absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-card border border-[var(--border)] bg-[var(--surface)] shadow-2xl"
                       >
                         <Link
                           href="/journal/new"
                           role="menuitem"
-                          className="ea-focus-ring flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-page)]"
+                          className="ea-focus-ring flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-1)] transition-colors hover:bg-[var(--paper-deep)]"
                         >
-                          <Icon name="hook" className="h-5 w-5 flex-shrink-0 text-[var(--action)]" />
+                          <Icon name="hook" className="h-4 w-4 flex-shrink-0 text-[var(--accent)]" />
                           Log a session
                         </Link>
-                        <div className="mx-4 h-px bg-[var(--border-rule)]" />
+                        <div className="mx-4 h-px bg-[var(--border)]" />
                         <Link
                           href="/journal/flies/new"
                           role="menuitem"
-                          className="ea-focus-ring flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-page)]"
+                          className="ea-focus-ring flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-1)] transition-colors hover:bg-[var(--paper-deep)]"
                         >
-                          <Icon name="hackle" className="h-5 w-5 flex-shrink-0 text-[var(--action)]" />
+                          <Icon name="hackle" className="h-4 w-4 flex-shrink-0 text-[var(--accent)]" />
                           New fly recipe
                         </Link>
                       </div>
@@ -190,14 +174,12 @@ export default function Header() {
                 </div>
               ) : (
                 <div className="hidden lg:flex items-center gap-2">
-                  <Button
-                    href="/login"
-                    variant="ghost"
-                    size="sm"
-                    className={`ea-focus-ring ${FOCUS_VISIBLE} focus-visible:ring-0`}
-                  >
+                  <Link href="/login" className="ea-btn ea-btn-ghost ea-btn-sm ea-focus-ring">
                     Sign in
-                  </Button>
+                  </Link>
+                  <Link href="/signup" className="ea-btn ea-btn-primary ea-btn-sm ea-focus-ring">
+                    Create account
+                  </Link>
                 </div>
               )}
 
@@ -207,7 +189,7 @@ export default function Header() {
                 onClick={() => setMobileOpen(true)}
                 aria-expanded={mobileOpen}
                 aria-haspopup="dialog"
-                className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-[13px] font-medium text-[var(--text-body)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-11 items-center gap-2 rounded-md px-2 text-[14px] font-medium text-[var(--text-2)]`}
               >
                 <Icon name="menu" className="h-5 w-5" />
                 Menu

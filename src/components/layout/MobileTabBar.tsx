@@ -29,7 +29,7 @@ export default function MobileTabBar() {
   return (
     <nav
       aria-label="Primary"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface-page)]/95 backdrop-blur-md border-t border-[var(--border-rule)] pb-[env(safe-area-inset-bottom)]"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface-page)] border-t border-[var(--border-rule)] pb-[env(safe-area-inset-bottom)]"
     >
       <ul className="grid grid-cols-5 h-14">
         {TABS.map((tab) => {
@@ -40,11 +40,11 @@ export default function MobileTabBar() {
               <Link
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
-                className={`ea-focus-ring flex h-full min-h-[48px] flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors duration-[120ms] ease-out ${
+                className={`ea-focus-ring flex h-full min-h-[48px] flex-col items-center justify-center gap-1 text-[12px] font-medium transition-colors duration-150 ease-standard ${
                   active ? "text-[var(--action)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
                 }`}
               >
-                <Icon className="h-5 w-5" strokeWidth={active ? 2.25 : 2} aria-hidden />
+                <Icon className="h-5 w-5" aria-hidden />
                 <span>{tab.label}</span>
               </Link>
             </li>
@@ -54,17 +54,17 @@ export default function MobileTabBar() {
           <Link
             href="/account"
             aria-current={accountActive ? "page" : undefined}
-            className={`ea-focus-ring flex h-full min-h-[48px] flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors duration-[120ms] ease-out ${
+            className={`ea-focus-ring flex h-full min-h-[48px] flex-col items-center justify-center gap-1 text-[12px] font-medium transition-colors duration-150 ease-standard ${
               accountActive ? "text-[var(--action)]" : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
             }`}
           >
             {user.avatarUrl ? (
-              <div className={`h-6 w-6 rounded-full overflow-hidden ring-2 ${accountActive ? "ring-[var(--action)]" : "ring-transparent"}`}>
+              <div className={`h-6 w-6 rounded-full overflow-hidden ring-2 ${accountActive ? "ring-[var(--action)]" : "ring-[var(--border)]"}`}>
                 <Image src={user.avatarUrl} alt={user.displayName || "Your account"} width={24} height={24} className="object-cover w-full h-full" />
               </div>
             ) : (
-              <div className={`h-6 w-6 rounded-full bg-[var(--surface-card)] flex items-center justify-center ring-2 ${accountActive ? "ring-[var(--action)]" : "ring-transparent"}`}>
-                <span className="text-[10px] font-bold text-[var(--text-body)]">{avatarInitial}</span>
+              <div className={`h-6 w-6 rounded-full bg-[var(--surface)] flex items-center justify-center ring-2 ${accountActive ? "ring-[var(--action)]" : "ring-[var(--border)]"}`}>
+                <span className="text-[12px] font-semibold text-[var(--text-body)]">{avatarInitial}</span>
               </div>
             )}
             <span>Me</span>

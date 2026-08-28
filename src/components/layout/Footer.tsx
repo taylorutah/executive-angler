@@ -54,13 +54,13 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-body)]">
-      <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-20">
+    <footer className="ea-band-ink">
+      <div className="mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
           <div className="max-w-md">
             <Link href="/" className="ea-focus-ring inline-block" aria-label={SITE_NAME}>
               <Image
-                src="/images/logo-horizontal-forest.svg"
+                src="/images/logo-horizontal-white.svg"
                 alt="Executive Angler"
                 width={384}
                 height={73}
@@ -68,13 +68,13 @@ export default function Footer() {
                 className="h-10 w-[220px] max-w-full"
               />
             </Link>
-            <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-body)]">
+            <p className="mt-4 text-[14px] leading-relaxed">
               Every feature, free.
             </p>
-            <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-body)]">
+            <p className="mt-2 text-[14px] leading-relaxed">
               We never publish locations or fish counts.
             </p>
-            <div className="mt-8 flex items-center gap-4">
+            <div className="mt-8 -ml-3 flex items-center gap-1">
               {socials.map((s) => (
                 <a
                   key={s.label}
@@ -82,26 +82,24 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="ea-focus-ring text-[var(--text-body)] transition-colors hover:text-[var(--text-primary)]"
+                  className="ea-focus-ring inline-flex h-11 w-11 items-center justify-center"
                 >
-                  <Icon name={s.name} className="h-4 w-4" />
+                  <Icon name={s.name} className="h-5 w-5" />
                 </a>
               ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-4">
             {footerColumns.map(({ title, links }) => (
               <div key={title}>
-                <h3 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-primary)]">
-                  {title}
-                </h3>
+                <h3 className="ea-band-heading mb-4">{title}</h3>
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="ea-focus-ring text-[13.5px] text-[var(--text-body)] transition-colors hover:text-[var(--text-primary)]"
+                        className="ea-focus-ring text-[14px]"
                       >
                         {link.label}
                       </Link>
@@ -113,16 +111,13 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 h-px w-full bg-[var(--border-rule)] lg:mt-20" />
+        <div className="ea-band-rule mt-12 h-px w-full lg:mt-16" />
 
-        <div className="flex flex-col gap-5 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="whitespace-nowrap font-mono text-[11px] tracking-wide text-[var(--text-meta)]">
+        <div className="flex flex-col gap-4 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="ea-band-meta text-[12px]">
             © {year} {SITE_NAME}
           </p>
-          <Link
-            href="/terms"
-            className="ea-focus-ring text-[11px] text-[var(--text-meta)] transition-colors hover:text-[var(--text-primary)]"
-          >
+          <Link href="/terms" className="ea-focus-ring text-[12px]">
             Terms
           </Link>
         </div>
