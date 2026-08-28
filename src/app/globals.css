@@ -1,64 +1,133 @@
 @import "tailwindcss";
 
-/* =============================================
-   THEME — tokens (Lane A)
-   Commit A holds TODAY's hardcoded hexes so the class rewrite is
-   pixel-identical. Commit B flips the values and binds registers.
-   ============================================= */
+/* =================================================================
+   EXECUTIVE ANGLER — DESIGN TOKENS (DESIGN.md is the law)
+   Warm paper + river green. Light theme only. Flat color only.
+   Every visual value on the site resolves to this block.
+   ================================================================= */
 
 :root {
-  /* Primitive — Daylight */
-  --paper: #FAF6F0;
-  --vellum: #F2EDE4;
-  --card: #FFFFFF;
-  --rule: #E2DACD;
-  --ink: #2C211B;
-  --graphite: #4F4540;
-  --slate: #6D645F;
+  /* ── Color: the brief's tokens, verbatim ─────────────────────── */
+  --paper: #FAF9F5;        /* page background */
+  --paper-deep: #F2EFE8;   /* alternating sections, chips */
+  --surface: #FFFFFF;      /* cards, panels, inputs */
+  --ink: #131815;          /* dark bands ONLY: footer, closing CTA */
+  --border: #E4E0D6;
+  --border-strong: #CFC9BB;
+  --text-1: #171C19;
+  --text-2: #525B55;
+  --text-3: #969E97;
+  --accent: #1E4D3B;       /* deep river green — actions, links, active */
+  --accent-hover: #16382B;
+  --accent-soft: #EAF1ED;  /* active nav, selected rows */
+  --ember: #C05B23;        /* RARE: featured badges, one key stat max */
+  --danger: #A63A2E;
+  --success: #2E7D4F;
+  --warning: #A8741A;
 
-  /* Primitive — Dusk */
+  /* ── Spacing (8pt system) ────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* ── Type scale (px) ─────────────────────────────────────────── */
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-16: 16px;
+  --text-18: 18px;
+  --text-20: 20px;
+  --text-24: 24px;
+  --text-30: 30px;
+  --text-36: 36px;
+  --text-48: 48px;
+  --text-60: 60px;
+
+  /* ── Radius: one language ────────────────────────────────────── */
+  --radius-sm: 4px;        /* small elements */
+  --radius-md: 6px;        /* default: buttons, inputs */
+  --radius-card: 10px;     /* cards, modals, map panels */
+  --radius-pill: 999px;    /* condition chips and tags only */
+
+  /* ── Elevation: borders, not shadows. One shadow, floating only ─ */
+  --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  /* ── Motion: 150–200ms, opacity + transform only ─────────────── */
+  --duration-fast: 150ms;
+  --duration-base: 180ms;
+  --duration-modal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Layout ──────────────────────────────────────────────────── */
+  --container: 1200px;
+  --prose: 680px;
+  --gutter: 16px;
+
+  /* ── Imagery: the one consistent photo grade ─────────────────── */
+  --photo-grade: saturate(0.88) contrast(1.03);
+
+  /* ─────────────────────────────────────────────────────────────
+     LEGACY PRIMITIVE ALIASES — pre-system class names resolve here.
+     Do not add new uses; write tokens above directly.
+     ───────────────────────────────────────────────────────────── */
+  --vellum: var(--paper-deep);
+  --card: var(--surface);
+  --rule: var(--border);
+  --graphite: var(--text-2);
+  --slate: var(--text-3);
+
+  /* Dusk register primitives — retained while the route-determined
+     dusk register exists (see DESIGN.md § Open conflicts). */
   --riverbed: #0B1112;
   --pool: #131B1D;
   --shelf: #1C2629;
   --chalk: #EEF2F1;
   --fog: #8B979A;
-
-  /* Signal — copper is hue 40; teal-300 is water (hue 200), not neon cyan */
-  --copper-700: #B4410D;
   --copper-400: #E97C48;
-  --copper-hover-700: #9B3300;
   --copper-hover-400: #FE9A77;
-  --teal-700: #086B6C;
   --teal-300: #00BCC5;
-  --rise-700: #1F7A3D;
   --rise-400: #3FB863;
-  --cut-700: #B3261E;
   --cut-400: #F87171;
+
+  /* Retired font families alias onto the two lawful faces so legacy
+     class names keep compiling. Inter for UI/body/data, Fraunces for
+     display. */
+  --font-archivo: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-newsreader: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-ibm-plex-mono: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-dm-sans: var(--font-inter), "Inter", system-ui, sans-serif;
 
   --background: var(--surface-page);
   --foreground: var(--text-primary);
-  --font-inter: var(--font-fraunces), "Fraunces", serif;
-  --font-dm-sans: var(--font-archivo), "Archivo", sans-serif;
 
-  /* Motion budget — §5.4. Banned: count-ups, text parallax, scroll-jacking,
-     self-drawing charts, animated logo, motion inside data tables. */
-  --hover-duration: 160ms;
-  --hover-ease: ease-out;
-  --crossfade-duration: 400ms;
-  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
-  --gutter: 1rem;
+  /* Motion aliases (pre-system names) */
+  --hover-duration: var(--duration-base);
+  --hover-ease: var(--ease-standard);
+  --crossfade-duration: var(--duration-modal);
+  --ease-out-expo: var(--ease-standard);
+
+  /* Radius aliases (pre-system names; geometry test gates these) */
   --radius-chip: 9999px;
   --radius-surface: 6px;
   --radius-instrument: 4px;
   --radius-media: 4px;
-  --elev-inset: inset 0 1px 0 rgb(255 255 255 / 0.15), 0 1px 2px rgb(11 17 18 / 0.15);
-  --elev-hairline: 0 1px 1px rgb(11 17 18 / 0.04);
-  --signal-ring: 0 0 0 5px color-mix(in srgb, var(--signal-live) 30%, transparent);
 
-  /* Hero scrims — rgb(15 43 31) / rgba(15,43,31). Homepage uses --scrim-light.
-     River heroes keep the pre-token .hero-overlay stops this PR; binding
-     them to --scrim-standard would lighten those pages. --scrim-heavy
-     requires written justification before use. */
+  /* Elevation aliases — neutral only. Colored shadows are banned. */
+  --elev-inset: inset 0 1px 0 rgb(255 255 255 / 0.15), 0 1px 2px rgb(19 24 21 / 0.15);
+  --elev-hairline: 0 1px 1px rgb(19 24 21 / 0.04);
+  --elev-1: var(--shadow-float);
+  --elev-2: var(--shadow-float);
+  --signal-ring: 0 0 0 3px rgb(30 77 59 / 0.15);
+
+  /* Hero scrims — photo-legibility washes over hero imagery.
+     CONFLICT: the brief bans gradients; these survive because hero
+     text-over-photo is functional. Awaiting client ruling (DESIGN.md). */
   --scrim-light: linear-gradient(
     to bottom,
     rgb(15 43 31 / 0) 0%,
@@ -79,47 +148,27 @@
   );
 }
 
-/* Default + daylight public pages */
+/* ── Semantic layer: daylight (the only lawful register going forward) ── */
 :root,
 [data-register="daylight"] {
   --surface-page: var(--paper);
-  --surface-raised: var(--vellum);
-  --surface-card: var(--card);
-  --border-rule: var(--rule);
-  --border-strong: #C9BFAE;
-  --text-primary: var(--ink);
-  --text-body: var(--graphite);
-  --text-meta: var(--slate);
-  --action: var(--copper-700);
-  --action-hover: var(--copper-hover-700);
+  --surface-raised: var(--paper-deep);
+  --surface-card: var(--surface);
+  --border-rule: var(--border);
+  --text-primary: var(--text-1);
+  --text-body: var(--text-2);
+  --text-meta: var(--text-3);
+  --action: var(--accent);
+  --action-hover: var(--accent-hover);
   --on-action: #FFFFFF;
-  --signal-live: var(--teal-700);
-  --state-positive: var(--rise-700);
-  --state-negative: var(--cut-700);
-
-  /* Ground wash — ~1.5% lighter at the top. --surface-page stays the
-     solid darkest hex so contrast math measures the worst point. */
-  --surface-page-wash: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--paper) 98.5%, white) 0%,
-    var(--paper) 42%,
-    var(--paper) 100%
-  );
-
-  /* Elevation — inset top highlight (a light source on a raised edge)
-     plus copper-tinted contact + ambient. Never raw black. */
-  --elev-1:
-    inset 0 1px 0 rgb(255 255 255 / 0.90),
-    0 0 0 1px rgb(255 255 255 / 0.22),
-    0 1px 2px rgb(180 65 13 / 0.06),
-    0 4px 12px rgb(180 65 13 / 0.04);
-  --elev-2:
-    inset 0 1px 0 rgb(255 255 255 / 0.90),
-    0 0 0 1px rgb(255 255 255 / 0.22),
-    0 1px 2px rgb(180 65 13 / 0.07),
-    0 6px 16px rgb(180 65 13 / 0.06);
+  --signal-live: var(--accent);
+  --state-positive: var(--success);
+  --state-negative: var(--danger);
 }
 
+/* Dusk register — route-determined dark theme for the logged-in product.
+   CONFLICT with the brief's light-only rule; machinery kept intact so the
+   member product keeps working until the client rules. See DESIGN.md. */
 [data-register="dusk"],
 .register-dusk {
   --surface-page: var(--riverbed);
@@ -136,45 +185,43 @@
   --signal-live: var(--teal-300);
   --state-positive: var(--rise-400);
   --state-negative: var(--cut-400);
-
-  --surface-page-wash: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--riverbed) 98.5%, white) 0%,
-    var(--riverbed) 42%,
-    var(--riverbed) 100%
-  );
-
-  /* Elevation — warm top highlight on Dusk, then riverbed ambient. */
-  --elev-1:
-    inset 0 1px 0 rgb(242 237 228 / 0.16),
-    0 0 0 1px rgb(242 237 228 / 0.10),
-    0 1px 2px rgb(11 17 18 / 0.35),
-    0 4px 12px rgb(11 17 18 / 0.28);
-  --elev-2:
-    inset 0 1px 0 rgb(242 237 228 / 0.16),
-    0 0 0 1px rgb(242 237 228 / 0.10),
-    0 1px 2px rgb(11 17 18 / 0.40),
-    0 6px 16px rgb(11 17 18 / 0.36);
 }
 
 @theme inline {
-  --color-background: var(--surface-page);
-  --color-foreground: var(--text-primary);
-  --font-sans: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  /* Fonts — two faces only */
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-ui: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
   --font-serif: var(--font-fraunces), "Fraunces", serif;
   --font-heading: var(--font-fraunces), "Fraunces", serif;
-  --font-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
   --font-display: var(--font-fraunces), "Fraunces", serif;
-  --font-body: var(--font-newsreader), "Newsreader", serif;
-  --font-ui: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  /* Mono is retired; tabular numerals come from font-variant-numeric. */
+  --font-mono: var(--font-inter), "Inter", system-ui, sans-serif;
 
+  /* Brief tokens as utilities */
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-ember: var(--ember);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-text-1: var(--text-1);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+
+  /* Pre-system utility names, rebound to the lawful tokens */
+  --color-background: var(--surface-page);
+  --color-foreground: var(--text-primary);
   --color-bg: var(--surface-page);
   --color-surface: var(--surface-raised);
   --color-surface-raised: var(--surface-card);
   --color-surface-page: var(--surface-page);
   --color-surface-card: var(--surface-card);
-  --color-dusk: #2C1F14;
-  --color-accent: var(--action);
+  --color-dusk: var(--ink);
   --color-signal: var(--signal-live);
   --color-signal-pip: var(--signal-live);
   --color-text-primary: var(--text-primary);
@@ -183,39 +230,39 @@
   --color-border: var(--border-rule);
   --color-border-rule: var(--border-rule);
   --color-border-strong: var(--border-strong);
-  --color-success: var(--state-positive);
-  --color-danger: var(--state-negative);
   --color-action: var(--action);
   --color-action-hover: var(--action-hover);
   --color-on-action: var(--on-action);
 
-  --shadow-sm: var(--elev-1);
-  --shadow-md: var(--elev-2);
-  --shadow-lg: var(--elev-2);
-  --shadow-xl: var(--elev-2);
-  --shadow-2xl: var(--elev-2);
+  /* Shadows: one neutral floating shadow, nothing else */
+  --shadow-sm: 0 1px 2px rgb(19 24 21 / 0.08);
+  --shadow-md: var(--shadow-float);
+  --shadow-lg: var(--shadow-float);
+  --shadow-xl: var(--shadow-float);
+  --shadow-2xl: var(--shadow-float);
 
+  /* Radius utilities */
   --radius-chip: 9999px;
   --radius-surface: 6px;
   --radius-instrument: 4px;
   --radius-media: 4px;
+  --radius-card: 10px;
+
+  /* 13px sits between Tailwind's xs(12) and sm(14); the brief needs it */
+  --text-13: 13px;
 }
 
-/* =============================================
-   BASE LAYER — overridable by Tailwind utilities
-   ============================================= */
+/* =================================================================
+   BASE — typography and element defaults (Tailwind utilities override)
+   ================================================================= */
 
-/* Tabular numerals — available; call sites migrate in later lanes */
+/* Tabular numerals for logs and tables */
 .num {
   font-family: var(--font-ui);
   font-variant-numeric: tabular-nums;
 }
 
 @layer base {
-  :root {
-    --font-body: var(--font-newsreader), "Newsreader", serif;
-  }
-
   .ea-header-primary {
     background: var(--surface-page);
     border-color: var(--border-rule);
@@ -243,11 +290,8 @@
     background-color: var(--surface-page);
   }
 
-  /*
-   * The §2 duskFullBleed census treats rgba(0,0,0,0) as dark.
-   * Structural boxes report --paper RGB at alpha 0. Class-level
-   * fills (InstrumentWell, cards) live in @layer utilities and win.
-   */
+  /* Structural boxes report --paper RGB at alpha 0 for the rendered
+     contrast census. Class-level fills win over this. */
   main,
   section,
   img,
@@ -257,65 +301,59 @@
   tfoot,
   footer > *,
   main div {
-    background-color: rgba(250, 246, 240, 0);
+    background-color: rgba(250, 249, 245, 0);
   }
 
   @media (min-width: 640px) {
-    :root { --gutter: 1.5rem; }
-  }
-  @media (min-width: 1024px) {
-    :root { --gutter: 2rem; }
+    :root { --gutter: 24px; }
   }
 
-  /* App banner: push fixed header + main content down when iOS banner is visible */
+  /* App banner offset hooks (banner is unmounted; rules are harmless) */
   :root {
     --app-banner-height: 0px;
   }
 
-  /* When iOS app banner is showing, shift fixed header below it */
   header[class*="fixed"] {
     top: var(--app-banner-height, 0px) !important;
   }
 
-  /* Offset main content to account for banner + header */
   main[class*="pt-"] {
     padding-top: calc(56px + var(--app-banner-height, 0px)) !important;
   }
 
   body {
     background-color: var(--surface-page);
-    background-image: var(--surface-page-wash);
     color: var(--foreground);
     font-family: var(--font-ui);
-    line-height: 1.6;
+    font-size: var(--text-16);
+    line-height: 1.55;
     min-height: 100vh;
   }
 
-  /* Typography defaults — Tailwind classes override these */
-  h1, h2 {
+  /* Headlines: Fraunces 600, tight leading, -0.01em max tracking */
+  h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-  }
-
-  h3, h4, h5, h6 {
-    font-family: var(--font-ui);
     font-weight: 600;
-    line-height: 1.3;
+    line-height: 1.15;
     letter-spacing: -0.01em;
   }
 
-  h1 { font-size: clamp(3rem, 5vw, 5rem); }
-  h2 { font-size: clamp(2rem, 3.5vw, 2.5rem); }
-  h3 { font-size: clamp(1.375rem, 2.5vw, 1.875rem); }
-  h4 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
-  h5 { font-size: 1.125rem; }
-  h6 { font-size: 1rem; }
+  h5, h6 {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  h1 { font-size: clamp(var(--text-36), 5vw, var(--text-60)); }
+  h2 { font-size: clamp(var(--text-30), 3.5vw, var(--text-48)); }
+  h3 { font-size: clamp(var(--text-24), 2.5vw, var(--text-30)); }
+  h4 { font-size: var(--text-20); }
+  h5 { font-size: var(--text-16); }
+  h6 { font-size: var(--text-14); }
 
   p {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: var(--text-16);
+    line-height: 1.55;
   }
 
   ::selection {
@@ -340,26 +378,300 @@
     background: var(--text-meta);
   }
 
+  /* The one focus ring: 2px accent, 2px offset, everywhere */
   a:focus-visible,
   button:focus-visible,
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    outline: 2px solid var(--action);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
     border-radius: 2px;
   }
 }
 
-/* =============================================
-   COMPONENT STYLES
-   ============================================= */
+/* =================================================================
+   COMPONENTS
+   ================================================================= */
 
 @layer components {
+  /* ── Buttons: 32/40/48 tall, radius 6, Inter 14–15/500 ─────────── */
+  .ea-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: 40px;
+    padding-inline: 18px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-family: var(--font-ui);
+    font-size: var(--text-14);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard),
+      color var(--duration-base) var(--ease-standard),
+      opacity var(--duration-base) var(--ease-standard);
+  }
+  .ea-btn:disabled,
+  .ea-btn[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .ea-btn-sm { height: 32px; padding-inline: 14px; }
+  .ea-btn-lg { height: 48px; padding-inline: 22px; font-size: 15px; }
+
+  .ea-btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .ea-btn-primary:hover { background: var(--accent-hover); }
+  .ea-btn-primary:active { background: var(--accent-hover); }
+
+  .ea-btn-secondary {
+    background: transparent;
+    border-color: var(--border-strong);
+    color: var(--text-1);
+  }
+  .ea-btn-secondary:hover { border-color: var(--text-3); }
+
+  .ea-btn-ghost {
+    background: transparent;
+    color: var(--text-2);
+  }
+  .ea-btn-ghost:hover { color: var(--text-1); }
+
+  .ea-btn-danger {
+    background: var(--danger);
+    color: #fff;
+  }
+  .ea-btn-danger:hover {
+    background: color-mix(in srgb, var(--danger) 88%, black);
+  }
+
+  /* On --ink bands the primary flips: paper fill, ink text */
+  .ea-btn-on-ink {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .ea-btn-on-ink:hover { background: var(--paper-deep); }
+
+  /* ── Inputs: 44px tall for streamside thumbs ───────────────────── */
+  .ea-label {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-family: var(--font-ui);
+    font-size: var(--text-13);
+    font-weight: 500;
+    color: var(--text-2);
+  }
+  .ea-input {
+    display: block;
+    width: 100%;
+    height: 44px;
+    padding-inline: var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    font-family: var(--font-ui);
+    font-size: var(--text-16);
+    color: var(--text-1);
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+  .ea-input::placeholder { color: var(--text-3); }
+  .ea-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: var(--signal-ring);
+  }
+  .ea-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .ea-input-error,
+  .ea-input[aria-invalid="true"] {
+    border-color: var(--danger);
+  }
+  .ea-field-error {
+    margin-top: var(--space-2);
+    font-size: var(--text-13);
+    color: var(--danger);
+  }
+  .ea-field-helper {
+    margin-top: var(--space-2);
+    font-size: var(--text-13);
+    color: var(--text-3);
+  }
+  textarea.ea-input {
+    height: auto;
+    min-height: 96px;
+    padding-block: var(--space-3);
+  }
+
+  /* ── Cards: border, radius 10, 24 padding, no shadow ───────────── */
+  .ea-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: var(--space-5);
+  }
+
+  /* ── Condition chips and tags: the only pills ──────────────────── */
+  .ea-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--paper-deep);
+    font-family: var(--font-ui);
+    font-size: var(--text-12);
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+  .ea-chip svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* ── Badges: pill metadata; ember reserved for featured/seasonal ── */
+  .ea-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--paper-deep);
+    font-family: var(--font-ui);
+    font-size: var(--text-12);
+    font-weight: 500;
+    color: var(--text-2);
+  }
+  .ea-badge-ember {
+    background: color-mix(in srgb, var(--ember) 10%, var(--surface));
+    color: var(--ember);
+  }
+
+  /* ── Overline: sparse section metadata ─────────────────────────── */
+  .ea-overline {
+    font-family: var(--font-ui);
+    font-size: var(--text-12);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  /* ── Stats: Fraunces numeral, uppercase label ──────────────────── */
+  .ea-stat-value {
+    font-family: var(--font-display);
+    font-size: var(--text-30);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--text-1);
+    font-variant-numeric: tabular-nums;
+  }
+  .ea-stat-label {
+    font-family: var(--font-ui);
+    font-size: var(--text-12);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  /* ── Tables: catch and session logs ────────────────────────────── */
+  .ea-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-ui);
+    font-size: var(--text-14);
+    color: var(--text-1);
+    font-variant-numeric: tabular-nums;
+  }
+  .ea-table th {
+    padding: var(--space-3) var(--space-3);
+    text-align: left;
+    font-size: var(--text-12);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    border-bottom: 1px solid var(--border);
+  }
+  .ea-table td {
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .ea-table tbody tr {
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+  .ea-table tbody tr:hover {
+    background: var(--paper-deep);
+  }
+
+  /* ── Modal: the one allowed shadow ─────────────────────────────── */
+  .ea-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(19, 24, 21, 0.5);
+  }
+  .ea-modal {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    max-width: 520px;
+    width: 100%;
+    padding: var(--space-6);
+    box-shadow: var(--shadow-float);
+  }
+
+  /* ── Toast ─────────────────────────────────────────────────────── */
+  .ea-toast {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    box-shadow: var(--shadow-float);
+    font-size: var(--text-14);
+    color: var(--text-1);
+  }
+
+  /* ── Empty state: one sentence, one action, centered is fine ───── */
+  .ea-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-8) var(--space-5);
+    text-align: center;
+  }
+  .ea-empty p {
+    font-size: var(--text-16);
+    color: var(--text-2);
+    max-width: 40ch;
+  }
+
+  /* ── Photography: one grade, fixed aspect per context ──────────── */
+  .ea-photo {
+    object-fit: cover;
+    filter: var(--photo-grade);
+    background: var(--paper-deep);
+  }
+  .ea-photo-hero { aspect-ratio: 21 / 9; }
+  .ea-photo-wide { aspect-ratio: 3 / 2; }
+  .ea-photo-card { aspect-ratio: 4 / 3; }
+  .ea-photo-avatar { aspect-ratio: 1 / 1; }
+
+  /* ── Hero scrims (flagged — see token block note) ──────────────── */
   .hero-overlay {
-    /* River heroes keep this pre-token weight. --scrim-standard is the
-       named next-pass wash (0.10 / 0.40@60% / 0.70) and is not bound
-       here — that would lighten these pages. Do not thin these stops. */
     background: linear-gradient(
       to bottom,
       rgb(15 43 31 / 0) 0%,
@@ -374,55 +686,39 @@
     background: var(--scrim-light);
   }
 
+  /* Card hover: border emphasis, never a shadow */
   .card-hover {
     overflow: hidden;
-    transition: box-shadow var(--hover-duration) var(--hover-ease);
+    transition: border-color var(--duration-base) var(--ease-standard);
   }
 
   .card-hover:hover {
-    box-shadow: var(--elev-1);
+    border-color: var(--border-strong);
   }
 
   .photo-card {
     overflow: hidden;
   }
 
-  .animate-fade-in {
-    animation: fadeIn 0.6s ease forwards;
-  }
-
-  .animate-fade-in-up {
-    animation: fadeInUp 0.6s ease forwards;
-  }
-
-  .stagger-1 { animation-delay: 0.1s; }
-  .stagger-2 { animation-delay: 0.2s; }
-  .stagger-3 { animation-delay: 0.3s; }
-  .stagger-4 { animation-delay: 0.4s; }
-  .stagger-5 { animation-delay: 0.5s; }
-  .stagger-6 { animation-delay: 0.6s; }
-
-  /* Mapbox overrides */
+  /* Mapbox overrides — muted chrome, system radius */
   .mapboxgl-popup-content {
-    border-radius: var(--radius-surface);
+    border-radius: var(--radius-card);
     padding: 12px 16px;
     font-family: var(--font-ui);
-    font-size: 0.875rem;
-    box-shadow: var(--elev-2);
+    font-size: var(--text-14);
+    box-shadow: var(--shadow-float);
   }
 
   .mapboxgl-popup-close-button {
-    font-size: 1.125rem;
+    font-size: 18px;
     padding: 4px 8px;
-    color: var(--color-slate-600);
+    color: var(--text-2);
   }
 
   .mapboxgl-ctrl-logo {
     display: none !important;
   }
 
-  /* Mapbox attribution inside InstrumentWell — third-party chrome
-     still reads as ours at Mapbox's 12px. Radius only. */
   .mapboxgl-ctrl-attrib,
   .mapboxgl-ctrl-attrib-button {
     border-radius: var(--radius-instrument);
@@ -437,9 +733,10 @@
     display: none;
   }
 
-  /* New brand utility classes */
+  /* Pre-system utility classes kept compiling */
   .font-mono-data {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: var(--font-ui);
+    font-variant-numeric: tabular-nums;
   }
 
   .text-accent {
@@ -463,69 +760,17 @@
   }
 }
 
-/* =============================================
-   KEYFRAMES (outside layers — always available)
-   ============================================= */
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Reading progress */
-.reading-progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: var(--action);
-  width: 100%;
-  transform-origin: left;
-  transform: scaleX(0);
-  z-index: 9999;
-  animation: reading-progress linear;
-  animation-timeline: scroll(root);
-}
-
-@keyframes reading-progress {
-  to { transform: scaleX(1); }
-}
-
-/* =============================================
+/* =================================================================
    ARTICLE / DESTINATION / RIVER BODIES
    Stored HTML must not depend on Tailwind utilities.
-   Colour and type live on the wrapper, unlayered so they
-   beat leftover class attributes until those are stripped.
-   ============================================= */
+   Long-form: Inter 18px / 1.7 / 65ch — it must read like a journal.
+   ================================================================= */
 
 .prose {
   font-family: var(--font-body);
-  font-optical-sizing: auto;
-  font-size: 19px;
+  font-size: var(--text-18);
   line-height: 1.7;
-  max-width: 68ch;
+  max-width: 65ch;
   color: var(--text-body);
 }
 
@@ -534,19 +779,14 @@
 .river-body {
   color: var(--text-body);
   font-family: var(--font-body);
-  font-optical-sizing: auto;
-  font-size: 1rem;
-  line-height: 1.8;
+  font-size: var(--text-18);
+  line-height: 1.7;
   max-width: 100%;
 }
 
-/* A field note sets its stored body in .prose for the 19px / 1.7 / 68ch measure
-   while keeping the .article-body element rules that stored HTML depends on
-   (h2/h3/p/ul/table/figcaption). .article-body is declared later in this file,
-   so the shared properties have to be restated at two-class specificity. */
 .prose.article-body {
-  max-width: 68ch;
-  font-size: 19px;
+  max-width: 65ch;
+  font-size: var(--text-18);
   line-height: 1.7;
 }
 
@@ -563,12 +803,10 @@
   margin-right: 0.1em;
   margin-top: 0.05em;
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: 600;
 }
 
-/* A field note's body is split into segments so a pull quote or stat block can
-   sit between them. Only the first segment opens the piece, so the drop cap
-   must not restart on every one. */
+/* Split bodies must not restart the drop cap on every segment. */
 .article-body--continued > p:first-of-type::first-letter {
   float: none;
   font-family: inherit;
@@ -583,36 +821,37 @@
 .destination-body h2,
 .river-body h2 {
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: var(--text-24);
+  font-weight: 600;
   color: var(--text-primary);
-  margin-top: 2.5rem;
-  margin-bottom: 0.6rem;
-  line-height: 1.3;
-  padding-bottom: 0.4rem;
+  margin-top: var(--space-7);
+  margin-bottom: var(--space-3);
+  line-height: 1.2;
+  padding-bottom: var(--space-2);
   border-bottom: 1px solid var(--border-rule);
 }
 
 .article-body h3,
 .destination-body h3,
 .river-body h3 {
-  font-family: var(--font-ui);
-  font-size: 1.125rem;
+  font-family: var(--font-display);
+  font-size: var(--text-20);
   font-weight: 600;
   color: var(--text-primary);
-  margin-top: 1.75rem;
-  margin-bottom: 0.4rem;
-  line-height: 1.35;
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
+  line-height: 1.25;
 }
 
 .article-body h4,
 .destination-body h4,
 .river-body h4 {
-  font-size: 0.8125rem;
-  font-weight: 700;
+  font-family: var(--font-ui);
+  font-size: var(--text-13);
+  font-weight: 600;
   color: var(--text-meta);
-  margin-top: 1.25rem;
-  margin-bottom: 0.25rem;
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-1);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -621,9 +860,9 @@
 .destination-body p,
 .river-body p {
   margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  line-height: 1.8;
+  margin-bottom: var(--space-4);
+  font-size: inherit;
+  line-height: inherit;
   color: var(--text-body);
 }
 
@@ -631,18 +870,18 @@
 .destination-body ul,
 .river-body ul {
   list-style-type: disc;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  padding-left: 1.5rem;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-5);
 }
 
 .article-body ol,
 .destination-body ol,
 .river-body ol {
   list-style-type: decimal;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  padding-left: 1.5rem;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-5);
 }
 
 .article-body ul ul,
@@ -663,14 +902,14 @@
 .article-body li,
 .destination-body li,
 .river-body li {
-  margin-bottom: 0.4rem;
+  margin-bottom: var(--space-2);
   color: var(--text-body);
 }
 
 .article-body strong,
 .destination-body strong,
 .river-body strong {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-primary);
 }
 
@@ -683,7 +922,7 @@
 .article-body a,
 .destination-body a,
 .river-body a {
-  color: var(--text-primary);
+  color: var(--accent);
   font-weight: 500;
   text-decoration: underline 1px;
   text-underline-offset: 0.15em;
@@ -692,15 +931,15 @@
 .article-body a:hover,
 .destination-body a:hover,
 .river-body a:hover {
-  color: var(--action);
+  color: var(--accent-hover);
 }
 
 .article-body figcaption,
 .destination-body figcaption,
 .river-body figcaption {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   font-family: var(--font-ui);
-  font-size: 0.8125rem;
+  font-size: var(--text-13);
   color: var(--text-meta);
 }
 
@@ -710,11 +949,11 @@
 .article-body aside,
 .destination-body aside,
 .river-body aside {
-  border-left: 3px solid var(--action);
-  padding: 0.75rem 1.25rem;
-  margin: 1.5rem 0;
-  background: color-mix(in srgb, var(--action) 8%, var(--surface-raised));
-  border-radius: 0 var(--radius-surface) var(--radius-surface) 0;
+  border-left: 3px solid var(--accent);
+  padding: var(--space-3) var(--space-5);
+  margin: var(--space-5) 0;
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
   color: var(--text-body);
   font-style: italic;
 }
@@ -732,10 +971,11 @@
 .destination-body table,
 .river-body table {
   width: 100%;
-  font-size: 0.875rem;
+  font-size: var(--text-14);
+  font-variant-numeric: tabular-nums;
   border-collapse: collapse;
-  margin: 1.25rem 0;
-  border-radius: var(--radius-surface);
+  margin: var(--space-5) 0;
+  border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border-rule);
 }
@@ -745,10 +985,10 @@
 .river-body th {
   background: var(--surface-raised);
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 500;
   text-align: left;
-  padding: 0.625rem 0.875rem;
-  font-size: 0.75rem;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-12);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -756,7 +996,7 @@
 .article-body td,
 .destination-body td,
 .river-body td {
-  padding: 0.5rem 0.875rem;
+  padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--border-rule);
   vertical-align: top;
   color: var(--text-body);
@@ -774,15 +1014,14 @@
   background: var(--surface-raised);
 }
 
-/* =============================================
+/* =================================================================
    DESTINATION & RIVER — tags / metadata rows
-   ============================================= */
+   ================================================================= */
 
-/* Species, technique, and difficulty badge rows — always wrap, never overflow */
 .entity-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--space-2);
   max-width: 100%;
   overflow: hidden;
 }
@@ -790,65 +1029,52 @@
 @media (max-width: 639px) {
   .entity-tags span,
   .entity-tags a {
-    font-size: 0.75rem;   /* text-xs on mobile */
+    font-size: var(--text-12);
   }
 }
 
-/* =============================================
+/* =================================================================
    ARTICLE BODY — mobile overrides (max-width: 639px)
-   ============================================= */
+   ================================================================= */
 
-/* A — Disable drop cap on mobile (causes wrapping issues) */
 @media (max-width: 639px) {
   .article-body > p:first-of-type::first-letter {
     float: none;
-    font-size: 1rem;
+    font-size: var(--text-16);
     line-height: inherit;
     margin-right: 0;
     margin-top: 0;
     color: inherit;
   }
-}
 
-/* B — Tables: horizontally scrollable on mobile */
-@media (max-width: 639px) {
   .article-body table {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    font-size: 0.8125rem;
+    font-size: var(--text-13);
   }
-}
 
-/* C — Heading sizes: slightly smaller on mobile */
-@media (max-width: 639px) {
   .article-body h2 {
-    font-size: 1.25rem;
-    margin-top: 2rem;
+    font-size: var(--text-20);
+    margin-top: var(--space-6);
   }
   .article-body h3 {
-    font-size: 1rem;
-    margin-top: 1.5rem;
+    font-size: var(--text-18);
+    margin-top: var(--space-5);
   }
-}
 
-/* D — Blockquote: tighter padding on mobile */
-@media (max-width: 639px) {
   .article-body blockquote {
-    padding: 0.625rem 1rem;
-    margin: 1.25rem 0;
+    padding: var(--space-3) var(--space-4);
+    margin: var(--space-5) 0;
   }
-}
 
-/* E — Lists: tighter indent on mobile */
-@media (max-width: 639px) {
   .article-body ul,
   .article-body ol {
-    padding-left: 1.125rem;
+    padding-left: var(--space-4);
   }
 }
 
-
+/* Register-driven logo swap */
 [data-register="daylight"] .dark-logo { display: none !important; }
 [data-register="daylight"] .light-logo { display: block !important; }
 [data-register="dusk"] .dark-logo { display: block; }
@@ -865,16 +1091,16 @@
   color: var(--on-action) !important;
 }
 
-/* Light-mode store badges — never inherit dusk greys. */
+/* Light-mode store badges */
 .ea-store-badge {
   display: inline-flex;
   height: 52px;
   align-items: center;
-  gap: 0.75rem;
-  border-radius: var(--radius-surface);
+  gap: var(--space-3);
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-strong);
   background: var(--surface-card);
-  padding: 0 1rem;
+  padding: 0 var(--space-4);
   color: var(--text-primary);
 }
 .ea-store-badge-kicker {
@@ -891,13 +1117,13 @@
   color: var(--text-primary);
 }
 .ea-store-badge-soon {
-  margin-left: 0.25rem;
+  margin-left: var(--space-1);
   border-radius: var(--radius-chip);
   border: 1px solid var(--border-rule);
   background: var(--surface-raised);
-  padding: 0.125rem 0.375rem;
+  padding: 2px 6px;
   font-size: 9px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-primary);
@@ -906,56 +1132,48 @@
   color: var(--text-meta);
 }
 
-/* =============================================
+/* Dashboard stats card — flat paper-deep, no gradient */
+.ea-stats-card {
+  background: var(--paper-deep) !important;
+}
+
+/* =================================================================
    FORM CONTROLS — normalize select appearance
-   Non-layered (higher cascade than @layer utilities)
-   so padding-right beats px-* Tailwind utilities.
-   Best practice: strip OS chrome, add custom chevron,
-   identical height/border/radius to text inputs.
-   ============================================= */
+   Non-layered so padding-right beats px-* Tailwind utilities.
+   ================================================================= */
 
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  /* Custom chevron — matches text-secondary (#A8B2BD) */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B949E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23969E97' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 12px 12px;
-  padding-right: 2.25rem; /* room for chevron */
+  padding-right: 2.25rem;
   cursor: pointer;
 }
 
-/* Light mode — darker chevron for contrast on parchment */
 [data-register="daylight"] select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234B5563' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23525B55' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
 }
 
-/* Focus ring — copper, consistent with input focus */
 select:focus {
   outline: none;
-  border-color: var(--action) !important;
-  box-shadow: 0 0 0 1px var(--action);
+  border-color: var(--accent) !important;
+  box-shadow: var(--signal-ring);
 }
 
-/* ── Dashboard Stats Card gradient ── */
-.ea-stats-card {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--action) 6%, var(--surface-raised)) 0%, var(--surface-raised) 40%, var(--surface-page) 100%) !important;
-}
-
-/* =============================================
+/* =================================================================
    SITE CHROME — header, footer, mobile tab bar
    Non-layered so these beat @layer base defaults.
-   ============================================= */
+   ================================================================= */
 
-/* Page ground: solid --surface-page (darkest, for contrast) + wash on top. */
 .page-ground {
   background-color: var(--surface-page);
-  background-image: var(--surface-page-wash);
 }
 
-/* Header height never changes; only the bottom rule and fill arrive on scroll. */
+/* Header height never changes; only the bottom rule arrives on scroll. */
 .ea-header-flat {
   background: var(--surface-page);
   border-bottom: 1px solid transparent;
@@ -971,12 +1189,13 @@ select:focus {
   display: inline-flex;
   align-items: center;
   height: 100%;
-  padding: 0 12px;
+  padding: 0 var(--space-3);
   font-family: var(--font-ui);
-  font-size: 15px;
+  font-size: var(--text-14);
+  font-weight: 500;
   line-height: 1;
   color: var(--text-body);
-  transition: color 120ms ease-out;
+  transition: color var(--duration-fast) var(--ease-standard);
   white-space: nowrap;
 }
 
@@ -984,19 +1203,19 @@ select:focus {
   color: var(--text-primary);
 }
 
-/* Current page: 2px action underline sitting on the bar's bottom rule. */
+/* Current page: 2px accent underline on the bar's bottom rule. */
 .ea-nav-link[aria-current="page"] {
-  color: var(--text-primary);
+  color: var(--accent);
 }
 
 .ea-nav-link[aria-current="page"]::after {
   content: "";
   position: absolute;
-  left: 12px;
-  right: 12px;
+  left: var(--space-3);
+  right: var(--space-3);
   bottom: -1px;
   height: 2px;
-  background: var(--action);
+  background: var(--accent);
 }
 
 .ea-nav-divider {
@@ -1007,25 +1226,22 @@ select:focus {
   background: var(--border-rule);
 }
 
-/* Every chrome control gets the same ring — mark, input, avatar, buttons.
-   !important beats Button's outline-none and outline-2's currentColor default. */
+/* Every chrome control gets the same ring. !important beats Button's
+   outline-none and outline-2's currentColor default. */
 a.ea-focus-ring:focus-visible,
 button.ea-focus-ring:focus-visible,
 input.ea-focus-ring:focus-visible,
 .ea-focus-ring:focus-visible {
-  outline: 2px solid var(--signal-live) !important;
-  outline-offset: 3px !important;
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
   border-radius: 2px;
 }
 
-/* =============================================
+/* =================================================================
    WORKBENCH TABLES
-   The save flash is an animation, not a static colour: `WorkbenchTable`
-   clears the flash state on `animationend`, so without keyframes here a
-   saved cell would stay green forever.
-   Row focus keeps the standard ring but draws it inset — the 3px offset
-   would be clipped by the row's own bottom border.
-   ============================================= */
+   The save flash is an animation, not a static colour: WorkbenchTable
+   clears the flash state on animationend, so the keyframes must exist.
+   ================================================================= */
 @keyframes ea-wb-flash-saved {
   from {
     background-color: color-mix(in srgb, var(--state-positive) 30%, transparent);
@@ -1052,17 +1268,27 @@ input.ea-focus-ring:focus-visible,
   animation: ea-wb-flash-error 900ms ease-out;
 }
 
-/* Reduced motion still needs the animation to *run*, because animationend is
-   what clears the flash — it just runs too fast to read as movement. */
+/* Reduced motion still needs the animation to *run*, because
+   animationend is what clears the flash — just too fast to read. */
 @media (prefers-reduced-motion: reduce) {
   .ea-wb-flash-saved,
   .ea-wb-flash-error {
     animation-duration: 1ms;
   }
-
-  /* Photo zoom and staged entrance are retired (v4.1 §14). */
 }
 
 .ea-wb-row.ea-focus-ring:focus-visible {
   outline-offset: -2px !important;
+}
+
+/* Motion law: 150–200ms opacity/transform, and honor the OS setting. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

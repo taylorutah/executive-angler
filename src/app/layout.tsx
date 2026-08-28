@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Fraunces, Newsreader, Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
@@ -16,32 +16,20 @@ import { organizationJsonLd } from "@/lib/seo";
 import { REGISTER_BOOTSTRAP } from "@/lib/register";
 import "./globals.css";
 
+/* Two faces only (DESIGN.md): Fraunces 500/600 for display, Inter 400/500/600 for UI.
+   Pinned weights only — a stray 700 anywhere resolves to 600, which self-enforces the law. */
 const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-fraunces",
-  axes: ["opsz", "SOFT", "WONK"],
+  weight: ["500", "600"],
 });
 
-const newsreader = Newsreader({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-newsreader",
-  style: ["normal", "italic"],
-  axes: ["opsz"],
-});
-
-const archivo = Archivo({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-archivo",
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-  variable: "--font-ibm-plex-mono",
-  display: "swap",
+  variable: "--font-inter",
+  weight: ["400", "500", "600"],
 });
 
 const GA_MEASUREMENT_ID = "G-RY19PKC2WQ";
@@ -123,7 +111,7 @@ export default function RootLayout({
       lang="en"
       data-register="daylight"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${newsreader.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+      className={`${fraunces.variable} ${inter.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: REGISTER_BOOTSTRAP }} />

@@ -20,7 +20,7 @@ describe("v4.1 geometry tokens", () => {
   });
 
   it("reports paper RGB on transparent structural boxes", () => {
-    assert.match(css, /rgba\(250,\s*246,\s*240,\s*0\)/);
+    assert.match(css, /rgba\(250,\s*249,\s*245,\s*0\)/);
   });
 
   it("retires staged entrance and photo zoom", () => {
