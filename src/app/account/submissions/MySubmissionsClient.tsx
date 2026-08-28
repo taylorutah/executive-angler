@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  ChevronLeft, Plus, Clock, CheckCircle, XCircle, AlertCircle,
-  Send, FileEdit, Eye, Trash2, Loader2, Shield
+  ArrowLeft, Plus, CheckCircle, XCircle, AlertCircle,
+  Send, FileEdit, Eye, Trash2, Loader2, Shield,
+  Waves, Store, User, Home, Compass, Fish, Feather, FileText,
 } from "@/icons";
 
 interface Submission {
@@ -30,26 +31,32 @@ interface Stats {
   trust_level: string;
 }
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode; bg: string }> = {
-  draft: { label: "Draft", color: "text-[var(--text-body)]", icon: <FileEdit className="h-3.5 w-3.5" />, bg: "bg-[var(--border-rule)]" },
-  submitted: { label: "Submitted", color: "text-[var(--signal-live)]", icon: <Send className="h-3.5 w-3.5" />, bg: "bg-[var(--signal-live)]/15" },
-  in_review: { label: "In Review", color: "text-[var(--action)]", icon: <Eye className="h-3.5 w-3.5" />, bg: "bg-[var(--action)]/15" },
-  needs_info: { label: "Needs Info", color: "text-yellow-400", icon: <AlertCircle className="h-3.5 w-3.5" />, bg: "bg-yellow-400/15" },
-  approved: { label: "Approved", color: "text-[var(--state-positive)]", icon: <CheckCircle className="h-3.5 w-3.5" />, bg: "bg-[var(--state-positive)]/15" },
-  rejected: { label: "Rejected", color: "text-red-400", icon: <XCircle className="h-3.5 w-3.5" />, bg: "bg-red-400/15" },
-  published: { label: "Published", color: "text-[var(--state-positive)]", icon: <CheckCircle className="h-3.5 w-3.5" />, bg: "bg-[var(--state-positive)]/15" },
+const STATUS_CONFIG: Record<string, { label: string; icon: React.ReactNode; cls: string }> = {
+  draft: { label: "Draft", icon: <FileEdit className="h-3.5 w-3.5" />, cls: "bg-[var(--paper-deep)] text-[var(--text-2)]" },
+  submitted: { label: "Submitted", icon: <Send className="h-3.5 w-3.5" />, cls: "bg-[var(--accent-soft)] text-[var(--accent)]" },
+  in_review: { label: "In Review", icon: <Eye className="h-3.5 w-3.5" />, cls: "bg-[var(--accent-soft)] text-[var(--accent)]" },
+  needs_info: { label: "Needs Info", icon: <AlertCircle className="h-3.5 w-3.5" />, cls: "bg-[var(--warning)]/10 border border-[var(--warning)]/30 text-[var(--warning)]" },
+  approved: { label: "Approved", icon: <CheckCircle className="h-3.5 w-3.5" />, cls: "bg-[var(--success)]/10 border border-[var(--success)]/30 text-[var(--success)]" },
+  rejected: { label: "Rejected", icon: <XCircle className="h-3.5 w-3.5" />, cls: "bg-[var(--danger)]/10 border border-[var(--danger)]/30 text-[var(--danger)]" },
+  published: { label: "Published", icon: <CheckCircle className="h-3.5 w-3.5" />, cls: "bg-[var(--success)]/10 border border-[var(--success)]/30 text-[var(--success)]" },
 };
 
-const TYPE_EMOJI: Record<string, string> = {
-  river: "🏞️", fly_shop: "🏪", guide: "🎣", lodge: "🏡", destination: "🗺️", species: "🐟", fly_pattern: "🪰",
+const TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  river: Waves,
+  fly_shop: Store,
+  guide: User,
+  lodge: Home,
+  destination: Compass,
+  species: Fish,
+  fly_pattern: Feather,
 };
 
 const TRUST_LABELS: Record<string, { label: string; color: string }> = {
-  new: { label: "New Contributor", color: "text-[var(--text-body)]" },
-  contributor: { label: "Contributor", color: "text-[var(--signal-live)]" },
-  trusted: { label: "Trusted Contributor", color: "text-[var(--state-positive)]" },
-  verified: { label: "Verified", color: "text-[var(--action)]" },
-  moderator: { label: "Moderator", color: "text-purple-400" },
+  new: { label: "New Contributor", color: "text-[var(--text-2)]" },
+  contributor: { label: "Contributor", color: "text-[var(--accent)]" },
+  trusted: { label: "Trusted Contributor", color: "text-[var(--success)]" },
+  verified: { label: "Verified", color: "text-[var(--accent)]" },
+  moderator: { label: "Moderator", color: "text-[var(--text-1)]" },
 };
 
 export default function MySubmissionsClient({ submissions, stats }: { submissions: Submission[]; stats: Stats }) {
@@ -70,42 +77,46 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <Link href="/account" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
-              <ChevronLeft className="h-5 w-5" />
-            </Link>
-            <h1 className="font-serif text-2xl text-[var(--text-primary)]">My Submissions</h1>
-          </div>
+    <div className="min-h-screen bg-[var(--paper)]">
+      {/* Header bar — mirrors Gear Locker */}
+      <div className="border-b border-[var(--border)]">
+        <div className="max-w-[var(--container)] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
-            href="/contribute"
-            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--action)] text-white rounded-lg text-sm font-semibold hover:bg-[var(--action-hover)] transition-colors"
+            href="/account"
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--text-2)] hover:text-[var(--accent)] transition-colors duration-150 ease-standard mb-2"
           >
-            <Plus className="h-4 w-4" />
-            New Submission
+            <ArrowLeft className="h-3.5 w-3.5" /> Account
           </Link>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div className="min-w-0">
+              <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">My Submissions</h1>
+            </div>
+            <Link href="/contribute" className="ea-btn ea-btn-primary ea-btn-sm shrink-0">
+              <Plus className="h-4 w-4" />
+              New Submission
+            </Link>
+          </div>
         </div>
+      </div>
 
+      <div className="max-w-[var(--container)] mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
         {/* Contributor stats */}
-        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-[var(--action)]" />
-              <div>
-                <p className={`text-sm font-semibold ${trustInfo.color}`}>{trustInfo.label}</p>
-                <p className="text-[11px] text-[var(--text-meta)]">
-                  {stats.submissions_approved} approved · {stats.submissions_rejected} rejected · {stats.submissions_total} total
-                </p>
-              </div>
+        <div className="ea-card mb-6">
+          <div className="flex items-center gap-3">
+            <span className="h-9 w-9 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center shrink-0" aria-hidden>
+              <Shield className="h-4 w-4 text-[var(--accent)]" />
+            </span>
+            <div>
+              <p className={`text-sm font-semibold ${trustInfo.color}`}>{trustInfo.label}</p>
+              <p className="text-xs text-[var(--text-3)] num">
+                {stats.submissions_approved} approved · {stats.submissions_rejected} rejected · {stats.submissions_total} total
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Filter tabs */}
-        <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1">
+        {/* Filter chips */}
+        <div className="flex flex-wrap gap-2 mb-4">
           {[
             { key: "all", label: "All" },
             { key: "draft", label: "Drafts" },
@@ -117,15 +128,16 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
             <button
               key={tab.key}
               onClick={() => setFilter(tab.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
+              aria-pressed={filter === tab.key}
+              className={`rounded-[var(--radius-pill)] border px-3 py-1.5 text-[13px] font-medium whitespace-nowrap transition-colors duration-150 ease-standard ${
                 filter === tab.key
-                  ? "bg-[var(--action)] text-white"
-                  : "bg-[var(--surface-raised)] text-[var(--text-body)] hover:text-[var(--text-primary)]"
+                  ? "border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)]"
+                  : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
               }`}
             >
               {tab.label}
               {tab.key !== "all" && (
-                <span className="ml-1 opacity-60">
+                <span className="ml-1 opacity-60 num">
                   {submissions.filter(s => s.status === tab.key).length}
                 </span>
               )}
@@ -135,11 +147,11 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
 
         {/* Submissions list */}
         {filtered.length === 0 ? (
-          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-12 text-center">
-            <p className="text-[var(--text-meta)] mb-3">
+          <div className="ea-card p-12 text-center">
+            <p className="text-sm text-[var(--text-2)] mb-3">
               {filter === "all" ? "No submissions yet" : `No ${filter} submissions`}
             </p>
-            <Link href="/contribute" className="text-sm text-[var(--action)] hover:underline">
+            <Link href="/contribute" className="text-sm font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors duration-150 ease-standard">
               Start contributing →
             </Link>
           </div>
@@ -147,49 +159,52 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
           <div className="space-y-3">
             {filtered.map(s => {
               const statusCfg = STATUS_CONFIG[s.status] || STATUS_CONFIG.draft;
+              const TypeIcon = TYPE_ICONS[s.entity_type] || FileText;
               const canEdit = ["draft", "needs_info", "rejected"].includes(s.status);
               const canDelete = s.status === "draft";
 
               return (
-                <div key={s.id} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4 hover:border-[var(--text-meta)] transition-colors">
+                <div key={s.id} className="ea-card card-hover p-4">
                   <div className="flex items-start gap-3">
-                    {/* Type emoji */}
-                    <span className="text-2xl mt-0.5">{TYPE_EMOJI[s.entity_type] || "📄"}</span>
+                    {/* Entity type mark */}
+                    <span className="h-9 w-9 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center shrink-0 mt-0.5" aria-hidden>
+                      <TypeIcon className="h-4 w-4 text-[var(--accent)]" />
+                    </span>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="text-sm font-bold text-[var(--text-primary)]">{s.name}</h3>
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${statusCfg.color} ${statusCfg.bg}`}>
+                        <h3 className="text-sm font-semibold text-[var(--text-1)]">{s.name}</h3>
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[var(--radius-pill)] text-xs font-medium ${statusCfg.cls}`}>
                           {statusCfg.icon}
                           {statusCfg.label}
                         </span>
                       </div>
 
-                      <p className="text-xs text-[var(--text-meta)] mt-1">
+                      <p className="text-xs text-[var(--text-3)] mt-1">
                         {s.entity_type.replace("_", " ")} · v{s.version} · Updated {formatDate(s.updated_at)}
                       </p>
 
                       {/* Admin feedback for needs_info */}
                       {s.status === "needs_info" && s.admin_feedback && (
-                        <div className="mt-2 px-3 py-2 bg-yellow-400/5 border border-yellow-400/20 rounded-lg">
-                          <p className="text-xs text-yellow-400"><strong>Admin feedback:</strong> {s.admin_feedback}</p>
+                        <div className="mt-2 px-3 py-2 bg-[var(--warning)]/10 border border-[var(--warning)]/30 rounded-[var(--radius-md)]">
+                          <p className="text-xs text-[var(--warning)]"><strong>Admin feedback:</strong> {s.admin_feedback}</p>
                         </div>
                       )}
 
                       {/* Rejection reason */}
                       {s.status === "rejected" && s.rejection_reason && (
-                        <div className="mt-2 px-3 py-2 bg-red-400/5 border border-red-400/20 rounded-lg">
-                          <p className="text-xs text-red-400"><strong>Reason:</strong> {s.rejection_reason}</p>
+                        <div className="mt-2 px-3 py-2 bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)]">
+                          <p className="text-xs text-[var(--danger)]"><strong>Reason:</strong> {s.rejection_reason}</p>
                         </div>
                       )}
                     </div>
 
                     {/* Actions */}
-                    <div className="flex gap-1.5 shrink-0">
+                    <div className="flex gap-1 shrink-0">
                       {canEdit && (
                         <Link
                           href={`/contribute/${s.entity_type}?edit=${s.id}`}
-                          className="p-2 bg-[var(--border-rule)] rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                          className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors duration-150 ease-standard"
                           title="Edit"
                         >
                           <FileEdit className="h-4 w-4" />
@@ -199,7 +214,7 @@ export default function MySubmissionsClient({ submissions, stats }: { submission
                         <button
                           onClick={() => handleDelete(s.id)}
                           disabled={deleting === s.id}
-                          className="p-2 bg-[var(--border-rule)] rounded-lg text-[var(--text-body)] hover:text-red-400 transition-colors disabled:opacity-50"
+                          className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--danger)] hover:bg-[var(--danger)]/10 transition-colors duration-150 ease-standard disabled:opacity-50"
                           title="Delete draft"
                         >
                           {deleting === s.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
