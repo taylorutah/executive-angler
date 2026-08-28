@@ -3,8 +3,10 @@
  * Keys are the canonical /images/... path; values are the 828px-wide sibling.
  */
 export const LOCAL_HERO_MOBILE: Record<string, string> = {
+  "/images/home/madison-three-dollar-bridge.jpg":
+    "/images/home/madison-three-dollar-bridge-828.jpg",
   "/images/madison-river-three-dollar-bridge.jpg":
-    "/images/madison-river-three-dollar-bridge-828.jpg",
+    "/images/home/madison-three-dollar-bridge-828.jpg",
 };
 
 export function localHeroMobileSrc(src: string): string | undefined {
