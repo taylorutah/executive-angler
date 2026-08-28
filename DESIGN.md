@@ -91,7 +91,7 @@ Implemented as `.ea-*` classes in `src/app/globals.css` (`@layer components`). S
 - **Journal entry card**: date as 12px overline; water/location name Fraunces 20px; conditions as chips; notes excerpt clamped to 2 lines; optional 4:3 photo thumb.
 - **Condition chips** (`.ea-chip`): pill, 12px, `--paper-deep` bg, `--text-2`, optional 14px icon (thermometer, droplets, wind, sun metaphors).
 - **Nav**: 68px, sticky, 1px bottom border, `--paper` bg. Wordmark left in Fraunces 600. Links Inter 14px/500; active = `--accent` text. Primary CTA right. No blur, no transparency tricks.
-- **Footer**: `--ink` bg, `--paper` text at 80%, organized link columns, hairline separators rgba(255,255,255,0.12).
+- **Footer**: the site's one graded-photo ink band (client ruling 2026-08-28 — see Phase 4C rulings): one existing library photograph under a flat `--ink` scrim at uniform alpha, `--paper` text at 80%, organized link columns, hairline separators rgba(255,255,255,0.12). The closing CTA stays flat `--ink`.
 - **Tables** (`.ea-table`): header 12px uppercase 0.06em `--text-3`; 1px row borders; 12px vertical cell padding; row hover `--paper-deep`; tabular numerals. One table language app-wide: `WorkbenchTable` (journal, flybox, rivers/mine, gear, fly workbench) renders this spec — no zebra, no fixed-height rows (client ruling 2026-08-28).
 - **Map panels**: radius 10, 1px `--border`; muted default map chrome where the API allows; minimal consistent controls.
 - **Stats** (`.ea-stat-value` / `.ea-stat-label`): numeral Fraunces 30px/600 `--text-1`, label 12px uppercase `--text-3`.
@@ -111,7 +111,7 @@ Inline SVG only, via the repo's desk icon set (`src/icons/` — Lucide-geometry 
 - Explicit width/height or CSS aspect-ratio on every image — zero layout shift.
 - Radius matches tokens. Lazy-load below the fold. Descriptive alt text ("Evening rise on the Madison," never "image1").
 - Missing photo asset: solid `--paper-deep` block at the correct aspect-ratio with descriptive alt text. Never hotlink stock URLs.
-- Heroes are flat (client ruling 2026-08-28): no scrims, no gradient overlays, no text over the photograph. The image stands in its own band; headline, overline, and metadata sit on paper below. The only sanctioned on-photo affordance is the solid `--ink` chip (photo credit, gallery count).
+- Heroes are flat (client ruling 2026-08-28): no scrims, no gradient overlays, no text over the photograph. The image stands in its own band; headline, overline, and metadata sit on paper below. The only sanctioned on-photo affordance is the solid `--ink` chip (photo credit, gallery count). One exception: the footer photo band (Phase 4C ruling below).
 
 ## 7. Responsive & accessibility
 
@@ -163,3 +163,10 @@ All four Phase 3 open questions are ruled. These are permanent law.
 2. **FirstRunEmpty is token-compliant.** All six first-run surfaces live on the 8pt and type scales: purpose at body size (16px), the primary action on the overline spec (12px uppercase, 0.06em — never 0.14em), the example at metadata size (13px). One concrete sentence + one primary action, per §4 Empty states.
 3. **Dropdown triggers are buttons, not tags.** FilterDropdown triggers — and any future menu trigger — use `--radius-md` (6px). `--radius-pill` stays reserved for condition chips and tags; the selected-count inside the trigger is a badge and keeps the pill.
 4. **Touch targets resolved.** The 32/40/48 height scale governs desktop/pointer contexts. Below 768px (touch), interactive elements enforce a 44px minimum — a single `min-height` floor in `globals.css`, not per-component rewrites. Streamside one-handed use is a product requirement.
+
+## Phase 4C chrome rulings — client rulings (2026-08-28)
+
+Both rulings are permanent law.
+
+1. **The footer is the site's one permanent graded-photo ink band.** One existing photograph from the imagery the site already serves (a moody water/river landscape) carries the standard `--photo-grade` under a flat `--ink` scrim at a uniform 72% alpha (`.ea-band-photo` / `.ea-band-photo-scrim`) — a grade, never a gradient. White text, the link columns, and the legal bar ride above it. This is the only sanctioned photo-behind-text band anywhere on the site; heroes and every other surface stay flat per §6, and the solid `--ink` chip remains the only other on-photo affordance. The photograph may only ever be swapped for another image the site already serves — never downloaded, hotlinked, or invented.
+2. **The Explore mega menu is the canonical directory navigation pattern.** One hover-triggered, full-width solid panel (`--paper`, 1px `--border` bottom edge, `--shadow-float`): directory link columns on the left, a featured-image tile on the right that crossfades (opacity only, 150–200ms) to the existing site photograph mapped to the hovered or focused link, with a default photograph when nothing is hovered. Imagery rule: only imagery the site already serves. Behavior: hover-intent delays (120ms open / 220ms close), closes on mouse-leave and ESC (focus returns to the trigger), keyboard focus on the trigger opens it, and every link is tabbable — the disclosure pattern (`aria-expanded` + `aria-controls`; no `aria-haspopup`, because the panel is a nav region of ordinary links, not a `role="menu"`). Below 768px no hover panel exists; the directory links live in the `.ea-sheet` mobile menu as an accordion group.
