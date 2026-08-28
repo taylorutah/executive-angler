@@ -98,15 +98,15 @@ export default async function LodgesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
+      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <p className="ea-overline">
             Premier Accommodations
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
+          <h1 className="mt-3 text-[var(--text-1)]">
             Stay Where the Fishing Is Finest
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
+          <p className="mt-5 max-w-[var(--prose)] text-lg text-[var(--text-2)] leading-relaxed">
             World-class lodges at the world&apos;s greatest fisheries — from remote Alaskan
             fly-outs to Scottish castle beats.
           </p>
@@ -114,9 +114,9 @@ export default async function LodgesPage() {
       </section>
 
       {/* ── Spotlight Lodges ──────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
+      <section className="bg-[var(--paper)] pt-2 pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <p className="ea-overline mb-8">
             Editor&apos;s Selection
           </p>
 
@@ -127,56 +127,52 @@ export default async function LodgesPage() {
                 href={`/lodges/${heroLodge.slug}`}
                 className="group block mb-6"
               >
-                <div className="grid lg:grid-cols-5 rounded-2xl overflow-hidden shadow-xl min-h-[380px]">
-                  <div className="relative lg:col-span-3 h-72 lg:h-auto min-h-[288px]">
+                <div className="grid lg:grid-cols-5 rounded-[var(--radius-card)] overflow-hidden border border-[var(--border)] bg-[var(--surface)] card-hover min-h-[380px]">
+                  <div className="relative lg:col-span-3 h-72 lg:h-auto min-h-[288px] overflow-hidden">
                     <SafeEntityImage
                       src={heroLodge.heroImageUrl}
                       alt={heroLodge.name}
                       title={heroLodge.name}
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="ea-photo"
                       sizes="(max-width: 1024px) 100vw, 60vw"
                       priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 hidden lg:block pointer-events-none" />
                   </div>
-                  <div className="bg-[var(--surface-page)] lg:col-span-2 p-8 lg:p-10 flex flex-col justify-center">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
+                  <div className="bg-[var(--surface)] lg:col-span-2 p-8 lg:p-12 flex flex-col justify-center">
+                    <p className="ea-overline">
                       Featured Lodge
                     </p>
-                    <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-bold text-[var(--text-primary)]">
+                    <h2 className="mt-2 font-heading text-3xl lg:text-4xl font-semibold text-[var(--text-1)]">
                       {heroLodge.name}
                     </h2>
-                    <div className="mt-2 flex items-center gap-1.5 text-[var(--text-meta)] text-sm">
+                    <div className="mt-2 flex items-center gap-1.5 text-[var(--text-3)] text-sm">
                       <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
                       <span>West Yellowstone, Montana</span>
                     </div>
                     {heroLodge.averageRating && (
                       <div className="mt-2 flex items-center gap-1.5">
-                        <Star className="h-4 w-4 fill-[var(--action)] text-[var(--action)]" />
-                        <span className="text-[var(--text-body)] text-sm font-medium">
+                        <Star className="h-4 w-4 fill-[var(--accent)] text-[var(--accent)]" />
+                        <span className="text-[var(--text-2)] text-sm font-medium">
                           {heroLodge.averageRating} · {heroLodge.reviewCount} reviews
                         </span>
                       </div>
                     )}
-                    <p className="mt-4 text-[var(--text-body)] text-sm leading-relaxed line-clamp-3">
+                    <p className="mt-4 text-[var(--text-2)] text-sm leading-relaxed line-clamp-3">
                       {heroLodge.description?.substring(0, 240)}...
                     </p>
                     <div className="mt-4 flex flex-wrap gap-1.5">
                       {heroLodge.amenities.slice(0, 4).map((a) => (
-                        <span
-                          key={a}
-                          className="px-2.5 py-1 bg-[var(--surface-raised)] text-[var(--text-body)] text-[10px] font-medium rounded-full"
-                        >
+                        <span key={a} className="ea-chip">
                           {a}
                         </span>
                       ))}
                     </div>
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="text-[var(--action)] text-sm font-semibold">
+                      <span className="text-[var(--accent)] text-sm font-semibold">
                         {heroLodge.priceRange}
                       </span>
                     </div>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--action)] group-hover:underline">
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--accent)] group-hover:underline">
                       View Lodge <ChevronRight className="h-4 w-4" />
                     </span>
                   </div>
@@ -193,48 +189,42 @@ export default async function LodgesPage() {
                 <ScrollAnimation key={lodge.id} delay={i * 0.1}>
                   <Link
                     href={`/lodges/${lodge.slug}`}
-                    className="group block bg-[var(--surface-raised)] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+                    className="group block card-hover bg-[var(--surface)] rounded-[var(--radius-card)] overflow-hidden border border-[var(--border)]"
                   >
-                    <div className="relative h-52">
+                    <div className="relative h-52 overflow-hidden">
                       <SafeEntityImage
                         src={lodge.heroImageUrl}
                         alt={lodge.name}
                         title={lodge.name}
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="ea-photo"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <h3 className="font-heading text-xl font-bold text-white leading-tight">
-                          {lodge.name}
-                        </h3>
-                        {lodge.priceRange && (
-                          <p className="text-[var(--action)] text-xs mt-0.5 font-medium">
-                            {lodge.priceRange}
-                          </p>
-                        )}
-                      </div>
                     </div>
                     <div className="p-5">
-                      <div className="flex flex-wrap gap-1.5">
+                      <h3 className="font-heading text-xl font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors leading-tight">
+                        {lodge.name}
+                      </h3>
+                      {lodge.priceRange && (
+                        <p className="text-[var(--accent)] text-sm mt-0.5 font-semibold">
+                          {lodge.priceRange}
+                        </p>
+                      )}
+                      <div className="mt-3 flex flex-wrap gap-1.5">
                         {lodge.amenities.slice(0, 3).map((a) => (
-                          <span
-                            key={a}
-                            className="px-2 py-0.5 bg-[var(--surface-page)] text-[var(--action)] text-[10px] font-medium rounded-full"
-                          >
+                          <span key={a} className="ea-chip">
                             {a}
                           </span>
                         ))}
                       </div>
                       {lodge.averageRating && (
                         <div className="mt-3 flex items-center gap-1">
-                          <Star className="h-3.5 w-3.5 fill-[var(--action)] text-[var(--action)]" />
-                          <span className="text-[var(--text-body)] text-xs">
+                          <Star className="h-3.5 w-3.5 fill-[var(--accent)] text-[var(--accent)]" />
+                          <span className="text-[var(--text-2)] text-xs">
                             {lodge.averageRating} ({lodge.reviewCount} reviews)
                           </span>
                         </div>
                       )}
-                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--action)] group-hover:underline">
+                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[var(--accent)] group-hover:underline">
                         Explore <ChevronRight className="h-3.5 w-3.5" />
                       </span>
                     </div>
@@ -247,16 +237,16 @@ export default async function LodgesPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">All Lodges</h2>
-          <p className="text-sm text-[var(--text-body)] mt-1">
+      <div className="bg-[var(--paper)] border-t border-[var(--border)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">All Lodges</h2>
+          <p className="text-sm text-[var(--text-2)] mt-1">
             {lodges.length} world-class lodges — filter by destination, river &amp; price
           </p>
         </div>
       </div>
-      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <Suspense>
             <EntityListView items={items} config={config} storageKey="lodges" />
           </Suspense>
