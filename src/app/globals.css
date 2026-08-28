@@ -1357,6 +1357,14 @@ input.ea-focus-ring:focus-visible,
 
 .desk-form {
   max-width: 28rem;
+  --action: var(--copper-700);
+  --action-hover: var(--copper-hover-700);
+  --on-action: #ffffff;
+}
+
+/* Public routes pack the footer under the sheet. Dusk apps keep a full-height main. */
+[data-register="daylight"] main {
+  flex: 0 0 auto;
 }
 
 .desk-spec,
@@ -1445,6 +1453,7 @@ input.ea-focus-ring:focus-visible,
 .desk-table-wrap {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .desk-table {

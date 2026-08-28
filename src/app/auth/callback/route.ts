@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendBrandedEmail } from "@/lib/email/client";
 import { buildWelcome } from "@/lib/email/senders";
-import { POST_LOGIN_PATH } from "@/lib/auth-paths";
+import { POST_LOGIN_PATH, safeInternalPath } from "@/lib/auth-paths";
 
 /**
  * GET /auth/callback
@@ -13,16 +13,10 @@ import { POST_LOGIN_PATH } from "@/lib/auth-paths";
  */
 // Prevents open-redirect: only allow same-origin path redirects.
 
-function safeNext(raw: string | null): string {
-  if (!raw) return POST_LOGIN_PATH;
-  if (!raw.startsWith("/") || raw.startsWith("//")) return POST_LOGIN_PATH;
-  return raw;
-}
-
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = safeNext(searchParams.get("next"));
+  const next = safeInternalPath(searchParams.get("next")) ?? POST_LOGIN_PATH;
   const error = searchParams.get("error");
   const errorDescription = searchParams.get("error_description");
 

@@ -192,7 +192,10 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
           )}
         </div>
 
-        <div className="desk-table-wrap border border-[var(--border-rule)]">
+        <p className="mb-2 font-ui text-[12px] text-[var(--text-meta)] lg:hidden">
+          Swipe to see In box and Add.
+        </p>
+        <div className="desk-table-wrap border border-[var(--border-rule)] bg-[var(--vellum)]">
           <table className="desk-table text-[13px] leading-[1.35]">
             <thead>
               <tr className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">

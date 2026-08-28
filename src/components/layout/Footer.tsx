@@ -45,7 +45,7 @@ const footerColumns: { title: string; links: FooterLink[] }[] = [
 export default function Footer() {
   return (
     <footer className="border-t border-[var(--rule)] bg-[var(--vellum)] text-[var(--graphite)]">
-      <div className="w-full px-5 pb-9 pt-12 sm:px-8 xl:px-20">
+      <div className="w-full px-5 pb-24 pt-12 sm:px-8 lg:pb-9 xl:px-20">
         <div>
           <p
             className="font-heading text-[28px] font-semibold leading-none text-[var(--ink)]"

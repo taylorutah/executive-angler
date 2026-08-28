@@ -1,5 +1,6 @@
 import { DESTINATION_STATE_MAP } from "@/lib/destination-state-map";
 import { currentHatchMonth } from "@/lib/flies/fishing-now";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 import { speciesTokens } from "./species-tokens";
 import type { River } from "@/types/entities";
 import type { CardData } from "@/types/list-config";
@@ -63,7 +64,7 @@ export function toRiverBrowseItem(
   return {
     riverId: river.id,
     href: `/rivers/${river.slug}`,
-    imageUrl: river.heroImageUrl,
+    imageUrl: normalizeImageUrl(river.heroImageUrl),
     imageAlt: river.name,
     title: river.name,
     kicker: state || undefined,

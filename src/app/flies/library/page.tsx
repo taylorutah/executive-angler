@@ -13,6 +13,7 @@ import FlyLibraryClient from "./FlyLibraryClient";
 import { formatHookSize } from "@/lib/flies/variant-format";
 import { hatchTokens, sizeListValue } from "@/lib/browse/fly-filters";
 import { getAllCanonicalFlies } from "@/lib/db";
+import { plateImageUrl } from "@/lib/media/image-url";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
@@ -50,9 +51,12 @@ export default async function FliesPage() {
   const allFlies = await getAllCanonicalFlies();
 
   const items: (CardData & { _filterValues: Record<string, string> })[] = allFlies.map(
-    (fly) => ({
+    (fly) => {
+    const imageUrl = plateImageUrl(fly.heroImageUrl);
+    const iconOnly = imageUrl === undefined;
+    return {
       href: `/flies/${fly.slug}`,
-      imageUrl: fly.heroImageUrl || undefined,
+      imageUrl,
       imageAlt: `${fly.name} fly pattern for trout fishing`,
       title: fly.name,
       subtitle: fly.tagline || undefined,
@@ -61,10 +65,7 @@ export default async function FliesPage() {
       badges: [FLY_CATEGORY_LABELS[fly.category] || fly.category],
       featured: fly.featured,
       description: fly.description?.substring(0, 150),
-      iconOnly:
-        !fly.heroImageUrl ||
-        fly.heroImageUrl.includes("/fly-icons/") ||
-        fly.heroImageUrl.includes("/community-images/submissions/"),
+      iconOnly,
       actionSlot: {
         kind: "add-to-fly-box" as const,
         canonicalFlyId: fly.id,
@@ -82,7 +83,8 @@ export default async function FliesPage() {
         size: sizeListValue(fly.sizes),
         canTie: "0",
       },
-    }),
+    };
+    },
   );
 
   return (

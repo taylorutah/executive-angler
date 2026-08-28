@@ -49,7 +49,7 @@ export default function YourRecordHere({ riverId, riverName }: Props) {
         <p className="font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--slate)]">
           Your record
         </p>
-        <p className="mt-1.5 font-body text-[14px] leading-[22px] text-[var(--graphite)]">
+        <p className="prose mt-1.5 text-[14px] leading-[22px] text-[var(--graphite)]">
           Sign in. The river stays public. The day does not.
         </p>
       </div>

@@ -77,7 +77,7 @@ export default function RiverDeskBody({
             {paragraphs.length > 0 ? (
               <div className="flex flex-col gap-3.5">
                 <Eyebrow>How it fishes</Eyebrow>
-                <div className="space-y-3.5 font-body text-[17px] leading-7 text-[var(--graphite)]">
+                <div className="prose space-y-3.5 text-[17px] leading-7 text-[var(--graphite)]">
                   {paragraphs.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}

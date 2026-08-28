@@ -102,7 +102,13 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
       </div>
 
       <div className="overflow-x-auto border border-[var(--border-rule)] bg-[var(--surface-card)]">
-        <table className="w-full min-w-[720px] border-collapse text-sm">
+        <table className="w-full min-w-[720px] table-fixed border-collapse text-sm">
+          <colgroup>
+            <col className="w-[9.5rem]" />
+            {MONTHS.map((month) => (
+              <col key={month} className="w-8" />
+            ))}
+          </colgroup>
           <thead>
             <tr>
               <th className="sticky left-0 z-10 bg-[var(--surface-card)] px-3 py-2 text-left font-medium text-[var(--text-meta)]">

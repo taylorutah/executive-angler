@@ -5,7 +5,7 @@ import Image from "next/image";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
-import { isUsableImageUrl } from "@/lib/media/image-url";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
 import { localHeroMobileSrc, localHeroWebpSrc } from "@/lib/media/local-hero";
 
@@ -42,16 +42,16 @@ export default function RiverHeroImage({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const showPhoto = isUsableImageUrl(heroImageUrl) && !failed;
-  const mobileSrc = heroImageUrl ? localHeroMobileSrc(heroImageUrl) : undefined;
-  const webpSrc = heroImageUrl ? localHeroWebpSrc(heroImageUrl) : undefined;
+  const heroSrc = normalizeImageUrl(heroImageUrl);
+  const showPhoto = Boolean(heroSrc) && !failed;
+  const mobileSrc = heroSrc ? localHeroMobileSrc(heroSrc) : undefined;
   const mobileWebp = mobileSrc ? localHeroWebpSrc(mobileSrc) : undefined;
-  const useNativeHero = Boolean(mobileSrc && heroImageUrl);
+  const useNativeHero = Boolean(mobileSrc && heroSrc);
 
-  const heroAsPhoto: ApprovedPhoto | null = showPhoto
+  const heroAsPhoto: ApprovedPhoto | null = showPhoto && heroSrc
     ? {
         id: "hero",
-        photoUrl: heroImageUrl,
+        photoUrl: heroSrc,
         caption: heroImageAlt,
         submitterName: heroImageCredit || "Executive Angler",
         submittedAt: new Date().toISOString(),
@@ -64,7 +64,7 @@ export default function RiverHeroImage({
   return (
     <>
       <section className="relative h-[420px] w-full overflow-hidden">
-        {showPhoto && useNativeHero ? (
+        {heroSrc && showPhoto && useNativeHero ? (
           <div className="absolute inset-0">
             <picture className="block h-full w-full">
           {mobileWebp ? (
@@ -74,7 +74,7 @@ export default function RiverHeroImage({
             <source srcSet={mobileSrc} media="(max-width: 1024px)" />
           ) : null}
           <img
-                src={heroImageUrl}
+                src={heroSrc}
                 alt={heroImageAlt}
                 decoding="async"
                 fetchPriority="high"
@@ -84,10 +84,10 @@ export default function RiverHeroImage({
               />
             </picture>
           </div>
-        ) : showPhoto ? (
+        ) : heroSrc && showPhoto ? (
           <div className="absolute inset-0">
             <Image
-              src={heroImageUrl}
+              src={heroSrc}
               alt={heroImageAlt}
               fill
               className="object-cover"

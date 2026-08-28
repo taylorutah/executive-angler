@@ -18,3 +18,15 @@ export function isUsableImageUrl(
 ): value is string {
   return normalizeImageUrl(value) !== undefined;
 }
+
+/** Plate / bench stills only — icons and leftover submission paths stay empty. */
+export function plateImageUrl(
+  value: string | null | undefined,
+): string | undefined {
+  const href = normalizeImageUrl(value);
+  if (!href) return undefined;
+  if (href.includes("/fly-icons/") || href.includes("/community-images/submissions/")) {
+    return undefined;
+  }
+  return href;
+}

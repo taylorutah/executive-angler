@@ -57,3 +57,26 @@ export function signedInPathRedirect(pathname: string): string | null {
   if (pathname === "/dashboard") return POST_LOGIN_PATH;
   return null;
 }
+
+/**
+ * Same-origin path only. Rejects protocol-relative (`//`, `/\\`) and
+ * encoded backslash tricks (`/%5C%5Cevil.com`) that browsers treat as hosts.
+ */
+export function safeInternalPath(raw: string | null | undefined): string | null {
+  if (typeof raw !== "string") return null;
+  const trimmed = raw.trim();
+  if (trimmed.length === 0) return null;
+
+  let value = trimmed;
+  try {
+    value = decodeURIComponent(trimmed);
+  } catch {
+    return null;
+  }
+
+  if (value.includes("\\") || value.includes("\0")) return null;
+  if (!value.startsWith("/")) return null;
+  if (value.startsWith("//")) return null;
+  if (value.includes("://")) return null;
+  return value;
+}

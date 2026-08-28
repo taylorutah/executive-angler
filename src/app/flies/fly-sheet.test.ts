@@ -36,6 +36,8 @@ describe("fly Water Desk sheet", () => {
 
   it("keeps variants on the cream sheet, not a dusk well", () => {
     assert.match(variants, /desk-table-wrap/);
+    assert.match(variants, /bg-\[var\(--vellum\)\]/);
+    assert.match(variants, /Swipe to see In box and Add/);
     assert.equal(variants.includes("InstrumentWellFrame"), false);
     assert.equal(variants.includes("register-dusk"), false);
   });

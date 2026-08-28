@@ -68,6 +68,9 @@ describe("public chrome locks", () => {
     const house = footer.slice(footer.indexOf('title: "House"'));
     assert.match(house, /label: "Privacy", href: "\/privacy"/);
     assert.match(house, /label: "Terms", href: "\/terms"/);
+    assert.match(footer, /pb-24/);
+    const layout = readFileSync(join(root, "src/app/layout.tsx"), "utf8");
+    assert.match(layout, /<Footer \/>/);
   });
 
   it("pulses the header avatar only when a session cookie is already hinted", () => {

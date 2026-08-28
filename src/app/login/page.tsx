@@ -1,11 +1,5 @@
 import LoginForm from "./LoginForm";
-import { POST_LOGIN_PATH } from "@/lib/auth-paths";
-
-function safeNext(raw: string | null | undefined): string | null {
-  if (!raw) return null;
-  if (!raw.startsWith("/") || raw.startsWith("//")) return null;
-  return raw;
-}
+import { POST_LOGIN_PATH, safeInternalPath } from "@/lib/auth-paths";
 
 interface Props {
   searchParams: Promise<{ next?: string; redirect?: string; error?: string }>;
@@ -14,7 +8,7 @@ interface Props {
 export default async function LoginPage({ searchParams }: Props) {
   const sp = await searchParams;
   const redirect =
-    safeNext(sp.next) ?? safeNext(sp.redirect) ?? POST_LOGIN_PATH;
+    safeInternalPath(sp.next) ?? safeInternalPath(sp.redirect) ?? POST_LOGIN_PATH;
 
   return (
     <div className="bg-[var(--paper)]">

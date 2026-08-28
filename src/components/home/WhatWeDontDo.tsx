@@ -15,7 +15,7 @@ export default function WhatWeDontDo() {
         >
           What we don&apos;t publish
         </h2>
-        <p className="mt-2.5 font-body text-[18px] leading-7 text-[var(--graphite)]">
+        <p className="prose mt-2.5 text-[18px] leading-7 text-[var(--graphite)]">
           Named spots. Fish counts. Your water.
         </p>
       </HomeGutter>

@@ -6,6 +6,7 @@ import HomeGutter from "@/components/home/HomeGutter";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { formatHookSize } from "@/lib/flies/variant-format";
 import { getAllCanonicalFlies } from "@/lib/db";
+import { plateImageUrl } from "@/lib/media/image-url";
 import type { CanonicalFly } from "@/types/entities";
 
 const FEATURED_NAMES = ["Pale Morning Dun", "PMD Sparkle Dun", "Sparkle Dun"] as const;
@@ -152,7 +153,7 @@ export default async function FliesDeskPage() {
                   <li key={fly.id}>
                     <DeskPhotoCard
                       href={`/flies/${fly.slug}`}
-                      imageUrl={fly.heroImageUrl || undefined}
+                      imageUrl={plateImageUrl(fly.heroImageUrl)}
                       imageAlt={`${fly.name} fly pattern`}
                       title={fly.name}
                       meta={sizeLabel(fly.sizes) ?? undefined}

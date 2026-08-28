@@ -7,6 +7,7 @@ import {
   PROTECTED_EXACT,
   PROTECTED_PATHS,
   pathMatches,
+  safeInternalPath,
   signedInPathRedirect,
 } from "./auth-paths.ts";
 
@@ -35,6 +36,19 @@ describe("auth paths — the gate for /today", () => {
       pathMatches("/plan/madison-river", EMAIL_VERIFIED_REQUIRED, EMAIL_VERIFIED_EXACT),
       false,
     );
+  });
+
+  it("rejects protocol-relative and backslash open redirects", () => {
+    assert.equal(safeInternalPath("/journal"), "/journal");
+    assert.equal(safeInternalPath("/flies/pheasant-tail?from=home"), "/flies/pheasant-tail?from=home");
+    assert.equal(safeInternalPath("//evil.com"), null);
+    assert.equal(safeInternalPath("/\\evil.com"), null);
+    assert.equal(safeInternalPath("/%5C%5Cevil.com"), null);
+    assert.equal(safeInternalPath("/%2F%2Fevil.com"), null);
+    assert.equal(safeInternalPath("https://evil.com"), null);
+    assert.equal(safeInternalPath("journal"), null);
+    assert.equal(safeInternalPath(""), null);
+    assert.equal(safeInternalPath(null), null);
   });
 
   it("requires a verified email on /today and /rivers/mine", () => {

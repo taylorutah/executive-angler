@@ -1,10 +1,5 @@
 import SignupForm from "./SignupForm";
-
-function safeNext(raw: string | null | undefined): string | null {
-  if (!raw) return null;
-  if (!raw.startsWith("/") || raw.startsWith("//")) return null;
-  return raw;
-}
+import { safeInternalPath } from "@/lib/auth-paths";
 
 interface Props {
   searchParams: Promise<{ next?: string }>;
@@ -12,7 +7,7 @@ interface Props {
 
 export default async function SignupPage({ searchParams }: Props) {
   const sp = await searchParams;
-  const next = safeNext(sp.next);
+  const next = safeInternalPath(sp.next);
 
   return (
     <div className="bg-[var(--paper)]">

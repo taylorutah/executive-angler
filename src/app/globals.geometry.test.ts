@@ -93,6 +93,8 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: none;/);
     assert.match(css, /\.house-measure h1,[\s\S]*?color:\s*var\(--text-primary\)/);
     assert.match(css, /\.house-measure \.prose \{\n  font-family:\s*var\(--font-body\)/);
+    assert.match(css, /\.desk-form \{[\s\S]*?--action:\s*var\(--copper-700\)/);
+    assert.match(css, /\[data-register="daylight"\] main \{\n  flex: 0 0 auto;/);
   });
 
   it("squares Mapbox attribution to --radius-instrument", () => {
