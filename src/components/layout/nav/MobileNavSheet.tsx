@@ -44,7 +44,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
       role="dialog"
       aria-modal="true"
       aria-label="Menu"
-      className="lg:hidden fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-[var(--surface-page)]"
+      className="md:hidden fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-[var(--surface-page)]"
     >
       <div className="flex h-[var(--header-h)] shrink-0 items-center justify-between border-b border-[var(--border-rule)] px-4">
         <p className="ea-overline">

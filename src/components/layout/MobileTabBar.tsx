@@ -29,7 +29,7 @@ export default function MobileTabBar() {
   return (
     <nav
       aria-label="Primary"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface-page)] border-t border-[var(--border-rule)] pb-[env(safe-area-inset-bottom)]"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface-page)] border-t border-[var(--border-rule)] pb-[env(safe-area-inset-bottom)]"
     >
       <ul className="grid grid-cols-5 h-14">
         {TABS.map((tab) => {

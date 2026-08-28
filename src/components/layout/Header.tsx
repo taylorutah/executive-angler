@@ -62,7 +62,7 @@ export default function Header() {
             </Link>
 
             {/* ── Primary nouns ── */}
-            <nav aria-label="Primary" className="hidden lg:flex h-[var(--header-h)] items-stretch">
+            <nav aria-label="Primary" className="hidden md:flex h-[var(--header-h)] items-stretch">
               {nouns.map((item) => {
                 const active = isSectionActive(pathname, item.section);
                 return (
@@ -93,15 +93,15 @@ export default function Header() {
 
             {/* ── Utility zone ── */}
             <div className="ml-auto flex items-center gap-2">
-              {user && <span className="ea-nav-divider hidden lg:block" aria-hidden />}
+              {user && <span className="ea-nav-divider hidden md:block" aria-hidden />}
               <HeaderSearch />
 
               {isLoading ? (
-                <div className="hidden lg:flex items-center">
+                <div className="hidden md:flex items-center">
                   <div className="h-8 w-8 rounded-full bg-[var(--surface-raised)] animate-pulse" />
                 </div>
               ) : user ? (
-                <div className="hidden lg:flex items-center gap-1">
+                <div className="hidden md:flex items-center gap-1">
                   <ExploreMenu />
                   <NotificationBell />
                   <MessageIcon />
@@ -169,7 +169,7 @@ export default function Header() {
                   </div>
                 </div>
               ) : (
-                <div className="hidden lg:flex items-center gap-2">
+                <div className="hidden md:flex items-center gap-2">
                   <Link href="/login" className="ea-btn ea-btn-ghost ea-btn-sm ea-focus-ring">
                     Sign in
                   </Link>
@@ -185,7 +185,7 @@ export default function Header() {
                 onClick={() => setMobileOpen(true)}
                 aria-expanded={mobileOpen}
                 aria-haspopup="dialog"
-                className={`ea-focus-ring ${FOCUS_VISIBLE} lg:hidden inline-flex h-11 items-center gap-2 rounded-md px-2 text-[14px] font-medium text-[var(--text-2)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} md:hidden inline-flex h-11 items-center gap-2 rounded-md px-2 text-[14px] font-medium text-[var(--text-2)]`}
               >
                 <Icon name="menu" className="h-5 w-5" />
                 Menu

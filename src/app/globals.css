@@ -219,11 +219,23 @@
     border-color: var(--border-rule);
   }
 
-  /* Mobile category bar scroll fade */
-  @media (max-width: 1023px) {
+  /* Mobile category bar scroll fade (tracks the 768px nav collapse) */
+  @media (max-width: 767px) {
     .category-bar-fade {
       mask-image: linear-gradient(to right, black 85%, transparent 100%);
       -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    }
+  }
+
+  /* Density: between the 768px nav collapse and 1024px, nav links tighten
+     one step so the full bar fits alongside the utility zone. */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .ea-nav-link {
+      padding: 0 var(--space-2);
+    }
+    .ea-nav-link[aria-current="page"]::after {
+      left: var(--space-2);
+      right: var(--space-2);
     }
   }
 
