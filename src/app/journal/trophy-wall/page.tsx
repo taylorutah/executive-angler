@@ -42,8 +42,8 @@ export default async function TrophyWallPage() {
     .order('date', { ascending: false });
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] pt-6 pb-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen bg-[var(--paper)] pt-6 pb-12">
+      <div className="max-w-[var(--container)] mx-auto px-4 sm:px-6">
         <PageHeader eyebrow="Journal" title="Trophy wall" />
         <TrophyWallClient catches={catches || []} sessions={sessions || []} photoCatches={photoCatches || []} />
       </div>
