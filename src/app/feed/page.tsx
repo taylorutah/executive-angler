@@ -5,6 +5,7 @@ import Link from "next/link";
 import { APP_STORE_URL } from "@/lib/constants";
 import { getBannedUserIds } from "@/lib/db/banned-users";
 import { getUntrustedUserIds } from "@/lib/db/trust";
+import { BookOpen, Feather, TrendingUp, Waves, Users } from "@/icons";
 
 export const metadata: Metadata = {
   title: "On The Water",
@@ -28,6 +29,29 @@ export interface FeedSession {
   } | null;
 }
 
+const ACCOUNT_PERKS = [
+  {
+    Icon: BookOpen,
+    text: "Private fishing journal — your sessions, catches, GPS, and notes stay yours",
+  },
+  {
+    Icon: Feather,
+    text: "Fly tying workbench with 500+ materials and recipe matcher",
+  },
+  {
+    Icon: TrendingUp,
+    text: "Personal stats, trophy wall, and trends across your seasons",
+  },
+  {
+    Icon: Waves,
+    text: "Browse rivers, hatch charts, regulations, and access points",
+  },
+  {
+    Icon: Users,
+    text: "Optional: appear on the presence feed when you head out (river + weather only)",
+  },
+];
+
 export default async function FeedPage() {
   const supabase = await createClient();
   const {
@@ -37,117 +61,71 @@ export default async function FeedPage() {
   /* ── Unauthenticated gate ── */
   if (!user) {
     return (
-      <main className="min-h-screen bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-xl px-4 pt-12 pb-24 text-center">
-          {/* Icon */}
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--surface-raised)] border border-[var(--border-rule)]">
-            <svg
-              className="h-8 w-8 text-[var(--action)]"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6V7.5Z"
-              />
-            </svg>
-          </div>
-
-          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-3">
+      <main className="min-h-screen bg-[var(--paper)]">
+        <div className="mx-auto max-w-[var(--prose)] px-4 py-12 sm:px-6 sm:py-16">
+          <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] sm:text-3xl">
             On The Water
           </h1>
-          <p className="text-[var(--text-body)] text-lg mb-3 max-w-md mx-auto">
+          <p className="mt-3 text-lg leading-relaxed text-[var(--text-2)]">
             See who&apos;s fishing right now — river, section, and weather only.
           </p>
-          <p className="text-[var(--text-meta)] text-sm mb-10 max-w-md mx-auto">
+          <p className="mt-2 text-sm text-[var(--text-3)]">
             We never publish locations or fish counts. That&apos;s between you and the river.
           </p>
 
           {/* Sign-in CTA */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
-            <Link
-              href="/login?redirect=/feed"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--action)] px-6 py-3 text-sm font-semibold text-[var(--surface-page)] hover:bg-[#D4812E] transition-colors w-full sm:w-auto"
-            >
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/login?redirect=/feed" className="ea-btn ea-btn-primary">
               Sign In
             </Link>
-            <Link
-              href="/signup"
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-card)] transition-colors w-full sm:w-auto"
-            >
+            <Link href="/signup" className="ea-btn ea-btn-secondary">
               Create Free Account
             </Link>
           </div>
 
           {/* What you get */}
-          <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6 text-left mb-12">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--action)] mb-4">
+          <div className="ea-card mt-8">
+            <h2 className="ea-overline">
               What you get with an account
             </h2>
-            <ul className="space-y-3">
-              {[
-                {
-                  icon: "📓",
-                  text: "Private fishing journal — your sessions, catches, GPS, and notes stay yours",
-                },
-                {
-                  icon: "🪶",
-                  text: "Fly tying workbench with 500+ materials and recipe matcher",
-                },
-                {
-                  icon: "📊",
-                  text: "Personal stats, trophy wall, and trends across your seasons",
-                },
-                {
-                  icon: "🌊",
-                  text: "Browse rivers, hatch charts, regulations, and access points",
-                },
-                {
-                  icon: "👥",
-                  text: "Optional: appear on the presence feed when you head out (river + weather only)",
-                },
-              ].map((item) => (
+            <ul className="mt-4 space-y-3">
+              {ACCOUNT_PERKS.map(({ Icon, text }) => (
                 <li
-                  key={item.text}
-                  className="flex items-start gap-3 text-[#C9D1D9] text-sm"
+                  key={text}
+                  className="flex items-start gap-3 text-sm text-[var(--text-2)]"
                 >
-                  <span className="text-base leading-5 shrink-0">
-                    {item.icon}
-                  </span>
-                  {item.text}
+                  <Icon className="h-4 w-4 shrink-0 mt-0.5 text-[var(--text-3)]" aria-hidden />
+                  {text}
                 </li>
               ))}
             </ul>
           </div>
 
           {/* App download */}
-          <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="inline-flex items-center rounded-full bg-[var(--state-positive)]/10 px-3 py-1 text-xs font-medium text-[var(--state-positive)] border border-[var(--state-positive)]/20">
+          <div className="ea-card mt-6">
+            <p>
+              <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[color-mix(in_srgb,var(--success)_10%,var(--surface))] px-3 py-1 text-xs font-medium text-[var(--success)]">
                 Live on the App Store
               </span>
-            </div>
-            <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">
+            </p>
+            <h2 className="mt-3 font-display text-xl font-semibold text-[var(--text-1)]">
               Get the iPhone App
             </h2>
-            <p className="text-sm text-[var(--text-body)] mb-4">
+            <p className="mt-1 text-sm text-[var(--text-2)]">
               Log fish on-stream, track GPS sessions, and sync everything to your account.
             </p>
             <a
               href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 px-7 py-3 bg-[var(--action)] text-[var(--on-action)] font-semibold rounded-xl hover:bg-[var(--action-hover)] transition-colors"
+              className="ea-btn ea-btn-primary mt-4 w-full"
             >
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
                 <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
               </svg>
               Download for iPhone
             </a>
-            <p className="font-['IBM_Plex_Mono'] text-[var(--text-meta)] text-xs mt-3 text-center">
+            <p className="mt-3 text-xs text-[var(--text-3)]">
               Android coming soon
             </p>
           </div>
@@ -227,16 +205,16 @@ export default async function FeedPage() {
   }));
 
   return (
-    <main className="min-h-screen bg-[var(--surface-page)]">
-      <div className="mx-auto max-w-2xl px-4 pt-6 pb-16">
+    <main className="min-h-screen bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--prose)] px-4 pt-6 pb-16">
         <header className="mb-8">
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-1">
+          <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] sm:text-3xl">
             On The Water
           </h1>
-          <p className="text-sm text-[var(--text-body)] mb-1">
+          <p className="mt-1 text-sm text-[var(--text-2)]">
             Anglers currently fishing — river, section, and weather only.
           </p>
-          <p className="text-xs text-[var(--text-meta)]">
+          <p className="mt-1 text-xs text-[var(--text-3)]">
             We never publish locations or fish counts. That&apos;s between you and the river.
           </p>
         </header>
