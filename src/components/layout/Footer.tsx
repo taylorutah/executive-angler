@@ -7,13 +7,28 @@ type FooterLink = { label: string; href: string };
 
 const footerColumns: { title: string; links: FooterLink[] }[] = [
   {
-    title: "The desk",
+    title: "Explore",
     links: [
       { label: "Rivers", href: "/rivers" },
-      { label: "Flies", href: "/flies/library" },
-      { label: "Places", href: "/destinations" },
+      { label: "Destinations", href: "/destinations" },
+      { label: "Species", href: "/species" },
       { label: "Field Notes", href: "/articles" },
+    ],
+  },
+  {
+    title: "Learn",
+    links: [
       { label: "Learn", href: "/learn" },
+      { label: "Flies", href: "/flies/library" },
+      { label: "Gear", href: "/gear" },
+    ],
+  },
+  {
+    title: "Directory",
+    links: [
+      { label: "Fly Shops", href: "/fly-shops" },
+      { label: "Guides", href: "/guides" },
+      { label: "Lodges", href: "/lodges" },
     ],
   },
   {
@@ -25,20 +40,14 @@ const footerColumns: { title: string; links: FooterLink[] }[] = [
     ],
   },
   {
-    title: "Find",
-    links: [
-      { label: "Guides", href: "/guides" },
-      { label: "Lodges", href: "/lodges" },
-      { label: "Shops", href: "/fly-shops" },
-    ],
-  },
-  {
-    title: "House",
+    title: "Company",
     links: [
       { label: "About", href: "/about" },
+      { label: "For Guides", href: "/for-guides" },
+      { label: "Contact", href: "/contact" },
+      { label: "Feedback", href: "/feedback" },
       { label: "Privacy", href: "/privacy" },
       { label: "What we don't do", href: "/#what-we-dont-do" },
-      { label: "Contact", href: "/contact" },
     ],
   },
 ];
@@ -54,61 +63,73 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="ea-band-ink">
-      <div className="mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
-          <div className="max-w-md">
-            <Link href="/" className="ea-focus-ring inline-block" aria-label={SITE_NAME}>
-              <Image
-                src="/images/logo-horizontal-white.svg"
-                alt="Executive Angler"
-                width={384}
-                height={73}
-                sizes="384px"
-                className="h-10 w-[220px] max-w-full"
-              />
-            </Link>
-            <p className="mt-4 text-[14px] leading-relaxed">
-              Every feature, free.
-            </p>
-            <p className="mt-2 text-[14px] leading-relaxed">
-              We never publish locations or fish counts.
-            </p>
-            <div className="mt-8 -ml-3 flex items-center gap-1">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="ea-focus-ring inline-flex h-11 w-11 items-center justify-center"
-                >
-                  <Icon name={s.name} className="h-5 w-5" />
-                </a>
-              ))}
-            </div>
-          </div>
+    <footer className="ea-band-ink ea-band-photo">
+      {/* The site's one graded-photo ink band (client ruling 2026-08-28).
+          Decorative: an existing library photograph under the flat ink scrim. */}
+      <div className="ea-band-photo-media" aria-hidden="true">
+        <Image
+          src="/images/mongolia-river-aerial.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="ea-photo"
+        />
+      </div>
+      <div className="ea-band-photo-scrim" aria-hidden="true" />
 
-          <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-4">
-            {footerColumns.map(({ title, links }) => (
-              <div key={title}>
-                <h3 className="ea-band-heading mb-4">{title}</h3>
-                <ul className="space-y-3">
-                  {links.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="ea-focus-ring text-[14px]"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      <div className="relative mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <Link href="/" className="ea-focus-ring inline-block" aria-label={SITE_NAME}>
+            <Image
+              src="/images/logo-horizontal-white.svg"
+              alt="Executive Angler"
+              width={384}
+              height={73}
+              sizes="384px"
+              className="h-10 w-[220px] max-w-full"
+            />
+          </Link>
+          <div className="-mr-3 flex items-center gap-1">
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="ea-focus-ring inline-flex h-11 w-11 items-center justify-center"
+              >
+                <Icon name={s.name} className="h-5 w-5" />
+              </a>
             ))}
           </div>
+        </div>
+        <p className="mt-4 text-[14px] leading-relaxed">
+          Every feature, free.
+        </p>
+
+        <p className="mt-12 max-w-[24ch] font-display text-4xl font-semibold leading-[1.15] tracking-[-0.01em] text-[var(--paper)] sm:text-5xl">
+          We never publish locations or fish counts.
+        </p>
+
+        <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 lg:mt-16 lg:grid-cols-5">
+          {footerColumns.map(({ title, links }) => (
+            <div key={title}>
+              <h3 className="ea-band-heading mb-4">{title}</h3>
+              <ul className="space-y-3">
+                {links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="ea-focus-ring text-[14px]"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         <div className="ea-band-rule mt-12 h-px w-full lg:mt-16" />

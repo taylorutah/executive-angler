@@ -1214,6 +1214,26 @@ select:focus {
   color: color-mix(in srgb, var(--paper) 55%, transparent);
 }
 
+/* ── Footer photo band: the site's ONE graded-photo ink band ─────────
+   Client ruling 2026-08-28 (DESIGN.md, Phase 4C rulings). One existing
+   site photograph under a flat --ink scrim at a uniform 72% alpha — a
+   grade, never a gradient. The scrim is heavy so paper text stays AA
+   over the photograph's brightest water. No other band may do this. */
+.ea-band-photo {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+}
+.ea-band-photo-media {
+  position: absolute;
+  inset: 0;
+}
+.ea-band-photo-scrim {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ink) 72%, transparent);
+}
+
 /* Every chrome control gets the same ring. !important beats Button's
    outline-none and outline-2's currentColor default. */
 a.ea-focus-ring:focus-visible,
