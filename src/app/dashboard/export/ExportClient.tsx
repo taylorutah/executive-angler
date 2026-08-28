@@ -190,33 +190,33 @@ export default function ExportClient({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
+    <div className="min-h-screen bg-[var(--paper)]">
+      <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <Link href="/dashboard" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
+          <Link href="/dashboard" className="text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="flex items-center gap-2">
-            <Download className="h-6 w-6 text-[var(--signal-live)]" />
-            <h1 className="font-serif text-2xl text-[var(--text-primary)]">Export Data</h1>
+            <Download className="h-5 w-5 text-[var(--accent)]" />
+            <h1 className="font-display text-2xl font-semibold text-[var(--text-1)]">Export Data</h1>
           </div>
         </div>
 
         {/* Data summary */}
-        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-6">
+        <div className="ea-card mb-6">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-[var(--text-body)] uppercase tracking-wider mb-1">Sessions</p>
-              <p className="text-2xl font-bold text-[var(--text-primary)] font-mono">{sessions.length}</p>
+              <p className="ea-stat-label mb-1">Sessions</p>
+              <p className="ea-stat-value">{sessions.length}</p>
             </div>
             <div>
-              <p className="text-xs text-[var(--text-body)] uppercase tracking-wider mb-1">Catches</p>
-              <p className="text-2xl font-bold text-[var(--text-primary)] font-mono">{catches.length}</p>
+              <p className="ea-stat-label mb-1">Catches</p>
+              <p className="ea-stat-value">{catches.length}</p>
             </div>
           </div>
           {sessions.length > 0 && (
-            <p className="text-xs text-[var(--text-meta)] mt-3">
+            <p className="num text-xs text-[var(--text-3)] mt-3">
               {sessions[sessions.length - 1].date} → {sessions[0].date}
             </p>
           )}
@@ -224,54 +224,56 @@ export default function ExportClient({
 
         {/* Format picker */}
         <div className="mb-6">
-          <p className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">Format</p>
+          <p className="ea-overline mb-3">Format</p>
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setFormat("csv")}
-              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+              aria-pressed={format === "csv"}
+              className={`ea-focus-ring flex items-center gap-3 rounded-[var(--radius-card)] border p-4 transition-colors ${
                 format === "csv"
-                  ? "bg-[var(--action)]/10 border-[var(--action)] text-[var(--action)]"
-                  : "bg-[var(--surface-raised)] border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--text-meta)]"
+                  ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]"
+                  : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)]"
               }`}
             >
-              <Table className="h-6 w-6" />
+              <Table className="h-5 w-5" />
               <div className="text-left">
                 <p className="font-semibold text-sm">CSV</p>
-                <p className="text-[11px] opacity-70">Spreadsheet-ready</p>
+                <p className="text-xs text-[var(--text-3)]">Spreadsheet-ready</p>
               </div>
             </button>
 
             <button
               onClick={() => setFormat("pdf")}
-              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+              aria-pressed={format === "pdf"}
+              className={`ea-focus-ring flex items-center gap-3 rounded-[var(--radius-card)] border p-4 transition-colors ${
                 format === "pdf"
-                  ? "bg-[var(--signal-live)]/10 border-[var(--signal-live)] text-[var(--signal-live)]"
-                  : "bg-[var(--surface-raised)] border-[var(--border-rule)] text-[var(--text-body)] hover:border-[var(--text-meta)]"
+                  ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]"
+                  : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)]"
               }`}
             >
-              <FileText className="h-6 w-6" />
+              <FileText className="h-5 w-5" />
               <div className="text-left">
                 <p className="font-semibold text-sm">PDF</p>
-                <p className="text-[11px] opacity-70">Formatted trip report</p>
+                <p className="text-xs text-[var(--text-3)]">Formatted trip report</p>
               </div>
             </button>
           </div>
         </div>
 
         {/* What's included */}
-        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-6">
-          <p className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">Includes</p>
-          <ul className="space-y-2 text-sm text-[var(--text-primary)]">
+        <div className="ea-card mb-6">
+          <p className="ea-overline mb-3">Includes</p>
+          <ul className="space-y-2 text-sm text-[var(--text-1)]">
             <li className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-[var(--state-positive)] shrink-0" />
+              <CheckCircle className="h-4 w-4 text-[var(--success)] shrink-0" />
               All sessions with date, river, fish count, weather, water data
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-[var(--state-positive)] shrink-0" />
+              <CheckCircle className="h-4 w-4 text-[var(--success)] shrink-0" />
               Individual catches with species, length, fly pattern, fly size
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-[var(--state-positive)] shrink-0" />
+              <CheckCircle className="h-4 w-4 text-[var(--success)] shrink-0" />
               Session notes and location data
             </li>
           </ul>
@@ -281,11 +283,11 @@ export default function ExportClient({
         <button
           onClick={handleExport}
           disabled={exporting || sessions.length === 0}
-          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--action)] text-white text-base font-bold rounded-xl hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="ea-btn ea-btn-primary ea-btn-lg w-full"
         >
           {exporting ? (
             <>
-              <div className="h-5 w-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              <span aria-hidden className="h-5 w-5 animate-spin rounded-full border-2 border-current border-r-transparent" />
               Exporting...
             </>
           ) : exported ? (
@@ -302,7 +304,7 @@ export default function ExportClient({
         </button>
 
         {format === "pdf" && (
-          <p className="text-xs text-[var(--text-meta)] mt-3 text-center">
+          <p className="text-xs text-[var(--text-3)] mt-3 text-center">
             Opens a formatted report in a new tab — use your browser&apos;s Print → Save as PDF
           </p>
         )}
