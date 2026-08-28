@@ -95,13 +95,13 @@ export default function PhotoLightbox({
         animate={{ opacity: 1 }}
         exit={reduceMotion ? undefined : { opacity: 0 }}
         transition={{ duration: reduceMotion ? 0 : 0.2 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--ink)]"
         onClick={onClose}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute top-4 right-4 z-50 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors`}
+          className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute top-4 right-4 z-50 p-2 rounded-[var(--radius-md)] bg-white/10 hover:bg-white/20 text-white transition-colors`}
           data-autofocus
           aria-label="Close lightbox"
         >
@@ -123,7 +123,7 @@ export default function PhotoLightbox({
                 e.stopPropagation();
                 goPrev();
               }}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-[var(--radius-md)] bg-white/10 hover:bg-white/20 text-white transition-colors`}
               aria-label="Previous photo"
             >
               <ChevronLeft className="h-6 w-6" aria-hidden />
@@ -133,7 +133,7 @@ export default function PhotoLightbox({
                 e.stopPropagation();
                 goNext();
               }}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} ${MOTION_SAFE} absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-[var(--radius-md)] bg-white/10 hover:bg-white/20 text-white transition-colors`}
               aria-label="Next photo"
             >
               <ChevronRight className="h-6 w-6" aria-hidden />

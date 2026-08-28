@@ -19,17 +19,17 @@ export default function PlateFallback({
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col justify-end bg-[var(--surface-card)] px-3 py-2.5",
+        "flex h-full w-full flex-col justify-end bg-[var(--paper-deep)] px-3 py-2.5",
         className,
       )}
       role="img"
       aria-label={meta ? `${title}, ${meta}` : title}
     >
-      <p className="font-heading text-base font-semibold leading-tight text-[var(--text-primary)] line-clamp-3 sm:text-lg">
+      <p className="font-heading text-base font-semibold leading-tight text-[var(--text-1)] line-clamp-3 sm:text-lg">
         {title}
       </p>
       {meta ? (
-        <p className="mt-1 text-[10px] font-medium uppercase tracking-wider text-[var(--text-meta)] line-clamp-2 sm:text-xs">
+        <p className="ea-overline mt-1 line-clamp-2">
           {meta}
         </p>
       ) : null}

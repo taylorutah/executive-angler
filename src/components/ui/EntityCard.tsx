@@ -47,7 +47,7 @@ export default function EntityCard({
     return (
       <Link
         href={href}
-        className="group relative block overflow-hidden rounded-surface border border-[var(--border-rule)] bg-[var(--surface-raised)] border-l-4 border-l-[var(--action)]"
+        className="group relative block overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] border-l-4 border-l-[var(--accent)]"
       >
         {actionSlot?.kind === "add-to-fly-box" && (
           <CardActionSlot
@@ -58,24 +58,24 @@ export default function EntityCard({
         <div className="p-6">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+              <h3 className="font-heading text-lg font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors">
                 {title}
               </h3>
               {subtitle && (
-                <p className="mt-1 text-sm text-[var(--text-body)]">{subtitle}</p>
+                <p className="mt-1 text-sm text-[var(--text-2)]">{subtitle}</p>
               )}
             </div>
             {accent && (
-              <span className="text-sm font-semibold text-[var(--action)] shrink-0">
+              <span className="text-sm font-semibold text-[var(--accent)] shrink-0">
                 {accent}
               </span>
             )}
           </div>
           {description && (
-            <p className="mt-3 text-sm text-[var(--text-meta)] line-clamp-2">{description}</p>
+            <p className="mt-3 text-sm text-[var(--text-3)] line-clamp-2">{description}</p>
           )}
           {meta && (
-            <p className="mt-2 text-xs font-medium text-[var(--text-meta)] uppercase tracking-wider">
+            <p className="ea-overline mt-2">
               {meta}
             </p>
           )}
@@ -84,7 +84,7 @@ export default function EntityCard({
               {badges?.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2.5 py-1 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-chip"
+                  className="px-3 py-1 text-xs font-medium bg-[var(--accent-soft)] text-[var(--accent)] rounded-chip"
                 >
                   {badge}
                 </span>
@@ -92,7 +92,7 @@ export default function EntityCard({
               {tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs bg-[var(--surface-page)] text-[var(--action)] rounded-chip border border-[var(--border-rule)]"
+                  className="ea-chip"
                 >
                   {tag}
                 </span>
@@ -107,7 +107,7 @@ export default function EntityCard({
   return (
     <Link
       href={href}
-      className="group relative block card-hover overflow-hidden rounded-surface border border-[var(--border-rule)] bg-[var(--surface-raised)]"
+      className="group relative block card-hover overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]"
     >
       {actionSlot?.kind === "add-to-fly-box" && (
         <CardActionSlot
@@ -115,7 +115,7 @@ export default function EntityCard({
           flyName={actionSlot.flyName}
         />
       )}
-      <div className={`relative h-44 overflow-hidden${imageContain ? " bg-[#F5F0EA]" : ""}`}>
+      <div className={`relative h-44 overflow-hidden${imageContain ? " bg-[var(--paper-deep)]" : ""}`}>
         <SafeEntityImage
           src={imageUrl}
           alt={imageAlt}
@@ -123,26 +123,26 @@ export default function EntityCard({
           meta={[meta, subtitle].filter(Boolean).join(" · ") || undefined}
           contain={imageContain}
           loading="eager"
-          className={imageContain ? "object-contain p-3" : "object-cover card-image-zoom"}
+          className={imageContain ? "object-contain p-3" : "ea-photo"}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
         />
         {badges && badges.length > 0 && (
           <div className="absolute top-3 left-3">
-            <span className="rounded-chip bg-[var(--surface-raised)] px-2.5 py-1 text-xs font-medium text-[var(--action)]">
+            <span className="rounded-[var(--radius-sm)] bg-[var(--ink)] px-2 py-1 text-xs font-medium text-[var(--paper)]">
               {badges[0]}
             </span>
           </div>
         )}
       </div>
       <div className="p-5">
-        <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+        <h3 className="font-heading text-lg font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors">
           {title}
         </h3>
         {subtitle && (
-          <p className="mt-1.5 text-sm text-[var(--text-body)] line-clamp-2">{subtitle}</p>
+          <p className="mt-1.5 text-sm text-[var(--text-2)] line-clamp-2">{subtitle}</p>
         )}
         {meta && (
-          <p className="mt-2 text-xs font-medium text-[var(--text-meta)] uppercase tracking-wider">
+          <p className="ea-overline mt-2">
             {meta}
           </p>
         )}

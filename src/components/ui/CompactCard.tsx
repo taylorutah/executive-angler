@@ -7,7 +7,7 @@ export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle,
   return (
     <Link
       href={href}
-      className="group relative block card-hover overflow-hidden rounded-surface border border-[var(--border-rule)] bg-[var(--surface-raised)]"
+      className="group relative block card-hover overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]"
     >
       {actionSlot?.kind === "add-to-fly-box" && (
         <CardActionSlot
@@ -22,19 +22,19 @@ export default function CompactCard({ href, imageUrl, imageAlt, title, subtitle,
           title={title}
           meta={subtitle}
           loading="eager"
-          className="object-cover card-image-zoom"
+          className="ea-photo"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 280px"
         />
         {badges && badges.length > 0 && (
           <div className="absolute top-2 left-2">
-            <span className="rounded-chip bg-[var(--surface-raised)] px-2 py-0.5 text-xs font-medium text-[var(--action)]">
+            <span className="rounded-[var(--radius-sm)] bg-[var(--ink)] px-2 py-1 text-xs font-medium text-[var(--paper)]">
               {badges[0]}
             </span>
           </div>
         )}
       </div>
       <div className="p-3">
-        <h3 className="font-heading text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors line-clamp-1">
+        <h3 className="font-heading text-sm font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors line-clamp-1">
           {title}
         </h3>
       </div>

@@ -97,13 +97,13 @@ export default function CommunityPhotos({
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="h-8 w-48 bg-[var(--surface-card)] rounded animate-pulse" />
+          <div className="h-8 w-48 bg-[var(--paper-deep)] rounded-[var(--radius-sm)] animate-pulse" />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="aspect-[4/3] bg-[var(--surface-card)] rounded-surface animate-pulse"
+              className="aspect-[4/3] bg-[var(--paper-deep)] rounded-surface animate-pulse"
             />
           ))}
         </div>
@@ -111,26 +111,14 @@ export default function CommunityPhotos({
     );
   }
 
-  function formatDate(dateStr: string): string {
-    try {
-      return new Date(dateStr).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-    } catch {
-      return dateStr;
-    }
-  }
-
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <Camera className="h-5 w-5 text-[var(--action)]" />
-        <h2 className="font-heading text-2xl font-bold text-[var(--action)]">
+        <Camera className="h-5 w-5 text-[var(--text-1)]" />
+        <h2 className="font-heading text-2xl font-semibold text-[var(--text-1)]">
           Community Photos
         </h2>
-        <span className="px-2.5 py-0.5 text-xs font-medium bg-[var(--action)]/10 text-[var(--action)] rounded-chip">
+        <span className="ea-badge num">
           {photos.length}
         </span>
       </div>
@@ -141,39 +129,20 @@ export default function CommunityPhotos({
             key={photo.id}
             onClick={() => setLightboxIndex(index)}
             aria-label={`View photo${photo.caption ? `: ${photo.caption}` : ""} by ${photo.submitterName}`}
-            className="group relative aspect-[4/3] rounded-surface overflow-hidden bg-[var(--surface-card)] focus:outline-none focus:ring-2 focus:ring-[var(--action)] focus:ring-offset-2"
+            className="group relative aspect-[4/3] rounded-surface overflow-hidden bg-[var(--paper-deep)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2"
           >
             <Image
               src={photo.photoUrl}
               alt={photo.caption || `Photo by ${photo.submitterName}`}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="ea-photo"
               sizes="(max-width: 768px) 50vw, 33vw"
             />
 
-            {/* Hover Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <div className="absolute bottom-0 left-0 right-0 p-3">
-                {photo.caption && (
-                  <p className="text-white text-sm line-clamp-2 mb-1.5">
-                    {photo.caption}
-                  </p>
-                )}
-                <div className="flex items-center justify-between text-white/70 text-xs">
-                  <span className="flex items-center gap-1">
-                    <User className="h-3 w-3" />
-                    {photo.submitterName}
-                  </span>
-                  <span>{formatDate(photo.submittedAt)}</span>
-                </div>
-                {photo.cameraBody && (
-                  <div className="flex items-center gap-1 text-white/50 text-xs mt-1">
-                    <Camera className="h-3 w-3" />
-                    {photo.cameraBody}
-                    {photo.lens ? ` · ${photo.lens}` : ""}
-                  </div>
-                )}
-              </div>
+            {/* Photo credit — the one sanctioned on-photo affordance */}
+            <div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-[var(--radius-sm)] bg-[var(--ink)] px-2 py-1 text-xs font-medium text-[var(--paper)] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              <User className="h-3 w-3" aria-hidden />
+              {photo.submitterName}
             </div>
           </button>
         ))}

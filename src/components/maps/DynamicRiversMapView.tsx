@@ -6,7 +6,7 @@ const RiversMapView = dynamic(() => import("./RiversMapView"), {
   ssr: false,
   loading: () => (
     <div
-      className="bg-[var(--surface-card)] animate-pulse rounded-xl"
+      className="bg-[var(--paper-deep)] animate-pulse rounded-[var(--radius-card)]"
       style={{ height: "520px" }}
     />
   ),

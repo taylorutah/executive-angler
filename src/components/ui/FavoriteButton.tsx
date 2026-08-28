@@ -66,11 +66,11 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       type="button"
       onClick={toggleFavorite}
       disabled={loading}
-      className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-instrument p-2.5 transition-all motion-reduce:transition-none ${
+      className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-[var(--radius-md)] p-2 transition-colors motion-reduce:transition-none ${
         isFavorite
-          ? "bg-[var(--action)]/10 text-[var(--action)] hover:bg-[var(--action)]/20"
-          : "bg-[var(--surface-raised)]/80 text-[var(--text-body)] hover:text-[var(--action)] hover:bg-[var(--surface-raised)]"
-      } shadow-sm backdrop-blur-sm`}
+          ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+          : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:text-[var(--accent)] hover:border-[var(--border-strong)]"
+      }`}
       aria-label={isFavorite ? "Remove from saved" : "Keep this"}
       aria-pressed={isFavorite}
     >

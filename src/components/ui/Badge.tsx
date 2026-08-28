@@ -10,15 +10,15 @@ export default function Badge({
   size = "sm",
 }: BadgeProps) {
   const variants = {
-    default: "bg-[var(--surface-raised)] text-[var(--text-body)]",
-    forest: "bg-[var(--action)]/10 text-[var(--action)]",
-    river: "bg-[var(--signal-live)]/10 text-[var(--signal-live)]",
-    gold: "bg-[var(--action)]/10 text-[var(--action)]",
-    outline: "border border-[var(--border-rule)] text-[var(--text-body)]",
+    default: "bg-[var(--paper-deep)] text-[var(--text-2)]",
+    forest: "bg-[var(--accent-soft)] text-[var(--accent)]",
+    river: "bg-[var(--accent-soft)] text-[var(--accent)]",
+    gold: "bg-[var(--accent-soft)] text-[var(--accent)]",
+    outline: "border border-[var(--border)] text-[var(--text-2)]",
   };
 
   const sizes = {
-    sm: "px-2.5 py-0.5 text-xs",
+    sm: "px-3 py-1 text-xs",
     md: "px-3 py-1 text-sm",
   };
 

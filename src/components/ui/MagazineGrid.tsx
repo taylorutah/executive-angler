@@ -12,7 +12,7 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
   return (
     <Link
       href={href}
-      className="group block card-hover overflow-hidden rounded-surface border border-[var(--border-rule)] bg-[var(--surface-raised)]"
+      className="group block card-hover overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]"
     >
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="relative h-64 min-h-[16rem] overflow-hidden md:h-auto">
@@ -22,12 +22,12 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
             title={title}
             meta={meta}
             loading="eager"
-            className="object-cover card-image-zoom"
+            className="ea-photo"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
           {badges && badges.length > 0 && (
             <div className="absolute top-3 left-3">
-              <span className="rounded-chip bg-[var(--surface-raised)] px-2.5 py-1 text-xs font-medium text-[var(--action)]">
+              <span className="rounded-[var(--radius-sm)] bg-[var(--ink)] px-2 py-1 text-xs font-medium text-[var(--paper)]">
                 {badges[0]}
               </span>
             </div>
@@ -35,24 +35,24 @@ function FeaturedCard({ href, imageUrl, imageAlt, title, subtitle, meta, badges,
         </div>
         <div className="flex flex-col justify-center p-8 md:p-10">
           <div className="mb-2 flex items-center gap-2">
-            <span className="rounded-chip bg-[var(--action)] px-2.5 py-0.5 text-xs font-medium uppercase text-white">
+            <span className="ea-badge ea-badge-ember">
               Featured
             </span>
             {meta && (
-              <span className="text-xs uppercase tracking-wider text-[var(--text-meta)]">{meta}</span>
+              <span className="ea-overline">{meta}</span>
             )}
             {accent && (
-              <span className="ml-auto shrink-0 text-lg font-semibold text-[var(--action)]">{accent}</span>
+              <span className="ml-auto shrink-0 text-lg font-semibold text-[var(--accent)]">{accent}</span>
             )}
           </div>
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)] transition-colors group-hover:text-[var(--action)] md:text-3xl">
+          <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)] md:text-3xl">
             {title}
           </h2>
           {subtitle && (
-            <p className="mt-2 text-lg italic text-[var(--text-body)]">{subtitle}</p>
+            <p className="mt-2 text-lg italic text-[var(--text-2)]">{subtitle}</p>
           )}
           {description && (
-            <p className="mt-3 line-clamp-3 text-[var(--text-body)]">{description}</p>
+            <p className="mt-3 line-clamp-3 text-[var(--text-2)]">{description}</p>
           )}
         </div>
       </div>

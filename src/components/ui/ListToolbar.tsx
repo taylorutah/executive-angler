@@ -101,20 +101,20 @@ export default function ListToolbar({
   }, [localSearch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="sticky top-14 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[var(--surface-page)] border-b border-[var(--border-rule)]/60 mb-8">
+    <div className="sticky top-14 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 bg-[var(--paper)] border-b border-[var(--border)] mb-8">
       {onSearchChange && (
         <div className="relative mb-3">
           <label htmlFor={searchId} className="sr-only">
             {searchPlaceholder ?? "Filter results"}
           </label>
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-body)]" aria-hidden />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-3)]" aria-hidden />
           <input
             id={searchId}
             type="search"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             placeholder={searchPlaceholder ?? "Search..."}
-            className={`ea-focus-ring ${FOCUS_VISIBLE} w-full bg-[var(--surface-raised)] border border-[var(--border-rule)] pl-9 pr-9 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-body)] outline-none`}
+            className={`ea-focus-ring ${FOCUS_VISIBLE} w-full rounded-[var(--radius-md)] bg-[var(--surface)] border border-[var(--border)] pl-9 pr-9 py-2 text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] outline-none`}
           />
           {localSearch && (
             <button
@@ -139,10 +139,10 @@ export default function ListToolbar({
             aria-expanded={filtersOpen}
             aria-controls="browse-filter-panel"
             onClick={() => setFiltersOpen(!filtersOpen)}
-            className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border ${
+            className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex items-center gap-1.5 rounded-[var(--radius-md)] px-3 py-1.5 text-sm font-medium border transition-colors ${
               filtersOpen || hasActiveFilters
-                ? "bg-[var(--action)] text-[var(--on-action)] border-[var(--action)]"
-                : "bg-[var(--surface-raised)] text-[var(--text-body)] border-[var(--border-rule)] hover:border-[var(--action)]"
+                ? "bg-[var(--accent)] text-[var(--on-action)] border-[var(--accent)]"
+                : "bg-[var(--surface)] text-[var(--text-2)] border-[var(--border)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
             }`}
           >
             <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
@@ -159,7 +159,7 @@ export default function ListToolbar({
               onClick={() => {
                 clearableFilters.forEach((f) => onFilterChange(f.key, null));
               }}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} px-2 py-1.5 text-sm text-[var(--text-meta)] hover:text-[var(--text-body)] transition-colors`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} px-2 py-1.5 text-sm text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors`}
             >
               Clear
             </button>
@@ -167,14 +167,14 @@ export default function ListToolbar({
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <span className="hidden text-xs text-[var(--text-body)] sm:inline" aria-live="polite">
+          <span className="hidden text-xs text-[var(--text-3)] sm:inline" aria-live="polite">
             {filteredCount === totalCount
               ? `${totalCount} results`
               : `${filteredCount} of ${totalCount}`}
           </span>
 
           <div
-            className="flex items-center gap-0.5 border border-[var(--border-rule)] bg-[var(--surface-raised)] p-0.5"
+            className="ea-segmented"
             role="group"
             aria-label="View density"
           >
@@ -186,11 +186,7 @@ export default function ListToolbar({
                 aria-label={label}
                 aria-pressed={viewMode === mode}
                 title={label}
-                className={`ea-focus-ring ${FOCUS_VISIBLE} p-1.5 ${
-                  viewMode === mode
-                    ? "bg-[var(--action)]/10 text-[var(--action)]"
-                    : "text-[var(--text-body)] hover:text-[var(--text-primary)]"
-                }`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} ea-segment ea-segment-icon`}
               >
                 <Icon className="h-4 w-4" aria-hidden />
               </button>
@@ -205,7 +201,7 @@ export default function ListToolbar({
               id="browse-sort"
               value={activeSort}
               onChange={(e) => onSortChange(e.target.value)}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} appearance-none bg-[var(--surface-raised)] border border-[var(--border-rule)] pl-3 pr-8 py-1.5 text-sm text-[var(--text-body)] hover:border-[var(--action)]/30 outline-none cursor-pointer`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} appearance-none rounded-[var(--radius-md)] bg-[var(--surface)] border border-[var(--border)] pl-3 pr-8 py-1.5 text-sm text-[var(--text-2)] hover:border-[var(--border-strong)] outline-none cursor-pointer`}
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -220,13 +216,13 @@ export default function ListToolbar({
       {filtersOpen && (
         <div
           id="browse-filter-panel"
-          className="mt-3 pt-3 border-t border-[var(--border-rule)]/60 flex flex-col gap-3"
+          className="mt-3 pt-3 border-t border-[var(--border)] flex flex-col gap-3"
         >
           {visibleFilters.map((dimension) => {
             const ui = dimensionUi(dimension);
             return (
               <div key={dimension.key} className="flex flex-wrap items-center gap-2">
-                <span className="w-20 shrink-0 text-xs font-medium uppercase tracking-wider text-[var(--text-body)]">
+                <span className="ea-overline w-20 shrink-0">
                   {dimension.label}
                 </span>
                 {ui === "select" ? (
@@ -236,7 +232,7 @@ export default function ListToolbar({
                     onChange={(e) =>
                       onFilterChange(dimension.key, e.target.value || null)
                     }
-                    className={`ea-focus-ring ${FOCUS_VISIBLE} min-w-[10rem] border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-1.5 text-sm text-[var(--text-primary)] outline-none`}
+                    className={`ea-focus-ring ${FOCUS_VISIBLE} min-w-[10rem] rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-sm text-[var(--text-1)] outline-none`}
                   >
                     <option value="">All</option>
                     {dimension.options.map((opt) => (
@@ -250,10 +246,10 @@ export default function ListToolbar({
                     <button
                       type="button"
                       onClick={() => onFilterChange(dimension.key, null)}
-                      className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-chip px-3 py-1.5 text-sm font-medium ${
+                      className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-chip px-3 py-1.5 text-sm font-medium transition-colors ${
                         !activeFilters[dimension.key]
-                          ? "bg-[var(--action)] text-[var(--on-action)]"
-                          : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--action)] hover:text-[var(--action)]"
+                          ? "bg-[var(--accent)] text-[var(--on-action)]"
+                          : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
                       }`}
                     >
                       All
@@ -268,10 +264,10 @@ export default function ListToolbar({
                             activeFilters[dimension.key] === opt.value ? null : opt.value,
                           )
                         }
-                        className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-chip px-3 py-1.5 text-sm font-medium ${
+                        className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-chip px-3 py-1.5 text-sm font-medium transition-colors ${
                           activeFilters[dimension.key] === opt.value
-                            ? "bg-[var(--action)] text-[var(--on-action)]"
-                            : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:border-[var(--action)] hover:text-[var(--action)]"
+                            ? "bg-[var(--accent)] text-[var(--on-action)]"
+                            : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
                         }`}
                       >
                         {opt.label}

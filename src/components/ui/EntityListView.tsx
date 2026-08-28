@@ -254,8 +254,8 @@ export default function EntityListView({
         {resultsOverride ? (
           resultsOverride
         ) : sortedItems.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-[var(--text-body)] text-lg">
+            <div className="ea-empty">
+              <p>
                 {searchQuery ? "No results match your search." : "No results match your filters."}
               </p>
               <button
@@ -264,7 +264,7 @@ export default function EntityListView({
                   config.filters.forEach((f) => handleFilterChange(f.key, null));
                   handleSearchChange("");
                 }}
-                className="mt-4 inline-block text-[var(--action)] font-medium hover:underline"
+                className="ea-btn ea-btn-secondary"
               >
                 Clear all filters
               </button>
@@ -316,10 +316,10 @@ export default function EntityListView({
           <button
             type="button"
             onClick={() => setVisibleCount((n) => n + (pageSize ?? 24))}
-            className="border border-[var(--border-rule)] bg-[var(--surface-raised)] px-5 py-2.5 text-sm font-medium text-[var(--text-primary)] hover:border-[var(--action)] hover:text-[var(--action)]"
+            className="ea-btn ea-btn-secondary"
           >
             Load more
-            <span className="num text-[var(--text-meta)] ml-2">
+            <span className="num text-[var(--text-3)]">
               {sortedItems.length - visibleCount} left
             </span>
           </button>

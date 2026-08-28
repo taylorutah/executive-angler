@@ -76,7 +76,7 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
         ref={triggerRef}
         type="button"
         onClick={() => setIsOpen(true)}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} flex items-center gap-1.5 text-xs text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors`}
         title="Report an issue"
       >
         <Flag className="h-3.5 w-3.5" aria-hidden />
@@ -84,47 +84,47 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
+        <div className="ea-modal-overlay z-50 flex items-center justify-center p-4" onClick={() => setIsOpen(false)}>
           <div
             ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label="Report an issue"
-            className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl max-w-md w-full p-6 shadow-2xl"
+            className="ea-modal max-w-md"
             onClick={e => e.stopPropagation()}
           >
             {submitted ? (
               <div className="text-center py-4">
-                <CheckCircle className="h-10 w-10 text-[var(--state-positive)] mx-auto mb-3" />
-                <p className="text-[var(--text-primary)] font-semibold">Report submitted</p>
-                <p className="text-xs text-[var(--text-body)] mt-1">We&apos;ll review this shortly. Thank you.</p>
+                <CheckCircle className="h-10 w-10 text-[var(--success)] mx-auto mb-3" />
+                <p className="text-[var(--text-1)] font-semibold">Report submitted</p>
+                <p className="text-xs text-[var(--text-2)] mt-1">We&apos;ll review this shortly. Thank you.</p>
               </div>
             ) : (
               <>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">Report an Issue</h3>
+                  <h3 className="text-base font-semibold text-[var(--text-1)]">Report an Issue</h3>
                   <button
                     type="button"
                     data-autofocus
                     onClick={() => setIsOpen(false)}
                     aria-label="Close report form"
-                    className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-meta)] hover:text-[var(--text-primary)]`}
+                    className={`ea-focus-ring ${FOCUS_VISIBLE} text-[var(--text-3)] hover:text-[var(--text-1)]`}
                   >
                     <X className="h-5 w-5" aria-hidden />
                   </button>
                 </div>
 
                 <div className="space-y-3 mb-4">
-                  <p className="text-xs text-[var(--text-body)]">What&apos;s wrong with this {entityType.replace("_", " ")}?</p>
+                  <p className="text-xs text-[var(--text-2)]">What&apos;s wrong with this {entityType.replace("_", " ")}?</p>
                   <div className="grid grid-cols-2 gap-2">
                     {REASONS.map(r => (
                       <button
                         key={r.key}
                         onClick={() => setReason(r.key)}
-                        className={`px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors ${
+                        className={`px-3 py-2 rounded-[var(--radius-md)] text-xs font-medium text-left transition-colors ${
                           reason === r.key
-                            ? "bg-[var(--action)]/15 text-[var(--action)] border border-[var(--action)]/30"
-                            : "bg-[var(--surface-page)] text-[var(--text-body)] border border-[var(--border-rule)] hover:border-[var(--text-meta)]"
+                            ? "bg-[var(--accent-soft)] text-[var(--accent)] border border-[var(--accent)]"
+                            : "bg-[var(--surface)] text-[var(--text-2)] border border-[var(--border)] hover:border-[var(--border-strong)]"
                         }`}
                       >
                         {r.label}
@@ -143,11 +143,11 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
                     onChange={e => setDetails(e.target.value)}
                     placeholder="Additional details (optional)..."
                     rows={3}
-                    className={`ea-focus-ring ${FOCUS_VISIBLE} w-full px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none resize-none`}
+                    className={`ea-focus-ring ${FOCUS_VISIBLE} w-full px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] outline-none resize-none`}
                   />
                 </div>
 
-                {error && <p className="text-xs text-red-400 mb-3">{error}</p>}
+                {error && <p className="text-xs text-[var(--danger)] mb-3">{error}</p>}
 
                 <Button
                   onClick={handleSubmit}

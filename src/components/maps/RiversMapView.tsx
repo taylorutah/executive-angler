@@ -24,17 +24,11 @@ interface RiversMapViewProps {
   className?: string;
 }
 
-const DIFFICULTY_COLORS: Record<string, string> = {
-  beginner: "#10b981",
-  intermediate: "#f59e0b",
-  advanced: "#ef4444",
-};
-
 export default function RiversMapView({
   rivers,
   selectedState,
   userLocation,
-  className = "w-full rounded-xl overflow-hidden",
+  className = "w-full rounded-[var(--radius-card)] overflow-hidden",
 }: RiversMapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -55,7 +49,7 @@ export default function RiversMapView({
     if (!token) {
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--paper-deep);color:var(--text-2);border-radius:var(--radius-card);font-size:0.875rem">Map unavailable</div>';
       }
       return;
     }
@@ -94,7 +88,7 @@ export default function RiversMapView({
       console.error("Mapbox failed to initialize:", e);
       if (mapContainer.current) {
         mapContainer.current.innerHTML =
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1F2937;color:#A8B2BD;border-radius:0.75rem;font-size:0.875rem">Map unavailable</div>';
+          '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--paper-deep);color:var(--text-2);border-radius:var(--radius-card);font-size:0.875rem">Map unavailable</div>';
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
