@@ -37,9 +37,8 @@ const TYPE_LABELS: Record<GearType, string> = {
   other: "Other",
 };
 
-const inputCls =
-  "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2.5 text-[var(--text-primary)] text-sm focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)]";
-const labelCls = "block text-xs font-semibold text-[var(--text-body)] mb-1 uppercase tracking-wide";
+const inputCls = "ea-input";
+const labelCls = "ea-label";
 const selectCls = inputCls;
 
 export default function GearForm({ open, onClose, onSaved, initialType = "rod", editItem = null, isFirstOfType = false, presetProduct = null }: Props) {
@@ -232,20 +231,20 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
+      <div className="ea-modal-overlay" onClick={onClose} />
 
       {/* Sheet */}
-      <div className="relative w-full sm:max-w-xl max-h-[92dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--surface-raised)] border border-[var(--border-rule)] shadow-2xl">
+      <div className="relative w-full sm:max-w-xl max-h-[92dvh] overflow-y-auto rounded-t-[var(--radius-card)] sm:rounded-[var(--radius-card)] bg-[var(--surface)] shadow-[var(--shadow-float)]">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-rule)] sticky top-0 bg-[var(--surface-raised)] z-10">
-          <h2 className="font-heading font-bold text-[var(--text-primary)] text-lg">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)] sticky top-0 bg-[var(--surface)] z-10">
+          <h2 className="text-xl text-[var(--text-1)]">
             {editItem
               ? `Edit ${TYPE_LABELS[type]}`
               : presetProduct
                 ? `Add ${presetProduct.brandName} ${presetProduct.modelName}`
                 : `Add ${TYPE_LABELS[initialType]}`}
           </h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-page)] transition-colors">
+          <button onClick={onClose} className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -253,11 +252,11 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           {/* Catalog context banner */}
           {presetProduct && !editItem && (
-            <div className="rounded-lg bg-[var(--action)]/10 border border-[var(--action)]/20 px-3 py-2.5 flex items-start gap-2.5">
-              <Lock className="h-3.5 w-3.5 text-[var(--action)] mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-[var(--text-body)] leading-relaxed">
-                From the <span className="text-[var(--text-primary)] font-semibold">{presetProduct.brandName} {presetProduct.modelName}</span> catalog page.
-                Fill in <span className="text-[var(--text-primary)] font-semibold">your</span> SKU&apos;s length, weight, and pieces below so we can track it with your sessions.
+            <div className="rounded-[var(--radius-md)] bg-[var(--accent-soft)] px-3 py-2.5 flex items-start gap-2.5">
+              <Lock className="h-3.5 w-3.5 text-[var(--accent)] mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-[var(--text-2)] leading-relaxed">
+                From the <span className="text-[var(--text-1)] font-semibold">{presetProduct.brandName} {presetProduct.modelName}</span> catalog page.
+                Fill in <span className="text-[var(--text-1)] font-semibold">your</span> SKU&apos;s length, weight, and pieces below so we can track it with your sessions.
               </p>
             </div>
           )}
@@ -276,7 +275,7 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
 
           {/* Name */}
           <div>
-            <label className={labelCls}>Name <span className="text-red-500">*</span></label>
+            <label className={labelCls}>Name <span className="text-[var(--danger)]">*</span></label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputCls} placeholder={
               type === "rod" ? "e.g. Sage R8 9ft 5wt" :
               type === "reel" ? "e.g. Abel TR2" :
@@ -305,7 +304,7 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
                 disabled={!!presetProduct}
-                className={`${inputCls} ${presetProduct ? "opacity-60 cursor-not-allowed" : ""}`}
+                className={inputCls}
                 placeholder="e.g. R8"
               />
             </div>
@@ -447,25 +446,25 @@ export default function GearForm({ open, onClose, onSaved, initialType = "rod", 
               type="checkbox"
               checked={isDefault}
               onChange={(e) => setIsDefault(e.target.checked)}
-              className="mt-0.5 rounded border-[var(--border-rule)] accent-[var(--action)]"
+              className="mt-0.5 rounded border-[var(--border)] accent-[var(--accent)]"
             />
             <span>
-              <span className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+              <span className="text-sm font-medium text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors">
                 Set as default for new sessions
               </span>
-              <span className="block text-xs text-[var(--text-meta)] mt-0.5">
+              <span className="block text-xs text-[var(--text-3)] mt-0.5">
                 Like Strava&apos;s gear — this {TYPE_LABELS[type].toLowerCase()} will auto-attach whenever you log a new session.
               </span>
             </span>
           </label>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {error && <p className="ea-field-error">{error}</p>}
 
           <div className="flex gap-3 pt-1">
-            <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-[var(--border-rule)] py-2.5 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] hover:border-[var(--text-meta)] transition-colors">
+            <button type="button" onClick={onClose} className="ea-btn ea-btn-secondary flex-1">
               Cancel
             </button>
-            <button type="submit" disabled={saving} className="flex-1 rounded-lg bg-[var(--action)] py-2.5 text-sm font-semibold text-white hover:bg-[#d07e31] disabled:opacity-60 transition-colors">
+            <button type="submit" disabled={saving} className="ea-btn ea-btn-primary flex-1">
               {saving ? "Saving…" : editItem ? "Save Changes" : "Add Gear"}
             </button>
           </div>

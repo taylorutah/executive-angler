@@ -22,8 +22,7 @@ const TYPE_LABELS: Record<GearType, string> = {
   other: "Other",
 };
 
-const selectCls =
-  "w-full rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2.5 text-[var(--text-primary)] text-sm focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)]";
+const selectCls = "ea-input";
 
 export default function GearPicker({ type, value, onChange, label }: Props) {
   const [items, setItems] = useState<GearItem[]>([]);
@@ -72,7 +71,7 @@ export default function GearPicker({ type, value, onChange, label }: Props) {
     <>
       <div>
         {label && (
-          <label className="block text-xs font-semibold text-[var(--text-body)] mb-1 uppercase tracking-wide">
+          <label className="ea-label">
             {label}
           </label>
         )}
@@ -86,10 +85,10 @@ export default function GearPicker({ type, value, onChange, label }: Props) {
           {items.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
-              {item.is_default ? " ⭐" : ""}
+              {item.is_default ? " (default)" : ""}
             </option>
           ))}
-          <option value="__add__">＋ Add new {TYPE_LABELS[type].toLowerCase()}…</option>
+          <option value="__add__">+ Add new {TYPE_LABELS[type].toLowerCase()}…</option>
         </select>
       </div>
 

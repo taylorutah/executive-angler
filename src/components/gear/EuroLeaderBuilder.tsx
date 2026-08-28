@@ -33,8 +33,8 @@ const DEFAULT_SECTIONS: EuroLeaderSection[] = [
 ];
 
 const cls =
-  "bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg px-2 py-1.5 text-[var(--text-primary)] text-xs focus:border-[var(--action)] focus:outline-none focus:ring-1 focus:ring-[var(--action)]";
-const lbl = "text-[10px] text-[var(--text-meta)] flex-shrink-0";
+  "bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] px-2 py-1.5 text-[var(--text-1)] text-xs focus:border-[var(--accent)] focus:outline-none focus:shadow-[var(--signal-ring)]";
+const lbl = "text-xs text-[var(--text-3)] flex-shrink-0";
 
 function newSection(): EuroLeaderSection {
   return { role: "tippet", material: "fluoro", length_ft: 2 };
@@ -71,8 +71,8 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
   const totalFt = sections.reduce((s, sec) => s + (sec.length_ft || 0), 0);
 
   return (
-    <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-page)] p-4">
-      <p className="text-xs font-semibold text-[var(--text-body)] uppercase tracking-wide mb-3">
+    <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--paper)] p-4">
+      <p className="ea-overline mb-3">
         Euro Leader Sections
       </p>
 
@@ -85,14 +85,14 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
             onDragOver={(e) => { e.preventDefault(); setDragOver(idx); }}
             onDrop={() => handleDrop(idx)}
             onDragEnd={() => { setDragging(null); setDragOver(null); }}
-            className={`flex flex-wrap items-center gap-2 rounded-lg border p-2 transition-all ${
-              dragOver === idx   ? "border-[var(--action)] bg-[var(--action)]/5"
-              : dragging === idx ? "border-[var(--border-rule)] opacity-40"
-                                 : "border-[var(--border-rule)] bg-[var(--surface-raised)]"
+            className={`flex flex-wrap items-center gap-2 rounded-[var(--radius-md)] border p-2 transition-all ${
+              dragOver === idx   ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+              : dragging === idx ? "border-[var(--border)] opacity-40"
+                                 : "border-[var(--border)] bg-[var(--surface)]"
             }`}
           >
             {/* Drag handle */}
-            <GripVertical className="h-4 w-4 text-[var(--text-meta)] flex-shrink-0 cursor-grab active:cursor-grabbing" />
+            <GripVertical className="h-4 w-4 text-[var(--text-3)] flex-shrink-0 cursor-grab active:cursor-grabbing" />
 
             {/* Role selector */}
             <select
@@ -205,7 +205,7 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
             <button
               type="button"
               onClick={() => remove(idx)}
-              className="ml-auto flex-shrink-0 p-1 rounded text-[var(--text-meta)] hover:text-red-500 hover:bg-red-500/10 transition-colors"
+              className="ml-auto flex-shrink-0 p-1 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--danger)] hover:bg-[var(--danger)]/10 transition-colors"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -217,12 +217,12 @@ export default function EuroLeaderBuilder({ sections: propSections, onChange }: 
         <button
           type="button"
           onClick={add}
-          className="flex items-center gap-1.5 text-xs text-[var(--signal-live)] hover:text-[var(--signal-live)]/80 font-medium transition-colors"
+          className="flex items-center gap-1.5 text-xs text-[var(--accent)] hover:text-[var(--accent-hover)] font-medium transition-colors"
         >
           <Plus className="h-3.5 w-3.5" /> Add Section
         </button>
-        <span className="text-xs text-[var(--text-body)] font-medium">
-          Total: <span className="text-[var(--action)] font-bold">{totalFt.toFixed(1)} ft</span>
+        <span className="text-xs text-[var(--text-2)] font-medium">
+          Total: <span className="num font-semibold text-[var(--text-1)]">{totalFt.toFixed(1)} ft</span>
         </span>
       </div>
     </div>

@@ -149,7 +149,7 @@ export default function GearLockerTable({
               >
                 <Star
                   className={`h-3.5 w-3.5 ${
-                    i.is_default ? "fill-current text-[var(--action)]" : "text-[var(--text-meta)]"
+                    i.is_default ? "fill-current text-[var(--accent)]" : "text-[var(--text-3)]"
                   }`}
                 />
               </button>

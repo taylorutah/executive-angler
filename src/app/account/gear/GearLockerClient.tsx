@@ -2,21 +2,21 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ArrowLeft, Pencil, Trash2, Star, Plus } from "@/icons";
+import { ArrowLeft, Pencil, Trash2, Star, Plus, Ruler, RefreshCw, Waves, GitBranch, Split, Grid3X3, Layers, Package, type LucideIcon } from "@/icons";
 import type { GearItem, GearType } from "@/types/gear";
 import GearForm from "@/components/gear/GearForm";
 import GearLockerTable from "./GearLockerTable";
 import FirstRunEmpty from "@/app/today/FirstRunEmpty";
 
-const GEAR_TYPES: { type: GearType; label: string; emoji: string; desc: string }[] = [
-  { type: "rod", label: "Rods", emoji: "🎣", desc: "Fly rods" },
-  { type: "reel", label: "Reels", emoji: "🪝", desc: "Fly reels" },
-  { type: "line", label: "Lines", emoji: "〰️", desc: "Fly lines" },
-  { type: "leader", label: "Leaders", emoji: "📏", desc: "Leaders" },
-  { type: "tippet", label: "Tippet", emoji: "🧵", desc: "Tippet spools" },
-  { type: "net", label: "Nets", emoji: "🥅", desc: "Landing nets" },
-  { type: "waders", label: "Waders", emoji: "🦺", desc: "Waders & boots" },
-  { type: "other", label: "Other", emoji: "🔧", desc: "Everything else" },
+const GEAR_TYPES: { type: GearType; label: string; Icon: LucideIcon; desc: string }[] = [
+  { type: "rod", label: "Rods", Icon: Ruler, desc: "Fly rods" },
+  { type: "reel", label: "Reels", Icon: RefreshCw, desc: "Fly reels" },
+  { type: "line", label: "Lines", Icon: Waves, desc: "Fly lines" },
+  { type: "leader", label: "Leaders", Icon: GitBranch, desc: "Leaders" },
+  { type: "tippet", label: "Tippet", Icon: Split, desc: "Tippet spools" },
+  { type: "net", label: "Nets", Icon: Grid3X3, desc: "Landing nets" },
+  { type: "waders", label: "Waders", Icon: Layers, desc: "Waders & boots" },
+  { type: "other", label: "Other", Icon: Package, desc: "Everything else" },
 ];
 
 /** Build a compact one-line summary of euro leader sections */
@@ -97,29 +97,29 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
   })();
 
   return (
-    <div className="bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg p-3 hover:border-[var(--text-meta)] transition-colors">
+    <div className="py-3">
       <div className="flex items-start gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
-            <span className="font-semibold text-[var(--text-primary)] text-sm truncate">{item.name}</span>
+            <span className="font-semibold text-[var(--text-1)] text-sm truncate">{item.name}</span>
             {item.is_default && (
-              <span className="flex-shrink-0 inline-flex items-center gap-0.5 text-[9px] font-bold bg-[var(--action)]/15 text-[var(--action)] border border-[var(--action)]/20 rounded-full px-1.5 py-0.5">
-                <Star className="h-2 w-2 fill-current" /> DEFAULT
+              <span className="flex-shrink-0 inline-flex items-center gap-1 text-xs font-medium bg-[var(--accent-soft)] text-[var(--accent)] rounded-[var(--radius-pill)] px-2 py-0.5">
+                <Star className="h-3 w-3 fill-current" /> Default
               </span>
             )}
           </div>
           {(item.maker || item.model) && (
-            <p className="text-[11px] text-[var(--text-body)] leading-snug">
+            <p className="text-xs text-[var(--text-2)] leading-snug">
               {[item.maker, item.model].filter(Boolean).join(" ")}
             </p>
           )}
-          {specs && <p className="text-[11px] text-[var(--text-meta)] leading-snug">{specs}</p>}
+          {specs && <p className="text-xs text-[var(--text-3)] leading-snug">{specs}</p>}
           {euroSections && (
-            <p className="text-[10px] text-[var(--text-meta)]/70 mt-0.5 leading-snug line-clamp-2">
+            <p className="text-xs text-[var(--text-3)] mt-0.5 leading-snug line-clamp-2">
               {euroSections}
             </p>
           )}
-          {item.notes && <p className="text-[11px] text-[var(--text-meta)] italic mt-0.5 line-clamp-1">{item.notes}</p>}
+          {item.notes && <p className="text-xs text-[var(--text-3)] italic mt-0.5 line-clamp-1">{item.notes}</p>}
         </div>
 
         {/* Actions — always visible (mobile has no hover) */}
@@ -128,10 +128,10 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
             onClick={onToggleDefault}
             title={item.is_default ? "Remove default" : "Set as default"}
             aria-label={item.is_default ? "Remove default" : "Set as default"}
-            className={`p-1.5 rounded-md transition-colors ${
+            className={`p-1.5 rounded-[var(--radius-md)] transition-colors ${
               item.is_default
-                ? "text-[var(--action)] bg-[var(--action)]/10 hover:bg-[var(--action)]/20"
-                : "text-[var(--text-meta)] hover:text-[var(--action)] hover:bg-[var(--action)]/10"
+                ? "text-[var(--accent)] bg-[var(--accent-soft)]"
+                : "text-[var(--text-3)] hover:text-[var(--accent)] hover:bg-[var(--accent-soft)]"
             }`}
           >
             <Star className={`h-3.5 w-3.5 ${item.is_default ? "fill-current" : ""}`} />
@@ -140,7 +140,7 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
           <button
             onClick={onEdit}
             aria-label="Edit"
-            className="p-1.5 rounded-md text-[var(--text-meta)] hover:text-[var(--signal-live)] hover:bg-[var(--signal-live)]/10 transition-colors"
+            className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors"
           >
             <Pencil className="h-3.5 w-3.5" />
           </button>
@@ -149,13 +149,13 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
             <div className="flex items-center gap-0.5">
               <button
                 onClick={onDelete}
-                className="text-[10px] font-semibold text-red-500 border border-red-500/30 rounded px-1.5 py-1 hover:bg-red-500/10 transition-colors"
+                className="text-xs font-medium text-[var(--danger)] border border-[var(--danger)]/30 rounded-[var(--radius-md)] px-2 py-1 hover:bg-[var(--danger)]/10 transition-colors"
               >
                 Confirm
               </button>
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="text-[10px] text-[var(--text-meta)] border border-[var(--border-rule)] rounded px-1.5 py-1 hover:bg-[var(--border-rule)] transition-colors"
+                className="text-xs text-[var(--text-3)] border border-[var(--border)] rounded-[var(--radius-md)] px-2 py-1 hover:bg-[var(--paper-deep)] transition-colors"
               >
                 Cancel
               </button>
@@ -164,7 +164,7 @@ function GearCard({ item, onEdit, onDelete, onToggleDefault }: GearCardProps) {
             <button
               onClick={() => setConfirmDelete(true)}
               aria-label="Delete"
-              className="p-1.5 rounded-md text-[var(--text-meta)] hover:text-red-500 hover:bg-red-500/10 transition-colors"
+              className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--danger)] hover:bg-[var(--danger)]/10 transition-colors"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -276,50 +276,46 @@ export default function GearLockerClient() {
   const totalDefaults = items.filter((i) => i.is_default).length;
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
+    <div className="min-h-screen bg-[var(--paper)]">
       {/* Header bar — mirrors Dashboard */}
-      <div className="bg-[var(--surface-raised)] border-b border-[var(--border-rule)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-5">
+      <div className="border-b border-[var(--border)]">
+        <div className="max-w-[var(--container)] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/account"
-            className="inline-flex items-center gap-1.5 text-xs text-[var(--text-body)] hover:text-[var(--action)] transition-colors mb-2"
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--text-2)] hover:text-[var(--accent)] transition-colors mb-2"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Account
           </Link>
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="min-w-0">
-              <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[var(--action)]">Gear Locker</h1>
-              <p className="text-xs sm:text-sm text-[var(--text-body)] mt-1 max-w-2xl">
+              <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">Gear Locker</h1>
+              <p className="text-xs sm:text-sm text-[var(--text-2)] mt-1 max-w-[var(--prose)]">
                 Track your rods, reels, lines, and leaders. Mark a default per type and it auto-attaches to every new session you log.
               </p>
             </div>
-            <div className="flex shrink-0 items-center gap-0.5 border border-[var(--border-rule)] bg-[var(--surface-page)] p-0.5">
+            <div className="ea-segmented shrink-0" role="group" aria-label="Gear layout">
               {(["cards", "table"] as const).map((mode) => (
                 <button
                   key={mode}
                   type="button"
                   onClick={() => setLayout(mode)}
                   aria-pressed={layout === mode}
-                  className={`ea-focus-ring px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
-                    layout === mode
-                      ? "bg-[var(--action)]/10 text-[var(--action)]"
-                      : "text-[var(--text-meta)] hover:text-[var(--text-body)]"
-                  }`}
+                  className="ea-segment capitalize"
                 >
                   {mode}
                 </button>
               ))}
             </div>
             {!loading && totalItems > 0 && (
-              <div className="flex items-center gap-4 text-xs text-[var(--text-meta)] shrink-0">
+              <div className="flex items-center gap-4 shrink-0">
                 <div>
-                  <div className="font-mono text-lg font-bold text-[var(--text-primary)] leading-none">{totalItems}</div>
-                  <div className="tracking-wide uppercase mt-1">Items</div>
+                  <div className="ea-stat-value">{totalItems}</div>
+                  <div className="ea-stat-label mt-1">Items</div>
                 </div>
-                <div className="h-8 w-px bg-[var(--border-rule)]" />
+                <div className="h-8 w-px bg-[var(--border)]" />
                 <div>
-                  <div className="font-mono text-lg font-bold text-[var(--action)] leading-none">{totalDefaults}</div>
-                  <div className="tracking-wide uppercase mt-1">Defaults</div>
+                  <div className="ea-stat-value">{totalDefaults}</div>
+                  <div className="ea-stat-label mt-1">Defaults</div>
                 </div>
               </div>
             )}
@@ -328,10 +324,10 @@ export default function GearLockerClient() {
       </div>
 
       {/* Main content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
+      <div className="max-w-[var(--container)] mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="h-6 w-6 rounded-full border-2 border-[var(--action)]/30 border-t-[var(--action)] animate-spin" />
+            <div className="h-6 w-6 rounded-full border-2 border-[var(--accent)]/30 border-t-[var(--accent)] animate-spin" />
           </div>
         ) : totalItems === 0 ? (
           <FirstRunEmpty
@@ -368,20 +364,22 @@ export default function GearLockerClient() {
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
-            {GEAR_TYPES.map(({ type, label, emoji }) => {
+            {GEAR_TYPES.map(({ type, label, Icon }) => {
               const typeItems = itemsOfType(type);
               return (
                 <section
                   key={type}
-                  className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4 flex flex-col"
+                  className="ea-card flex flex-col"
                 >
                   {/* Section header */}
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h2 className="flex items-center gap-2 text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide min-w-0">
-                      <span className="text-base shrink-0" aria-hidden>{emoji}</span>
+                    <h2 className="flex items-center gap-2.5 text-xl text-[var(--text-1)] min-w-0">
+                      <span className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center shrink-0" aria-hidden>
+                        <Icon className="h-4 w-4 text-[var(--accent)]" />
+                      </span>
                       <span className="truncate">{label}</span>
                       {typeItems.length > 0 && (
-                        <span className="text-xs font-normal text-[var(--text-meta)] normal-case tracking-normal shrink-0">
+                        <span className="text-sm font-normal text-[var(--text-3)] shrink-0">
                           ({typeItems.length})
                         </span>
                       )}
@@ -390,9 +388,9 @@ export default function GearLockerClient() {
                       type="button"
                       onClick={() => openAdd(type)}
                       aria-label={`Add ${label.toLowerCase()}`}
-                      className="flex items-center gap-1 text-xs font-medium text-[var(--signal-live)] hover:text-[var(--signal-live)]/80 border border-[var(--signal-live)]/20 hover:border-[var(--signal-live)]/40 rounded-md px-2 py-1 transition-colors shrink-0"
+                      className="ea-btn ea-btn-secondary ea-btn-sm shrink-0"
                     >
-                      <Plus className="h-3 w-3" aria-hidden />
+                      <Plus className="h-3.5 w-3.5" aria-hidden />
                       <span className="hidden sm:inline">Add</span>
                     </button>
                   </div>
@@ -400,13 +398,15 @@ export default function GearLockerClient() {
                   {typeItems.length === 0 ? (
                     <button
                       onClick={() => openAdd(type)}
-                      className="flex-1 w-full border border-dashed border-[var(--border-rule)] rounded-lg py-5 text-center text-xs text-[var(--text-meta)] hover:border-[var(--action)]/30 hover:text-[var(--action)]/60 transition-colors min-h-[100px] flex flex-col items-center justify-center"
+                      className="flex-1 w-full border border-dashed border-[var(--border-strong)] rounded-[var(--radius-md)] py-5 text-center text-xs text-[var(--text-3)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors min-h-[100px] flex flex-col items-center justify-center gap-2"
                     >
-                      <span className="text-xl block mb-1">{emoji}</span>
+                      <span className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center" aria-hidden>
+                        <Icon className="h-5 w-5 text-[var(--accent)]" />
+                      </span>
                       No {label.toLowerCase()} yet
                     </button>
                   ) : (
-                    <div className="space-y-2 flex-1">
+                    <div className="divide-y divide-[var(--border)] flex-1">
                       {typeItems.map((item) => (
                         <GearCard
                           key={item.id}
