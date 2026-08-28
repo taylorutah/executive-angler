@@ -91,6 +91,11 @@ describe("public chrome locks", () => {
       "src/app/reset-password/page.tsx",
       "src/app/verify-email/page.tsx",
       "src/app/for-guides/page.tsx",
+      "src/app/contribute/page.tsx",
+      "src/app/feedback/FeedbackClient.tsx",
+      "src/app/learn/page.tsx",
+      "src/app/authors/page.tsx",
+      "src/app/search/page.tsx",
     ]) {
       const src = readFileSync(join(root, rel), "utf8");
       assert.match(src, /desk-sheet/);

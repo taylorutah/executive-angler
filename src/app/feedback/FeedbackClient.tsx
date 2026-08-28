@@ -2,11 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  Lightbulb, Bug, Sparkles, MessageSquarePlus, Send,
-  Loader2, CheckCircle, ChevronDown, Clock, AlertCircle,
-  ThumbsUp, Wrench
-} from "@/icons";
 
 interface Feedback {
   id: string;
@@ -19,24 +14,25 @@ interface Feedback {
 }
 
 const CATEGORIES = [
-  { key: "feature", label: "Feature Request", icon: <Lightbulb className="h-5 w-5" />, color: "text-[var(--action)]", bg: "bg-[var(--action)]/10 border-[var(--action)]/30", description: "I wish Executive Angler could..." },
-  { key: "improvement", label: "Improvement", icon: <Sparkles className="h-5 w-5" />, color: "text-[var(--signal-live)]", bg: "bg-[var(--signal-live)]/10 border-[var(--signal-live)]/30", description: "This exists but could be better..." },
-  { key: "bug", label: "Bug Report", icon: <Bug className="h-5 w-5" />, color: "text-red-400", bg: "bg-red-400/10 border-red-400/30", description: "Something isn't working right..." },
-  { key: "other", label: "General Feedback", icon: <MessageSquarePlus className="h-5 w-5" />, color: "text-[var(--state-positive)]", bg: "bg-[var(--state-positive)]/10 border-[var(--state-positive)]/30", description: "Anything else on your mind..." },
+  { key: "feature", label: "Feature", description: "Something the desk does not do yet." },
+  { key: "improvement", label: "Improvement", description: "Something that could be quieter." },
+  { key: "bug", label: "Bug", description: "Something that is broken." },
+  { key: "other", label: "Note", description: "Anything else." },
 ];
 
-const STATUS_DISPLAY: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  submitted: { label: "Received", color: "text-[var(--signal-live)]", icon: <Clock className="h-3 w-3" /> },
-  in_review: { label: "Under Review", color: "text-[var(--action)]", icon: <Wrench className="h-3 w-3" /> },
-  approved: { label: "Planned", color: "text-[var(--state-positive)]", icon: <ThumbsUp className="h-3 w-3" /> },
-  published: { label: "Shipped!", color: "text-[var(--state-positive)]", icon: <CheckCircle className="h-3 w-3" /> },
-  rejected: { label: "Not Planned", color: "text-[var(--text-meta)]", icon: <AlertCircle className="h-3 w-3" /> },
-  needs_info: { label: "Need More Details", color: "text-yellow-400", icon: <AlertCircle className="h-3 w-3" /> },
+const STATUS_LABEL: Record<string, string> = {
+  submitted: "Received",
+  in_review: "Under review",
+  approved: "Planned",
+  published: "Shipped",
+  rejected: "Not planned",
+  needs_info: "Need more",
 };
 
+const fieldClass =
+  "w-full rounded-[2px] border border-[var(--border-rule)] bg-[var(--surface-card)] px-4 py-3 font-ui text-[15px] text-[var(--ink)] placeholder:text-[var(--slate)] outline-none focus:border-[var(--action)]";
+
 export default function FeedbackClient({
-  userId,
-  userEmail,
   existing,
 }: {
   userId: string;
@@ -64,7 +60,7 @@ export default function FeedbackClient({
           entity_type: "feedback",
           name: title.trim(),
           description: details.trim() || null,
-          short_description: CATEGORIES.find(c => c.key === category)?.label || category,
+          short_description: CATEGORIES.find((c) => c.key === category)?.label || category,
           entity_data: { category },
           submit: true,
         }),
@@ -85,179 +81,128 @@ export default function FeedbackClient({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[var(--action)]/10 mb-4">
-            <Lightbulb className="h-7 w-7 text-[var(--action)]" />
-          </div>
-          <h1 className="font-serif text-3xl text-[var(--text-primary)] mb-2">Ideas & Feedback</h1>
-          <p className="text-[var(--text-body)] max-w-md mx-auto">
-            Executive Angler is built by anglers, for anglers. Your ideas shape what we build next.
+    <div className="bg-[var(--paper)]">
+      <div className="desk-sheet">
+        <div className="desk-form">
+          <p className="desk-eyebrow">House</p>
+          <h1
+            className="mt-4 font-heading text-[32px] font-semibold leading-[36px] text-[var(--ink)] sm:text-[48px] sm:leading-[56px]"
+            style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+          >
+            Feedback
+          </h1>
+          <p className="desk-dek-ui mt-3">The desk is built from the water out. Tell us what is missing.</p>
+
+          {success ? (
+            <div className="mt-8 space-y-4">
+              <p className="font-ui text-[15px] text-[var(--ink)]">Received. We read every note.</p>
+              <button
+                type="button"
+                onClick={() => setSuccess(false)}
+                className="bg-[var(--action)] px-[18px] py-2.5 font-ui text-[13px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)]"
+              >
+                Write another
+              </button>
+            </div>
+          ) : (
+            <div className="mt-8 space-y-5">
+              <fieldset>
+                <legend className="mb-2 font-ui text-[13px] text-[var(--ink)]">What kind?</legend>
+                <ul className="space-y-1">
+                  {CATEGORIES.map((cat) => (
+                    <li key={cat.key}>
+                      <button
+                        type="button"
+                        onClick={() => setCategory(cat.key)}
+                        className={`flex w-full items-baseline justify-between border px-3 py-2 text-left font-ui text-[14px] ${
+                          category === cat.key
+                            ? "border-[var(--ink)] bg-[var(--vellum)] text-[var(--ink)]"
+                            : "border-[var(--border-rule)] bg-[var(--paper)] text-[var(--graphite)]"
+                        }`}
+                      >
+                        <span>{cat.label}</span>
+                        <span className="text-[12px] text-[var(--slate)]">{cat.description}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </fieldset>
+
+              {category ? (
+                <>
+                  <div>
+                    <label htmlFor="feedback-title" className="mb-1.5 block font-ui text-sm text-[var(--ink)]">
+                      Title
+                    </label>
+                    <input
+                      id="feedback-title"
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className={fieldClass}
+                      maxLength={120}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="feedback-details" className="mb-1.5 block font-ui text-sm text-[var(--ink)]">
+                      Details
+                    </label>
+                    <textarea
+                      id="feedback-details"
+                      value={details}
+                      onChange={(e) => setDetails(e.target.value)}
+                      rows={5}
+                      className={`${fieldClass} resize-none`}
+                    />
+                  </div>
+                  {error ? (
+                    <p className="border border-[var(--border-rule)] bg-[var(--vellum)] px-4 py-2 font-ui text-sm text-[var(--ink)]">
+                      {error}
+                    </p>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={submitting || !title.trim()}
+                    className="w-full bg-[var(--action)] py-3 font-ui text-[14px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] disabled:cursor-not-allowed"
+                  >
+                    {submitting ? "Sending…" : "Send"}
+                  </button>
+                </>
+              ) : null}
+            </div>
+          )}
+
+          {existing.length > 0 ? (
+            <div className="mt-10">
+              <button
+                type="button"
+                onClick={() => setShowHistory(!showHistory)}
+                className="hover-copper font-ui text-[13px] text-[var(--copper)]"
+              >
+                {showHistory ? "Hide" : "Show"} your notes ({existing.length})
+              </button>
+              {showHistory ? (
+                <ul className="desk-rule-list mt-4">
+                  {existing.map((fb) => (
+                    <li key={fb.id}>
+                      <span className="text-[15px] text-[var(--ink)]">{fb.name}</span>
+                      <span className="shrink-0 text-[13px] text-[var(--graphite)]">
+                        {STATUS_LABEL[fb.status] || fb.status}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
+
+          <p className="mt-8 font-ui text-sm text-[var(--graphite)]">
+            <Link href="/today" className="hover-copper text-[var(--copper)] underline underline-offset-4">
+              Back to Today
+            </Link>
           </p>
         </div>
-
-        {/* Success state */}
-        {success ? (
-          <div className="bg-[var(--surface-raised)] border border-[var(--state-positive)]/30 rounded-xl p-8 text-center">
-            <CheckCircle className="h-12 w-12 text-[var(--state-positive)] mx-auto mb-4" />
-            <h2 className="text-lg font-bold text-[var(--text-primary)] mb-2">Thanks for the feedback!</h2>
-            <p className="text-sm text-[var(--text-body)] mb-6">
-              We read every submission. If we have questions, we&apos;ll reach out through the app.
-            </p>
-            <div className="flex gap-3 justify-center">
-              <button
-                onClick={() => setSuccess(false)}
-                className="px-5 py-2.5 bg-[var(--action)] text-white rounded-lg text-sm font-semibold hover:bg-[var(--action-hover)] transition-colors"
-              >
-                Submit Another
-              </button>
-              <Link
-                href="/dashboard"
-                className="px-5 py-2.5 bg-[var(--border-rule)] text-[var(--text-primary)] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors"
-              >
-                Back to Dashboard
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <>
-            {/* Category picker */}
-            <div className="mb-6">
-              <p className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">What kind of feedback?</p>
-              <div className="grid grid-cols-2 gap-3">
-                {CATEGORIES.map(cat => (
-                  <button
-                    key={cat.key}
-                    onClick={() => setCategory(cat.key)}
-                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all text-left ${
-                      category === cat.key
-                        ? cat.bg + " border-opacity-100"
-                        : "bg-[var(--surface-raised)] border-[var(--border-rule)] hover:border-[var(--text-meta)]"
-                    }`}
-                  >
-                    <span className={category === cat.key ? cat.color : "text-[var(--text-meta)]"}>
-                      {cat.icon}
-                    </span>
-                    <div>
-                      <p className={`text-sm font-semibold ${category === cat.key ? "text-[var(--text-primary)]" : "text-[var(--text-body)]"}`}>
-                        {cat.label}
-                      </p>
-                      <p className="text-[10px] text-[var(--text-meta)] mt-0.5">{cat.description}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Form */}
-            {category && (
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
-                    Title <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
-                    placeholder={
-                      category === "bug"
-                        ? "e.g., Session timer doesn't pause when app backgrounds"
-                        : category === "feature"
-                          ? "e.g., Hatch calendar with insect emergence data"
-                          : "e.g., Make the catch logging form faster"
-                    }
-                    className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
-                    maxLength={120}
-                  />
-                  <p className="text-[10px] text-[var(--text-meta)] mt-1 text-right">{title.length}/120</p>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
-                    Details <span className="text-[var(--text-meta)]">(optional)</span>
-                  </label>
-                  <textarea
-                    value={details}
-                    onChange={e => setDetails(e.target.value)}
-                    placeholder="Give us the full picture. What problem does this solve? How would it work? The more detail, the better we can build it."
-                    rows={5}
-                    className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] resize-none"
-                  />
-                </div>
-
-                {error && (
-                  <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg">
-                    <p className="text-sm text-red-400">{error}</p>
-                  </div>
-                )}
-
-                <button
-                  onClick={handleSubmit}
-                  disabled={submitting || !title.trim()}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[var(--action)] text-white text-base font-bold rounded-xl hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {submitting ? (
-                    <><Loader2 className="h-5 w-5 animate-spin" /> Submitting...</>
-                  ) : (
-                    <><Send className="h-5 w-5" /> Submit Feedback</>
-                  )}
-                </button>
-              </div>
-            )}
-          </>
-        )}
-
-        {/* Previous submissions */}
-        {existing.length > 0 && (
-          <div className="mt-10">
-            <button
-              onClick={() => setShowHistory(!showHistory)}
-              className="flex items-center gap-2 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors mb-3"
-            >
-              <ChevronDown className={`h-4 w-4 transition-transform ${showHistory ? "rotate-180" : ""}`} />
-              Your previous feedback ({existing.length})
-            </button>
-
-            {showHistory && (
-              <div className="space-y-2">
-                {existing.map(fb => {
-                  const statusCfg = STATUS_DISPLAY[fb.status] || STATUS_DISPLAY.submitted;
-                  const catInfo = CATEGORIES.find(c => c.key === fb.entity_data?.category);
-
-                  return (
-                    <div key={fb.id} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className={catInfo?.color || "text-[var(--text-body)]"}>
-                              {catInfo?.icon || <MessageSquarePlus className="h-4 w-4" />}
-                            </span>
-                            <h3 className="text-sm font-semibold text-[var(--text-primary)]">{fb.name}</h3>
-                          </div>
-                          <p className="text-xs text-[var(--text-meta)] mt-1">
-                            {new Date(fb.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                          </p>
-                          {fb.admin_feedback && (
-                            <div className="mt-2 px-3 py-2 bg-[var(--action)]/5 border border-[var(--action)]/20 rounded-lg">
-                              <p className="text-xs text-[var(--action)]"><strong>Team response:</strong> {fb.admin_feedback}</p>
-                            </div>
-                          )}
-                        </div>
-                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${statusCfg.color} bg-current/10 shrink-0`}>
-                          {statusCfg.icon}
-                          {statusCfg.label}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

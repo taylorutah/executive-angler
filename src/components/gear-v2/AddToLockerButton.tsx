@@ -1,6 +1,5 @@
 "use client";
 import { useState, useTransition } from "react";
-import { Check, Plus } from "@/icons";
 import { addProductToLockerAction } from "@/app/gear/actions";
 
 interface Props {
@@ -29,11 +28,7 @@ export default function AddToLockerButton({ productId, initiallyInLocker }: Prop
   };
 
   if (inLocker) {
-    return (
-      <span className="inline-flex items-center gap-1 rounded bg-[var(--signal-live)]/15 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--signal-live)]">
-        <Check className="h-3 w-3" /> In locker
-      </span>
-    );
+    return <span className="font-ui text-[12px] text-[var(--ink)]">In locker</span>;
   }
 
   return (
@@ -42,15 +37,15 @@ export default function AddToLockerButton({ productId, initiallyInLocker }: Prop
         type="button"
         onClick={click}
         disabled={pending}
-        className="inline-flex items-center gap-1 rounded-md bg-[var(--surface-card)] border border-[var(--border-strong)] px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--text-primary)] hover:bg-[var(--action)] hover:border-[var(--action)] hover:text-white transition-colors disabled:opacity-60"
+        className="bg-[var(--action)] px-2.5 py-1 font-ui text-[12px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] disabled:cursor-not-allowed"
       >
-        <Plus className="h-3 w-3" /> {pending ? "Adding…" : "Add"}
+        {pending ? "Adding…" : "Add"}
       </button>
-      {error && (
-        <span className="absolute right-0 top-full mt-1 z-10 whitespace-nowrap rounded bg-[#7F1D1D] px-1.5 py-0.5 text-[10px] text-white shadow-lg">
+      {error ? (
+        <span className="absolute right-0 top-full z-10 mt-1 whitespace-nowrap border border-[var(--border-rule)] bg-[var(--vellum)] px-1.5 py-0.5 font-ui text-[10px] text-[var(--ink)]">
           {error}
         </span>
-      )}
+      ) : null}
     </span>
   );
 }

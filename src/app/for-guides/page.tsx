@@ -79,20 +79,14 @@ export default function ForGuidesPage() {
             </li>
           </ol>
 
-          <div className="rounded-xl border border-[var(--action)]/30 bg-[var(--action)]/5 p-6 mt-10">
-            <p className="font-heading text-lg text-[var(--text-primary)] mb-2">
-              Ready to claim your profile?
-            </p>
-            <p className="text-[var(--text-body)] mb-4">
-              One short message. We handle the rest.
-            </p>
+          <p className="mt-10">
             <Link
               href="/contact?subject=Guide%20Profile%20Claim"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--action)] text-[var(--surface-page)] font-bold hover:bg-[#D4751F] transition-colors"
+              className="inline-flex items-center bg-[var(--action)] px-[18px] py-2.5 font-ui text-[13px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)]"
             >
               Submit your claim
             </Link>
-          </div>
+          </p>
         </div>
         </div>
       </div>

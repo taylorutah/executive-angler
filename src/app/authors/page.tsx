@@ -60,7 +60,7 @@ export default async function AuthorsPage() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h2 className="font-heading text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                    <h2 className="hover-copper font-heading text-xl font-bold text-[var(--text-primary)]">
                       {author.name}
                     </h2>
                     {author.role && (

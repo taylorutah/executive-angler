@@ -14,7 +14,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search } from "@/icons";
 import {
   GROUP_ORDER,
   rankSearch,
@@ -315,10 +314,7 @@ export function SearchPageFallback() {
         Loading search
       </span>
       <div aria-hidden className="relative">
-        <Search
-          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-body)]"
-        />
-        <div className="w-full border border-[var(--border-rule)] bg-[var(--surface-card)] py-4 pl-12 pr-4 text-[18px] text-[var(--text-body)]">
+        <div className="w-full border border-[var(--border-rule)] bg-[var(--surface-card)] px-4 py-4 text-[18px] text-[var(--text-body)]">
           Search a river, a fly, a hatch, a place.
         </div>
       </div>

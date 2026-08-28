@@ -30,3 +30,13 @@ export function plateImageUrl(
   }
   return href;
 }
+
+/** Leftover public templates: hosted stills only. No Unsplash. */
+export function hostedStillUrl(
+  value: string | null | undefined,
+): string | undefined {
+  const href = plateImageUrl(value);
+  if (!href) return undefined;
+  if (/unsplash\.com/i.test(href)) return undefined;
+  return href;
+}

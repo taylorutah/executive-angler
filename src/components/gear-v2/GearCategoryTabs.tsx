@@ -20,7 +20,7 @@ export default function GearCategoryTabs({ categories }: Props) {
   const tabs = [{ slug: "all", label: "All", count: total }, ...categories];
 
   return (
-    <div className="flex flex-wrap gap-1 border-b border-[var(--border-rule)] mb-4 -mx-1">
+    <div className="mb-6 flex flex-wrap gap-2">
       {tabs.map((t) => {
         const isActive = active === t.slug;
         const href = t.slug === "all" ? "/gear" : `/gear?category=${t.slug}`;
@@ -29,14 +29,14 @@ export default function GearCategoryTabs({ categories }: Props) {
             key={t.slug}
             href={href}
             scroll={false}
-            className={`px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
+            className={`rounded-[2px] border px-3 py-1.5 font-ui text-[12px] ${
               isActive
-                ? "bg-[var(--surface-raised)] text-[var(--text-primary)] border-x border-t border-[var(--border-rule)] -mb-px"
-                : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-raised)]/50"
+                ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--hero-type)]"
+                : "border-[var(--border-rule)] bg-[var(--paper)] text-[var(--graphite)] hover:text-[var(--ink)]"
             }`}
           >
             {t.label}{" "}
-            <span className="font-['IBM_Plex_Mono'] text-[var(--text-meta)]">{t.count}</span>
+            <span className="font-mono">{t.count}</span>
           </Link>
         );
       })}

@@ -9,6 +9,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import DeskMast from "@/components/desk/DeskMast";
 import HomeGutter from "@/components/home/HomeGutter";
 import { formatHookSize } from "@/lib/flies/variant-format";
+import { hostedStillUrl } from "@/lib/media/image-url";
 
 export const revalidate = 3600;
 
@@ -121,10 +122,7 @@ export default async function FlyCategoryPage({ params }: Props) {
                 <ScrollAnimation key={fly.id} delay={Math.min(i * 0.05, 0.3)}>
                   <EntityCard
                     href={`/flies/${fly.slug}`}
-                    imageUrl={
-                      fly.heroImageUrl ||
-                      "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&q=80"
-                    }
+                    imageUrl={hostedStillUrl(fly.heroImageUrl)}
                     imageAlt={`${fly.name} fly pattern`}
                     title={fly.name}
                     subtitle={fly.tagline || fly.description?.substring(0, 100)}
@@ -138,7 +136,7 @@ export default async function FlyCategoryPage({ params }: Props) {
                         ? fly.imitates.slice(0, 2)
                         : undefined
                     }
-                    iconOnly={!fly.heroImageUrl}
+                    iconOnly={!hostedStillUrl(fly.heroImageUrl)}
                     actionSlot={{
                       kind: "add-to-fly-box",
                       canonicalFlyId: fly.id,

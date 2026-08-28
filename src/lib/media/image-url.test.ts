@@ -2,7 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { normalizeImageUrl, plateImageUrl } from "./image-url";
+import { hostedStillUrl, normalizeImageUrl, plateImageUrl } from "./image-url";
 import { localHeroMobileSrc, localHeroWebpSrc } from "./local-hero";
 
 describe("normalizeImageUrl", () => {
@@ -37,6 +37,21 @@ describe("normalizeImageUrl", () => {
     assert.equal(
       localHeroWebpSrc("/images/madison-river-three-dollar-bridge.jpg"),
       "/images/home/madison-three-dollar-bridge.webp",
+    );
+  });
+
+  it("rejects Unsplash on leftover public templates", () => {
+    assert.equal(
+      hostedStillUrl("https://images.unsplash.com/photo-1502635385003-6675045844ad?w=1200"),
+      undefined,
+    );
+    assert.equal(
+      hostedStillUrl("https://plus.unsplash.com/premium-photo-x"),
+      undefined,
+    );
+    assert.equal(
+      hostedStillUrl("/images/home/madison-three-dollar-bridge.jpg"),
+      "/images/home/madison-three-dollar-bridge.jpg",
     );
   });
 

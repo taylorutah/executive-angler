@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  ChevronLeft, Upload, Save, Send, MapPin, Globe,
-  Phone, Mail, Image as ImageIcon, AlertCircle, CheckCircle, Loader2
-} from "@/icons";
+
+const fieldClass =
+  "w-full rounded-[2px] border border-[var(--border-rule)] bg-[var(--surface-card)] px-4 py-3 font-ui text-[15px] text-[var(--ink)] placeholder:text-[var(--slate)] outline-none focus:border-[var(--action)]";
 
 interface Props {
   entityType: string;
@@ -231,66 +230,68 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <Link href="/contribute" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
-            <ChevronLeft className="h-5 w-5" />
+    <div className="bg-[var(--paper)]">
+      <div className="desk-sheet">
+        <div className="desk-form">
+        <p className="desk-eyebrow">House</p>
+        <p className="mt-2 font-ui text-[13px]">
+          <Link href="/contribute" className="hover-copper text-[var(--copper)]">
+            Contribute
           </Link>
-          <h1 className="font-serif text-2xl text-[var(--text-primary)]">Add {entityLabel}</h1>
-        </div>
+        </p>
+        <h1
+          className="mt-4 font-heading text-[32px] font-semibold leading-[36px] text-[var(--ink)]"
+          style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
+        >
+          Add {entityLabel}
+        </h1>
 
-        {/* Status messages */}
-        {error && (
-          <div className="mb-4 px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg flex items-start gap-2">
-            <AlertCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-red-400">{error}</p>
-          </div>
-        )}
-        {success && (
-          <div className="mb-4 px-4 py-3 bg-green-950/30 border border-green-800 rounded-lg flex items-start gap-2">
-            <CheckCircle className="h-4 w-4 text-green-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-green-400">{success}</p>
-          </div>
-        )}
+        {error ? (
+          <p className="mt-4 border border-[var(--border-rule)] bg-[var(--vellum)] px-4 py-2 font-ui text-sm text-[var(--ink)]">
+            {error}
+          </p>
+        ) : null}
+        {success ? (
+          <p className="mt-4 border border-[var(--border-rule)] bg-[var(--vellum)] px-4 py-2 font-ui text-sm text-[var(--ink)]">
+            {success}
+          </p>
+        ) : null}
 
-        {/* Prefill banner */}
-        {showPrefillBanner && (
-          <div className="mb-4 px-4 py-3 bg-[var(--action)]/10 border border-[var(--action)]/30 rounded-lg flex items-center justify-between">
-            <p className="text-sm text-[var(--action)]">Pre-filled from your fly box — review and complete the details below.</p>
-            <button onClick={() => setShowPrefillBanner(false)} className="text-[var(--action)] hover:text-[var(--action-hover)] text-lg leading-none ml-3">&times;</button>
-          </div>
-        )}
+        {showPrefillBanner ? (
+          <p className="mt-4 flex items-baseline justify-between gap-3 border border-[var(--border-rule)] bg-[var(--vellum)] px-4 py-2 font-ui text-sm text-[var(--ink)]">
+            <span>Pre-filled from your fly box — review and complete the details below.</span>
+            <button type="button" onClick={() => setShowPrefillBanner(false)} className="hover-copper text-[var(--copper)]">
+              Dismiss
+            </button>
+          </p>
+        ) : null}
 
         {/* Hero image upload */}
         <div className="mb-6">
-          <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
-            <ImageIcon className="h-3 w-3 inline mr-1" />
-            Hero Image <span className="text-[var(--action)]">*strongly recommended</span>
+          <label className="mb-2 block font-ui text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--slate)]">
+            Still <span className="normal-case tracking-normal text-[var(--graphite)]">— recommended</span>
           </label>
 
           {heroImage ? (
-            <div className="relative rounded-xl overflow-hidden border border-[var(--border-rule)]">
+            <div className="relative overflow-hidden border border-[var(--border-rule)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={heroImage} alt="Preview" className="w-full h-48 object-cover" />
+              <img src={heroImage} alt="Preview" className="h-48 w-full object-cover" />
               <button
+                type="button"
                 onClick={() => setHeroImage("")}
-                className="absolute top-2 right-2 px-2.5 py-1 bg-black/70 text-white rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors"
+                className="absolute right-2 top-2 bg-[var(--ink)] px-2.5 py-1 font-ui text-[12px] font-semibold text-[var(--hero-type)]"
               >
                 Remove
               </button>
             </div>
           ) : (
             <label
-              className={`flex flex-col items-center justify-center w-full h-48 bg-[var(--surface-raised)] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
-                uploading ? "border-[var(--action)] bg-[var(--action)]/5" : "border-[var(--border-rule)] hover:border-[var(--text-meta)]"
+              className={`flex h-48 w-full cursor-pointer flex-col items-center justify-center border border-dashed bg-[var(--vellum)] ${
+                uploading ? "border-[var(--ink)]" : "border-[var(--border-rule)]"
               }`}
-              onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[var(--action)]", "bg-[var(--action)]/5"); }}
-              onDragLeave={e => { e.currentTarget.classList.remove("border-[var(--action)]", "bg-[var(--action)]/5"); }}
+              onDragOver={e => { e.preventDefault(); }}
               onDrop={async e => {
                 e.preventDefault();
-                e.currentTarget.classList.remove("border-[var(--action)]", "bg-[var(--action)]/5");
                 const file = e.dataTransfer.files[0];
                 if (file) await handleImageUpload(file);
               }}
@@ -304,30 +305,22 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                   if (file) await handleImageUpload(file);
                 }}
               />
-              {uploading ? (
-                <>
-                  <Loader2 className="h-8 w-8 text-[var(--action)] animate-spin mb-2" />
-                  <span className="text-sm text-[var(--action)] font-medium">Uploading...</span>
-                </>
-              ) : (
-                <>
-                  <Upload className="h-8 w-8 text-[var(--text-meta)] mb-2" />
-                  <span className="text-sm text-[var(--text-body)] font-medium">Drop an image here or click to browse</span>
-                  <span className="text-[10px] text-[var(--text-meta)] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
-                </>
-              )}
+              <span className="font-ui text-sm text-[var(--graphite)]">
+                {uploading ? "Uploading…" : "Drop a hosted still or click to browse"}
+              </span>
+              <span className="mt-1 font-ui text-[11px] text-[var(--slate)]">JPEG, PNG, or WebP · max 10 MB</span>
             </label>
           )}
-          <p className="text-[10px] text-[var(--text-meta)] mt-1.5">A great photo dramatically increases approval chances</p>
+          <p className="mt-1.5 font-ui text-[11px] text-[var(--slate)]">A hosted photograph helps the review.</p>
         </div>
 
         {/* Dynamic fields */}
         <div className="space-y-5">
           {fields.map(field => (
             <div key={field.key}>
-              <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
+              <label className="mb-2 block font-ui text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--slate)]">
                 {field.label}
-                {field.required && <span className="text-red-400 ml-1">*</span>}
+                {field.required ? <span className="ml-1 text-[var(--copper)]">*</span> : null}
               </label>
 
               {field.type === "text" && (
@@ -336,7 +329,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                   value={formData[field.key] || ""}
                   onChange={e => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+                  className={fieldClass}
                 />
               )}
 
@@ -346,7 +339,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                   onChange={e => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
                   rows={4}
-                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] resize-none"
+                  className={`${fieldClass} resize-none`}
                 />
               )}
 
@@ -354,7 +347,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                 <select
                   value={formData[field.key] || ""}
                   onChange={e => updateField(field.key, e.target.value)}
-                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--action)]"
+                  className={fieldClass}
                 >
                   <option value="">Select...</option>
                   {field.options?.map(opt => (
@@ -370,9 +363,9 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
                     value={formData[field.key] || ""}
                     onChange={e => updateField(field.key, e.target.value)}
                     placeholder={field.placeholder}
-                    className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+                    className={fieldClass}
                   />
-                  <p className="text-[10px] text-[var(--text-meta)] mt-1">Separate with commas</p>
+                  <p className="mt-1 font-ui text-[11px] text-[var(--slate)]">Separate with commas</p>
                 </>
               )}
             </div>
@@ -380,23 +373,24 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
         </div>
 
         {/* Action buttons */}
-        <div className="flex gap-3 mt-8">
+        <div className="mt-8 flex gap-3">
           <button
+            type="button"
             onClick={() => handleSave(false)}
             disabled={saving || submitting || !formData.name?.trim()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--border-rule)] text-[var(--text-primary)] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-50"
+            className="flex-1 border border-[var(--border-rule)] bg-[var(--vellum)] px-4 py-3 font-ui text-[14px] font-semibold text-[var(--ink)] disabled:cursor-not-allowed"
           >
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            Save Draft
+            {saving ? "Saving…" : "Save draft"}
           </button>
           <button
+            type="button"
             onClick={() => handleSave(true)}
             disabled={saving || submitting || !formData.name?.trim()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-lg text-sm font-bold hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50"
+            className="flex-1 bg-[var(--action)] px-4 py-3 font-ui text-[14px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] disabled:cursor-not-allowed"
           >
-            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            Submit for Review
+            {submitting ? "Sending…" : "Submit for review"}
           </button>
+        </div>
         </div>
       </div>
     </div>

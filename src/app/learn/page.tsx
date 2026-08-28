@@ -112,8 +112,9 @@ export default async function LearnPage() {
   ).filter((r): r is LearnRiver => Boolean(r));
 
   return (
-    <div className="bg-[var(--surface-page)]">
-      <header className="mx-auto max-w-3xl px-5 pt-10 pb-16 sm:px-8 xl:px-20">
+    <div className="bg-[var(--paper)]">
+      <header className="desk-sheet pb-16 pt-10">
+        <div className="house-measure">
         <Breadcrumbs items={[{ label: "Learn", href: "/learn" }]} />
         <p className="mt-8 font-ui text-[11px] font-medium uppercase tracking-[1.8px] text-[var(--text-meta)]">
           The beginner path
@@ -129,13 +130,15 @@ export default async function LearnPage() {
           pocket. Current that holds fish. Five flies that cover most days. Rivers that
           forgive a first cast. How to put a fish back. Then two lists — not a form.
         </p>
+        </div>
       </header>
 
       <section
         aria-labelledby="gear"
         className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
-        <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+        <div className="desk-sheet py-16 sm:py-20">
+          <div className="house-measure">
           <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             01
           </p>
@@ -172,11 +175,13 @@ export default async function LearnPage() {
               </li>
             ))}
           </ol>
+          </div>
         </div>
       </section>
 
       <section aria-labelledby="water" className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+        <div className="desk-sheet py-16 sm:py-20">
+          <div className="house-measure">
           <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             02
           </p>
@@ -214,6 +219,7 @@ export default async function LearnPage() {
               The full reading-water guide →
             </Link>
           </p>
+          </div>
         </div>
       </section>
 
@@ -222,7 +228,7 @@ export default async function LearnPage() {
         className="border-y border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
         <div className="desk-sheet py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl">
+          <div className="house-measure">
             <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
               03
             </p>
@@ -240,7 +246,7 @@ export default async function LearnPage() {
           <div className="mt-12">
             <FiveFlyPlate flies={flies} />
           </div>
-          <p className="mx-auto mt-10 max-w-3xl">
+          <p className="house-measure mt-10">
             <Link
               href="/articles/essential-fly-box-20-patterns"
               className="text-[15px] text-[var(--text-primary)] underline decoration-[var(--border-rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
@@ -252,7 +258,8 @@ export default async function LearnPage() {
       </section>
 
       <section aria-labelledby="rivers" className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+        <div className="desk-sheet py-16 sm:py-20">
+          <div className="house-measure">
           <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             04
           </p>
@@ -270,6 +277,7 @@ export default async function LearnPage() {
           <div className="mt-10">
             <NearRivers rivers={beginnerRivers} />
           </div>
+          </div>
         </div>
       </section>
 
@@ -277,7 +285,8 @@ export default async function LearnPage() {
         aria-labelledby="release"
         className="border-t border-[var(--border-rule)] bg-[var(--surface-raised)]"
       >
-        <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20 xl:px-20">
+        <div className="desk-sheet py-16 sm:py-20">
+          <div className="house-measure">
           <p className="font-ui text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--text-meta)]">
             05
           </p>
@@ -317,6 +326,7 @@ export default async function LearnPage() {
               The full handling sequence →
             </Link>
           </p>
+          </div>
         </div>
       </section>
 

@@ -176,6 +176,7 @@ export default async function FlyDetail({ params }: Props) {
           </div>
         </header>
 
+        <div className="desk-sheet-stack">
         <div className="mt-12">
           <RecipeStrip materials={linkedMaterials} notes={fly.recipe_notes} />
         </div>
@@ -267,6 +268,7 @@ export default async function FlyDetail({ params }: Props) {
             All patterns
           </Link>
         </p>
+        </div>
       </article>
     </div>
   );

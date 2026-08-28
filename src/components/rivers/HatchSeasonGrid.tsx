@@ -101,8 +101,11 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
         </ul>
       </div>
 
+      <p className="mb-2 font-ui text-[12px] text-[var(--text-meta)] lg:hidden">
+        Swipe months to stay on the year.
+      </p>
       <div
-        className="overflow-x-auto border border-[var(--border-rule)] bg-[var(--surface-card)]"
+        className="desk-table-wrap overflow-x-auto border border-[var(--border-rule)] bg-[var(--vellum)]"
         tabIndex={0}
         role="region"
         aria-label="Hatch chart by month"
@@ -116,7 +119,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
           </colgroup>
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 bg-[var(--surface-card)] px-3 py-2 text-left font-medium text-[var(--text-meta)]">
+              <th className="sticky left-0 z-10 bg-[var(--vellum)] px-3 py-2 text-left font-medium text-[var(--slate)]">
                 Insect
               </th>
               {MONTHS.map((month, i) => {
@@ -126,8 +129,8 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                     key={month}
                     className={`w-8 px-0 py-2 text-center text-[11px] font-semibold ${
                       on
-                        ? "bg-[var(--action)] text-[var(--on-action)]"
-                        : "text-[var(--text-body)]"
+                        ? "bg-[var(--ink)] text-[var(--hero-type)]"
+                        : "text-[var(--graphite)]"
                     }`}
                   >
                     {SHORT[i]}
@@ -141,7 +144,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
               const row = cells.get(insect) ?? {};
               return (
                 <tr key={insect} className="border-t border-[var(--border-rule)]">
-                  <th className="sticky left-0 z-10 bg-[var(--surface-card)] px-3 py-2 text-left font-medium text-[var(--text-primary)]">
+                  <th className="sticky left-0 z-10 bg-[var(--vellum)] px-3 py-2 text-left font-medium text-[var(--ink)]">
                     {insect}
                   </th>
                   {MONTHS.map((month) => {
@@ -150,7 +153,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                     return (
                       <td
                         key={month}
-                        className={`w-8 px-0 py-2 text-center ${on ? "bg-[var(--action)]/5" : ""}`}
+                        className={`w-8 px-0 py-2 text-center ${on ? "bg-[var(--paper)]" : ""}`}
                       >
                         {cell ? (
                           <span
