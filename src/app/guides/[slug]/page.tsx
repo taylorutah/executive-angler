@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ExternalLink, Phone, Mail, Award, MapPin, Fish, Star } from "@/icons";
+import { ExternalLink, Phone, Mail, Award, Home, MapPin, Fish, Star } from "@/icons";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import QuickFacts from "@/components/ui/QuickFacts";
 import Badge from "@/components/ui/Badge";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
-import { Button } from "@/components/ui/Button";
 import JsonLd from "@/components/seo/JsonLd";
 import GoogleReviews from "@/components/GoogleReviews";
 import UserReviews from "@/components/ui/UserReviews";
@@ -151,8 +150,8 @@ export default async function GuidePage({ params }: Props) {
       />
 
       {/* Text Hero */}
-      <section className="bg-[var(--surface-page)] pt-6 pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--paper)] pt-6 pb-10">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
               { label: "Guides", href: "/guides" },
@@ -162,7 +161,7 @@ export default async function GuidePage({ params }: Props) {
           />
 
           <div className="mt-6 flex items-start gap-4">
-            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] flex-1">
+            <h1 className="text-[var(--text-1)] flex-1">
               {guide.name}
             </h1>
             <div className="mt-2 shrink-0">
@@ -173,18 +172,18 @@ export default async function GuidePage({ params }: Props) {
           {/* Badge Row: Destination, Experience, Rate */}
           <div className="mt-4 flex flex-wrap items-center gap-3">
             {dest && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--surface-raised)] text-[var(--text-body)] text-sm font-medium rounded-full border border-[var(--border-rule)]">
-                <MapPin className="h-4 w-4 text-[var(--action)]" />
+              <span className="ea-chip">
+                <MapPin className="text-[var(--accent)]" />
                 {dest.name}
               </span>
             )}
             {guide.yearsExperience && (
-              <span className="inline-flex items-center px-3 py-1.5 bg-[var(--surface-raised)] text-[var(--text-body)] text-sm font-medium rounded-full border border-[var(--border-rule)]">
+              <span className="ea-chip">
                 {guide.yearsExperience}+ years experience
               </span>
             )}
             {guide.dailyRate && (
-              <span className="inline-flex items-center px-3 py-1.5 bg-[var(--action)]/10 text-[var(--action)] text-sm font-semibold rounded-full border border-[var(--action)]/30">
+              <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-[var(--accent-soft)] text-[var(--accent)] rounded-chip">
                 {guide.dailyRate}
               </span>
             )}
@@ -193,10 +192,7 @@ export default async function GuidePage({ params }: Props) {
           {/* Specialty Pills */}
           <div className="mt-5 flex flex-wrap gap-2">
             {(guide.specialties || []).map((s) => (
-              <span
-                key={s}
-                className="px-3 py-1 bg-[var(--surface-page)] text-[var(--action)] text-sm font-medium rounded-full border border-[var(--border-rule)]"
-              >
+              <span key={s} className="ea-chip">
                 {s}
               </span>
             ))}
@@ -205,33 +201,33 @@ export default async function GuidePage({ params }: Props) {
           {/* Rating */}
           {guide.googleRating && (
             <div className="mt-6 flex items-center gap-1.5">
-              <Star className="h-5 w-5 fill-[var(--action)] text-[var(--action)]" />
-              <span className="text-[var(--text-primary)] font-semibold">{guide.googleRating}</span>
+              <Star className="h-5 w-5 fill-[var(--accent)] text-[var(--accent)]" />
+              <span className="text-[var(--text-1)] font-semibold">{guide.googleRating}</span>
               {guide.googleReviewCount && (
-                <span className="text-[var(--text-meta)] text-sm">({guide.googleReviewCount} reviews)</span>
+                <span className="text-[var(--text-3)] text-sm">({guide.googleReviewCount} reviews)</span>
               )}
             </div>
           )}
         </div>
       </section>
 
-      <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div className="lg:col-span-2 space-y-10">
+      <section className="bg-[var(--paper)] pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2 space-y-12">
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                   About
                 </h2>
                 {guide.bio.split("\n\n").map((p, i) => (
-                  <p key={i} className="text-[var(--text-body)] leading-relaxed mb-4">
+                  <p key={i} className="text-[var(--text-2)] leading-relaxed mb-4">
                     {p}
                   </p>
                 ))}
               </ScrollAnimation>
 
               <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                   Specialties
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -246,7 +242,7 @@ export default async function GuidePage({ params }: Props) {
 
               {guideRivers.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-4">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                     Rivers & Waters
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -254,14 +250,14 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={river.id}
                         href={`/rivers/${river.slug}`}
-                        className="flex items-center gap-3 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-3 p-4 bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] card-hover"
                       >
-                        <MapPin className="h-5 w-5 text-river shrink-0" />
+                        <MapPin className="h-5 w-5 text-[var(--accent)] shrink-0" />
                         <div>
-                          <h3 className="font-medium text-[var(--action)]">
+                          <h3 className="font-medium text-[var(--accent)]">
                             {river.name}
                           </h3>
-                          <p className="text-xs text-[var(--text-body)]">
+                          <p className="text-xs text-[var(--text-2)]">
                             {(river.primarySpecies || []).join(", ")}
                           </p>
                         </div>
@@ -274,7 +270,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Lodges in This Area */}
               {areaLodges.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-6">
                     Lodges in This Area
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -282,18 +278,18 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={lodge.id}
                         href={`/lodges/${lodge.slug}`}
-                        className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] card-hover"
                       >
-                        <div className="w-12 h-12 rounded-lg bg-[var(--action)]/10 flex items-center justify-center shrink-0 text-lg">
-                          🏕
+                        <div className="w-12 h-12 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center shrink-0">
+                          <Home className="h-5 w-5 text-[var(--accent)]" />
                         </div>
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
+                          <h3 className="font-heading text-base font-semibold text-[var(--accent)]">
                             {lodge.name}
                           </h3>
-                          <p className="text-sm text-[var(--text-body)] mt-0.5">{lodge.priceRange}</p>
+                          <p className="text-sm text-[var(--text-2)] mt-0.5">{lodge.priceRange}</p>
                           {lodge.seasonStart && (
-                            <p className="text-xs text-[var(--text-meta)] mt-0.5">
+                            <p className="text-xs text-[var(--text-3)] mt-0.5">
                               {lodge.seasonStart}–{lodge.seasonEnd}
                             </p>
                           )}
@@ -307,7 +303,7 @@ export default async function GuidePage({ params }: Props) {
               {/* Fly Shops Nearby */}
               {areaFlyShops.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-6">
                     Fly Shops Nearby
                   </h2>
                   <div className="space-y-3">
@@ -315,14 +311,14 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={shop.id}
                         href={`/fly-shops/${shop.slug}`}
-                        className="flex items-center gap-4 p-4 bg-[var(--surface-raised)] rounded-xl shadow-sm card-hover"
+                        className="flex items-center gap-4 p-4 bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] card-hover"
                       >
-                        <MapPin className="h-5 w-5 text-[var(--action)] shrink-0" />
+                        <MapPin className="h-5 w-5 text-[var(--accent)] shrink-0" />
                         <div>
-                          <h3 className="font-heading text-base font-semibold text-[var(--action)]">
+                          <h3 className="font-heading text-base font-semibold text-[var(--accent)]">
                             {shop.name}
                           </h3>
-                          <p className="text-sm text-[var(--text-body)] mt-0.5">{shop.address}</p>
+                          <p className="text-sm text-[var(--text-2)] mt-0.5">{shop.address}</p>
                         </div>
                       </Link>
                     ))}
@@ -332,7 +328,7 @@ export default async function GuidePage({ params }: Props) {
 
               {guideSpecies.length > 0 && (
                 <ScrollAnimation>
-                  <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-6">
+                  <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-6">
                     Species in This Area
                   </h2>
                   <div className="flex flex-wrap gap-2">
@@ -371,31 +367,29 @@ export default async function GuidePage({ params }: Props) {
             <div className="space-y-6">
               <QuickFacts facts={quickFacts} />
 
-              <div className="bg-[var(--action)] rounded-xl p-6 text-[var(--on-action)] shadow-lg">
-                <h3 className="font-heading text-xl font-bold mb-3">
+              <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-6">
+                <h3 className="font-heading text-xl font-semibold text-[var(--text-1)] mb-3">
                   Book a Trip
                 </h3>
-                <p className="text-sm text-[var(--on-action)]/80 mb-6">
+                <p className="text-sm text-[var(--text-2)] mb-6">
                   Contact {guide.name} directly to book your guided trip.
                 </p>
                 {guide.websiteUrl && (
-                  <Button
+                  <a
                     href={guide.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    variant="solid"
-                    size="md"
-                    icon={ExternalLink}
-                    fullWidth
+                    className="ea-btn ea-btn-primary w-full"
                   >
+                    <ExternalLink className="h-4 w-4" aria-hidden />
                     Visit Website
-                  </Button>
+                  </a>
                 )}
                 <div className="mt-4 space-y-2 text-sm">
                   {guide.phone && (
                     <a
                       href={`tel:${guide.phone}`}
-                      className="flex items-center gap-2 text-[var(--on-action)]/80 hover:text-[var(--on-action)]"
+                      className="flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)]"
                     >
                       <Phone className="h-4 w-4" />
                       {guide.phone}
@@ -404,7 +398,7 @@ export default async function GuidePage({ params }: Props) {
                   {guide.email && (
                     <a
                       href={`mailto:${guide.email}`}
-                      className="flex items-center gap-2 text-[var(--on-action)]/80 hover:text-[var(--on-action)]"
+                      className="flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)]"
                     >
                       <Mail className="h-4 w-4" />
                       {guide.email}
@@ -414,8 +408,8 @@ export default async function GuidePage({ params }: Props) {
               </div>
 
               {guideArticles.length > 0 && (
-                <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-6 shadow-sm">
-                  <h3 className="font-heading text-lg font-semibold text-[var(--action)] mb-4">
+                <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-6">
+                  <h3 className="font-heading text-lg font-semibold text-[var(--text-1)] mb-4">
                     Related Articles
                   </h3>
                   <div className="space-y-3">
@@ -423,12 +417,12 @@ export default async function GuidePage({ params }: Props) {
                       <Link
                         key={article.id}
                         href={`/articles/${article.slug}`}
-                        className="block p-3 rounded-lg hover:bg-[var(--surface-page)] transition-colors"
+                        className="block p-3 rounded-[var(--radius-md)] hover:bg-[var(--paper-deep)] transition-colors"
                       >
-                        <p className="text-sm font-medium text-[var(--action)]">
+                        <p className="text-sm font-medium text-[var(--accent)]">
                           {article.title}
                         </p>
-                        <p className="text-xs text-[var(--text-body)] mt-1">
+                        <p className="text-xs text-[var(--text-3)] mt-1">
                           {article.readingTimeMinutes} min read
                         </p>
                       </Link>

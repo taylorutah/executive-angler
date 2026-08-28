@@ -56,15 +56,15 @@ export default async function GuidesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
+      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <p className="ea-overline">
             Expert Voices
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
+          <h1 className="mt-3 text-[var(--text-1)]">
             Your Guide Makes the Trip
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)] leading-relaxed">
+          <p className="mt-5 max-w-[var(--prose)] text-lg text-[var(--text-2)] leading-relaxed">
             {guides.length} certified professionals with decades of experience on the
             world&apos;s most storied waters.
           </p>
@@ -72,9 +72,9 @@ export default async function GuidesPage() {
       </section>
 
       {/* ── Spotlight Guides ──────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-page)] pt-2 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)] mb-8">
+      <section className="bg-[var(--paper)] pt-2 pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <p className="ea-overline mb-8">
             Featured Guides
           </p>
           <div className="grid md:grid-cols-3 gap-6">
@@ -85,56 +85,53 @@ export default async function GuidesPage() {
                 <ScrollAnimation key={guide.id} delay={i * 0.1}>
                   <Link
                     href={`/guides/${guide.slug}`}
-                    className="group block bg-[var(--surface-raised)] rounded-xl border-l-4 border-[var(--action)] shadow-lg hover:bg-[var(--surface-card)] transition-colors"
+                    className="group block card-hover rounded-[var(--radius-card)] border border-[var(--border)] border-l-4 border-l-[var(--accent)] bg-[var(--surface)]"
                   >
                     <div className="p-6">
-                      <h3 className="font-heading text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors leading-tight">
+                      <h3 className="font-heading text-2xl font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors leading-tight">
                         {guide.name}
                       </h3>
-                      <p className="mt-2 text-sm font-medium text-[var(--action)] italic">
+                      <p className="mt-2 text-sm font-medium text-[var(--text-2)] italic">
                         {GUIDE_HEADLINES[guide.slug]}
                       </p>
                       {dest && (
-                        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-meta)]">
+                        <p className="ea-overline mt-2">
                           {dest.name}
                         </p>
                       )}
-                      <p className="mt-4 text-sm text-[var(--text-body)] leading-relaxed line-clamp-3">
+                      <p className="mt-4 text-sm text-[var(--text-2)] leading-relaxed line-clamp-3">
                         {guide.bio.substring(0, 150)}...
                       </p>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {guide.specialties.slice(0, 3).map((sp) => (
-                          <span
-                            key={sp}
-                            className="px-2.5 py-1 bg-[var(--surface-page)] text-[var(--action)] text-xs font-medium rounded-full border border-[var(--border-rule)]"
-                          >
+                          <span key={sp} className="ea-chip">
                             {sp}
                           </span>
                         ))}
                       </div>
-                      <div className="mt-5 flex items-center justify-between border-t border-[var(--border-rule)] pt-4">
+                      <div className="mt-5 flex items-center justify-between border-t border-[var(--border)] pt-4">
                         <div className="flex items-center gap-4">
                           {guide.googleRating && (
                             <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4 fill-[var(--action)] text-[var(--action)]" />
-                              <span className="text-sm text-[var(--text-body)]">
+                              <Star className="h-4 w-4 fill-[var(--accent)] text-[var(--accent)]" />
+                              <span className="text-sm text-[var(--text-2)]">
                                 {guide.googleRating}
                               </span>
                             </div>
                           )}
                           {guide.yearsExperience && (
-                            <span className="text-xs text-[var(--text-meta)]">
+                            <span className="text-xs text-[var(--text-3)]">
                               {guide.yearsExperience}+ yrs
                             </span>
                           )}
                         </div>
                         {guide.dailyRate && (
-                          <span className="text-sm font-semibold text-[var(--action)]">
+                          <span className="text-sm font-semibold text-[var(--accent)]">
                             {guide.dailyRate}
                           </span>
                         )}
                       </div>
-                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--action)] group-hover:underline">
+                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--accent)] group-hover:underline">
                         View Profile <ChevronRight className="h-4 w-4" />
                       </span>
                     </div>
@@ -147,55 +144,52 @@ export default async function GuidesPage() {
       </section>
 
       {/* ── Full Catalog ──────────────────────────────────────────────────── */}
-      <div className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)]">All Guides</h2>
-          <p className="text-sm text-[var(--text-body)] mt-1">
+      <div className="bg-[var(--paper)] border-t border-[var(--border)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">All Guides</h2>
+          <p className="text-sm text-[var(--text-2)] mt-1">
             {guides.length} guides sorted A–Z
           </p>
         </div>
       </div>
-      <section className="bg-[var(--surface-raised)] pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ul className="divide-y divide-[#21262D]">
+      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <ul className="divide-y divide-[var(--border)]">
             {sortedGuides.map((guide) => {
               const dest = destinations.find((d) => d.id === guide.destinationId);
               return (
                 <li key={guide.id}>
                   <Link
                     href={`/guides/${guide.slug}`}
-                    className="group flex items-start justify-between gap-4 py-5 px-2 -mx-2 rounded-lg hover:bg-[var(--surface-raised)]/50 transition-colors"
+                    className="group flex items-start justify-between gap-4 py-5 px-2 -mx-2 rounded-[var(--radius-md)] hover:bg-[var(--paper-deep)] transition-colors"
                   >
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-heading text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                      <h3 className="font-heading text-lg font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors">
                         {guide.name}
                       </h3>
-                      <p className="mt-0.5 text-sm text-[var(--text-body)]">
+                      <p className="mt-0.5 text-sm text-[var(--text-2)]">
                         {dest?.name}
                         {guide.dailyRate && (
                           <>
-                            <span className="mx-2 text-[var(--text-meta)]">·</span>
-                            <span className="font-semibold text-[var(--action)]">{guide.dailyRate}</span>
+                            <span className="mx-2 text-[var(--text-3)]">·</span>
+                            <span className="font-semibold text-[var(--accent)]">{guide.dailyRate}</span>
                           </>
                         )}
                       </p>
                       {guide.specialties.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           {guide.specialties.slice(0, 3).map((sp) => (
-                            <span
-                              key={sp}
-                              className="px-2 py-0.5 text-[10px] font-medium text-[var(--action)] bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-full"
-                            >
+                            <span key={sp} className="ea-chip">
                               {sp}
                             </span>
                           ))}
                         </div>
                       )}
-                      <p className="mt-1 text-sm text-[var(--text-meta)] line-clamp-2">
+                      <p className="mt-1 text-sm text-[var(--text-3)] line-clamp-2">
                         {truncateBio(guide.bio)}
                       </p>
                     </div>
-                    <span className="shrink-0 flex items-center gap-1 text-sm font-semibold text-[var(--action)] pt-1 group-hover:underline">
+                    <span className="shrink-0 flex items-center gap-1 text-sm font-medium text-[var(--accent)] pt-1 group-hover:underline">
                       View Profile <ChevronRight className="h-4 w-4" />
                     </span>
                   </Link>
