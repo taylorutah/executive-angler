@@ -218,18 +218,6 @@ export default async function RiverPage({ params }: Props) {
                   { label: river.name },
                 ]}
               />
-              <div className="mt-2.5 flex flex-wrap gap-1.5">
-                {[river.flowType, river.difficulty, river.wadingType, ...(river.primarySpecies ?? [])]
-                  .filter(Boolean)
-                  .map((chip) => (
-                    <span
-                      key={chip}
-                      className="inline-flex items-center border border-[var(--border-strong)] bg-[var(--surface-raised)] px-2.5 py-0.5 text-[12px] text-[var(--text-body)]"
-                    >
-                      {chip}
-                    </span>
-                  ))}
-              </div>
             </div>
             <div className="mt-0.5 flex shrink-0 items-center gap-3">
               <Link
@@ -294,7 +282,7 @@ export default async function RiverPage({ params }: Props) {
               <p className="mb-4 font-ui text-[11px] font-medium uppercase tracking-[1.6px] text-[var(--text-meta)]">
                 How it fishes
               </p>
-              <div className="prose text-[15px] leading-6 sm:text-[17px] sm:leading-7">
+              <div className="prose max-w-[794px] text-[15px] leading-6 sm:text-[17px] sm:leading-7">
                 {river.description.split("\n\n").map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}

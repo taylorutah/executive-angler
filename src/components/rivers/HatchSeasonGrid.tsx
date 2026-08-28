@@ -113,7 +113,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                 return (
                   <th
                     key={month}
-                    className={`px-1 py-2 text-center text-[11px] font-semibold ${
+                    className={`w-8 px-0 py-2 text-center text-[11px] font-semibold ${
                       on
                         ? "bg-[var(--action)] text-[var(--on-action)]"
                         : "text-[var(--text-body)]"
@@ -139,7 +139,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                     return (
                       <td
                         key={month}
-                        className={`px-1 py-2 text-center ${on ? "bg-[var(--action)]/5" : ""}`}
+                        className={`w-8 px-0 py-2 text-center ${on ? "bg-[var(--action)]/5" : ""}`}
                       >
                         {cell ? (
                           <span
