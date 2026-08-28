@@ -86,9 +86,9 @@ export default function NewFlyPatternClient({ isAdminUser }: Props) {
 
   if (loadingClone) {
     return (
-      <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-[var(--text-meta)]">
-          <div className="h-8 w-8 rounded-full border-2 border-[var(--border-rule)] border-t-[var(--action)] animate-spin" />
+      <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-[var(--text-3)]">
+          <div className="h-8 w-8 rounded-full border-2 border-[var(--border)] border-t-[var(--accent)] animate-spin" />
           <p className="text-sm">Loading source fly…</p>
         </div>
       </div>
@@ -98,8 +98,8 @@ export default function NewFlyPatternClient({ isAdminUser }: Props) {
   return (
     <>
       {sourceName && (
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-4">
-          <div className="rounded-md border border-[var(--signal-live)]/40 bg-[var(--signal-live)]/10 px-3 py-2 text-xs text-[var(--signal-live)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 pt-4">
+          <div className="rounded-[var(--radius-md)] border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-3 py-2 text-xs text-[var(--accent)]">
             Cloning from <span className="font-semibold">{sourceName}</span> — rename it and adjust any materials, then save as a new fly.
           </div>
         </div>
