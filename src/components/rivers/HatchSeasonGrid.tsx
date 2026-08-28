@@ -34,10 +34,10 @@ function monthKey(raw: string): (typeof MONTHS)[number] | null {
 }
 
 function intensityClass(intensity?: Intensity): string {
-  if (intensity === "heavy") return "bg-[var(--signal-live)]";
-  if (intensity === "moderate") return "bg-[var(--signal-live)]/65";
-  if (intensity === "sparse") return "bg-[var(--signal-live)]/35";
-  return "bg-[var(--signal-live)]/50";
+  if (intensity === "heavy") return "bg-[var(--accent)]";
+  if (intensity === "moderate") return "bg-[var(--accent)]/65";
+  if (intensity === "sparse") return "bg-[var(--accent)]/35";
+  return "bg-[var(--accent)]/50";
 }
 
 interface Props {
@@ -81,31 +81,31 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
     <div>
       <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
         <div>
-          <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)]">
+          <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
             Hatch chart
           </h2>
-          <p className="mt-1 text-sm text-[var(--text-body)]">
+          <p className="mt-1 text-sm text-[var(--text-2)]">
             Filled months are when that insect is on the chart. Best months for this river are lit.
           </p>
         </div>
-        <ul className="flex items-center gap-3 text-[11px] text-[var(--text-body)]">
+        <ul className="flex items-center gap-3 text-xs text-[var(--text-2)]">
           <li className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-sm bg-[var(--signal-live)]/35" /> Sparse
+            <span className="h-3 w-3 rounded-sm bg-[var(--accent)]/35" /> Sparse
           </li>
           <li className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-sm bg-[var(--signal-live)]/65" /> Moderate
+            <span className="h-3 w-3 rounded-sm bg-[var(--accent)]/65" /> Moderate
           </li>
           <li className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-sm bg-[var(--signal-live)]" /> Heavy
+            <span className="h-3 w-3 rounded-sm bg-[var(--accent)]" /> Heavy
           </li>
         </ul>
       </div>
 
-      <div className="overflow-x-auto border border-[var(--border-rule)] bg-[var(--surface-card)]">
+      <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
         <table className="w-full min-w-[720px] border-collapse text-sm">
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 bg-[var(--surface-card)] px-3 py-2 text-left font-medium text-[var(--text-meta)]">
+              <th className="sticky left-0 z-10 bg-[var(--surface)] px-3 py-3 text-left text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">
                 Insect
               </th>
               {MONTHS.map((month, i) => {
@@ -113,10 +113,10 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                 return (
                   <th
                     key={month}
-                    className={`px-1 py-2 text-center text-[11px] font-semibold ${
+                    className={`px-1 py-3 text-center text-xs font-medium uppercase tracking-[0.06em] ${
                       on
-                        ? "bg-[var(--action)] text-[var(--on-action)]"
-                        : "text-[var(--text-body)]"
+                        ? "bg-[var(--accent)] text-[var(--on-action)]"
+                        : "text-[var(--text-3)]"
                     }`}
                   >
                     {SHORT[i]}
@@ -129,8 +129,8 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
             {insects.map((insect) => {
               const row = cells.get(insect) ?? {};
               return (
-                <tr key={insect} className="border-t border-[var(--border-rule)]">
-                  <th className="sticky left-0 z-10 bg-[var(--surface-card)] px-3 py-2 text-left font-medium text-[var(--text-primary)]">
+                <tr key={insect} className="border-t border-[var(--border)]">
+                  <th className="sticky left-0 z-10 bg-[var(--surface)] px-3 py-3 text-left font-medium text-[var(--text-1)]">
                     {insect}
                   </th>
                   {MONTHS.map((month) => {
@@ -139,7 +139,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                     return (
                       <td
                         key={month}
-                        className={`px-1 py-2 text-center ${on ? "bg-[var(--action)]/5" : ""}`}
+                        className={`px-1 py-3 text-center ${on ? "bg-[var(--accent-soft)]" : ""}`}
                       >
                         {cell ? (
                           <span
@@ -155,7 +155,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
                               .join(" · ")}
                           />
                         ) : (
-                          <span className="mx-auto block h-3 w-3 rounded-sm bg-[var(--border-rule)]/40" />
+                          <span className="mx-auto block h-3 w-3 rounded-sm bg-[var(--paper-deep)]" />
                         )}
                       </td>
                     );

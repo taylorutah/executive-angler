@@ -59,10 +59,10 @@ function EmptyGauge({
 }) {
   return (
     <div>
-      <h2 className="font-heading text-2xl font-bold text-[var(--text-primary)]">
+      <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
         On the water
       </h2>
-      <p className="mt-3 max-w-[68ch] text-sm leading-relaxed text-[var(--text-body)]">
+      <p className="mt-3 max-w-[var(--prose)] text-sm leading-relaxed text-[var(--text-2)]">
         {missingGaugeCopy(riverName, usgsGaugeId)}
       </p>
     </div>

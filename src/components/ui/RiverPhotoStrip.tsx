@@ -47,8 +47,8 @@ export default function RiverPhotoStrip({
 
   return (
     <>
-      <div className="bg-[var(--surface-page)] border-b border-[var(--border-rule)]">
-        <div className="max-w-7xl mx-auto px-4 py-3">
+      <div className="bg-[var(--paper)] border-b border-[var(--border)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 py-3">
           <div className="flex items-center gap-2">
             {/* Thumbnails */}
             <div className="flex items-center gap-1 flex-1 overflow-hidden">
@@ -56,20 +56,20 @@ export default function RiverPhotoStrip({
                 ? Array.from({ length: 8 }).map((_, i) => (
                     <div
                       key={i}
-                      className="w-16 h-16 rounded-md bg-[var(--surface-raised)] animate-pulse shrink-0"
+                      className="w-16 h-16 rounded-md bg-[var(--paper-deep)] animate-pulse shrink-0"
                     />
                   ))
                 : displayPhotos.map((photo, index) => (
                     <button
                       key={photo.id}
                       onClick={() => setLightboxIndex(index)}
-                      className="relative w-16 h-16 rounded-md overflow-hidden shrink-0 group ring-1 ring-[var(--border-rule)] hover:ring-[var(--action)] transition-all"
+                      className="relative w-16 h-16 rounded-md overflow-hidden shrink-0 group ring-1 ring-[var(--border)] hover:ring-[var(--accent)] transition-shadow"
                     >
                       <Image
                         src={photo.photoUrl}
                         alt={photo.caption || "River photo"}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-300"
+                        className="ea-photo"
                         sizes="64px"
                       />
                     </button>
@@ -81,16 +81,16 @@ export default function RiverPhotoStrip({
               {photos.length > 0 && (
                 <Link
                   href={`/rivers/${riverSlug}/photos`}
-                  className="text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] whitespace-nowrap transition-colors"
+                  className="text-xs text-[var(--text-3)] hover:text-[var(--text-1)] whitespace-nowrap transition-colors"
                 >
                   View all {photos.length} →
                 </Link>
               )}
               <Link
                 href={`/rivers/${riverSlug}/photos#submit`}
-                className="flex items-center gap-1 rounded-instrument px-2.5 py-1.5 text-xs text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors whitespace-nowrap"
+                className="flex items-center gap-1 rounded-[var(--radius-md)] px-2.5 py-1.5 text-xs font-medium text-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors whitespace-nowrap"
               >
-                <Plus className="h-3 w-3" /> Add yours
+                <Plus className="h-3.5 w-3.5" /> Add yours
               </Link>
             </div>
           </div>

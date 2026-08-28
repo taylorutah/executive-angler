@@ -18,13 +18,12 @@ export default function SignedOutRiverInsights({ riverName }: Props) {
 
   return (
     <div
-      className="border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5"
-      style={{ borderRadius: "var(--radius-surface)" }}
+      className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5"
     >
-      <h3 className="font-heading text-base font-semibold text-[var(--text-primary)]">
+      <h3 className="font-heading text-base font-semibold text-[var(--text-1)]">
         Your record on {riverName}
       </h3>
-      <p className="mt-2 text-sm leading-relaxed text-[var(--text-body)]">
+      <p className="mt-2 text-sm leading-relaxed text-[var(--text-2)]">
         With an account this page would show your catches on the hydrograph,
         your scorecard here, and the flow window you actually catch fish in.
         Those numbers stay private. We do not invent them for you.
@@ -32,13 +31,12 @@ export default function SignedOutRiverInsights({ riverName }: Props) {
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Link
           href="/signup"
-          className="inline-flex items-center bg-[var(--action)] px-3 py-1.5 text-sm font-semibold text-[var(--on-action)] transition-colors hover:bg-[var(--action-hover)]"
-          style={{ borderRadius: "var(--radius-instrument)" }}
+          className="ea-btn ea-btn-sm ea-btn-primary"
         >
           Create a free account
         </Link>
       </div>
-      <p className="mt-2 text-[11px] text-[var(--text-body)]">
+      <p className="mt-2 text-xs text-[var(--text-3)]">
         Free — every feature on Executive Angler costs nothing.
       </p>
     </div>

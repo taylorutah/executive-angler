@@ -181,8 +181,8 @@ export default async function RiverPage({ params }: Props) {
         />
       </RiverHeroImage>
 
-      <div className="border-b border-[var(--border-rule)] bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <div className="border-b border-[var(--border)] bg-[var(--paper)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <Breadcrumbs
@@ -203,7 +203,7 @@ export default async function RiverPage({ params }: Props) {
                   .map((chip) => (
                     <span
                       key={chip}
-                      className="inline-flex items-center border border-[var(--border-strong)] bg-[var(--surface-raised)] px-2.5 py-0.5 text-[12px] text-[var(--text-body)]"
+                      className="ea-chip"
                     >
                       {chip}
                     </span>
@@ -213,7 +213,7 @@ export default async function RiverPage({ params }: Props) {
             <div className="mt-0.5 flex shrink-0 items-center gap-3">
               <Link
                 href={`/plan/${river.slug}`}
-                className="text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+                className="text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
               >
                 Trip brief →
               </Link>
@@ -239,9 +239,9 @@ export default async function RiverPage({ params }: Props) {
               riverId={river.id}
             />
             {river.usgsGaugeId ? (
-              <p className="mt-3 text-sm text-[var(--text-body)]">
+              <p className="mt-3 text-sm text-[var(--text-2)]">
                 New to hydrographs?{" "}
-                <Link href="/articles/how-to-read-a-usgs-gauge-for-fly-fishing" className="text-[var(--action)] underline-offset-4 hover:underline">
+                <Link href="/articles/how-to-read-a-usgs-gauge-for-fly-fishing" className="text-[var(--accent)] underline-offset-4 hover:underline">
                   How to read a USGS gauge for fly fishing
                 </Link>
                 .
@@ -251,8 +251,8 @@ export default async function RiverPage({ params }: Props) {
         </RiverLiveInset>
       </Suspense>
 
-      <section className="bg-[var(--surface-page)]">
-        <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+      <section className="bg-[var(--paper)]">
+        <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 py-8 sm:px-6 lg:px-8">
           <YourRecordHere riverId={river.id} riverName={river.name} />
           <SignedOutRiverInsights riverName={river.name} />
           <PersonalFlowOverlay riverId={river.id} />
@@ -261,11 +261,11 @@ export default async function RiverPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="bg-[var(--surface-page)] pb-20">
-        <div className="mx-auto max-w-7xl space-y-14 px-4 sm:px-6 lg:px-8">
+      <section className="bg-[var(--paper)] pb-24">
+        <div className="mx-auto max-w-[var(--container)] space-y-12 px-4 sm:px-6 lg:px-8">
           <ScrollAnimation>
             <div>
-              <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
+              <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                 Overview
               </h2>
               <div className="prose">
@@ -299,24 +299,24 @@ export default async function RiverPage({ params }: Props) {
           {river.slug === "madison-river" && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   Planning a Madison trip in 2026
                 </h2>
                 <div className="prose">
                   <p>
                     The Madison is two fisheries that share a name. Above Ennis Lake you are covering broad riffle-and-run meadow water. Below the lake the wade game opens up and caddis and PMDs do more work than the salmonfly posters suggest. Build the trip around the{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       hatch-chart fly list
                     </Link>
                     , the USGS gauge on this page, and Montana&apos;s season dates. We do not publish other anglers&apos; catches or GPS.
                   </p>
                   <p>
                     If this is your first week on the Madison, fish the wade water first. A first float is worth a guide. Walk-up access is real on both the upper and the below-lake stretches if you already nymph. Pair this guide with the{" "}
-                    <Link href="/destinations/montana" className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href="/destinations/montana" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       Montana destination page
                     </Link>{" "}
                     for lodges, shops, and neighboring rivers. For a 2026 fly box, read{" "}
-                    <Link href="/articles/best-flies-for-the-madison-river-2026" className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href="/articles/best-flies-for-the-madison-river-2026" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       Best Flies for the Madison River in 2026
                     </Link>
                     .
@@ -329,17 +329,17 @@ export default async function RiverPage({ params }: Props) {
           {river.slug === "green-river" && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   Fishing the Green below Flaming Gorge
                 </h2>
                 <div className="prose">
                   <p>
                     This tailwater is A, B, and C sections, clear water, and a crowd that shows up for the same reasons you did. Pack small flies, check the gauge on this page, and read{" "}
-                    <Link href="/articles/green-river-utah-flaming-gorge-fly-fishing" className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href="/articles/green-river-utah-flaming-gorge-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       Fly Fishing the Green River Below Flaming Gorge
                     </Link>
                     {" "}before you book a shuttle. The{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       hatch-chart fly list
                     </Link>
                     {" "}is public. Other anglers&apos; fish are not.
@@ -352,17 +352,17 @@ export default async function RiverPage({ params }: Props) {
           {river.slug === "pecos-river-new-mexico" && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   Pecos pocket water
                 </h2>
                 <div className="prose">
                   <p>
                     Above Terrero you can walk. Along the road you share campground runs. After runoff, a dry-dropper and some manners will fish this river. Longer notes are in{" "}
-                    <Link href="/articles/pecos-river-new-mexico-fly-fishing" className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href="/articles/pecos-river-new-mexico-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       Fly Fishing the Pecos River in New Mexico
                     </Link>
                     . Flies live on the{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       Pecos hatch-chart fly list
                     </Link>
                     .
@@ -375,17 +375,17 @@ export default async function RiverPage({ params }: Props) {
           {river.slug === "little-cottonwood-creek" && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   A short Wasatch window
                 </h2>
                 <div className="prose">
                   <p>
                     Little Cottonwood is not Big Cottonwood and it is not a tailwater. Fish the cold window, carry a thermometer, and leave when summer heat says so. Read{" "}
-                    <Link href="/articles/little-cottonwood-creek-utah-fly-fishing" className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href="/articles/little-cottonwood-creek-utah-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       Fly Fishing Little Cottonwood Creek
                     </Link>
                     . The{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]">
+                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
                       creek fly list
                     </Link>
                     {" "}follows the hatch chart.
@@ -406,15 +406,15 @@ export default async function RiverPage({ params }: Props) {
 
           <ScrollAnimation>
             <div>
-              <h2 className="mb-2 font-heading text-2xl font-bold text-[var(--text-primary)]">
+              <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                 Access points
               </h2>
               {(river.accessPoints?.length ?? 0) > 0 ? (
-                <p className="mb-5 text-sm text-[var(--text-body)]">
+                <p className="mb-5 text-sm text-[var(--text-2)]">
                   {river.accessPoints!.length} listed points. Map is Vellum land and Teal water — a desk chart, not a satellite.
                 </p>
               ) : (
-                <p className="mb-5 text-sm text-[var(--text-body)]">
+                <p className="mb-5 text-sm text-[var(--text-2)]">
                   No access points are listed for this river yet.
                 </p>
               )}
@@ -425,31 +425,31 @@ export default async function RiverPage({ params }: Props) {
                 markers={mapMarkers}
                 bounds={river.mapBounds}
                 tone="desk"
-                className="h-[450px] w-full overflow-hidden border border-[var(--border-rule)]"
+                className="h-[450px] w-full overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)]"
               />
-              <div className="mt-6 space-y-0 border-t border-[var(--border-rule)]">
+              <div className="mt-6 space-y-0 border-t border-[var(--border)]">
                 {(river.accessPoints || []).map((ap, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-3 border-b border-[var(--border-rule)] py-4"
+                    className="flex items-start gap-3 border-b border-[var(--border)] py-4"
                   >
-                    <div className="num flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--border-rule)] bg-[var(--surface-raised)] text-sm font-bold text-[var(--text-primary)]">
+                    <div className="num flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--paper-deep)] text-sm font-semibold text-[var(--text-1)]">
                       {i + 1}
                     </div>
                     <div>
-                      <h3 className="font-medium text-[var(--text-primary)]">{ap.name}</h3>
+                      <h3 className="font-ui text-base font-medium text-[var(--text-1)]">{ap.name}</h3>
                       {ap.description && (
-                        <p className="mt-0.5 text-sm text-[var(--text-body)]">{ap.description}</p>
+                        <p className="mt-0.5 text-sm text-[var(--text-2)]">{ap.description}</p>
                       )}
-                      <div className="mt-1.5 flex items-center gap-3 text-xs text-[var(--text-body)]">
+                      <div className="mt-1.5 flex items-center gap-3 text-xs text-[var(--text-3)]">
                         <span className="flex items-center gap-1">
-                          <Icon name="map" className="h-3 w-3" />
-                          <span className="font-mono">
+                          <Icon name="map" className="h-3.5 w-3.5" />
+                          <span className="num">
                             {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
                           </span>
                         </span>
                         {ap.parking && (
-                          <span className="font-medium text-[var(--text-primary)]">
+                          <span className="font-medium text-[var(--text-1)]">
                             Parking available
                           </span>
                         )}
@@ -464,34 +464,34 @@ export default async function RiverPage({ params }: Props) {
           {fishingNow.length > 0 && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-2 font-heading text-2xl font-bold text-[var(--text-primary)]">
+                <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   Flies fishing now
                 </h2>
-                <p className="mb-5 text-sm text-[var(--text-body)]">
+                <p className="mb-5 text-sm text-[var(--text-2)]">
                   {monthNow} on the hatch chart — names and sizes, not a catch report.
                 </p>
-                <ul className="border-t border-[var(--border-rule)]">
+                <ul className="border-t border-[var(--border)]">
                   {fishingNow.map((hatch, i) => {
                     const matchedFly = flyByName.get(hatch.pattern?.toLowerCase() ?? "");
                     return (
                       <li
                         key={`${hatch.insect}-${hatch.pattern}-${i}`}
-                        className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-[var(--border-rule)] py-3"
+                        className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-[var(--border)] py-3"
                       >
-                        <span className="font-medium text-[var(--text-primary)]">{hatch.insect}</span>
+                        <span className="font-medium text-[var(--text-1)]">{hatch.insect}</span>
                         {hatch.size ? (
-                          <span className="font-mono text-[12px] text-[var(--text-body)]">{hatch.size}</span>
+                          <span className="num text-xs text-[var(--text-3)]">{hatch.size}</span>
                         ) : null}
                         {hatch.pattern ? (
                           matchedFly ? (
                             <Link
                               href={`/flies/${matchedFly.slug}`}
-                              className="text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-2 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+                              className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
                             >
                               {hatch.pattern}
                             </Link>
                           ) : (
-                            <span className="text-[var(--text-body)]">{hatch.pattern}</span>
+                            <span className="text-[var(--text-2)]">{hatch.pattern}</span>
                           )
                         ) : null}
                       </li>
@@ -506,14 +506,14 @@ export default async function RiverPage({ params }: Props) {
 
           {river.regulations && (
             <ScrollAnimation>
-              <div className="border border-[var(--border-strong)] bg-[var(--surface-raised)] p-6">
+              <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6">
                 <div className="flex items-start gap-3">
-                  <Icon name="warning" className="mt-0.5 h-5 w-5 shrink-0 text-[var(--action)]" />
+                  <Icon name="warning" className="mt-0.5 h-5 w-5 shrink-0 text-[var(--warning)]" />
                   <div>
-                    <h2 className="mb-2 font-heading text-lg font-semibold text-[var(--text-primary)]">
+                    <h2 className="mb-2 font-heading text-lg font-semibold text-[var(--text-1)]">
                       Regulations
                     </h2>
-                    <p className="text-sm leading-relaxed text-[var(--text-body)]">
+                    <p className="text-sm leading-relaxed text-[var(--text-2)]">
                       {river.regulations}
                     </p>
                   </div>
@@ -525,13 +525,13 @@ export default async function RiverPage({ params }: Props) {
           {(nearbyLodges.length > 0 || nearbyGuides.length > 0 || destFlyShops.length > 0) && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-6 font-heading text-2xl font-bold text-[var(--text-primary)]">
+                <h2 className="mb-6 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   On this river
                 </h2>
                 <div className="space-y-10">
                   {nearbyLodges.length > 0 && (
                     <div>
-                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-primary)]">
+                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-1)]">
                         {riverLodges.length > 0
                           ? "Lodges"
                           : `Lodges in ${destinationLabel ?? "this area"}`}
@@ -554,7 +554,7 @@ export default async function RiverPage({ params }: Props) {
 
                   {nearbyGuides.length > 0 && (
                     <div>
-                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-primary)]">
+                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-1)]">
                         Guides
                       </h3>
                       <div className="space-y-3">
@@ -562,11 +562,11 @@ export default async function RiverPage({ params }: Props) {
                           <Link
                             key={guide.id}
                             href={`/guides/${guide.slug}`}
-                            className="block border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4 transition-colors hover:bg-[var(--surface-card)]"
+                            className="block rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors hover:border-[var(--border-strong)]"
                           >
-                            <p className="text-sm font-medium text-[var(--text-primary)]">{guide.name}</p>
+                            <p className="text-sm font-medium text-[var(--text-1)]">{guide.name}</p>
                             {guide.dailyRate ? (
-                              <p className="mt-0.5 text-xs text-[var(--text-body)]">{guide.dailyRate}</p>
+                              <p className="mt-0.5 text-xs text-[var(--text-2)]">{guide.dailyRate}</p>
                             ) : null}
                           </Link>
                         ))}
@@ -576,7 +576,7 @@ export default async function RiverPage({ params }: Props) {
 
                   {destFlyShops.length > 0 && (
                     <div>
-                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-primary)]">
+                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-1)]">
                         Fly shops
                       </h3>
                       <div className="space-y-3">
@@ -584,14 +584,14 @@ export default async function RiverPage({ params }: Props) {
                           <Link
                             key={shop.id}
                             href={`/fly-shops/${shop.slug}`}
-                            className="flex items-center gap-4 border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4"
+                            className="flex items-center gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors hover:border-[var(--border-strong)]"
                           >
-                            <Icon name="current" className="h-5 w-5 shrink-0 text-[var(--signal-live)]" />
+                            <Icon name="current" className="h-5 w-5 shrink-0 text-[var(--accent)]" />
                             <div>
-                              <h4 className="font-heading text-base font-semibold text-[var(--text-primary)]">
+                              <h4 className="font-heading text-base font-semibold text-[var(--text-1)]">
                                 {shop.name}
                               </h4>
-                              <p className="mt-0.5 text-sm text-[var(--text-body)]">{shop.address}</p>
+                              <p className="mt-0.5 text-sm text-[var(--text-2)]">{shop.address}</p>
                             </div>
                           </Link>
                         ))}
@@ -606,7 +606,7 @@ export default async function RiverPage({ params }: Props) {
           {nearbyRivers.length > 0 && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-5 font-heading text-2xl font-bold text-[var(--text-primary)]">
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   Nearby rivers
                 </h2>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -627,16 +627,16 @@ export default async function RiverPage({ params }: Props) {
           )}
 
           <ScrollAnimation>
-            <div className="border-t border-[var(--border-rule)] pt-8">
-              <h2 className="mb-2 font-heading text-2xl font-bold text-[var(--text-primary)]">
+            <div className="border-t border-[var(--border)] pt-8">
+              <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                 Best flies for {river.name}
               </h2>
-              <p className="mb-3 text-sm text-[var(--text-body)]">
+              <p className="mb-3 text-sm text-[var(--text-2)]">
                 Hatch-chart nymphs, dries, and streamers for this river. Not a crowdsourced catch report.
               </p>
               <Link
                 href={`/flies/for/${river.slug}`}
-                className="inline-flex text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+                className="inline-flex text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
               >
                 Open the {river.name} fly list →
               </Link>

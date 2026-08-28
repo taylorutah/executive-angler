@@ -51,21 +51,21 @@ export default function YourRecordHere({ riverId, riverName }: Props) {
 
   return (
     <section
-      className="border border-[var(--border-rule)] bg-[var(--surface-card)] p-5 sm:p-6"
+      className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-6"
       aria-label="Your record here"
     >
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="font-heading text-xl font-bold text-[var(--text-primary)]">
+          <h2 className="font-heading text-xl font-semibold text-[var(--text-1)]">
             Your record here
           </h2>
-          <p className="mt-1 text-[12px] text-[var(--text-meta)]">
+          <p className="mt-1 text-xs text-[var(--text-3)]">
             From your private journal on {riverName} — only you can see this.
           </p>
         </div>
         <Link
           href="/journal/new"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
         >
           <BookOpen className="h-4 w-4" aria-hidden />
           Log a session here
@@ -73,7 +73,7 @@ export default function YourRecordHere({ riverId, riverName }: Props) {
       </div>
 
       {timesFished === 0 ? (
-        <p className="text-sm text-[var(--text-body)]">
+        <p className="text-sm text-[var(--text-2)]">
           No sessions logged on {riverName} yet. The first one you save will fill in times fished, your best month, and your top fly.
         </p>
       ) : (
@@ -89,11 +89,11 @@ export default function YourRecordHere({ riverId, riverName }: Props) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border border-[var(--border-rule)] bg-[var(--surface-raised)] px-4 py-3">
-      <dt className="text-[11px] font-medium uppercase tracking-wider text-[var(--text-meta)]">
+    <div className="rounded-[var(--radius-md)] bg-[var(--paper-deep)] px-4 py-3">
+      <dt className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">
         {label}
       </dt>
-      <dd className="num mt-1 font-heading text-xl font-semibold text-[var(--text-primary)]">
+      <dd className="num mt-1 font-heading text-xl font-semibold text-[var(--text-1)]">
         {value}
       </dd>
     </div>

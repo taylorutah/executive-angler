@@ -8,7 +8,7 @@ import {
 import { Fish } from "@/icons";
 import { useAuth } from "@/lib/auth-context";
 import { fetchOnce } from "./fetch-once";
-import { COPPER_700 } from "@/lib/palette";
+import { CARD, COPPER_700, GRAPHITE, RULE, SLATE } from "@/lib/palette";
 
 interface CatchPoint {
   date: string;
@@ -135,30 +135,30 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
   }
 
   return (
-    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
+    <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5">
       <div className="flex items-center gap-3 mb-4">
-        <Fish className="h-5 w-5 text-[var(--action)]" />
-        <h3 className="text-sm font-bold text-[var(--text-primary)]">Your Catches vs. Flow</h3>
+        <Fish className="h-5 w-5 text-[var(--accent)]" />
+        <h3 className="text-sm font-semibold text-[var(--text-1)]">Your Catches vs. Flow</h3>
       </div>
 
       {/* Correlation stats */}
       {correlationStats && (
         <div className="grid grid-cols-3 gap-3 mb-4">
-          <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold font-mono text-[var(--action)]">{correlationStats.totalSessions}</p>
-            <p className="text-[10px] text-[var(--text-meta)]">Sessions</p>
+          <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3 text-center">
+            <p className="num text-lg font-semibold text-[var(--text-1)]">{correlationStats.totalSessions}</p>
+            <p className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Sessions</p>
           </div>
-          <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold font-mono text-[var(--signal-live)]">
+          <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3 text-center">
+            <p className="num text-lg font-semibold text-[var(--text-1)]">
               {correlationStats.sweetSpotMin}–{correlationStats.sweetSpotMax}
             </p>
-            <p className="text-[10px] text-[var(--text-meta)]">Sweet Spot (cfs)</p>
+            <p className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Sweet Spot (cfs)</p>
           </div>
-          <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center">
-            <p className="text-lg font-bold font-mono text-[var(--text-primary)]">
+          <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3 text-center">
+            <p className="num text-lg font-semibold text-[var(--text-1)]">
               {correlationStats.bestDayFish} fish
             </p>
-            <p className="text-[10px] text-[var(--text-meta)]">
+            <p className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">
               Best @ {correlationStats.bestDayFlow} cfs
             </p>
           </div>
@@ -184,15 +184,15 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
             <XAxis
               dataKey="date"
               tickFormatter={formatMonth}
-              tick={{ fontSize: 10, fill: "#6E7681" }}
-              axisLine={{ stroke: "#21262D" }}
+              tick={{ fontSize: 10, fill: SLATE }}
+              axisLine={{ stroke: RULE }}
               tickLine={false}
               interval={Math.floor(chartData.length / 6)}
             />
             <YAxis
               yAxisId="flow"
               tickFormatter={(v: number) => v >= 1000 ? `${(v / 1000).toFixed(1)}k` : String(v)}
-              tick={{ fontSize: 10, fill: "#6E7681" }}
+              tick={{ fontSize: 10, fill: SLATE }}
               axisLine={false}
               tickLine={false}
               width={45}
@@ -200,7 +200,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
             <YAxis
               yAxisId="fish"
               orientation="right"
-              tick={{ fontSize: 10, fill: "#00B4D8" }}
+              tick={{ fontSize: 10, fill: SLATE }}
               axisLine={false}
               tickLine={false}
               width={30}
@@ -208,11 +208,11 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#0D1117",
-                border: "1px solid #21262D",
-                borderRadius: "8px",
+                backgroundColor: CARD,
+                border: `1px solid ${RULE}`,
+                borderRadius: "6px",
                 fontSize: "12px",
-                color: "#F0F6FC",
+                color: GRAPHITE,
               }}
               labelFormatter={(label) => formatDate(String(label))}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -237,14 +237,14 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
               yAxisId="flow"
               dataKey="discharge"
               data={chartData.filter((d) => d.fishCount)}
-              fill="#00B4D8"
+              fill={COPPER_700}
               shape={(props: { cx?: number; cy?: number; payload?: { fishCount: number } }) => {
                 const { cx = 0, cy = 0, payload } = props;
                 const size = Math.min(12, 4 + (payload?.fishCount || 0));
                 return (
                   <g>
-                    <circle cx={cx} cy={cy} r={size} fill="#00B4D8" fillOpacity={0.3} stroke="#00B4D8" strokeWidth={1.5} />
-                    <text x={cx} y={cy + 1} textAnchor="middle" dominantBaseline="middle" fontSize={8} fill="#F0F6FC" fontWeight="bold">
+                    <circle cx={cx} cy={cy} r={size} fill={COPPER_700} fillOpacity={0.3} stroke={COPPER_700} strokeWidth={1.5} />
+                    <text x={cx} y={cy + 1} textAnchor="middle" dominantBaseline="middle" fontSize={8} fill={CARD} fontWeight={600}>
                       {payload?.fishCount}
                     </text>
                   </g>
@@ -255,7 +255,7 @@ export default function PersonalFlowOverlay({ riverId, siteId }: Props) {
         </ResponsiveContainer>
       </div>
 
-      <p className="text-[10px] text-[var(--text-meta)] mt-2 text-center">
+      <p className="text-xs text-[var(--text-3)] mt-2 text-center">
         Bubbles = your sessions · Size = fish count · Flow data: USGS NWIS
       </p>
     </div>

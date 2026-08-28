@@ -98,7 +98,7 @@ export default function RiverHeroImage({
         </div>
 
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+          <div className="mx-auto w-full max-w-[var(--container)] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
             {subtitle ? <p className="ea-overline">{subtitle}</p> : null}
             <h1 className="mt-2 max-w-4xl text-[var(--text-1)]">{title}</h1>
             {meta ? (

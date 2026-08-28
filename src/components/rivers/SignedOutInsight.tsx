@@ -12,27 +12,27 @@ interface Props {
 
 export default function SignedOutInsight({ icon, title, description }: Props) {
   return (
-    <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] p-5">
+    <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] p-5">
       <div className="flex items-center gap-2 mb-2">
         {icon}
-        <h3 className="text-sm font-bold text-[var(--text-primary)]">{title}</h3>
+        <h3 className="text-sm font-semibold text-[var(--text-1)]">{title}</h3>
       </div>
-      <p className="text-sm text-[var(--text-body)] leading-relaxed">{description}</p>
+      <p className="text-sm text-[var(--text-2)] leading-relaxed">{description}</p>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Link
           href="/signup"
-          className="inline-flex items-center rounded-lg bg-[var(--action)] px-3 py-1.5 text-sm font-semibold text-[var(--on-action)] transition-opacity hover:opacity-90"
+          className="ea-btn ea-btn-sm ea-btn-primary"
         >
           Create a free account
         </Link>
         <Link
           href="/login"
-          className="text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--action)] hover:decoration-[var(--action)]"
+          className="text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
         >
           Sign in
         </Link>
       </div>
-      <p className="mt-2 text-[11px] text-[var(--text-body)]">
+      <p className="mt-2 text-xs text-[var(--text-3)]">
         Free — every feature on Executive Angler costs nothing.
       </p>
     </div>

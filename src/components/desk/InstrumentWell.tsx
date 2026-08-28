@@ -5,9 +5,8 @@ import { cn } from "@/lib/utils";
  * Contained instrument panel on a daylight page.
  *
  * Inset from the page gutter on all four sides; ≥24px paper above and below;
- * --radius-instrument (4px); 1px --border-rule. Panels are bordered, never
- * shadowed (DESIGN.md § Elevation). Light theme only — the dusk register is
- * deleted machinery.
+ * --radius-card (10px); 1px --border. Panels are bordered, never
+ * shadowed (DESIGN.md § Elevation). Light theme only.
  */
 interface Props {
   children: ReactNode;
@@ -23,13 +22,9 @@ export default function InstrumentWell({ children, className, label }: Props) {
       role="region"
       aria-label={label}
       className={cn(
-        "border border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-primary)]",
+        "rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--paper)] text-[var(--text-1)]",
         className,
       )}
-      style={{
-        borderRadius: "var(--radius-instrument)",
-        backgroundColor: "var(--surface-page)",
-      }}
     >
       {children}
     </div>
@@ -45,9 +40,9 @@ export function InstrumentWellFrame({
   className?: string;
 }) {
   return (
-    <section className={cn("bg-[var(--surface-page)]", className)}>
+    <section className={cn("bg-[var(--paper)]", className)}>
       <div
-        className="mx-auto max-w-7xl"
+        className="mx-auto max-w-[var(--container)]"
         style={{
           paddingInline: "var(--gutter)",
           paddingBlock: "max(1.5rem, var(--gutter))",

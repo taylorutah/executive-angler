@@ -235,11 +235,11 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
   /* eslint-enable react-hooks/rules-of-hooks */
 
-  // Loading state — no second dusk slab; the well already has a border.
+  // Loading state — no second slab; the well already has a border.
   if (loading) {
     return (
-      <div className="mt-6 min-h-48 border-t border-[var(--border-rule)] pt-5">
-        <div className="flex items-center gap-2 text-[var(--text-meta)]">
+      <div className="mt-6 min-h-48 border-t border-[var(--border)] pt-5">
+        <div className="flex items-center gap-2 text-[var(--text-3)]">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-sm">Loading 30-day flow data…</span>
         </div>
@@ -250,11 +250,11 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   // A failed request and an empty series are different facts — say which.
   if (error || chartPoints.length === 0) {
     return (
-      <div className="mt-6 border-t border-[var(--border-rule)] pt-5">
-        <h3 className="text-sm font-bold text-[var(--text-primary)]">
+      <div className="mt-6 border-t border-[var(--border)] pt-5">
+        <h3 className="text-sm font-semibold text-[var(--text-1)]">
           Thirty-day flow — {riverName}
         </h3>
-        <p className="mt-2 text-sm text-[var(--text-body)]">
+        <p className="mt-2 text-sm text-[var(--text-2)]">
           {error || "This gauge has no daily means for the last 30 days. We do not guess a flow."}
         </p>
       </div>
@@ -268,28 +268,28 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
   const siteName = activeGauge?.name || "";
 
   return (
-    <div className="mt-6 border-t border-[var(--border-rule)] pt-5">
+    <div className="mt-6 border-t border-[var(--border)] pt-5">
       <div className="mb-3 flex items-end justify-between gap-4">
         <div>
-          <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-meta)]">
+          <h3 className="ea-overline">
             30-day daily means
           </h3>
           {siteName ? (
-            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+            <p className="mt-1 text-xs text-[var(--text-3)]">
               {siteName}
             </p>
           ) : null}
         </div>
         <p className="text-right">
-          <span className="num text-3xl font-bold leading-none text-[var(--text-primary)]">
+          <span className="num text-3xl font-semibold leading-none text-[var(--text-1)]">
             {currentFlow.value.toLocaleString("en-US")}
           </span>
-          <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+          <span className="ml-2 text-xs uppercase tracking-[0.06em] text-[var(--text-3)]">
             cfs daily mean
           </span>
           {trend ? (
             <span
-              className={`mt-1 block text-[12px] text-[var(--text-primary)] ${
+              className={`mt-1 block text-xs text-[var(--text-1)] ${
                 trend === "steady" ? "font-normal" : "font-semibold"
               }`}
             >
@@ -317,10 +317,10 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
                   cx={sm.x}
                   cy={sm.y}
                   r={Math.min(12, 5 + sm.fishCount)}
-                  fill="var(--action)"
+                  fill="var(--accent)"
                   fillOpacity={0.16}
                 />
-                <circle cx={sm.x} cy={sm.y} r={3} fill="var(--action)" />
+                <circle cx={sm.x} cy={sm.y} r={3} fill="var(--accent)" />
               </g>
             ))
           }
@@ -328,36 +328,35 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
         {hoveredSession && (
           <div
-            className="absolute z-20 pointer-events-none border border-[var(--border-rule)] bg-[var(--surface-page)] px-3 py-2 text-xs shadow-[var(--elev-1)]"
+            className="absolute z-20 pointer-events-none rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs shadow-[var(--shadow-float)]"
             style={{
-              borderRadius: "var(--radius-instrument)",
               left: `${(hoveredSession.x / HYDRO.W) * 100}%`,
               top: `${(hoveredSession.y / HYDRO.H) * 100 - 20}%`,
               transform: "translateX(-50%)",
             }}
           >
-            <p className="font-bold text-[var(--action)]">
+            <p className="font-semibold text-[var(--accent)]">
               {hoveredSession.fishCount} fish caught
             </p>
-            <p className="text-[var(--text-primary)]">
+            <p className="text-[var(--text-1)]">
               {formatShortDate(hoveredSession.date + "T12:00:00")}
             </p>
             {hoveredSession.topFly && (
-              <p className="text-[var(--text-meta)]">Fly: {hoveredSession.topFly}</p>
+              <p className="text-[var(--text-3)]">Fly: {hoveredSession.topFly}</p>
             )}
             {hoveredSession.species.length > 0 && (
-              <p className="text-[var(--text-meta)]">
+              <p className="text-[var(--text-3)]">
                 {hoveredSession.species.join(", ")}
               </p>
             )}
-            <p className="font-mono text-[var(--text-meta)]">
+            <p className="num text-[var(--text-3)]">
               {hoveredSession.flow.toLocaleString("en-US")} cfs
             </p>
           </div>
         )}
       </div>
 
-      <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-meta)]">
+      <p className="mt-3 text-xs text-[var(--text-3)]">
         {sessionMarkers.length > 0
           ? `${sessionMarkers.length} session${sessionMarkers.length !== 1 ? "s" : ""} overlaid · `
           : ""}
