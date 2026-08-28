@@ -76,34 +76,31 @@ function ContactPageInner() {
 
   return (
     <>
-      <div className="pt-8 pb-20">
-        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-4">
+      <div className="py-14 sm:py-24">
+        <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
+          <h1 className="font-display text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
             Contact Us
           </h1>
-          <p className="text-lg text-[var(--text-body)] mb-10">
+          <p className="mt-4 text-lg text-[var(--text-2)]">
             Have a question, suggestion, or want to partner with {SITE_NAME}?
             We&apos;d love to hear from you.
           </p>
 
           {submitted ? (
-            <div className="rounded-xl bg-[var(--action)]/5 border border-forest/20 p-8 text-center">
-              <CheckCircle className="h-12 w-12 text-[var(--action)] mx-auto mb-4" />
-              <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-2">
+            <div className="ea-empty mt-10 rounded-card border border-[var(--border)] bg-[var(--surface)]">
+              <CheckCircle size={24} className="text-[var(--success)]" />
+              <h2 className="font-display text-xl font-semibold text-[var(--text-1)]">
                 Message Sent
               </h2>
-              <p className="text-[var(--text-body)]">
+              <p>
                 Thank you for reaching out. We&apos;ll get back to you as soon
                 as possible.
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="mt-10 space-y-6">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-[var(--text-primary)] mb-1.5"
-                >
+                <label htmlFor="name" className="ea-label">
                   Name
                 </label>
                 <input
@@ -111,16 +108,13 @@ function ContactPageInner() {
                   id="name"
                   name="name"
                   required
-                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
+                  className="ea-input"
                   placeholder="Your name"
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-[var(--text-primary)] mb-1.5"
-                >
+                <label htmlFor="email" className="ea-label">
                   Email
                 </label>
                 <input
@@ -128,16 +122,13 @@ function ContactPageInner() {
                   id="email"
                   name="email"
                   required
-                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
+                  className="ea-input"
                   placeholder="you@example.com"
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="subject"
-                  className="block text-sm font-medium text-[var(--text-primary)] mb-1.5"
-                >
+                <label htmlFor="subject" className="ea-label">
                   Subject
                 </label>
                 <select
@@ -145,7 +136,7 @@ function ContactPageInner() {
                   name="subject"
                   required
                   defaultValue={initialSubject}
-                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors"
+                  className="ea-input"
                 >
                   <option value="">Select a topic</option>
                   {SUBJECT_OPTIONS.map((s) => (
@@ -157,10 +148,7 @@ function ContactPageInner() {
               </div>
 
               <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-[var(--text-primary)] mb-1.5"
-                >
+                <label htmlFor="message" className="ea-label">
                   Message
                 </label>
                 <textarea
@@ -168,7 +156,7 @@ function ContactPageInner() {
                   name="message"
                   required
                   rows={6}
-                  className="w-full rounded-lg border border-[var(--border-rule)] px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-meta)] focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-colors resize-y"
+                  className="ea-input resize-y"
                   placeholder="How can we help?"
                 />
               </div>
@@ -184,19 +172,19 @@ function ContactPageInner() {
 
               {/* Error message */}
               {error && (
-                <div className="flex items-start gap-3 rounded-lg bg-red-50 border border-red-200 px-4 py-3">
-                  <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-700">{error}</p>
+                <div className="flex items-start gap-3 rounded-surface border border-[var(--danger)] bg-[var(--surface)] px-4 py-3">
+                  <AlertCircle size={20} className="mt-0.5 shrink-0 text-[var(--danger)]" />
+                  <p className="text-sm text-[var(--danger)]">{error}</p>
                 </div>
               )}
 
-              <div className="flex items-center justify-between">
+              <div>
                 <button
                   type="submit"
                   disabled={sending || !captchaResolved}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[var(--action)] px-6 py-3 text-base font-medium text-white hover:bg-[var(--action)]-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="ea-btn ea-btn-primary ea-btn-lg"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send size={16} />
                   {sending ? "Sending..." : "Send Message"}
                 </button>
               </div>
