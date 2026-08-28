@@ -33,28 +33,28 @@ export default async function RiverPhotosPage({ params }: Props) {
   if (!river) notFound();
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
+    <div className="min-h-screen bg-[var(--paper)]">
       {/* Header */}
-      <div className="bg-[var(--surface-raised)] border-b border-[var(--border-rule)]">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="bg-[var(--paper)] border-b border-[var(--border)]">
+        <div className="mx-auto max-w-[var(--container)] px-4 py-6 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-[var(--text-meta)] mb-3">
-            <Link href="/rivers" className="hover:text-[var(--action)] transition-colors">Rivers</Link>
+          <nav className="flex items-center gap-2 text-sm text-[var(--text-3)] mb-3">
+            <Link href="/rivers" className="hover:text-[var(--accent)] transition-colors">Rivers</Link>
             <span>/</span>
-            <Link href={`/rivers/${slug}`} className="hover:text-[var(--action)] transition-colors">{river.name}</Link>
+            <Link href={`/rivers/${slug}`} className="hover:text-[var(--accent)] transition-colors">{river.name}</Link>
             <span>/</span>
-            <span className="text-[var(--text-body)]">Photos</span>
+            <span className="text-[var(--text-2)]">Photos</span>
           </nav>
-          <h1 className="font-heading text-3xl font-bold text-[var(--text-primary)]">
+          <h1 className="text-[var(--text-1)]">
             {river.name} — Community Photos
           </h1>
-          <p className="mt-2 text-[var(--text-body)]">
+          <p className="mt-2 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
             Photos submitted by anglers and catches logged in the app.
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="mx-auto max-w-[var(--container)] px-4 py-8 sm:px-6 lg:px-8">
         <RiverPhotosClient
           riverId={river.id}
           riverSlug={slug}

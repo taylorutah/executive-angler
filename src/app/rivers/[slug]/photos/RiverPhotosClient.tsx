@@ -56,12 +56,12 @@ export default function RiverPhotosClient({
     <div className="space-y-10">
       {/* Submit Section */}
       <section id="submit-section">
-        <div className="bg-[var(--surface-raised)] rounded-xl border border-[var(--border-rule)] overflow-hidden">
-          <div className="px-6 py-4 border-b border-[var(--border-rule)] flex items-center gap-3">
-            <Camera className="h-5 w-5 text-[var(--action)]" />
+        <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] overflow-hidden">
+          <div className="px-6 py-4 border-b border-[var(--border)] flex items-center gap-3">
+            <Camera className="h-5 w-5 text-[var(--accent)]" />
             <div>
-              <h2 className="font-heading text-lg font-semibold text-[var(--action)]">Submit Your Photo</h2>
-              <p className="text-xs text-[var(--text-body)] mt-0.5">
+              <h2 className="font-heading text-lg font-semibold text-[var(--text-1)]">Submit Your Photo</h2>
+              <p className="text-xs text-[var(--text-2)] mt-0.5">
                 Share your best shots from {riverName}. Ideal: 2000px+ wide, JPEG or PNG, well-exposed. All photos are reviewed before publishing.
               </p>
             </div>
@@ -82,11 +82,11 @@ export default function RiverPhotosClient({
       {/* Photo Gallery */}
       <section>
         <div className="flex items-baseline justify-between mb-4">
-          <h2 className="font-heading text-lg font-semibold text-[var(--text-primary)]">
+          <h2 className="font-heading text-lg font-semibold text-[var(--text-1)]">
             Community Photos
-            <span className="ml-2 text-xs text-[var(--text-meta)] font-mono font-normal">{photos.length}</span>
+            <span className="ml-2 text-xs text-[var(--text-3)] num font-normal">{photos.length}</span>
           </h2>
-          <p className="text-[11px] text-[var(--text-meta)]">
+          <p className="text-xs text-[var(--text-3)]">
             Submitted by anglers — never pulled from private catch logs.
           </p>
         </div>
@@ -94,13 +94,12 @@ export default function RiverPhotosClient({
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="aspect-[4/3] rounded-xl bg-[var(--surface-raised)] animate-pulse" />
+              <div key={i} className="aspect-[4/3] rounded-[var(--radius-card)] bg-[var(--paper-deep)] animate-pulse" />
             ))}
           </div>
         ) : photos.length === 0 ? (
-          <div className="text-center py-16">
-            <Camera className="h-12 w-12 text-[var(--border-rule)] mx-auto mb-4" />
-            <p className="text-[var(--text-meta)]">No photos yet. Be the first to submit one above.</p>
+          <div className="ea-empty rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+            <p>No photos yet. Be the first to submit one above.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -108,29 +107,28 @@ export default function RiverPhotosClient({
               <button
                 key={photo.id}
                 onClick={() => setLightboxIndex(index)}
-                className="group relative text-left bg-[var(--surface-raised)] rounded-xl overflow-hidden ring-1 ring-[var(--border-rule)] hover:ring-[var(--action)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--action)]"
+                className="group relative text-left bg-[var(--surface)] rounded-[var(--radius-card)] overflow-hidden border border-[var(--border)] transition-colors hover:border-[var(--border-strong)]"
               >
                 <div className="relative aspect-[4/3]">
                   <Image
                     src={photo.photoUrl}
                     alt={photo.caption || "River photo"}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="ea-photo"
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <div className="p-3">
                   {photo.caption && (
-                    <p className="text-xs text-[var(--text-primary)] line-clamp-2 mb-1.5">{photo.caption}</p>
+                    <p className="text-xs text-[var(--text-1)] line-clamp-2 mb-1.5">{photo.caption}</p>
                   )}
-                  <div className="flex items-center justify-between text-[10px] text-[var(--text-meta)]">
+                  <div className="flex items-center justify-between text-xs text-[var(--text-3)]">
                     <span className="flex items-center gap-1">
-                      <User className="h-2.5 w-2.5" />
+                      <User className="h-3.5 w-3.5" />
                       {photo.submitterName || "Angler"}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Calendar className="h-2.5 w-2.5" />
+                      <Calendar className="h-3.5 w-3.5" />
                       {formatDate(photo.submittedAt)}
                     </span>
                   </div>
