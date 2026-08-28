@@ -1269,6 +1269,16 @@ input.ea-focus-ring:focus-visible,
   outline-offset: -2px !important;
 }
 
+/* Row hover per the §4 table spec — the zebra is retired (client ruling
+   2026-08-28). Non-layered so it beats the @layer base census fill. */
+.ea-wb-row {
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.ea-wb-row:hover {
+  background: var(--paper-deep);
+}
+
 /* Motion law: 150–200ms opacity/transform, and honor the OS setting. */
 @media (prefers-reduced-motion: reduce) {
   *,

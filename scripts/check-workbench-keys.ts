@@ -141,22 +141,28 @@ async function exerciseKeyboard(page: Page, surface: Surface): Promise<void> {
   }
   check(`${surface.name}: table rendered`, true, `${rowCount} rows`);
 
-  // Row height is 32px.
-  const box = await rows.first().boundingBox();
+  // Cells carry 12px vertical padding (DESIGN.md §4 table spec; the fixed
+  // 32px row is retired — density comes from the padding, not a height).
+  const pad = await rows
+    .first()
+    .locator("[role='gridcell']")
+    .first()
+    .evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { top: parseFloat(s.paddingTop), bottom: parseFloat(s.paddingBottom) };
+    });
   check(
-    `${surface.name}: 32px rows`,
-    !!box && Math.abs(box.height - 32) < 1.5,
-    `measured ${box?.height?.toFixed(1)}px`,
+    `${surface.name}: 12px vertical cell padding`,
+    Math.abs(pad.top - 12) < 0.5 && Math.abs(pad.bottom - 12) < 0.5,
+    `measured ${pad.top}/${pad.bottom}px`,
   );
 
-  // Zebra: adjacent rows use different backgrounds.
-  if (rowCount >= 2) {
-    const [a, b] = await page.evaluate(() => {
-      const els = Array.from(document.querySelectorAll("[data-workbench-row]"));
-      return [getComputedStyle(els[0]).backgroundColor, getComputedStyle(els[1]).backgroundColor];
-    });
-    check(`${surface.name}: zebra striping`, a !== b, `${a} vs ${b}`);
-  }
+  // Row hover is --paper-deep (#F2EFE8); zebra striping is retired.
+  await rows.first().hover();
+  const hoverBg = await rows
+    .first()
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  check(`${surface.name}: row hover is paper-deep`, hoverBg === "rgb(242, 239, 232)", hoverBg);
 
   // Right-aligned tabular numerics.
   const numericCells = await page.locator("[data-workbench-row] .num").count();

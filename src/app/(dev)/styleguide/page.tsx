@@ -220,7 +220,7 @@ export default function StyleguidePage() {
             <code className="font-mono text-sm">/account/gear</code>.
           </p>
           <ul className="mb-4 space-y-1 text-sm" style={{ fontFamily: "var(--font-ui)", color: "var(--text-body)" }}>
-            <li>32px rows · zebra paper-deep / paper · numerics in <code className="font-mono">.num</code>, right-aligned</li>
+            <li>12px vertical cell padding · row hover paper-deep · numerics in <code className="font-mono">.num</code>, right-aligned</li>
             <li>Inline edit flashes green on save, red on error, then clears</li>
             <li>Bulk toolbar appears only when a row is selected</li>
             <li>
@@ -235,20 +235,20 @@ export default function StyleguidePage() {
               <code className="font-mono">.focus()</code>. A painted ring is not a stop.
             </li>
           </ul>
-          <div className="grid h-8 items-center border-b text-[10px] font-bold uppercase tracking-widest" style={{ gridTemplateColumns: "32px 1fr 64px", borderColor: "var(--border-strong)", color: "var(--text-meta)", background: "var(--surface-card)" }}>
+          <div className="grid items-center border-b text-[12px] font-medium uppercase tracking-[0.06em]" style={{ gridTemplateColumns: "32px 1fr 64px", borderColor: "var(--border)", color: "var(--text-3)" }}>
             <span />
-            <span className="px-2">Session</span>
-            <span className="px-2 text-right">Fish</span>
+            <span className="px-2 py-3">Session</span>
+            <span className="px-2 py-3 text-right">Fish</span>
           </div>
-          <div className="ea-wb-row ea-focus-ring grid h-8 items-center border-b" style={{ gridTemplateColumns: "32px 1fr 64px", background: "var(--surface-raised)", borderColor: "var(--border-rule)", color: "var(--text-primary)" }}>
+          <div className="ea-wb-row ea-focus-ring grid items-center border-b" style={{ gridTemplateColumns: "32px 1fr 64px", borderColor: "var(--border)", color: "var(--text-1)" }}>
             <span />
-            <span className="truncate px-2 text-[13px]">Fixture — Madison table row</span>
-            <span className="num truncate px-2 text-right text-[13px]">0</span>
+            <span className="truncate px-2 py-3 text-[13px]">Fixture — Madison table row</span>
+            <span className="num truncate px-2 py-3 text-right text-[13px]">0</span>
           </div>
-          <div className="ea-wb-row grid h-8 items-center border-b" style={{ gridTemplateColumns: "32px 1fr 64px", background: "var(--surface-page)", borderColor: "var(--border-rule)", color: "var(--text-primary)" }}>
+          <div className="ea-wb-row grid items-center border-b" style={{ gridTemplateColumns: "32px 1fr 64px", borderColor: "var(--border)", color: "var(--text-1)" }}>
             <span />
-            <span className="truncate px-2 text-[13px]">Fixture — Gallatin table row</span>
-            <span className="num truncate px-2 text-right text-[13px]">0</span>
+            <span className="truncate px-2 py-3 text-[13px]">Fixture — Gallatin table row</span>
+            <span className="num truncate px-2 py-3 text-right text-[13px]">0</span>
           </div>
         </section>
 

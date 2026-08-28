@@ -6,10 +6,11 @@
  * `components/ui/DataTable`), neither of which was imported anywhere. The
  * standard, in one place so `j` means the same thing on every surface:
  *
- *   32px rows · zebra on Pool / Riverbed · tabular numerics via `.num`,
- *   right-aligned · inline edit with optimistic update, green on save and red
- *   on error · a bulk-action toolbar that appears on selection · the keyboard
- *   map from `@/lib/workbench/keymap`.
+ *   The DESIGN.md §4 table spec — 12px/0.06em uppercase header in `--text-3`,
+ *   1px row borders, 12px vertical cell padding, row hover `--paper-deep` ·
+ *   tabular numerics via `.num`, right-aligned · inline edit with optimistic
+ *   update, green on save and red on error · a bulk-action toolbar that
+ *   appears on selection · the keyboard map from `@/lib/workbench/keymap`.
  *
  * The keyboard behaviour and the rollback path live in tested pure modules;
  * this component is the rendering and the wiring.
@@ -284,7 +285,7 @@ export default function WorkbenchTable<T>({
         <div
           role="row"
           aria-rowindex={1}
-          className="grid h-8 items-center border-b border-[var(--border-strong)] bg-[var(--surface-card)] text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]"
+          className="grid items-center border-b border-[var(--border)] text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-3)]"
           style={{ gridTemplateColumns: gridTemplate }}
         >
           {/* Must occupy the 32px track, not be pulled out of flow: `sr-only`
@@ -297,7 +298,7 @@ export default function WorkbenchTable<T>({
             <span
               key={c.key}
               role="columnheader"
-              className={`truncate px-2 ${c.numeric ? "text-right" : "text-left"}`}
+              className={`truncate px-2 py-3 ${c.numeric ? "text-right" : "text-left"}`}
             >
               {c.label}
             </span>
@@ -313,8 +314,6 @@ export default function WorkbenchTable<T>({
             const id = rowId(row);
             const isSelected = cursor.selected.has(id);
             const isActive = cursor.active === i;
-            // Zebra on Pool / Riverbed — surface-raised is Pool, surface-page is Riverbed.
-            const zebra = i % 2 === 1 ? "bg-[var(--surface-page)]" : "bg-[var(--surface-raised)]";
             return (
               <div
                 key={id}
@@ -329,13 +328,13 @@ export default function WorkbenchTable<T>({
                 onFocus={() => setCursor((c) => (c.active === i ? c : { ...c, active: i }))}
                 onClick={() => setCursor((c) => ({ ...c, active: i }))}
                 onDoubleClick={() => onActivate?.(row)}
-                className={`ea-wb-row ea-focus-ring grid h-8 items-center border-b border-[var(--border-rule)] ${zebra} ${
+                className={`ea-wb-row ea-focus-ring grid items-center border-b border-[var(--border)] ${
                   isActive ? "border-l border-l-[var(--border-strong)]" : "border-l border-l-transparent"
                 }`}
                 style={{ gridTemplateColumns: gridTemplate }}
               >
                 {selectable && (
-                  <span role="gridcell" className="flex items-center justify-center">
+                  <span role="gridcell" className="flex items-center justify-center py-3">
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -365,7 +364,7 @@ export default function WorkbenchTable<T>({
                       key={col.key}
                       role="gridcell"
                       onAnimationEnd={() => setEdits((s) => clearFlash(s, id, col.key))}
-                      className={`truncate px-2 text-[13px] ${tone} ${
+                      className={`truncate px-2 py-3 text-[13px] ${tone} ${
                         col.numeric ? "num text-right" : "text-left"
                       } ${pending ? "opacity-70" : ""} ${
                         flash === "saved"
