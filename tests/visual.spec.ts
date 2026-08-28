@@ -21,8 +21,9 @@ const PUBLIC_ROUTES = [
   "/styleguide",
 ] as const;
 
-/** Protected routes — captured as the fixture account, not as /login. */
-const SIGNED_IN_ROUTES = ["/journal", "/today"] as const;
+/** Protected routes — captured as the fixture account, not as /login.
+ *  /today stays the signed-in dusk desk and is not in this public gate. */
+const SIGNED_IN_ROUTES = ["/journal"] as const;
 
 const VIEWPORTS = [
   { name: "1440", width: 1440, height: 900 },

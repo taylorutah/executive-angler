@@ -37,6 +37,8 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /\.hero-dek[\s\S]*?color:\s*var\(--hero-type\)/);
     assert.match(css, /@media \(max-width:\s*639px\)[\s\S]*?\.hero-overlay-home/);
     assert.equal(css.includes("--hover-duration: 600ms"), true);
+    assert.match(css, /\.photo-lift[\s\S]*?var\(--hover-duration\)/);
+    assert.match(css, /\.hover-copper[\s\S]*?var\(--hover-duration\)/);
   });
 
   it("squares Mapbox attribution to --radius-instrument", () => {

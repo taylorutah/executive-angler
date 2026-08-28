@@ -50,17 +50,17 @@ export default function Header() {
 
   const nouns = user ? MEMBER_NOUNS : PUBLIC_NOUNS;
   const onHome = pathname === "/";
-  const logoSrc =
-    registerForPath(pathname) === "dusk"
-      ? "/images/logo-horizontal-white.svg"
-      : "/images/logo-horizontal-forest.svg";
+  const duskApp = Boolean(user) && registerForPath(pathname) === "dusk";
+  const logoSrc = duskApp
+    ? "/images/logo-horizontal-white.svg"
+    : "/images/logo-horizontal-forest.svg";
 
   return (
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 ea-header-primary ${
           scrolled ? "ea-header-scrolled" : "ea-header-flat"
-        }`}
+        } ${duskApp ? "" : "ea-header-public"}`}
       >
         <div className="w-full px-5 sm:px-8 xl:px-20">
           <div className="flex h-14 items-center gap-4 lg:gap-7">
@@ -69,13 +69,13 @@ export default function Header() {
               className="ea-focus-ring flex flex-shrink-0 cursor-pointer select-none items-center"
               aria-label="Executive Angler — home"
             >
-              <Image
+              {/* Native SVG — next/image's 160×32 box cropped ANGLER at 390. */}
+              <img
                 src={logoSrc}
                 alt="Executive Angler"
-                width={160}
-                height={32}
-                className="h-7 w-auto pointer-events-none"
-                priority
+                width={136}
+                height={26}
+                className="pointer-events-none h-[26px] w-auto"
               />
             </Link>
 

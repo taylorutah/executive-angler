@@ -1085,6 +1085,17 @@ select:focus {
   border-bottom: 1px solid var(--border-rule);
 }
 
+/* Signed-out chrome stays paper + forest even on dusk routes like /today. */
+.ea-header-public {
+  --text-body: var(--graphite);
+  --text-primary: var(--ink);
+  --surface-page: var(--paper);
+  --surface-raised: var(--vellum);
+  --border-rule: var(--rule);
+  --action: var(--copper-700);
+  background: var(--paper);
+}
+
 .ea-nav-link {
   position: relative;
   display: inline-flex;
