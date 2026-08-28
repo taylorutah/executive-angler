@@ -137,8 +137,8 @@ export default async function HatchInsectPage({ params }: Props) {
       />
 
       {/* Breadcrumbs */}
-      <div className="bg-[var(--surface-page)] pt-6 pb-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="bg-[var(--paper)] pt-6 pb-4">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
               { label: "Fly Library", href: "/flies" },
@@ -149,15 +149,15 @@ export default async function HatchInsectPage({ params }: Props) {
       </div>
 
       {/* Editorial header */}
-      <section className="bg-[var(--surface-page)] pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
+      <section className="bg-[var(--paper)] pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <p className="ea-overline">
             Hatch Imitations
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
+          <h1 className="mt-3 text-[var(--text-1)]">
             Flies That Imitate {displayName}
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)]">
+          <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
             {flies.length} proven pattern{flies.length !== 1 ? "s" : ""} designed
             to match {displayName.toLowerCase()} across multiple life stages.
             From subsurface nymphs to surface duns, these are the flies that
@@ -167,8 +167,8 @@ export default async function HatchInsectPage({ params }: Props) {
       </section>
 
       {/* Fly grid */}
-      <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {flies.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {flies.map((fly, i) => (
@@ -199,8 +199,8 @@ export default async function HatchInsectPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <p className="text-[var(--text-body)] text-lg">
+            <div className="ea-empty">
+              <p>
                 No patterns found for this insect yet. Check back soon.
               </p>
             </div>

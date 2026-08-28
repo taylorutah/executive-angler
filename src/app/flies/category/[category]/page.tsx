@@ -103,8 +103,8 @@ export default async function FlyCategoryPage({ params }: Props) {
       />
 
       {/* Breadcrumbs */}
-      <div className="bg-[var(--surface-page)] pt-6 pb-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="bg-[var(--paper)] pt-6 pb-4">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
               { label: "Fly Library", href: "/flies" },
@@ -115,31 +115,29 @@ export default async function FlyCategoryPage({ params }: Props) {
       </div>
 
       {/* Editorial header */}
-      <section className="bg-[var(--surface-page)] pb-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] flex items-center justify-center p-2">
-              <Image src={icon} alt={label} width={48} height={48} />
-            </div>
+      <section className="bg-[var(--paper)] pb-10 sm:pb-12">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-2">
+            <Image src={icon} alt={label} width={48} height={48} />
           </div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--action)]">
+          <p className="ea-overline">
             Fly Library
           </p>
-          <h1 className="mt-3 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--text-primary)]">
+          <h1 className="mt-3 text-[var(--text-1)]">
             {label}
           </h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-[var(--text-body)]">
+          <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
             {description}
           </p>
-          <p className="mt-3 text-sm text-[var(--text-meta)]">
+          <p className="mt-3 text-sm text-[var(--text-3)]">
             {flies.length} pattern{flies.length !== 1 ? "s" : ""} in this category
           </p>
         </div>
       </section>
 
       {/* Fly grid */}
-      <section className="bg-[var(--surface-raised)] border-t border-[var(--border-rule)] py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {flies.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {flies.map((fly, i) => (
@@ -174,8 +172,8 @@ export default async function FlyCategoryPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <p className="text-[var(--text-body)] text-lg">
+            <div className="ea-empty">
+              <p>
                 No patterns found in this category yet. Check back soon.
               </p>
             </div>
