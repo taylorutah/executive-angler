@@ -45,10 +45,11 @@ test.describe("journey smoke", () => {
     await expect(page).toHaveURL(/\/login\?redirect=/);
   });
 
-  test("logged-out /flies permanently redirects to /flies/library", async ({ page }) => {
+  test("logged-out /flies is The plate, not a redirect to the library", async ({ page }) => {
     const res = await page.goto("/flies", { waitUntil: "domcontentloaded" });
-    expect(res?.request().redirectedFrom() || page.url()).toBeTruthy();
-    await expect(page).toHaveURL(/\/flies\/library\/?$/);
+    expect(res?.status()).toBeLessThan(400);
+    await expect(page).toHaveURL(/\/flies\/?$/);
+    await expect(page.getByRole("heading", { name: /the plate/i })).toBeVisible();
   });
 
   test("/dashboard permanently lands on /today", async ({ page }) => {

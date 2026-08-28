@@ -9,6 +9,7 @@ import CompactCard from "./CompactCard";
 import ListCard from "./ListCard";
 import MagazineGrid from "./MagazineGrid";
 import ScrollAnimation from "./ScrollAnimation";
+import DeskAlsoKept from "@/components/desk/DeskAlsoKept";
 import DeskArchive from "@/components/desk/DeskArchive";
 import DeskFlyIndex from "@/components/desk/DeskFlyIndex";
 import DeskMagazine from "@/components/desk/DeskMagazine";
@@ -244,10 +245,7 @@ export default function EntityListView({
     return sorted;
   }, [filteredItems, activeSort]);
 
-  const pageSize =
-    chrome === "desk" && (deskLayout === "flies" || deskLayout === "archive")
-      ? undefined
-      : config.pageSize;
+  const pageSize = chrome === "desk" ? undefined : config.pageSize;
   const visibleItems =
     pageSize && !resultsOverride ? sortedItems.slice(0, visibleCount) : sortedItems;
   const canLoadMore = Boolean(pageSize && !resultsOverride && visibleCount < sortedItems.length);
@@ -326,6 +324,12 @@ export default function EntityListView({
               <MagazineGrid items={visibleItems} />
             )
           ) : displayView === "list" ? (
+            chrome === "desk" ? (
+              <DeskAlsoKept
+                items={visibleItems}
+                heading={deskLayout === "flies" ? "The rest of the bench" : "Also kept"}
+              />
+            ) : (
             <div className="divide-y-0">
               {visibleItems.map((item, i) => (
                 <ScrollAnimation key={item.href} index={i}>
@@ -333,6 +337,7 @@ export default function EntityListView({
                 </ScrollAnimation>
               ))}
             </div>
+            )
           ) : displayView === "compact" ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {visibleItems.map((item, i) => (

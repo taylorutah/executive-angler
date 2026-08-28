@@ -14,12 +14,13 @@ export default function DeskMagazine({ items, liveCfs }: Props) {
 
   return (
     <div className="flex flex-col gap-7">
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)]">
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,832fr)_minmax(0,432fr)]">
         <DeskPhotoCard
           href={lead.href}
           imageUrl={lead.imageUrl}
           imageAlt={lead.imageAlt}
           title={lead.title}
+          kicker={lead.kicker}
           meta={lead.meta ?? lead.subtitle}
           featured
           liveHint={liveCfs?.[lead.href]}
@@ -31,6 +32,7 @@ export default function DeskMagazine({ items, liveCfs }: Props) {
               imageUrl={sideA.imageUrl}
               imageAlt={sideA.imageAlt}
               title={sideA.title}
+              kicker={sideA.kicker}
               meta={sideA.meta ?? sideA.subtitle}
               liveHint={liveCfs?.[sideA.href]}
             />
@@ -41,6 +43,7 @@ export default function DeskMagazine({ items, liveCfs }: Props) {
               imageUrl={sideB.imageUrl}
               imageAlt={sideB.imageAlt}
               title={sideB.title}
+              kicker={sideB.kicker}
               meta={sideB.meta ?? sideB.subtitle}
               liveHint={liveCfs?.[sideB.href]}
             />
@@ -57,6 +60,7 @@ export default function DeskMagazine({ items, liveCfs }: Props) {
                 imageUrl={item.imageUrl}
                 imageAlt={item.imageAlt}
                 title={item.title}
+                kicker={item.kicker}
                 meta={item.meta ?? item.subtitle}
                 liveHint={liveCfs?.[item.href]}
               />

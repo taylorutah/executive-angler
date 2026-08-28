@@ -1,16 +1,26 @@
 /**
- * /flies — root of the authenticated flies hub.
+ * /flies — public Water Desk plate (Figma 76:3).
  *
- * Logged-in users: redirect to the appropriate sibling route.
- *   - default / no params       → /flybox
+ * Logged-in hub tabs still redirect:
  *   - ?tab=patterns|workspace|boxes|shared → /flybox
- *   - ?tab=workbench            → /flies/workbench
- *   - ?tab=tie-next             → /flies/tie-next
+ *   - ?tab=workbench → /flies/workbench
+ *   - ?tab=tie-next → /flies/tie-next
  *
- * Logged-out users: redirect to /flies/library (public canonical catalog).
+ * No tab: The plate. The bench index is /flies/library.
  */
+import type { Metadata } from "next";
 import { permanentRedirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { SITE_URL } from "@/lib/constants";
+import { brandedTitle } from "@/lib/seo";
+import FliesDeskPage from "./FliesDeskPage";
+
+export const metadata: Metadata = {
+  title: brandedTitle("The plate — flies on the water this week"),
+  description:
+    "Twelve patterns on the water this week. The bench is every fly we keep. Not a catalog.",
+  alternates: { canonical: `${SITE_URL}/flies` },
+};
 
 export const dynamic = "force-dynamic";
 
@@ -25,27 +35,30 @@ const TAB_TO_ROUTE: Record<string, string> = {
   shared: "/flybox",
 };
 
-export default async function FliesHubRedirect({
+export default async function FliesPage({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) permanentRedirect("/flies/library");
-
   const sp = await searchParams;
-  const target = TAB_TO_ROUTE[sp.tab ?? ""] ?? "/flybox";
+  const tabTarget = TAB_TO_ROUTE[sp.tab ?? ""];
+  if (tabTarget) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      permanentRedirect(`/login?redirect=${encodeURIComponent(`/flies?tab=${sp.tab}`)}`);
+    }
 
-  // Forward any non-tab params (clone, view, sort, etc.) onto the
-  // destination so deep links keep working.
-  const carry = new URLSearchParams();
-  for (const [k, v] of Object.entries(sp)) {
-    if (k === "tab" || v === undefined) continue;
-    carry.set(k, v);
+    const carry = new URLSearchParams();
+    for (const [k, v] of Object.entries(sp)) {
+      if (k === "tab" || v === undefined) continue;
+      carry.set(k, v);
+    }
+    const qs = carry.toString();
+    permanentRedirect(qs ? `${tabTarget}?${qs}` : tabTarget);
   }
-  const qs = carry.toString();
-  permanentRedirect(qs ? `${target}?${qs}` : target);
+
+  return <FliesDeskPage />;
 }

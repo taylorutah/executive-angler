@@ -45,6 +45,7 @@ export default async function ArticlesPage() {
       imageAlt: article.title,
       title: article.title,
       subtitle: article.subtitle,
+      group: article.category,
       meta: [noteDate(article.publishedAt), article.author].filter(Boolean).join(" · "),
       badges: [article.category],
       featured: article.featured,

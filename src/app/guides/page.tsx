@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Suspense } from "react";
 import DeskMast from "@/components/desk/DeskMast";
 import HomeGutter from "@/components/home/HomeGutter";
+import EntityListView from "@/components/ui/EntityListView";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
+import { guideListConfig } from "@/lib/list-configs";
+import type { CardData, EntityListConfig } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
 
@@ -25,7 +28,45 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function GuidesPage() {
   const [guides, destinations] = await Promise.all([getAllGuides(), getAllDestinations()]);
-  const sortedGuides = [...guides].sort((a, b) => a.name.localeCompare(b.name));
+
+  const destCounts = new Map<string, { name: string; count: number }>();
+  for (const guide of guides) {
+    const dest = destinations.find((d) => d.id === guide.destinationId);
+    if (!dest) continue;
+    const existing = destCounts.get(guide.destinationId);
+    if (existing) existing.count++;
+    else destCounts.set(guide.destinationId, { name: dest.name, count: 1 });
+  }
+  const destOptions = Array.from(destCounts.entries())
+    .sort((a, b) => b[1].count - a[1].count || a[1].name.localeCompare(b[1].name))
+    .map(([id, { name }]) => ({ value: id, label: name }));
+
+  const config: EntityListConfig = {
+    ...guideListConfig,
+    filters: [{ ...guideListConfig.filters[0], options: destOptions }],
+  };
+
+  const items: (CardData & { _filterValues: Record<string, string | number> })[] = guides.map(
+    (guide) => {
+      const dest = destinations.find((d) => d.id === guide.destinationId);
+      return {
+        href: `/guides/${guide.slug}`,
+        imageUrl: guide.photoUrl || undefined,
+        imageAlt: guide.name,
+        title: guide.name,
+        subtitle: dest?.name,
+        kicker: dest?.state || dest?.name,
+        group: dest?.state || dest?.name || dest?.country,
+        meta: [dest?.name, guide.specialties.slice(0, 2).join(", ")].filter(Boolean).join(" · "),
+        featured: false,
+        description: guide.bio?.substring(0, 150),
+        _filterValues: {
+          destination: guide.destinationId,
+          experience: guide.yearsExperience ?? 0,
+        },
+      };
+    },
+  );
 
   return (
     <>
@@ -38,36 +79,9 @@ export default async function GuidesPage() {
 
       <section className="bg-[var(--surface-page)] pb-16">
         <HomeGutter>
-          <ul>
-            {sortedGuides.map((guide) => {
-              const dest = destinations.find((d) => d.id === guide.destinationId);
-              return (
-                <li key={guide.id} className="border-t border-[var(--border-rule)]">
-                  <Link
-                    href={`/guides/${guide.slug}`}
-                    className="group flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
-                  >
-                    <div className="min-w-0">
-                      <h2
-                        className="hover-copper font-heading text-[22px] font-semibold leading-[26px] text-[var(--text-primary)] group-hover:text-[var(--action)]"
-                        style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
-                      >
-                        {guide.name}
-                      </h2>
-                      <p className="mt-1 font-ui text-[14px] text-[var(--text-body)]">
-                        {[dest?.name, guide.specialties.slice(0, 2).join(", ")]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </p>
-                    </div>
-                    <span className="shrink-0 font-ui text-[13px] font-medium text-[var(--action)]">
-                      View →
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <Suspense>
+            <EntityListView items={items} config={config} storageKey="guides" />
+          </Suspense>
         </HomeGutter>
       </section>
     </>

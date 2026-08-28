@@ -1,4 +1,5 @@
 import { DESTINATION_STATE_MAP } from "@/lib/destination-state-map";
+import { currentHatchMonth } from "@/lib/flies/fishing-now";
 import { speciesTokens } from "./species-tokens";
 import type { River } from "@/types/entities";
 import type { CardData } from "@/types/list-config";
@@ -20,6 +21,7 @@ export type RiverBrowseSource = Pick<
   | "longitude"
   | "featured"
   | "usgsGaugeId"
+  | "hatchChart"
 >;
 
 export type RiverBrowseItem = CardData & {
@@ -38,24 +40,36 @@ export function waterTypeKey(flowType: string): string {
   return (flowType ?? "").trim().toLowerCase();
 }
 
-export function toRiverBrowseItem(river: RiverBrowseSource): RiverBrowseItem {
+/** Chart insect only — drop the scientific parenthetical, do not invent a nickname. */
+export function shortInsect(name: string): string {
+  return name.replace(/\s*\([^)]*\)\s*/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function hatchThisMonth(hatchChart: River["hatchChart"], month: string): string {
+  const entry = (hatchChart ?? []).find((m) => m?.month === month);
+  const insect = (entry?.hatches ?? []).map((h) => h.insect).find(Boolean);
+  return insect ? shortInsect(insect) : "";
+}
+
+export function toRiverBrowseItem(
+  river: RiverBrowseSource,
+  month = currentHatchMonth(),
+): RiverBrowseItem {
   const states = statesForRiver(river);
   const water = waterTypeKey(river.flowType);
   const species = speciesTokens(river.primarySpecies ?? []);
+  const hatch = hatchThisMonth(river.hatchChart, month);
+  const state = states[0] ?? "";
   return {
     riverId: river.id,
     href: `/rivers/${river.slug}`,
     imageUrl: river.heroImageUrl,
     imageAlt: river.name,
     title: river.name,
-    subtitle: [states[0], river.flowType].filter(Boolean).join(" · "),
-    meta: [
-      (river.primarySpecies ?? []).slice(0, 2).join(", "),
-      river.difficulty,
-      river.wadingType,
-    ]
-      .filter(Boolean)
-      .join(" · "),
+    kicker: state || undefined,
+    group: state || undefined,
+    subtitle: [state, river.flowType].filter(Boolean).join(" · "),
+    meta: hatch || river.flowType || undefined,
     badges: undefined,
     featured: river.featured,
     description: river.description?.slice(0, 150),

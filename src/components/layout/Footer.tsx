@@ -8,7 +8,7 @@ const footerColumns: { title: string; links: FooterLink[] }[] = [
     title: "The desk",
     links: [
       { label: "Rivers", href: "/rivers" },
-      { label: "Flies", href: "/flies/library" },
+      { label: "Flies", href: "/flies" },
       { label: "Places", href: "/destinations" },
       { label: "Field Notes", href: "/articles" },
       { label: "Learn", href: "/learn" },

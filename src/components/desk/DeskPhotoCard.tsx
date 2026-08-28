@@ -7,6 +7,7 @@ interface Props {
   imageAlt: string;
   title: string;
   meta?: string;
+  kicker?: string;
   featured?: boolean;
   liveHint?: string;
   /** plate = Flies index 12px Archivo names. river = Fraunces 20/28. */
@@ -20,6 +21,7 @@ export default function DeskPhotoCard({
   imageAlt,
   title,
   meta,
+  kicker,
   featured,
   liveHint,
   density = "river",
@@ -56,13 +58,19 @@ export default function DeskPhotoCard({
           {title}
         </h3>
       )}
-      {(meta || liveHint) && (
+      {(kicker || meta || liveHint) && (
         <p className={`font-ui text-[var(--text-meta)] ${plate ? "mt-0.5 text-[11px]" : "mt-2 text-[13px]"}`}>
-          {meta}
+          {kicker}
           {liveHint ? (
             <>
-              {meta ? "  ·  " : null}
+              {kicker ? "  ·  " : null}
               <span className="text-[var(--signal-live)]">{liveHint}</span>
+            </>
+          ) : null}
+          {meta ? (
+            <>
+              {kicker || liveHint ? "  ·  " : null}
+              {meta}
             </>
           ) : null}
         </p>

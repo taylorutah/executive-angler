@@ -42,10 +42,10 @@ export default async function RiversPage() {
   return (
     <>
       <DeskMast
-        title="Rivers"
+        title="Every river we keep"
         lede={`${rivers.length} waters we actually keep. Honest flows. Pictures first.`}
-        titleSize="word"
-        ledeFace="essay"
+        titleSize="phrase"
+        ledeFace="ui"
       />
 
       <section className="bg-[var(--surface-page)] pb-16">

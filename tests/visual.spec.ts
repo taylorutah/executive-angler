@@ -3,7 +3,7 @@ import { signInViaApi } from "./helpers/auth";
 import { liveMasks, stubLiveData, stubRemoteImages } from "./helpers/stubs";
 
 /**
- * Public routes captured signed-out. `/flies` 308s to `/flies/library`
+ * Public routes captured signed-out. `/flies` is The plate; `/flies/library` is the bench.
  * (asserted in journeys.spec.ts) so it is not a baseline.
  * `/dashboard` 308s to `/today` — same.
  */

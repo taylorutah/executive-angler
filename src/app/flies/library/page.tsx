@@ -56,6 +56,7 @@ export default async function FliesPage() {
       imageAlt: `${fly.name} fly pattern for trout fishing`,
       title: fly.name,
       subtitle: fly.tagline || undefined,
+      group: FLY_CATEGORY_LABELS[fly.category] || fly.category,
       meta: `Sizes ${formatHookSize(fly.sizes[0])}–${formatHookSize(fly.sizes[fly.sizes.length - 1])}`,
       badges: [FLY_CATEGORY_LABELS[fly.category] || fly.category],
       featured: fly.featured,

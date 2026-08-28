@@ -70,7 +70,9 @@ export default async function LodgesPage() {
         imageAlt: lodge.name,
         title: lodge.name,
         subtitle: dest?.name,
-        meta: lodge.priceRange,
+        kicker: dest?.state || dest?.name,
+        group: dest?.state || dest?.name || dest?.country,
+        meta: [dest?.name, lodge.priceRange].filter(Boolean).join(" · "),
         featured: lodge.featured,
         description: lodge.description?.substring(0, 150),
         _filterValues: {
