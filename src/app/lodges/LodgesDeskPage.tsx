@@ -78,7 +78,7 @@ export default async function LodgesDeskPage() {
                 Pictures
               </span>
               <Link
-                href="/lodges/all"
+                href="/lodges/all?view=list"
                 className="ea-focus-ring bg-[var(--paper)] px-3.5 py-2 font-ui text-[12px] text-[var(--graphite)]"
               >
                 List

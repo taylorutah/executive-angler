@@ -9,7 +9,7 @@
  * No tab: The plate. The bench index is /flies/library.
  */
 import type { Metadata } from "next";
-import { permanentRedirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
@@ -48,7 +48,7 @@ export default async function FliesPage({
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      permanentRedirect(`/login?redirect=${encodeURIComponent(`/flies?tab=${sp.tab}`)}`);
+      redirect(`/login?redirect=${encodeURIComponent(`/flies?tab=${sp.tab}`)}`);
     }
 
     const carry = new URLSearchParams();
@@ -57,7 +57,7 @@ export default async function FliesPage({
       carry.set(k, v);
     }
     const qs = carry.toString();
-    permanentRedirect(qs ? `${tabTarget}?${qs}` : tabTarget);
+    redirect(qs ? `${tabTarget}?${qs}` : tabTarget);
   }
 
   return <FliesDeskPage />;

@@ -70,6 +70,9 @@ describe("v4.1 geometry tokens", () => {
     assert.match(css, /\.home-hero-fold \{\n  height: calc\(100dvh - 56px/);
     assert.match(css, /@media \(max-width:\s*639px\)[\s\S]*?\.home-hero-fold \{\n    height: 664px;/);
     assert.match(css, /@media \(max-width:\s*639px\)[\s\S]*?\.hero-overlay-home/);
+    assert.match(css, /\[data-register="daylight"\] \.home-hero-fold h1/);
+    assert.match(css, /\[data-register="daylight"\] \.hero-on-photo h1/);
+    assert.match(css, /\.hero-cfs \{\n  color:\s*var\(--teal\);\n  background-color:\s*var\(--paper\);/);
     assert.equal(css.includes("--hover-duration: 600ms"), true);
     assert.match(css, /\.photo-lift[\s\S]*?var\(--hover-duration\)/);
     assert.match(css, /\.hover-copper[\s\S]*?var\(--hover-duration\)/);

@@ -63,7 +63,7 @@ export default function RiverHeroImage({
 
   return (
     <>
-      <section className="relative h-[420px] w-full overflow-hidden">
+      <section className="hero-on-photo relative h-[420px] w-full overflow-hidden">
         {heroSrc && showPhoto && useNativeHero ? (
           <div className="absolute inset-0">
             <picture className="block h-full w-full">

@@ -406,17 +406,17 @@
     );
   }
 
-  /* Full-viewport Home hero (1440×844). Chalk + teal-300 sit in the
-     bottom ~400px; keep that band at ≥0.82 riverbed so the rendered
-     contrast gate clears over a light photograph (teal needs ~0.80).
-     390 uses the unlayered override below — the mobile crop is a
-     darker river and the dek sat in a thinner stop. */
-  /* Home / 1440 fold 40:2 — riverbed wash from the top of the plate. */
+  /* Home / 1440 fold 40:2 — type sits at the bottom of the plate.
+     Cream kicker / dek / caption need a dark riverbed band there.
+     Teal CFS (#086B6C) cannot clear 4.5:1 on that band; it sits on
+     .hero-cfs paper instead. 390 keeps the unlayered override below. */
   .hero-overlay-home {
     background: linear-gradient(
-      to bottom,
-      rgb(11 17 18 / 0.76) 0%,
-      rgb(11 17 18 / 0.16) 45%,
+      to top,
+      rgb(11 17 18 / 0.92) 0%,
+      rgb(11 17 18 / 0.86) 42%,
+      rgb(11 17 18 / 0.58) 58%,
+      rgb(11 17 18 / 0.18) 78%,
       rgb(11 17 18 / 0) 100%
     );
   }
@@ -651,6 +651,21 @@
 [data-register="daylight"] main h2 {
   color: var(--text-primary);
   font-family: var(--font-heading);
+}
+
+/* Photo heroes keep cream type. Unlayered so this beats the ink rule. */
+[data-register="daylight"] .home-hero-fold h1,
+[data-register="daylight"] .home-hero-fold h2,
+[data-register="daylight"] .hero-on-photo h1,
+[data-register="daylight"] .hero-on-photo h2 {
+  color: var(--hero-type);
+}
+
+/* Token teal on paper — the only pair where #086B6C clears 4.5:1 on the fold. */
+.hero-cfs {
+  color: var(--teal);
+  background-color: var(--paper);
+  padding: 0 0.35em;
 }
 
 /* 390 fold: keep chalk / dek / teal CFS in a ≥0.86 riverbed band.

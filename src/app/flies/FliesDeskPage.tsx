@@ -53,7 +53,7 @@ function pickBench(flies: CanonicalFly[], featuredId: string | undefined): Canon
   for (const name of BENCH_NAMES) {
     if (bench.length === 12) break;
     const fly = byName.get(nameKey(name));
-    if (!fly || seen.has(fly.id)) continue;
+    if (!fly || fly.id === featuredId || seen.has(fly.id)) continue;
     seen.add(fly.id);
     bench.push(fly);
   }

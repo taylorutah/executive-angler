@@ -61,34 +61,40 @@ export default function EntityListView({
   const router = useRouter();
   const pathname = usePathname();
 
-  // View mode from localStorage
+  // View mode: URL ?view= wins over localStorage when it is a valid mode.
   const deskDefault: ViewMode = chrome === "desk" ? "magazine" : config.defaultView;
-  const [viewMode, setViewMode] = useState<ViewMode>(deskDefault);
+  const allowedViews = useMemo<ViewMode[]>(
+    () =>
+      chrome === "desk"
+        ? ["magazine", "list"]
+        : (config.availableViews ?? ["grid", "compact", "list", "magazine"]),
+    [chrome, config.availableViews],
+  );
+  const urlViewRaw = searchParams.get("view");
+  const urlViewMode =
+    urlViewRaw && allowedViews.includes(urlViewRaw as ViewMode)
+      ? (urlViewRaw as ViewMode)
+      : null;
+
+  const [viewMode, setViewMode] = useState<ViewMode>(urlViewMode ?? deskDefault);
   const [mounted, setMounted] = useState(false);
   const [deskRefine, setDeskRefine] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    if (urlViewMode) {
+      setViewMode(urlViewMode);
+      localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, urlViewMode);
+      return;
+    }
     const stored = localStorage.getItem(`${VIEW_STORAGE_KEY}-${storageKey}`);
-    const allowed =
-      chrome === "desk"
-        ? ["magazine", "list"]
-        : (config.availableViews ?? ["grid", "compact", "list", "magazine"]);
-    if (stored && (allowed as string[]).includes(stored)) {
+    if (stored && allowedViews.includes(stored as ViewMode)) {
       setViewMode(stored as ViewMode);
-    } else if (stored && !(allowed as string[]).includes(stored)) {
+    } else if (stored && !allowedViews.includes(stored as ViewMode)) {
       setViewMode(deskDefault);
       localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, deskDefault);
     }
-  }, [storageKey, config.availableViews, config.defaultView, chrome, deskDefault]);
-
-  const handleViewChange = useCallback(
-    (mode: ViewMode) => {
-      setViewMode(mode);
-      localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, mode);
-    },
-    [storageKey]
-  );
+  }, [storageKey, allowedViews, deskDefault, urlViewMode]);
 
   // Search query from URL params
   const searchQuery = searchParams.get("q") || "";
@@ -151,6 +157,15 @@ export default function EntityListView({
     }
     updateParams(updates);
   }, [config.filters, updateParams]);
+
+  const handleViewChange = useCallback(
+    (mode: ViewMode) => {
+      setViewMode(mode);
+      localStorage.setItem(`${VIEW_STORAGE_KEY}-${storageKey}`, mode);
+      updateParams({ view: mode === deskDefault ? null : mode });
+    },
+    [storageKey, deskDefault, updateParams],
+  );
 
   const [visibleCount, setVisibleCount] = useState(config.pageSize ?? items.length);
 
@@ -251,7 +266,7 @@ export default function EntityListView({
   const canLoadMore = Boolean(pageSize && !resultsOverride && visibleCount < sortedItems.length);
 
   // Use defaultView on server, real viewMode only after mount
-  const displayView = mounted ? viewMode : deskDefault;
+  const displayView = mounted ? viewMode : (urlViewMode ?? deskDefault);
 
   return (
     <>

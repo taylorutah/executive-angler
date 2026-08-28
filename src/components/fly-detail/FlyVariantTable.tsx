@@ -180,22 +180,24 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
             Variants
           </h2>
           {!user && (
-            <p className="font-ui text-[13px] text-[var(--text-body)]">
-              <Link
-                href={loginHref}
-                className="hover-copper text-[var(--action)] underline-offset-4 hover:underline"
-              >
-                Sign in
-              </Link>{" "}
-              to put these sizes in your box.
-            </p>
+            <Link
+              href={loginHref}
+              className="hover-copper font-ui text-[13px] text-[var(--action)] underline-offset-4 hover:underline"
+            >
+              Sign in to put these sizes in your box
+            </Link>
           )}
         </div>
 
         <p className="mb-2 font-ui text-[12px] text-[var(--text-meta)] lg:hidden">
           Swipe to see In box and Add.
         </p>
-        <div className="desk-table-wrap border border-[var(--border-rule)] bg-[var(--vellum)]">
+        <div
+          className="desk-table-wrap border border-[var(--border-rule)] bg-[var(--vellum)]"
+          tabIndex={0}
+          role="region"
+          aria-label={`${flyName} variants`}
+        >
           <table className="desk-table text-[13px] leading-[1.35]">
             <thead>
               <tr className="border-b border-[var(--border-rule)] bg-[var(--surface-raised)]">
@@ -270,6 +272,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                           type="button"
                           disabled={!!busyKey}
                           onClick={() => addSize(row.size)}
+                          aria-label={`Add ${flyName} ${row.size} to box`}
                           className="bg-[var(--action)] px-2.5 py-1 text-[12px] font-semibold text-[var(--on-action)] hover:bg-[var(--action-hover)] disabled:opacity-50"
                         >
                           {busyKey === row.size ? "Adding…" : "Add"}

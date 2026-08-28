@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
-import { POST_LOGIN_PATH } from "@/lib/auth-paths";
+import { POST_LOGIN_PATH, safeInternalPath } from "@/lib/auth-paths";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -46,7 +46,7 @@ export default function LoginForm({ redirect, authError }: Props) {
       setLoading(false);
       return;
     }
-    window.location.href = redirect;
+    window.location.href = safeInternalPath(redirect) ?? POST_LOGIN_PATH;
   }
 
   return (

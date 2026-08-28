@@ -101,7 +101,12 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
         </ul>
       </div>
 
-      <div className="overflow-x-auto border border-[var(--border-rule)] bg-[var(--surface-card)]">
+      <div
+        className="overflow-x-auto border border-[var(--border-rule)] bg-[var(--surface-card)]"
+        tabIndex={0}
+        role="region"
+        aria-label="Hatch chart by month"
+      >
         <table className="w-full min-w-[720px] table-fixed border-collapse text-sm">
           <colgroup>
             <col className="w-[9.5rem]" />

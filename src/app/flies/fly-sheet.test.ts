@@ -9,6 +9,10 @@ const recipe = readFileSync(join(root, "src/components/desk/RecipeStrip.tsx"), "
 const variants = readFileSync(join(root, "src/components/fly-detail/FlyVariantTable.tsx"), "utf8");
 const login = readFileSync(join(root, "src/app/login/page.tsx"), "utf8");
 const loginForm = readFileSync(join(root, "src/app/login/LoginForm.tsx"), "utf8");
+const fliesIndex = readFileSync(join(root, "src/app/flies/page.tsx"), "utf8");
+const fliesDesk = readFileSync(join(root, "src/app/flies/FliesDeskPage.tsx"), "utf8");
+const lodgesDesk = readFileSync(join(root, "src/app/lodges/LodgesDeskPage.tsx"), "utf8");
+const entityList = readFileSync(join(root, "src/components/ui/EntityListView.tsx"), "utf8");
 const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
 
 describe("fly Water Desk sheet", () => {
@@ -50,5 +54,27 @@ describe("fly Water Desk sheet", () => {
     assert.equal(login.includes("SITE_NAME"), false);
     assert.equal(loginForm.includes("red-950"), false);
     assert.equal(loginForm.includes("rounded-xl"), false);
+    assert.match(loginForm, /safeInternalPath\(redirect\)/);
+  });
+
+  it("does not permanently redirect logged-out fly tabs", () => {
+    assert.match(fliesIndex, /redirect\(`\/login\?redirect=/);
+    assert.equal(fliesIndex.includes("permanentRedirect"), false);
+  });
+
+  it("keeps the featured fly off the bench", () => {
+    assert.match(fliesDesk, /if \(!fly \|\| fly\.id === featuredId \|\| seen\.has\(fly\.id\)\) continue;/);
+  });
+
+  it("opens lodges List as list density, not the magazine catalog", () => {
+    assert.match(lodgesDesk, /href="\/lodges\/all\?view=list"/);
+    assert.match(lodgesDesk, /href="\/lodges\/all"/);
+    assert.match(entityList, /urlViewMode/);
+    assert.match(entityList, /updateParams\(\{ view: mode === deskDefault \? null : mode \}\)/);
+  });
+
+  it("keeps the variants sign-in control out of a text block", () => {
+    assert.match(variants, /Sign in to put these sizes in your box/);
+    assert.equal(variants.includes("to put these sizes in your box."), false);
   });
 });
