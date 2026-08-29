@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useId, type ReactNode } from "react";
-import { LayoutGrid, Grid3X3, List, Newspaper, Search, SlidersHorizontal, X } from "@/icons";
+import { LayoutGrid, Grid3X3, List, Newspaper, Search, Filter, X } from "@/icons";
 import type { FilterDimension, SortOption, ViewMode } from "@/types/list-config";
 import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 
@@ -25,7 +25,9 @@ interface ListToolbarProps {
   showOptionalFilters?: boolean;
   /** Extra controls (near me, map) sit in the filter panel. */
   toolbarExtra?: ReactNode;
-  /** Default true so the bar is a real filter surface, not a hidden drawer. */
+  /** Controlled open state. Uncontrolled default: closed, unless the URL
+      arrives with an active filter — then the panel starts open so the
+      filtering is visible (client ruling 2026-08-28). */
   filtersOpen?: boolean;
   onFiltersOpenChange?: (open: boolean) => void;
 }
@@ -80,7 +82,11 @@ export default function ListToolbar({
 
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
-  const [internalOpen, setInternalOpen] = useState(true);
+  // Closed on a plain visit; a shared filtered link opens the panel so the
+  // active filtering is visible. Initializer reads the first render's URL.
+  const [internalOpen, setInternalOpen] = useState(
+    () => Object.keys(activeFilters).length > 0,
+  );
   const filtersOpen = filtersOpenProp ?? internalOpen;
   const setFiltersOpen = (open: boolean) => {
     onFiltersOpenChange?.(open);
@@ -139,16 +145,12 @@ export default function ListToolbar({
             aria-expanded={filtersOpen}
             aria-controls="browse-filter-panel"
             onClick={() => setFiltersOpen(!filtersOpen)}
-            className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex items-center gap-1.5 rounded-[var(--radius-md)] px-3 py-1.5 text-sm font-medium border transition-colors ${
-              filtersOpen || hasActiveFilters
-                ? "bg-[var(--accent)] text-[var(--on-action)] border-[var(--accent)]"
-                : "bg-[var(--surface)] text-[var(--text-2)] border-[var(--border)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
-            }`}
+            className={`ea-btn ea-btn-secondary ea-btn-sm ea-focus-ring ${FOCUS_VISIBLE}`}
           >
-            <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
+            <Filter className="h-4 w-4" aria-hidden />
             Filters
             {hasActiveFilters && (
-              <span className="num text-xs opacity-80">
+              <span className="num rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-2 py-1 text-xs font-medium leading-none text-[var(--accent)]">
                 {Object.keys(activeFilters).length}
               </span>
             )}
@@ -213,74 +215,77 @@ export default function ListToolbar({
         </div>
       </div>
 
-      {filtersOpen && (
-        <div
-          id="browse-filter-panel"
-          className="mt-3 pt-3 border-t border-[var(--border)] flex flex-col gap-3"
-        >
-          {visibleFilters.map((dimension) => {
-            const ui = dimensionUi(dimension);
-            return (
-              <div key={dimension.key} className="flex flex-wrap items-center gap-2">
-                <span className="ea-overline w-20 shrink-0">
-                  {dimension.label}
-                </span>
-                {ui === "select" ? (
-                  <select
-                    aria-label={dimension.label}
-                    value={activeFilters[dimension.key] ?? ""}
-                    onChange={(e) =>
-                      onFilterChange(dimension.key, e.target.value || null)
-                    }
-                    className={`ea-focus-ring ${FOCUS_VISIBLE} min-w-[10rem] rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-sm text-[var(--text-1)] outline-none`}
-                  >
-                    <option value="">All</option>
-                    {dimension.options.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => onFilterChange(dimension.key, null)}
-                      className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-chip px-3 py-1.5 text-sm font-medium transition-colors ${
-                        !activeFilters[dimension.key]
-                          ? "bg-[var(--accent)] text-[var(--on-action)]"
-                          : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
-                      }`}
+      <div
+        id="browse-filter-panel"
+        className="ea-filter-panel"
+        data-open={filtersOpen}
+      >
+        <div>
+          <div className="mt-3 pt-3 pb-1 border-t border-[var(--border)] flex flex-col gap-3">
+            {visibleFilters.map((dimension) => {
+              const ui = dimensionUi(dimension);
+              return (
+                <div key={dimension.key} className="flex flex-wrap items-center gap-2">
+                  <span className="ea-overline w-20 shrink-0">
+                    {dimension.label}
+                  </span>
+                  {ui === "select" ? (
+                    <select
+                      aria-label={dimension.label}
+                      value={activeFilters[dimension.key] ?? ""}
+                      onChange={(e) =>
+                        onFilterChange(dimension.key, e.target.value || null)
+                      }
+                      className={`ea-focus-ring ${FOCUS_VISIBLE} min-w-[10rem] rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-sm text-[var(--text-1)] outline-none`}
                     >
-                      All
-                    </button>
-                    {dimension.options.map((opt) => (
+                      <option value="">All</option>
+                      {dimension.options.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <>
                       <button
-                        key={opt.value}
                         type="button"
-                        onClick={() =>
-                          onFilterChange(
-                            dimension.key,
-                            activeFilters[dimension.key] === opt.value ? null : opt.value,
-                          )
-                        }
+                        onClick={() => onFilterChange(dimension.key, null)}
                         className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-chip px-3 py-1.5 text-sm font-medium transition-colors ${
-                          activeFilters[dimension.key] === opt.value
+                          !activeFilters[dimension.key]
                             ? "bg-[var(--accent)] text-[var(--on-action)]"
                             : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
                         }`}
                       >
-                        {opt.label}
+                        All
                       </button>
-                    ))}
-                  </>
-                )}
-              </div>
-            );
-          })}
-          {toolbarExtra}
+                      {dimension.options.map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() =>
+                            onFilterChange(
+                              dimension.key,
+                              activeFilters[dimension.key] === opt.value ? null : opt.value,
+                            )
+                          }
+                          className={`ea-focus-ring ${FOCUS_VISIBLE} whitespace-nowrap rounded-chip px-3 py-1.5 text-sm font-medium transition-colors ${
+                            activeFilters[dimension.key] === opt.value
+                              ? "bg-[var(--accent)] text-[var(--on-action)]"
+                              : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </>
+                  )}
+                </div>
+              );
+            })}
+            {toolbarExtra}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

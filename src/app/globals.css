@@ -488,6 +488,27 @@
     height: 14px;
   }
 
+  /* ── Filter panel: inline disclosure on the browse toolbar. Collapses
+     by grid-rows so the page below slides with it; visibility keeps the
+     closed panel out of the tab order and flips at the end of the close
+     transition (client ruling 2026-08-28). ── */
+  .ea-filter-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--duration-base) var(--ease-standard),
+      visibility var(--duration-base) var(--ease-standard);
+  }
+  .ea-filter-panel[data-open="true"] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+  }
+  .ea-filter-panel > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+
   /* ── Segmented control: view toggles (list / calendar / table) ── */
   .ea-segmented {
     display: inline-flex;

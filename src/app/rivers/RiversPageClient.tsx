@@ -34,7 +34,11 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
   const router = useRouter();
   const pathname = usePathname();
 
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  // Closed on a plain visit; a shared filtered link arrives with the panel
+  // open so the active filtering is visible (client ruling 2026-08-28).
+  const [filtersOpen, setFiltersOpen] = useState(() =>
+    riverListConfig.filters.some((f) => searchParams.get(f.key)),
+  );
   const [showMap, setShowMap] = useState(false);
   const [flows, setFlows] = useState<Record<string, FlowStateRow>>({});
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
