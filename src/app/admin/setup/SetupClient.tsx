@@ -95,43 +95,43 @@ export default function SetupClient({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
+    <div className="min-h-screen bg-[var(--paper)]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
+          <Link href="/admin" className="text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard">
             <ChevronLeft className="h-5 w-5" />
           </Link>
-          <h1 className="font-serif text-2xl text-[var(--text-primary)]">Database Setup</h1>
+          <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">Database Setup</h1>
         </div>
 
         {/* Schema checks */}
-        <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-6">
-          <h2 className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">Schema Status</h2>
+        <div className="ea-card mb-6">
+          <h2 className="ea-overline mb-3">Schema Status</h2>
           <div className="space-y-2">
             {Object.entries(checks).map(([key, ok]) => (
               <div key={key} className="flex items-center gap-2">
                 {ok ? (
-                  <CheckCircle className="h-4 w-4 text-green-400" />
+                  <CheckCircle className="h-4 w-4 text-[var(--success)]" />
                 ) : (
-                  <XCircle className="h-4 w-4 text-red-400" />
+                  <XCircle className="h-4 w-4 text-[var(--danger)]" />
                 )}
-                <span className={`text-sm font-mono ${ok ? "text-green-400" : "text-red-400"}`}>{key}</span>
+                <span className={`text-sm num ${ok ? "text-[var(--success)]" : "text-[var(--danger)]"}`}>{key}</span>
               </div>
             ))}
           </div>
         </div>
 
         {allGood ? (
-          <div className="bg-green-950/30 border border-green-800 rounded-xl p-5 text-center">
-            <CheckCircle className="h-8 w-8 text-green-400 mx-auto mb-2" />
-            <p className="text-green-400 font-semibold">All schema checks passed!</p>
-            <p className="text-green-400/60 text-sm mt-1">Admin panel is fully operational.</p>
+          <div className="bg-[var(--success)]/10 border border-[var(--success)]/30 rounded-[var(--radius-card)] p-5 text-center">
+            <CheckCircle className="h-8 w-8 text-[var(--success)] mx-auto mb-2" />
+            <p className="text-[var(--success)] font-semibold">All schema checks passed!</p>
+            <p className="text-[var(--success)]/70 text-sm mt-1">Admin panel is fully operational.</p>
           </div>
         ) : (
           <>
-            <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-5 mb-4">
+            <div className="ea-card mb-4">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider">Migration SQL</h2>
+                <h2 className="ea-overline">Migration SQL</h2>
                 <div className="flex gap-2">
                   <Button
                     onClick={handleCopy}
@@ -148,17 +148,17 @@ export default function SetupClient({
                     variant="outline"
                     size="sm"
                     icon={ExternalLink}
-                   
+
                   >
                     Open SQL Editor
                   </Button>
                 </div>
               </div>
-              <pre className="text-xs text-[var(--text-body)] bg-[var(--surface-page)] p-4 rounded-lg overflow-x-auto max-h-80 overflow-y-auto font-mono">
+              <pre className="text-xs text-[var(--text-2)] bg-[var(--paper-deep)] p-4 rounded-[var(--radius-md)] overflow-x-auto max-h-80 overflow-y-auto font-mono">
                 {MIGRATION_SQL}
               </pre>
             </div>
-            <p className="text-xs text-[var(--text-meta)] text-center">
+            <p className="text-xs text-[var(--text-3)] text-center">
               Copy the SQL above → paste in Supabase SQL Editor → click Run → refresh this page
             </p>
           </>
