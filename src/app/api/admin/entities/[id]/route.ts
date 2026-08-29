@@ -12,6 +12,7 @@ const ALLOWED_TABLES = [
   "guides",
   "fly_shops",
   "articles",
+  "flies",
   "canonical_flies",
   "gear_brands",
   "gear_products",

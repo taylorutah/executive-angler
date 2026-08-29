@@ -26,6 +26,7 @@ export interface FieldConfig {
   placeholder?: string;
   tableColumn?: boolean; // Show in list table
   fullWidth?: boolean; // Span full form width
+  readOnly?: boolean; // Render disabled; skip on save
   // For type: "image" — optional companion form keys for alt, credit, credit URL.
   // When set, the image widget renders inputs for those and writes through
   // onChange(altKey, …) etc. The hidden companion fields still live in the

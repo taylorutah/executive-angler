@@ -8,6 +8,7 @@ const PATHS_BY_TABLE: Record<string, string[]> = {
   lodges: ["/", "/lodges", "/lodges/all", "/lodges/[slug]"],
   guides: ["/", "/guides", "/guides/[slug]"],
   fly_shops: ["/", "/fly-shops", "/fly-shops/[slug]"],
+  flies: ["/", "/flies", "/flies/[slug]"],
   canonical_flies: ["/", "/flies", "/flies/[slug]"],
 };
 

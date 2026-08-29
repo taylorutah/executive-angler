@@ -5,16 +5,22 @@ import { MOTION_SAFE } from "@/components/layout/nav/links";
 
 /**
  * Field Notes card: photo at the sanctioned 4:3 card ratio, category
- * overline, Fraunces title — nothing else on the face (client ruling
- * 2026-08-28: no teaser line, no author/read-time meta row).
+ * overline with reading time, Fraunces title — nothing else on the face
+ * (no teaser, no author). Titles are one step below the prior 20px so
+ * the longer overline and two-line clamp stay on clean lines.
  *
  * Hover or keyboard focus flips the WHOLE card — photo and text zone
- * together — to a solid paper-deep panel carrying the excerpt in the
- * base reading style (16px/1.55): one surface, one opacity crossfade at
- * the token duration and easing, never a scrim and never a zoom. The
- * panel is aria-hidden so the link's accessible name stays the title;
- * the excerpt is a preview of the linked page, which carries it in full.
+ * together — to a solid paper-deep panel carrying the excerpt in
+ * Fraunces italic, left-aligned, with a short accent rule above
+ * (the pull-quote motif). One opacity crossfade at the token duration
+ * and easing, never a scrim and never a zoom. The panel is aria-hidden
+ * so the link's accessible name stays the title; the excerpt is a
+ * preview of the linked page, which carries it in full.
  */
+function overlineReadingTime(minutes: number): string {
+  return `${Math.max(1, Math.round(minutes))} min read`;
+}
+
 export default function ArticleCard({
   href,
   imageUrl,
@@ -23,8 +29,13 @@ export default function ArticleCard({
   meta,
   badges,
   description,
+  readingTimeMinutes,
 }: CardData) {
   const category = badges?.[0];
+  const readLabel =
+    typeof readingTimeMinutes === "number" && Number.isFinite(readingTimeMinutes)
+      ? overlineReadingTime(readingTimeMinutes)
+      : null;
 
   return (
     <Link
@@ -42,8 +53,20 @@ export default function ArticleCard({
         />
       </div>
       <div className="p-5">
-        {category && <p className="ea-overline">{category}</p>}
-        <h3 className="mt-2 font-heading text-[var(--text-20)] font-semibold text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
+        {(category || readLabel) && (
+          <p className="ea-overline whitespace-nowrap">
+            {category && (
+              <span className="text-[var(--accent)]">{category}</span>
+            )}
+            {category && readLabel && (
+              <span className="text-[var(--text-3)]"> · </span>
+            )}
+            {readLabel && (
+              <span className="text-[var(--text-3)]">{readLabel}</span>
+            )}
+          </p>
+        )}
+        <h3 className="mt-2 line-clamp-2 font-heading [font-size:var(--text-18)] font-semibold leading-[1.2] text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
           {title}
         </h3>
       </div>
@@ -52,7 +75,16 @@ export default function ArticleCard({
           aria-hidden="true"
           className={`absolute inset-0 flex items-center bg-[var(--paper-deep)] p-6 opacity-0 transition-opacity duration-200 ease-standard group-hover:opacity-100 group-focus-visible:opacity-100 ${MOTION_SAFE}`}
         >
-          <p className="text-[var(--text-1)] line-clamp-8">{description}</p>
+          <div className="w-full">
+            <div
+              data-excerpt-rule
+              aria-hidden="true"
+              className="mb-[var(--space-4)] h-[2px] w-[var(--space-6)] bg-[var(--accent)]"
+            />
+            <p className="line-clamp-4 text-left font-display [font-size:var(--text-20)] font-medium italic leading-[1.3] text-[var(--text-1)]">
+              {description}
+            </p>
+          </div>
         </div>
       )}
     </Link>

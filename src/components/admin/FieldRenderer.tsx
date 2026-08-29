@@ -24,7 +24,9 @@ export default function FieldRenderer({
 }: FieldRendererProps) {
   if (field.type === "hidden") return null;
 
-  const inputBase = "ea-input";
+  const inputBase = field.readOnly
+    ? "ea-input bg-[var(--paper-deep)] text-[var(--text-2)] cursor-not-allowed"
+    : "ea-input";
 
   function handleChange(val: unknown) {
     onChange(field.key, val);
@@ -42,6 +44,8 @@ export default function FieldRenderer({
             onChange={(e) => handleChange(e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
+            readOnly={field.readOnly}
+            disabled={field.readOnly}
             className={inputBase}
           />
         );
@@ -56,6 +60,8 @@ export default function FieldRenderer({
             }
             placeholder={field.placeholder}
             required={field.required}
+            readOnly={field.readOnly}
+            disabled={field.readOnly}
             className={inputBase}
           />
         );
@@ -67,6 +73,8 @@ export default function FieldRenderer({
             onChange={(e) => handleChange(e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
+            readOnly={field.readOnly}
+            disabled={field.readOnly}
             rows={4}
             className={inputBase}
           />
@@ -90,6 +98,7 @@ export default function FieldRenderer({
             value={(value as string) ?? ""}
             onChange={(e) => handleChange(e.target.value)}
             required={field.required}
+            disabled={field.readOnly}
             className={inputBase}
           >
             <option value="">Select...</option>
@@ -103,12 +112,15 @@ export default function FieldRenderer({
 
       case "boolean":
         return (
-          <label className="inline-flex items-center gap-3 cursor-pointer h-11">
+          <label className={`inline-flex items-center gap-3 h-11 ${field.readOnly ? "cursor-not-allowed" : "cursor-pointer"}`}>
             <button
               type="button"
               role="switch"
               aria-checked={!!value}
-              onClick={() => handleChange(!value)}
+              disabled={field.readOnly}
+              onClick={() => {
+                if (!field.readOnly) handleChange(!value);
+              }}
               className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border transition-colors duration-150 ease-standard ${
                 value
                   ? "bg-[var(--accent)] border-transparent"
@@ -151,6 +163,8 @@ export default function FieldRenderer({
             value={(value as string) ?? ""}
             onChange={(e) => handleChange(e.target.value)}
             required={field.required}
+            readOnly={field.readOnly}
+            disabled={field.readOnly}
             className={inputBase}
           />
         );
@@ -206,6 +220,8 @@ export default function FieldRenderer({
             type="text"
             value={(value as string) ?? ""}
             onChange={(e) => handleChange(e.target.value)}
+            readOnly={field.readOnly}
+            disabled={field.readOnly}
             className={inputBase}
           />
         );
@@ -217,6 +233,11 @@ export default function FieldRenderer({
       <label className="ea-label">
         {field.label}
         {field.required && <span className="text-[var(--danger)] ml-0.5">*</span>}
+        {field.readOnly && (
+          <span className="ml-1.5 text-[10px] uppercase tracking-wide text-[var(--text-3)]">
+            read-only
+          </span>
+        )}
       </label>
       {renderInput()}
     </div>

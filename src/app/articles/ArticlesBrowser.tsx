@@ -217,7 +217,7 @@ export default function ArticlesBrowser({ items, config, storageKey }: ArticlesB
           </div>
         ) : (
           /* Story grid — four wide, the Field Notes layout */
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {sortedItems.map((item, i) => (
               <ScrollAnimation key={item.href} index={i}>
                 <ArticleCard {...item} />

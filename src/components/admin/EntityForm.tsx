@@ -103,7 +103,7 @@ export default function EntityForm({
 
     // Validate required fields
     for (const field of fields) {
-      if (field.required && field.type !== "hidden") {
+      if (field.required && field.type !== "hidden" && !field.readOnly) {
         const val = formData[field.key];
         if (val === "" || val === null || val === undefined) {
           setError(`${field.label} is required.`);

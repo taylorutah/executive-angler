@@ -91,6 +91,7 @@ export default function EditEntityClient({
   async function handleSave(formData: Record<string, unknown>) {
     const dbData: Record<string, unknown> = {};
     for (const field of fields) {
+      if (field.readOnly) continue;
       if (field.type === "hidden" && field.key === "id") continue;
       const val = formData[field.key];
       if (val !== undefined) {

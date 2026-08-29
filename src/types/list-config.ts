@@ -31,6 +31,8 @@ export interface CardData {
   title: string;
   subtitle?: string;
   meta?: string;
+  /** Article cards: minutes, shown on the category overline. */
+  readingTimeMinutes?: number;
   /** Lead token on a magazine meta line (state, then live CFS, then meta). */
   kicker?: string;
   /** Also-kept grouping key (state, country, category). */

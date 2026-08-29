@@ -43,6 +43,7 @@ export default async function ArticlesPage() {
         ? `${article.readingTimeMinutes} min read`
         : `${article.readingTimeMinutes} min read · ${article.author}`,
       badges: [article.category],
+      readingTimeMinutes: article.readingTimeMinutes,
       featured: article.featured,
       description: article.excerpt,
       _filterValues: {
