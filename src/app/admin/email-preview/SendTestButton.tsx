@@ -50,7 +50,7 @@ export default function SendTestButton({
         value={to}
         onChange={(e) => setTo(e.target.value)}
         placeholder="recipient@example.com"
-        className="text-xs px-2 py-1 rounded border border-[#D4CBB8] bg-white text-[#111827] placeholder:text-[#9CA3AF] w-56"
+        className="ea-input text-xs w-56"
         disabled={status === "sending"}
       />
       <Button
@@ -64,10 +64,10 @@ export default function SendTestButton({
         {status === "sending" ? "Sending…" : "Send test"}
       </Button>
       {status === "sent" && (
-        <span className="text-xs text-[#16A34A] font-medium">✓ {message}</span>
+        <span className="text-xs text-[var(--success)] font-medium">✓ {message}</span>
       )}
       {status === "error" && (
-        <span className="text-xs text-[#DC2626] font-medium" title={message}>
+        <span className="text-xs text-[var(--danger)] font-medium" title={message}>
           ✗ {message.length > 40 ? message.slice(0, 40) + "…" : message}
         </span>
       )}

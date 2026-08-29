@@ -13,7 +13,7 @@ export default function PreviewNav({ items }: { items: NavItem[] }) {
             const el = document.getElementById(item.key);
             if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
           }}
-          className="text-xs px-3 py-1.5 rounded-md border border-[#D4CBB8] bg-white text-[#4B5563] hover:text-[#111827] hover:border-[#D4751F] transition-colors cursor-pointer"
+          className="text-xs px-3 py-1.5 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:border-[var(--accent)]/40 transition-colors duration-150 ease-standard cursor-pointer"
         >
           {item.label}
         </button>
