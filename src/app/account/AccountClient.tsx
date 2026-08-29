@@ -4,26 +4,12 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { BookOpen, Fish, MapPin, Feather, Trophy, LogOut, Save, Star, Camera, Package, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Database, Trash2 } from "@/icons";
+import { Fish, MapPin, Trophy, LogOut, Save, Camera, X, Bell, Users, Shield, Key, Link2, ChevronRight, Settings, User, Award, Database, Trash2 } from "@/icons";
 import { formatDate } from "@/lib/date";
 import Image from "next/image";
 import AvatarCropModal from "@/components/AvatarCropModal";
 import { compressImage } from "@/lib/image-compress";
 import { Button } from "@/components/ui/Button";
-
-const AWARD_EMOJI_MAP: Record<string, string> = {
-  first_timer: "🪝", sessions_10: "🪝",
-  regular: "🎣", sessions_50: "🎣",
-  veteran: "🥾", sessions_100: "🥾",
-  legend: "👑", sessions_500: "👑",
-  centurion: "💯", catches_100: "💯",
-  master_angler: "🐋", catches_1000: "🐋",
-  consistent_producer: "🔥", catches_500: "🔥",
-  species_hunter: "🦎", species_5: "🦎",
-  species_15: "🌊", species_30: "🏔️",
-  rivers_5: "🗺️", rivers_15: "🧭", rivers_30: "🌍",
-  streak_4: "⚡", streak_12: "💎",
-};
 
 type Section = "profile" | "notifications" | "security" | "connected" | "data";
 
@@ -334,14 +320,6 @@ export default function AccountClient({ user, feedDisplay: initialFeedDisplay, t
     { key: "security", icon: Key, label: "Security" },
     { key: "connected", icon: Link2, label: "Connected Accounts" },
     ...(hasDemoContent ? [{ key: "data" as const, icon: Database, label: "Data" }] : []),
-  ];
-
-  // ─── Quick nav cards ───
-  const quickLinks = [
-    { href: "/journal", icon: BookOpen, label: "Fishing Journal", sub: `${stats.totalSessions} sessions`, color: "text-[var(--action)]", bg: "bg-[var(--action)]/10" },
-    { href: "/journal/flies", icon: Feather, label: "Fly Patterns", sub: `${stats.totalFlies} patterns`, color: "text-purple-400", bg: "bg-purple-400/10" },
-    { href: "/account/gear", icon: Package, label: "Gear Locker", sub: "Rods, reels & more", color: "text-[var(--signal-live)]", bg: "bg-[var(--signal-live)]/10" },
-    { href: "/favorites", icon: Star, label: "Favorites", sub: `${stats.totalFavorites} saved`, color: "text-[var(--action)]", bg: "bg-[var(--action)]/10" },
   ];
 
   return (
