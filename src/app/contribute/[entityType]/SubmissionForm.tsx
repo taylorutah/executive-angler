@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  ChevronLeft, Upload, Save, Send, MapPin, Globe,
-  Phone, Mail, Image as ImageIcon, AlertCircle, CheckCircle, Loader2
+  ArrowLeft, Upload, Save, Send,
+  Image as ImageIcon, AlertCircle, CheckCircle, Loader2, X
 } from "@/icons";
 
 interface Props {
@@ -231,66 +231,71 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
+    <div className="min-h-screen bg-[var(--paper)]">
+      <div className="max-w-[var(--prose)] mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <Link href="/contribute" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
-            <ChevronLeft className="h-5 w-5" />
+        <div className="mb-6">
+          <Link
+            href="/contribute"
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--text-2)] hover:text-[var(--accent)] transition-colors duration-150 ease-standard mb-2"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" /> Contribute
           </Link>
-          <h1 className="font-serif text-2xl text-[var(--text-primary)]">Add {entityLabel}</h1>
+          <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">Add {entityLabel}</h1>
         </div>
 
         {/* Status messages */}
         {error && (
-          <div className="mb-4 px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg flex items-start gap-2">
-            <AlertCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-red-400">{error}</p>
+          <div className="mb-4 px-4 py-3 rounded-[var(--radius-md)] border border-[var(--danger)]/30 bg-[var(--danger)]/10 flex items-start gap-2">
+            <AlertCircle className="h-4 w-4 text-[var(--danger)] shrink-0 mt-0.5" />
+            <p className="text-sm text-[var(--danger)]">{error}</p>
           </div>
         )}
         {success && (
-          <div className="mb-4 px-4 py-3 bg-green-950/30 border border-green-800 rounded-lg flex items-start gap-2">
-            <CheckCircle className="h-4 w-4 text-green-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-green-400">{success}</p>
+          <div className="mb-4 px-4 py-3 rounded-[var(--radius-md)] border border-[var(--success)]/30 bg-[var(--success)]/10 flex items-start gap-2">
+            <CheckCircle className="h-4 w-4 text-[var(--success)] shrink-0 mt-0.5" />
+            <p className="text-sm text-[var(--success)]">{success}</p>
           </div>
         )}
 
         {/* Prefill banner */}
         {showPrefillBanner && (
-          <div className="mb-4 px-4 py-3 bg-[var(--action)]/10 border border-[var(--action)]/30 rounded-lg flex items-center justify-between">
-            <p className="text-sm text-[var(--action)]">Pre-filled from your fly box — review and complete the details below.</p>
-            <button onClick={() => setShowPrefillBanner(false)} className="text-[var(--action)] hover:text-[var(--action-hover)] text-lg leading-none ml-3">&times;</button>
+          <div className="mb-4 px-4 py-3 rounded-[var(--radius-md)] border border-[var(--accent)]/40 bg-[var(--accent-soft)] flex items-center justify-between">
+            <p className="text-sm font-medium text-[var(--accent)]">Pre-filled from your fly box — review and complete the details below.</p>
+            <button onClick={() => setShowPrefillBanner(false)} className="text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors duration-150 ease-standard ml-3 shrink-0" aria-label="Dismiss prefill notice">
+              <X className="h-4 w-4" />
+            </button>
           </div>
         )}
 
         {/* Hero image upload */}
         <div className="mb-6">
-          <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
-            <ImageIcon className="h-3 w-3 inline mr-1" />
-            Hero Image <span className="text-[var(--action)]">*strongly recommended</span>
+          <label className="ea-label">
+            <ImageIcon className="h-3.5 w-3.5 inline mr-1" />
+            Hero Image <span className="text-[var(--accent)]">*strongly recommended</span>
           </label>
 
           {heroImage ? (
-            <div className="relative rounded-xl overflow-hidden border border-[var(--border-rule)]">
+            <div className="relative rounded-[var(--radius-card)] overflow-hidden border border-[var(--border)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={heroImage} alt="Preview" className="w-full h-48 object-cover" />
               <button
                 onClick={() => setHeroImage("")}
-                className="absolute top-2 right-2 px-2.5 py-1 bg-black/70 text-white rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors"
+                className="absolute top-2 right-2 px-2 py-1 rounded-[var(--radius-sm)] bg-[var(--ink)] text-[var(--paper)] text-xs font-medium hover:bg-[var(--ink)]/85 transition-colors duration-150 ease-standard"
               >
                 Remove
               </button>
             </div>
           ) : (
             <label
-              className={`flex flex-col items-center justify-center w-full h-48 bg-[var(--surface-raised)] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
-                uploading ? "border-[var(--action)] bg-[var(--action)]/5" : "border-[var(--border-rule)] hover:border-[var(--text-meta)]"
+              className={`flex flex-col items-center justify-center w-full h-48 bg-[var(--surface)] border-2 border-dashed rounded-[var(--radius-card)] cursor-pointer transition-colors duration-150 ease-standard ${
+                uploading ? "border-[var(--accent)] bg-[var(--accent-soft)]" : "border-[var(--border-strong)] hover:border-[var(--accent)]"
               }`}
-              onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[var(--action)]", "bg-[var(--action)]/5"); }}
-              onDragLeave={e => { e.currentTarget.classList.remove("border-[var(--action)]", "bg-[var(--action)]/5"); }}
+              onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-[var(--accent)]", "bg-[var(--accent-soft)]"); }}
+              onDragLeave={e => { e.currentTarget.classList.remove("border-[var(--accent)]", "bg-[var(--accent-soft)]"); }}
               onDrop={async e => {
                 e.preventDefault();
-                e.currentTarget.classList.remove("border-[var(--action)]", "bg-[var(--action)]/5");
+                e.currentTarget.classList.remove("border-[var(--accent)]", "bg-[var(--accent-soft)]");
                 const file = e.dataTransfer.files[0];
                 if (file) await handleImageUpload(file);
               }}
@@ -306,55 +311,58 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
               />
               {uploading ? (
                 <>
-                  <Loader2 className="h-8 w-8 text-[var(--action)] animate-spin mb-2" />
-                  <span className="text-sm text-[var(--action)] font-medium">Uploading...</span>
+                  <Loader2 className="h-8 w-8 text-[var(--accent)] animate-spin mb-2" />
+                  <span className="text-sm text-[var(--accent)] font-medium">Uploading...</span>
                 </>
               ) : (
                 <>
-                  <Upload className="h-8 w-8 text-[var(--text-meta)] mb-2" />
-                  <span className="text-sm text-[var(--text-body)] font-medium">Drop an image here or click to browse</span>
-                  <span className="text-[10px] text-[var(--text-meta)] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
+                  <Upload className="h-8 w-8 text-[var(--text-3)] mb-2" />
+                  <span className="text-sm text-[var(--text-2)] font-medium">Drop an image here or click to browse</span>
+                  <span className="text-xs text-[var(--text-3)] mt-1">JPEG, PNG, or WebP · max 10 MB</span>
                 </>
               )}
             </label>
           )}
-          <p className="text-[10px] text-[var(--text-meta)] mt-1.5">A great photo dramatically increases approval chances</p>
+          <p className="ea-field-helper">A great photo dramatically increases approval chances</p>
         </div>
 
         {/* Dynamic fields */}
         <div className="space-y-5">
           {fields.map(field => (
             <div key={field.key}>
-              <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
+              <label htmlFor={`field-${field.key}`} className="ea-label">
                 {field.label}
-                {field.required && <span className="text-red-400 ml-1">*</span>}
+                {field.required && <span className="text-[var(--danger)] ml-1">*</span>}
               </label>
 
               {field.type === "text" && (
                 <input
+                  id={`field-${field.key}`}
                   type="text"
                   value={formData[field.key] || ""}
                   onChange={e => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+                  className="ea-input"
                 />
               )}
 
               {field.type === "textarea" && (
                 <textarea
+                  id={`field-${field.key}`}
                   value={formData[field.key] || ""}
                   onChange={e => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
                   rows={4}
-                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] resize-none"
+                  className="ea-input resize-none"
                 />
               )}
 
               {field.type === "select" && (
                 <select
+                  id={`field-${field.key}`}
                   value={formData[field.key] || ""}
                   onChange={e => updateField(field.key, e.target.value)}
-                  className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--action)]"
+                  className="ea-input"
                 >
                   <option value="">Select...</option>
                   {field.options?.map(opt => (
@@ -366,13 +374,14 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
               {field.type === "tags" && (
                 <>
                   <input
+                    id={`field-${field.key}`}
                     type="text"
                     value={formData[field.key] || ""}
                     onChange={e => updateField(field.key, e.target.value)}
                     placeholder={field.placeholder}
-                    className="w-full px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+                    className="ea-input"
                   />
-                  <p className="text-[10px] text-[var(--text-meta)] mt-1">Separate with commas</p>
+                  <p className="ea-field-helper">Separate with commas</p>
                 </>
               )}
             </div>
@@ -384,7 +393,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
           <button
             onClick={() => handleSave(false)}
             disabled={saving || submitting || !formData.name?.trim()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--border-rule)] text-[var(--text-primary)] rounded-lg text-sm font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-50"
+            className="ea-btn ea-btn-secondary ea-btn-lg flex-1"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Draft
@@ -392,7 +401,7 @@ export default function SubmissionForm({ entityType, entityLabel, userId, prefil
           <button
             onClick={() => handleSave(true)}
             disabled={saving || submitting || !formData.name?.trim()}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-lg text-sm font-bold hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50"
+            className="ea-btn ea-btn-primary ea-btn-lg flex-1"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             Submit for Review
