@@ -115,15 +115,15 @@ export default function EditEntityClient({
 
   if (loading) {
     return (
-      <div className="min-h-screen text-[var(--text-primary)]">
-        <header className="border-b border-[var(--border-rule)] px-6 py-6">
-          <h1 className="text-2xl font-bold tracking-tight">
+      <div className="min-h-screen text-[var(--text-1)]">
+        <header className="border-b border-[var(--border)] px-6 py-6">
+          <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">
             Edit {entityLabel}
           </h1>
         </header>
         <div className="flex items-center justify-center py-24">
-          <Loader2 className="h-6 w-6 animate-spin text-[var(--text-meta)]" />
-          <span className="ml-3 text-sm text-[var(--text-meta)]">Loading...</span>
+          <Loader2 className="h-6 w-6 animate-spin text-[var(--text-3)]" />
+          <span className="ml-3 text-sm text-[var(--text-3)]">Loading...</span>
         </div>
       </div>
     );
@@ -131,22 +131,22 @@ export default function EditEntityClient({
 
   if (error || !initialData) {
     return (
-      <div className="min-h-screen text-[var(--text-primary)]">
-        <header className="border-b border-[var(--border-rule)] px-6 py-6">
+      <div className="min-h-screen text-[var(--text-1)]">
+        <header className="border-b border-[var(--border)] px-6 py-6">
           <div className="flex items-center gap-3">
             <Link
               href={`/admin/content/${entitySlug}`}
-              className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
+              className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors duration-150 ease-standard"
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">
               Edit {entityLabel}
             </h1>
           </div>
         </header>
         <div className="px-6 py-12">
-          <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg text-sm text-red-400">
+          <div className="px-4 py-3 bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] text-sm text-[var(--danger)]">
             {error ?? "Entity not found."}
           </div>
         </div>
@@ -155,26 +155,26 @@ export default function EditEntityClient({
   }
 
   return (
-    <div className="min-h-screen text-[var(--text-primary)]">
+    <div className="min-h-screen text-[var(--text-1)]">
       {/* Header */}
-      <header className="border-b border-[var(--border-rule)] px-6 py-6">
+      <header className="border-b border-[var(--border)] px-6 py-6">
         <div className="flex items-center gap-3">
           <Link
             href={`/admin/content/${entitySlug}`}
-            className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
+            className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors duration-150 ease-standard"
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">
               Edit {entityLabel}
             </h1>
-            <p className="mt-0.5 text-sm text-[var(--text-body)]">
+            <p className="mt-0.5 text-xs num text-[var(--text-3)]">
               ID: {entityId}
             </p>
           </div>
           {success && (
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-950/40 border border-green-800/50 rounded-lg text-sm text-green-400">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--success)]/10 border border-[var(--success)]/30 rounded-[var(--radius-md)] text-sm text-[var(--success)]">
               <CheckCircle className="h-4 w-4" />
               Saved
             </div>
@@ -183,7 +183,7 @@ export default function EditEntityClient({
       </header>
 
       <div className="px-6 py-6 max-w-5xl">
-        <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6">
+        <div className="ea-card">
           <EntityForm
             fields={fields}
             initialData={initialData}

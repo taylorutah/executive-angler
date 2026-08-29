@@ -102,7 +102,7 @@ export default function ImageField({
   return (
     <div className="space-y-4">
       {label ? (
-        <label className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider flex items-center gap-1">
+        <label className="ea-label flex items-center gap-1">
           <ImageIcon className="h-3 w-3" />
           {label}
         </label>
@@ -110,7 +110,7 @@ export default function ImageField({
 
       {/* Image preview or drop zone */}
       {urlValue ? (
-        <div className="relative rounded-xl overflow-hidden border border-[var(--border-rule)]">
+        <div className="relative rounded-[var(--radius-card)] overflow-hidden border border-[var(--border)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={urlValue}
@@ -121,7 +121,7 @@ export default function ImageField({
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="px-2.5 py-1 bg-black/70 text-white rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors flex items-center gap-1"
+              className="px-2.5 py-1 bg-[var(--ink)] text-[var(--paper)] rounded-full text-xs font-medium hover:opacity-90 transition-opacity duration-150 ease-standard flex items-center gap-1"
             >
               <Crop className="h-3 w-3" />
               Replace & Crop
@@ -129,7 +129,7 @@ export default function ImageField({
             <button
               type="button"
               onClick={() => onChange({ url: "" })}
-              className="px-2.5 py-1 bg-red-900/70 text-red-200 rounded-lg text-xs font-semibold hover:bg-red-900/90 transition-colors"
+              className="px-2.5 py-1 bg-[var(--ink)] text-[var(--paper)] rounded-full text-xs font-medium hover:opacity-90 transition-opacity duration-150 ease-standard"
             >
               Remove
             </button>
@@ -137,21 +137,21 @@ export default function ImageField({
         </div>
       ) : (
         <label
-          className={`flex flex-col items-center justify-center w-full h-48 bg-[var(--surface-page)] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+          className={`flex flex-col items-center justify-center w-full h-48 bg-[var(--paper-deep)] border-2 border-dashed rounded-[var(--radius-card)] cursor-pointer transition-colors duration-150 ease-standard ${
             uploading
-              ? "border-[var(--action)] bg-[var(--action)]/5"
-              : "border-[var(--border-rule)] hover:border-[var(--text-meta)]"
+              ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+              : "border-[var(--border)] hover:border-[var(--border-strong)]"
           }`}
           onDragOver={(e) => {
             e.preventDefault();
-            e.currentTarget.classList.add("border-[var(--action)]");
+            e.currentTarget.classList.add("border-[var(--accent)]");
           }}
           onDragLeave={(e) => {
-            e.currentTarget.classList.remove("border-[var(--action)]");
+            e.currentTarget.classList.remove("border-[var(--accent)]");
           }}
           onDrop={(e) => {
             e.preventDefault();
-            e.currentTarget.classList.remove("border-[var(--action)]");
+            e.currentTarget.classList.remove("border-[var(--accent)]");
             const file = e.dataTransfer.files[0];
             if (file) handleFileSelect(file);
           }}
@@ -168,18 +168,18 @@ export default function ImageField({
           />
           {uploading ? (
             <>
-              <Loader2 className="h-8 w-8 text-[var(--action)] animate-spin mb-2" />
-              <span className="text-sm text-[var(--action)] font-medium">
+              <Loader2 className="h-8 w-8 text-[var(--accent)] animate-spin mb-2" />
+              <span className="text-sm text-[var(--accent)] font-medium">
                 Uploading...
               </span>
             </>
           ) : (
             <>
-              <Upload className="h-8 w-8 text-[var(--text-meta)] mb-2" />
-              <span className="text-sm text-[var(--text-body)] font-medium">
+              <Upload className="h-8 w-8 text-[var(--text-3)] mb-2" />
+              <span className="text-sm text-[var(--text-2)] font-medium">
                 Drop image here or click to browse
               </span>
-              <span className="text-[10px] text-[var(--text-meta)] mt-1">
+              <span className="text-xs text-[var(--text-3)] mt-1">
                 Drag & crop · JPEG/PNG/WebP · 15 MB max
               </span>
             </>
@@ -212,7 +212,7 @@ export default function ImageField({
 
       {/* Raw URL field — lets editors paste a URL or audit the stored value */}
       <div>
-        <label className="text-[10px] font-semibold text-[var(--text-meta)] uppercase tracking-wider block mb-1">
+        <label className="ea-label">
           URL
         </label>
         <input
@@ -220,7 +220,7 @@ export default function ImageField({
           value={urlValue}
           onChange={(e) => onChange({ url: e.target.value })}
           placeholder="https://… (or use upload above)"
-          className="w-full px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-body)] font-mono focus:outline-none focus:border-[var(--action)]"
+          className="ea-input font-mono text-[13px]"
         />
       </div>
 
@@ -228,7 +228,7 @@ export default function ImageField({
       {showAlt ? (
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider flex items-center gap-1">
+            <label className="ea-label mb-0 flex items-center gap-1">
               <Type className="h-3 w-3" />
               Alt Text
             </label>
@@ -240,16 +240,16 @@ export default function ImageField({
             onChange={(e) => onChange({ alt: e.target.value })}
             placeholder="e.g., Fly fishing the Madison River at sunset, Montana"
             maxLength={200}
-            className="w-full px-4 py-3 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+            className="ea-input"
           />
           <div className="flex justify-between mt-1">
             <span
-              className={`text-[10px] ${
+              className={`text-xs ${
                 (altValue?.length ?? 0) >= 80 && (altValue?.length ?? 0) <= 125
-                  ? "text-[var(--state-positive)]"
+                  ? "text-[var(--success)]"
                   : (altValue?.length ?? 0) > 0
-                  ? "text-[var(--action)]"
-                  : "text-[var(--text-meta)]"
+                  ? "text-[var(--accent)]"
+                  : "text-[var(--text-3)]"
               }`}
             >
               {(altValue?.length ?? 0) >= 80 && (altValue?.length ?? 0) <= 125
@@ -258,7 +258,7 @@ export default function ImageField({
                 ? "A bit long — aim for 80–125"
                 : "Aim for 80–125 characters"}
             </span>
-            <span className="text-[10px] text-[var(--text-meta)]">
+            <span className="text-xs num text-[var(--text-3)]">
               {altValue?.length ?? 0}/200
             </span>
           </div>
@@ -268,36 +268,36 @@ export default function ImageField({
       {/* Credit */}
       {showCredit ? (
         <div>
-          <label className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider flex items-center gap-1 mb-2">
+          <label className="ea-label flex items-center gap-1">
             <Camera className="h-3 w-3" />
             Photo Credit{" "}
-            <span className="text-[var(--text-meta)] font-normal normal-case">(optional)</span>
+            <span className="text-[var(--text-3)] font-normal">(optional)</span>
           </label>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <div className="flex items-center gap-1 mb-1">
-                <User className="h-2.5 w-2.5 text-[var(--text-meta)]" />
-                <span className="text-[10px] text-[var(--text-meta)]">Photographer</span>
+                <User className="h-3 w-3 text-[var(--text-3)]" />
+                <span className="text-xs text-[var(--text-3)]">Photographer</span>
               </div>
               <input
                 type="text"
                 value={creditValue ?? ""}
                 onChange={(e) => onChange({ credit: e.target.value })}
                 placeholder="Pat Ford Photography"
-                className="w-full px-3 py-2.5 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+                className="ea-input"
               />
             </div>
             <div>
               <div className="flex items-center gap-1 mb-1">
-                <LinkIcon className="h-2.5 w-2.5 text-[var(--text-meta)]" />
-                <span className="text-[10px] text-[var(--text-meta)]">Portfolio URL</span>
+                <LinkIcon className="h-3 w-3 text-[var(--text-3)]" />
+                <span className="text-xs text-[var(--text-3)]">Portfolio URL</span>
               </div>
               <input
                 type="url"
                 value={creditUrlValue ?? ""}
                 onChange={(e) => onChange({ creditUrl: e.target.value })}
                 placeholder="https://patford.com"
-                className="w-full px-3 py-2.5 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+                className="ea-input"
               />
             </div>
           </div>
@@ -305,7 +305,7 @@ export default function ImageField({
       ) : null}
 
       {error ? (
-        <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg text-sm text-red-400">
+        <div className="px-4 py-3 bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] text-sm text-[var(--danger)]">
           {error}
         </div>
       ) : null}
@@ -340,19 +340,19 @@ function AltTextTipsPopover() {
         onClick={() => setOpen(o => !o)}
         aria-label={open ? "Hide alt text tips" : "Show alt text tips"}
         aria-expanded={open}
-        className="text-[var(--text-meta)] hover:text-[var(--text-primary)] transition-colors p-0.5 -m-0.5"
+        className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard p-0.5 -m-0.5"
       >
         <Info className="h-3.5 w-3.5" />
       </button>
       {open && (
-        <div className="absolute right-0 top-6 w-64 p-3 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-[10px] text-[var(--text-body)] z-20 shadow-xl">
+        <div className="absolute right-0 top-6 w-64 p-3 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] text-xs text-[var(--text-2)] z-20 shadow-[var(--shadow-float)]">
           <div className="flex items-start justify-between gap-2 mb-1">
-            <p className="font-bold text-[var(--text-primary)]">SEO alt text tips:</p>
+            <p className="font-semibold text-[var(--text-1)]">SEO alt text tips:</p>
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close tips"
-              className="text-[var(--text-meta)] hover:text-[var(--text-primary)] -mt-0.5 -mr-0.5 p-0.5"
+              className="text-[var(--text-3)] hover:text-[var(--text-1)] -mt-0.5 -mr-0.5 p-0.5"
             >
               <X className="h-3 w-3" />
             </button>

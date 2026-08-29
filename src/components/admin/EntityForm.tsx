@@ -125,7 +125,7 @@ export default function EntityForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Error display */}
       {error && (
-        <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg text-sm text-red-400">
+        <div className="px-4 py-3 bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] text-sm text-[var(--danger)]">
           {error}
         </div>
       )}
@@ -148,11 +148,11 @@ export default function EntityForm({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-3 pt-4 border-t border-[var(--border-rule)]">
+      <div className="flex items-center gap-3 pt-4 border-t border-[var(--border)]">
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--action)] text-white rounded-lg text-sm font-bold hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="ea-btn ea-btn-primary"
         >
           {saving ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -164,7 +164,7 @@ export default function EntityForm({
         <button
           type="button"
           onClick={() => router.back()}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-sm font-semibold hover:bg-[#2D333B] hover:text-[var(--text-primary)] transition-colors"
+          className="ea-btn ea-btn-secondary"
         >
           <ArrowLeft className="h-4 w-4" />
           Cancel

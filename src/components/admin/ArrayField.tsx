@@ -32,12 +32,12 @@ export default function ArrayField({ value, onChange, placeholder }: ArrayFieldP
             value={item}
             onChange={(e) => handleChange(i, e.target.value)}
             placeholder={placeholder}
-            className="flex-1 px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors"
+            className="ea-input flex-1"
           />
           <button
             type="button"
             onClick={() => handleRemove(i)}
-            className="shrink-0 p-1.5 rounded-lg text-[var(--text-meta)] hover:text-red-400 hover:bg-red-950/30 transition-colors"
+            className="shrink-0 p-1.5 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--danger)] hover:bg-[var(--danger)]/10 transition-colors duration-150 ease-standard"
             aria-label="Remove item"
           >
             <X className="h-4 w-4" />
@@ -47,7 +47,7 @@ export default function ArrayField({ value, onChange, placeholder }: ArrayFieldP
       <button
         type="button"
         onClick={handleAdd}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[var(--text-body)] border border-dashed border-[var(--border-rule)] rounded-lg hover:border-[var(--action)] hover:text-[var(--action)] transition-colors"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--text-2)] border border-dashed border-[var(--border)] rounded-[var(--radius-md)] hover:border-[var(--accent)]/40 hover:text-[var(--accent)] transition-colors duration-150 ease-standard"
       >
         <Plus className="h-3.5 w-3.5" />
         Add

@@ -39,12 +39,12 @@ export default function AdminContentPage() {
   const entries = Object.entries(ENTITY_CONFIGS);
 
   return (
-    <div className="min-h-screen text-[var(--text-primary)]">
-      <header className="border-b border-[var(--border-rule)] px-6 py-6">
-        <h1 className="text-2xl font-bold tracking-tight">
+    <div className="min-h-screen text-[var(--text-1)]">
+      <header className="border-b border-[var(--border)] px-6 py-6">
+        <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">
           Content Management
         </h1>
-        <p className="mt-1 text-sm text-[var(--text-body)]">
+        <p className="mt-1 text-sm text-[var(--text-2)]">
           Select an entity type to manage its records.
         </p>
       </header>
@@ -53,39 +53,39 @@ export default function AdminContentPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
           <Link
             href="/admin/content/images"
-            className="group flex items-center gap-4 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5 hover:border-[var(--action)] transition-colors"
+            className="card-hover group flex items-center gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors duration-150 ease-standard"
           >
-            <div className="shrink-0 text-[var(--text-meta)] group-hover:text-[var(--action)] transition-colors">
+            <div className="shrink-0 text-[var(--text-3)] group-hover:text-[var(--accent)] transition-colors duration-150 ease-standard">
               <Images className="h-6 w-6" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+              <p className="text-sm font-semibold text-[var(--text-1)]">
                 Image gaps
               </p>
-              <p className="text-xs text-[var(--text-meta)] mt-0.5">
+              <p className="text-xs text-[var(--text-3)] mt-0.5">
                 Null heroes and Unsplash URLs
               </p>
             </div>
-            <ChevronRight className="h-4 w-4 shrink-0 text-[var(--text-meta)] group-hover:text-[var(--action)] transition-colors" />
+            <ChevronRight className="h-4 w-4 shrink-0 text-[var(--text-3)] group-hover:text-[var(--accent)] transition-colors duration-150 ease-standard" />
           </Link>
           {entries.map(([slug, config]) => (
             <Link
               key={slug}
               href={`/admin/content/${slug}`}
-              className="group flex items-center gap-4 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5 hover:border-[var(--action)] transition-colors"
+              className="card-hover group flex items-center gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors duration-150 ease-standard"
             >
-              <div className="shrink-0 text-[var(--text-meta)] group-hover:text-[var(--action)] transition-colors">
+              <div className="shrink-0 text-[var(--text-3)] group-hover:text-[var(--accent)] transition-colors duration-150 ease-standard">
                 {ENTITY_ICONS[slug] ?? <FileText className="h-6 w-6" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">
+                <p className="text-sm font-semibold text-[var(--text-1)]">
                   {config.label}
                 </p>
-                <p className="text-xs text-[var(--text-meta)] mt-0.5">
+                <p className="text-xs text-[var(--text-3)] mt-0.5">
                   Table: {config.table}
                 </p>
               </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-[var(--text-meta)] group-hover:text-[var(--action)] transition-colors" />
+              <ChevronRight className="h-4 w-4 shrink-0 text-[var(--text-3)] group-hover:text-[var(--accent)] transition-colors duration-150 ease-standard" />
             </Link>
           ))}
         </div>

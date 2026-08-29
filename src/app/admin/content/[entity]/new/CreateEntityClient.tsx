@@ -89,21 +89,21 @@ export default function CreateEntityClient({
   }
 
   return (
-    <div className="min-h-screen text-[var(--text-primary)]">
+    <div className="min-h-screen text-[var(--text-1)]">
       {/* Header */}
-      <header className="border-b border-[var(--border-rule)] px-6 py-6">
+      <header className="border-b border-[var(--border)] px-6 py-6">
         <div className="flex items-center gap-3">
           <Link
             href={`/admin/content/${entitySlug}`}
-            className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
+            className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors duration-150 ease-standard"
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">
               New {entityLabel}
             </h1>
-            <p className="mt-0.5 text-sm text-[var(--text-body)]">
+            <p className="mt-0.5 text-sm text-[var(--text-2)]">
               Create a new {entityLabel.toLowerCase()} record.
             </p>
           </div>
@@ -111,7 +111,7 @@ export default function CreateEntityClient({
       </header>
 
       <div className="px-6 py-6 max-w-5xl">
-        <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-6">
+        <div className="ea-card">
           <EntityForm
             fields={fields}
             entityType={entityLabel}

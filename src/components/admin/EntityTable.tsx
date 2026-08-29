@@ -234,7 +234,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
     <div className="space-y-4">
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-3)]" />
         <input
           type="text"
           value={search}
@@ -243,7 +243,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
             setPage(0);
           }}
           placeholder="Search… (typo-tolerant — try 'wolly bugger')"
-          className="w-full pl-10 pr-4 py-2.5 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors"
+          className="ea-input pl-10"
         />
       </div>
 
@@ -257,10 +257,10 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
                 <select
                   value={active}
                   onChange={(e) => setColumnFilter(col.key, e.target.value)}
-                  className={`appearance-none pl-3 pr-8 py-1.5 text-xs rounded-lg border transition-colors cursor-pointer ${
+                  className={`appearance-none pl-3 pr-8 py-1.5 text-xs rounded-[var(--radius-md)] border transition-colors duration-150 ease-standard cursor-pointer ${
                     active
-                      ? "border-[var(--action)] bg-[var(--action)]/10 text-[var(--action)] font-semibold"
-                      : "border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-body)] hover:border-[var(--action)]/40"
+                      ? "border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)] font-medium"
+                      : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)]"
                   }`}
                   title={`Filter by ${col.label}`}
                 >
@@ -278,7 +278,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
             <button
               type="button"
               onClick={clearAllFilters}
-              className="inline-flex items-center gap-1 px-2 py-1 text-xs text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+              className="inline-flex items-center gap-1 px-2 py-1 text-xs text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard"
               title="Clear all filters and search"
             >
               <X className="h-3 w-3" /> Clear
@@ -286,7 +286,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
             </button>
           )}
           <div className="ml-auto inline-flex items-center gap-2">
-            <span className="text-xs text-[var(--text-meta)]">
+            <span className="text-xs text-[var(--text-3)] num">
               {sorted.length === rows.length
                 ? `${rows.length} ${rows.length === 1 ? "record" : "records"}`
                 : `${sorted.length} of ${rows.length}`}
@@ -297,7 +297,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
                 setPageSize(parseInt(e.target.value, 10));
                 setPage(0);
               }}
-              className="text-xs px-2 py-1 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] text-[var(--text-body)] focus:outline-none focus:border-[var(--action)] cursor-pointer"
+              className="text-xs px-2 py-1 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] cursor-pointer"
               title="Rows per page"
             >
               {PAGE_SIZE_OPTIONS.map((n) => (
@@ -312,56 +312,56 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
 
       {/* Table */}
       {paged.length === 0 ? (
-        <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] px-6 py-12 text-center">
-          <p className="text-sm text-[var(--text-meta)]">
+        <div className="ea-card ea-empty">
+          <p>
             {search ? "No results match your search." : "No records found."}
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)]">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+          <table className="ea-table">
             <thead>
-              <tr className="border-b border-[var(--border-rule)] text-xs uppercase tracking-wider text-[var(--text-meta)]">
+              <tr>
                 {columns.map((col) => (
                   <th
                     key={col.key}
-                    className="px-5 py-3 font-semibold cursor-pointer select-none hover:text-[var(--text-body)] transition-colors"
+                    className="cursor-pointer select-none hover:text-[var(--text-2)] transition-colors duration-150 ease-standard"
                     onClick={() => handleSort(col.key)}
                   >
                     <span className="inline-flex items-center gap-1">
                       {col.label}
                       {sortKey === col.key && (
                         sortDir === "asc" ? (
-                          <ChevronUp className="h-3 w-3 text-[var(--action)]" />
+                          <ChevronUp className="h-3 w-3 text-[var(--accent)]" />
                         ) : (
-                          <ChevronDown className="h-3 w-3 text-[var(--action)]" />
+                          <ChevronDown className="h-3 w-3 text-[var(--accent)]" />
                         )
                       )}
                     </span>
                   </th>
                 ))}
-                <th className="px-5 py-3 font-semibold text-right">Actions</th>
+                <th className="text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#21262D]">
+            <tbody>
               {paged.map((row) => {
                 const id = String(row.id ?? row.slug ?? "");
                 return (
-                  <tr key={id} className="transition-colors hover:bg-[var(--border-rule)]/40">
+                  <tr key={id}>
                     {columns.map((col) => (
-                      <td key={col.key} className="px-5 py-3 text-[var(--text-primary)]">
+                      <td key={col.key} className="text-[var(--text-1)]">
                         {col.render
                           ? col.render(row[col.key], row)
                           : row[col.key] != null
                           ? String(row[col.key])
-                          : <span className="text-[var(--text-meta)]">&mdash;</span>}
+                          : <span className="text-[var(--text-3)]">&mdash;</span>}
                       </td>
                     ))}
-                    <td className="px-5 py-3 text-right">
+                    <td className="text-right">
                       <div className="inline-flex items-center gap-1.5">
                         <Link
                           href={`/admin/content/${entitySlug}/${id}`}
-                          className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-[var(--action)] hover:bg-[var(--action)]/10 transition-colors"
+                          className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors duration-150 ease-standard"
                           title="Edit"
                         >
                           <Pencil className="h-4 w-4" />
@@ -369,7 +369,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
                         <button
                           type="button"
                           onClick={() => onDelete(id)}
-                          className="p-1.5 rounded-lg text-[var(--text-body)] hover:text-red-400 hover:bg-red-950/30 transition-colors"
+                          className="p-1.5 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--danger)] hover:bg-[var(--danger)]/10 transition-colors duration-150 ease-standard"
                           title="Delete"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -387,7 +387,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between text-sm">
-          <span className="text-[var(--text-meta)]">
+          <span className="text-[var(--text-3)] num">
             {sorted.length} result{sorted.length !== 1 ? "s" : ""}
             {" "}· Page {currentPage + 1} of {totalPages}
           </span>
@@ -396,7 +396,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
               type="button"
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={currentPage === 0}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-xs font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="ea-btn ea-btn-secondary ea-btn-sm"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               Prev
@@ -405,7 +405,7 @@ export default function EntityTable({ columns, rows, entitySlug, onDelete }: Ent
               type="button"
               onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               disabled={currentPage >= totalPages - 1}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-xs font-semibold hover:bg-[#2D333B] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="ea-btn ea-btn-secondary ea-btn-sm"
             >
               Next
               <ChevronRight className="h-3.5 w-3.5" />

@@ -24,8 +24,7 @@ export default function FieldRenderer({
 }: FieldRendererProps) {
   if (field.type === "hidden") return null;
 
-  const inputBase =
-    "w-full px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)] transition-colors";
+  const inputBase = "ea-input";
 
   function handleChange(val: unknown) {
     onChange(field.key, val);
@@ -104,23 +103,25 @@ export default function FieldRenderer({
 
       case "boolean":
         return (
-          <label className="inline-flex items-center gap-3 cursor-pointer">
+          <label className="inline-flex items-center gap-3 cursor-pointer h-11">
             <button
               type="button"
               role="switch"
               aria-checked={!!value}
               onClick={() => handleChange(!value)}
-              className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors ${
-                value ? "bg-[var(--action)]" : "bg-[var(--border-rule)]"
+              className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border transition-colors duration-150 ease-standard ${
+                value
+                  ? "bg-[var(--accent)] border-transparent"
+                  : "bg-[var(--paper-deep)] border-[var(--border)]"
               }`}
             >
               <span
-                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
+                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white transition-transform duration-150 ease-standard ${
                   value ? "translate-x-5" : "translate-x-0"
                 }`}
               />
             </button>
-            <span className="text-sm text-[var(--text-body)]">
+            <span className="text-sm text-[var(--text-2)]">
               {value ? "Yes" : "No"}
             </span>
           </label>
@@ -213,9 +214,9 @@ export default function FieldRenderer({
 
   return (
     <div className={field.fullWidth ? "col-span-2" : ""}>
-      <label className="block text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-2">
+      <label className="ea-label">
         {field.label}
-        {field.required && <span className="text-red-400 ml-0.5">*</span>}
+        {field.required && <span className="text-[var(--danger)] ml-0.5">*</span>}
       </label>
       {renderInput()}
     </div>
