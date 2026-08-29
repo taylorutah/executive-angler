@@ -139,7 +139,7 @@ export default function HeroImageEditor({
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--action)] text-white rounded-lg text-xs font-semibold hover:bg-[var(--action-hover)] transition-colors shadow-lg"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--ink)] text-[var(--paper)] rounded-full text-xs font-medium hover:opacity-90 transition-opacity duration-150 ease-standard"
         title="Edit hero image (admin)"
       >
         <Pencil className="h-3 w-3" />
@@ -150,21 +150,22 @@ export default function HeroImageEditor({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="ea-modal-overlay z-50 flex items-center justify-center p-4"
       onClick={() => setIsOpen(false)}
     >
       <div
-        className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-2xl max-w-lg w-full shadow-2xl max-h-[90vh] overflow-y-auto"
+        className="ea-modal max-w-lg max-h-[90vh] overflow-y-auto p-0"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-rule)]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
           <div className="flex items-center gap-2">
-            <ImageIcon className="h-5 w-5 text-[var(--action)]" />
-            <h2 className="text-base font-bold text-[var(--text-primary)]">Edit Hero Image</h2>
+            <ImageIcon className="h-5 w-5 text-[var(--accent)]" />
+            <h2 className="font-display text-lg font-semibold text-[var(--text-1)]">Edit Hero Image</h2>
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-[var(--text-meta)] hover:text-[var(--text-primary)]"
+            className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard"
+            aria-label="Close"
           >
             <X className="h-5 w-5" />
           </button>
@@ -182,12 +183,12 @@ export default function HeroImageEditor({
           />
 
           {error ? (
-            <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-lg text-sm text-red-400">
+            <div className="px-4 py-3 bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] text-sm text-[var(--danger)]">
               {error}
             </div>
           ) : null}
           {success ? (
-            <div className="px-4 py-3 bg-green-950/30 border border-green-800 rounded-lg text-sm text-green-400 flex items-center gap-2">
+            <div className="px-4 py-3 bg-[var(--success)]/10 border border-[var(--success)]/30 rounded-[var(--radius-md)] text-sm text-[var(--success)] flex items-center gap-2">
               <CheckCircle className="h-4 w-4" /> Saved! Reloading...
             </div>
           ) : null}
@@ -195,7 +196,7 @@ export default function HeroImageEditor({
           <button
             onClick={handleSave}
             disabled={saving || !imageUrl || !altText.trim()}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-[var(--action)] text-white rounded-xl text-sm font-bold hover:bg-[var(--action-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="ea-btn ea-btn-primary w-full"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Hero Image
