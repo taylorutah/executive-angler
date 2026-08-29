@@ -51,21 +51,21 @@ export default function DeleteUserModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+      className="ea-modal-overlay z-50 flex items-center justify-center p-4"
       onClick={onCancel}
     >
       <div
-        className="bg-[var(--surface-raised)] border border-red-900/50 rounded-2xl shadow-2xl max-w-lg w-full p-6"
+        className="ea-modal max-w-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-red-950/40 flex items-center justify-center shrink-0">
-              <AlertTriangle className="h-5 w-5 text-red-400" />
+            <div className="w-10 h-10 rounded-full bg-[var(--danger)]/10 flex items-center justify-center shrink-0">
+              <AlertTriangle className="h-5 w-5 text-[var(--danger)]" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-[var(--text-primary)]">Delete user permanently?</h2>
-              <p className="text-xs text-[var(--text-body)] mt-0.5">
+              <h2 className="font-display text-lg font-semibold text-[var(--text-1)]">Delete user permanently?</h2>
+              <p className="text-xs text-[var(--text-2)] mt-0.5">
                 {displayName || username || "No name"}
                 {username && ` · @${username}`}
                 {email && ` · ${email}`}
@@ -74,19 +74,19 @@ export default function DeleteUserModal({
           </div>
           <button
             onClick={onCancel}
-            className="text-[var(--text-meta)] hover:text-[var(--text-primary)] shrink-0"
+            className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard shrink-0"
             aria-label="Close"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="bg-red-950/15 border border-red-900/40 rounded-lg p-4 mb-4">
-          <p className="text-xs text-red-400 font-bold uppercase tracking-wider mb-2">
+        <div className="bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] p-4 mb-4">
+          <p className="ea-overline text-[var(--danger)] mb-2">
             This cannot be undone
           </p>
-          <p className="text-xs text-[var(--text-body)] mb-2">The following will be deleted:</p>
-          <ul className="text-xs text-[var(--text-body)] space-y-0.5 list-disc list-inside">
+          <p className="text-xs text-[var(--text-2)] mb-2">The following will be deleted:</p>
+          <ul className="text-xs text-[var(--text-2)] space-y-0.5 list-disc list-inside">
             <li>{sessionCount} fishing session{sessionCount === 1 ? "" : "s"}</li>
             <li>{catchCount} catch{catchCount === 1 ? "" : "es"}</li>
             <li>{flyBoxCount} fly pattern{flyBoxCount === 1 ? "" : "s"}</li>
@@ -98,7 +98,7 @@ export default function DeleteUserModal({
         </div>
 
         {error && (
-          <div className="mb-4 px-3 py-2 bg-red-950/30 border border-red-800 rounded-lg text-xs text-red-400">
+          <div className="mb-4 px-3 py-2 bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] text-xs text-[var(--danger)]">
             {error}
           </div>
         )}
@@ -107,7 +107,7 @@ export default function DeleteUserModal({
           <button
             onClick={onCancel}
             disabled={loading}
-            className="px-4 py-2 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-sm font-bold hover:text-[var(--text-primary)] disabled:opacity-50"
+            className="ea-btn ea-btn-secondary"
           >
             Cancel
           </button>
@@ -115,7 +115,7 @@ export default function DeleteUserModal({
             onClick={handleDelete}
             disabled={loading}
             autoFocus
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="ea-btn ea-btn-danger"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             {loading ? "Deleting..." : "Delete user"}

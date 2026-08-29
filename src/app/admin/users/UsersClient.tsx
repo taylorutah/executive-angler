@@ -178,32 +178,32 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
+    <div className="min-h-screen bg-[var(--paper)]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin" className="text-[var(--text-body)] hover:text-[var(--text-primary)]"><ChevronLeft className="h-5 w-5" /></Link>
-          <Shield className="h-5 w-5 text-[var(--action)]" />
-          <h1 className="font-serif text-2xl text-[var(--text-primary)]">User Management</h1>
+          <Link href="/admin" className="text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard"><ChevronLeft className="h-5 w-5" /></Link>
+          <Shield className="h-5 w-5 text-[var(--accent)]" />
+          <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">User Management</h1>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
           {[
-            { val: totalUsers, label: "Total", color: "text-[var(--text-primary)]" },
-            { val: activeThisMonth, label: "Active 30d", color: "text-[var(--state-positive)]" },
-            { val: newThisWeek, label: "New 7d", color: "text-[var(--signal-live)]" },
-            { val: promoUsers, label: "Promo", color: "text-[var(--action)]" },
-            { val: bannedUsers, label: "Banned", color: "text-red-400" },
+            { val: totalUsers, label: "Total", color: "text-[var(--text-1)]" },
+            { val: activeThisMonth, label: "Active 30d", color: "text-[var(--success)]" },
+            { val: newThisWeek, label: "New 7d", color: "text-[var(--accent)]" },
+            { val: promoUsers, label: "Promo", color: "text-[var(--accent)]" },
+            { val: bannedUsers, label: "Banned", color: "text-[var(--danger)]" },
           ].map(s => (
-            <div key={s.label} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-3 text-center">
-              <p className={`text-xl font-bold font-mono ${s.color}`}>{s.val}</p>
-              <p className="text-[10px] text-[var(--text-body)] uppercase tracking-wider">{s.label}</p>
+            <div key={s.label} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-3 text-center">
+              <p className={`text-xl font-semibold num ${s.color}`}>{s.val}</p>
+              <p className="ea-stat-label mt-0.5">{s.label}</p>
             </div>
           ))}
         </div>
 
         {message && (
-          <div className={`mb-4 px-4 py-3 rounded-lg border text-sm ${message.type === "success" ? "bg-green-950/30 border-green-800 text-green-400" : "bg-red-950/30 border-red-800 text-red-400"}`}>
+          <div className={`mb-4 px-4 py-3 rounded-[var(--radius-md)] border text-sm ${message.type === "success" ? "bg-[var(--success)]/10 border-[var(--success)]/30 text-[var(--success)]" : "bg-[var(--danger)]/10 border-[var(--danger)]/30 text-[var(--danger)]"}`}>
             {message.text}
           </div>
         )}
@@ -212,24 +212,25 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
         <div className="flex flex-col gap-3 mb-4">
           <div className="flex gap-3">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-meta)]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-3)]" />
               <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, email, state, or ID..."
-                className="w-full pl-10 pr-4 py-2.5 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]" />
+                className="ea-input pl-10" />
             </div>
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value as "recent" | "activity" | "power")}
-              className="px-3 py-2 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--action)]"
+              className="ea-input w-auto text-xs"
             >
               <option value="recent">Newest signup</option>
               <option value="activity">Last activity</option>
               <option value="power">Power users</option>
             </select>
           </div>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-2">
             {(["all", "promo", "active", "inactive", "unverified", "banned"] as const).map(f => (
               <button key={f} onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${filter === f ? "bg-[var(--action)] text-white" : "bg-[var(--surface-raised)] text-[var(--text-body)]"}`}>
+                aria-pressed={filter === f}
+                className={`inline-flex items-center rounded-[var(--radius-pill)] border px-3 py-1.5 text-[13px] font-medium whitespace-nowrap transition-colors duration-150 ease-standard ${filter === f ? "border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)]" : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"}`}>
                 {f === "all" ? "All" :
                  f === "promo" ? "Promo" :
                  f === "active" ? "Active 30d" :
@@ -246,40 +247,40 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
           {filtered.map(u => {
             const isExpanded = expandedUser === u.user_id;
             return (
-              <div key={u.user_id} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
+              <div key={u.user_id} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
                 <div className="px-5 py-3 flex items-center gap-3 cursor-pointer" onClick={() => setExpandedUser(isExpanded ? null : u.user_id)}>
-                  <div className="w-10 h-10 rounded-full bg-[var(--action)]/15 flex items-center justify-center shrink-0 overflow-hidden">
+                  <div className="w-10 h-10 rounded-full bg-[var(--accent-soft)] flex items-center justify-center shrink-0 overflow-hidden">
                     {u.avatar_url ? (
                       <Image src={u.avatar_url} alt={`${u.display_name || u.username || "User"} avatar`} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
                     ) : (
-                      <User className="h-5 w-5 text-[var(--action)]" />
+                      <User className="h-5 w-5 text-[var(--accent)]" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-bold text-[var(--text-primary)] truncate">{u.display_name || u.username || "No name"}</span>
+                      <span className="text-sm font-semibold text-[var(--text-1)] truncate">{u.display_name || u.username || "No name"}</span>
                       <ProviderBadge provider={u.provider} verified={u.email_confirmed} />
-                      {u.is_banned && <Ban className="h-3.5 w-3.5 text-red-400" />}
+                      {u.is_banned && <Ban className="h-3.5 w-3.5 text-[var(--danger)]" />}
                       {u.active_promo && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[var(--action)]/15 text-[var(--action)]">
-                          <TicketPercent className="h-2.5 w-2.5" /> {u.active_promo.code}
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium bg-[var(--accent-soft)] text-[var(--accent)]">
+                          <TicketPercent className="h-3 w-3" /> {u.active_promo.code}
                         </span>
                       )}
                       {u.fly_box_count > 0 && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[var(--signal-live)]/15 text-[var(--signal-live)]">
-                          <Feather className="h-2.5 w-2.5" /> {u.fly_box_count}
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium bg-[var(--accent-soft)] text-[var(--accent)]">
+                          <Feather className="h-3 w-3" /> {u.fly_box_count}
                         </span>
                       )}
                       {u.home_state && (
-                        <span className="inline-flex items-center gap-1 text-[10px] text-[var(--text-body)]">
-                          <MapPin className="h-2.5 w-2.5" /> {u.home_state}
+                        <span className="inline-flex items-center gap-1 text-xs text-[var(--text-2)]">
+                          <MapPin className="h-3 w-3" /> {u.home_state}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-[var(--text-meta)] truncate">
+                    <p className="text-xs text-[var(--text-3)] truncate">
                       @{u.username || "—"}{u.email ? ` · ${u.email}` : ""}
                     </p>
-                    <p className="text-[11px] text-[var(--text-meta)] mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <p className="text-xs text-[var(--text-3)] mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="h-3 w-3" /> joined {formatDate(u.created_at)}
                       </span>
@@ -295,7 +296,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                         <Activity className="h-3 w-3" /> {u.last_session_at ? `fished ${formatRelative(u.last_session_at)}` : "no sessions"}
                       </span>
                     </p>
-                    <p className="text-[11px] text-[var(--text-meta)] mt-0.5">
+                    <p className="text-xs text-[var(--text-3)] mt-0.5 num">
                       <span>{u.session_count} sessions</span>
                       <span> · {u.catch_count} catches</span>
                       <span> · {u.fly_box_count} flies</span>
@@ -303,77 +304,77 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                       {u.review_count > 0 && <span> · {u.review_count} reviews</span>}
                     </p>
                   </div>
-                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[var(--text-meta)]" /> : <ChevronDown className="h-4 w-4 text-[var(--text-meta)]" />}
+                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[var(--text-3)]" /> : <ChevronDown className="h-4 w-4 text-[var(--text-3)]" />}
                 </div>
 
                 {isExpanded && (
-                  <div className="px-5 pb-4 border-t border-[var(--border-rule)] pt-4 space-y-3">
-                    <div className="space-y-1 text-xs text-[var(--text-body)]">
-                      <p className="font-mono break-all text-[var(--text-meta)]">ID: {u.user_id}</p>
+                  <div className="px-5 pb-4 border-t border-[var(--border)] pt-4 space-y-3">
+                    <div className="space-y-1 text-xs text-[var(--text-2)]">
+                      <p className="num break-all text-[var(--text-3)]">ID: {u.user_id}</p>
                       {u.email && (
                         <p className="flex items-center gap-1.5">
-                          <Mail className="h-3 w-3 text-[var(--text-meta)]" />
+                          <Mail className="h-3 w-3 text-[var(--text-3)]" />
                           <span className="break-all">{u.email}</span>
                         </p>
                       )}
                       <p className="flex items-center gap-1.5">
-                        <Calendar className="h-3 w-3 text-[var(--text-meta)]" />
+                        <Calendar className="h-3 w-3 text-[var(--text-3)]" />
                         Signed up {formatDate(u.created_at)}
                       </p>
                       <p className="flex items-center gap-1.5">
-                        <LogIn className="h-3 w-3 text-[var(--text-meta)]" />
+                        <LogIn className="h-3 w-3 text-[var(--text-3)]" />
                         Last sign-in {u.last_sign_in_at ? formatDateTime(u.last_sign_in_at) : "never"}
                       </p>
                       {formatLoginLocation(u) && (
                         <p className="flex items-center gap-1.5">
-                          <MapPin className="h-3 w-3 text-[var(--text-meta)]" />
+                          <MapPin className="h-3 w-3 text-[var(--text-3)]" />
                           Login from {formatLoginLocation(u)}
                           {u.last_login_at ? ` · ${formatDateTime(u.last_login_at)}` : ""}
                         </p>
                       )}
                       <p className="flex items-center gap-1.5">
-                        <Activity className="h-3 w-3 text-[var(--text-meta)]" />
+                        <Activity className="h-3 w-3 text-[var(--text-3)]" />
                         Last session {u.last_session_at ? formatDate(u.last_session_at) : "none logged"}
                       </p>
                       {(u.home_state || u.home_location) && (
                         <p className="flex items-center gap-1.5">
-                          <MapPin className="h-3 w-3 text-[var(--text-meta)]" />
+                          <MapPin className="h-3 w-3 text-[var(--text-3)]" />
                           {u.home_location || u.home_state}
                         </p>
                       )}
                       {u.active_promo && (
                         <p className="flex items-center gap-1.5">
-                          <TicketPercent className="h-3 w-3 text-[var(--action)]" />
-                          Promo <span className="font-mono text-[var(--action)]">{u.active_promo.code}</span> — expires {formatDate(u.active_promo.until)}
+                          <TicketPercent className="h-3 w-3 text-[var(--accent)]" />
+                          Promo <span className="num text-[var(--accent)]">{u.active_promo.code}</span> — expires {formatDate(u.active_promo.until)}
                         </p>
                       )}
                     </div>
 
                     <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-                      <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center border border-[var(--border-rule)]">
-                        <Calendar className="h-4 w-4 text-[var(--action)] mx-auto mb-1" />
-                        <p className="text-lg font-bold text-[var(--text-primary)] font-mono">{u.session_count}</p>
-                        <p className="text-[9px] text-[var(--text-meta)] uppercase">Sessions</p>
+                      <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3 text-center border border-[var(--border)]">
+                        <Calendar className="h-4 w-4 text-[var(--accent)] mx-auto mb-1" />
+                        <p className="text-lg font-semibold text-[var(--text-1)] num">{u.session_count}</p>
+                        <p className="text-xs text-[var(--text-3)] uppercase">Sessions</p>
                       </div>
-                      <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center border border-[var(--border-rule)]">
-                        <Fish className="h-4 w-4 text-[var(--signal-live)] mx-auto mb-1" />
-                        <p className="text-lg font-bold text-[var(--text-primary)] font-mono">{u.catch_count}</p>
-                        <p className="text-[9px] text-[var(--text-meta)] uppercase">Catches</p>
+                      <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3 text-center border border-[var(--border)]">
+                        <Fish className="h-4 w-4 text-[var(--accent)] mx-auto mb-1" />
+                        <p className="text-lg font-semibold text-[var(--text-1)] num">{u.catch_count}</p>
+                        <p className="text-xs text-[var(--text-3)] uppercase">Catches</p>
                       </div>
-                      <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center border border-[var(--border-rule)]">
-                        <Feather className="h-4 w-4 text-[var(--signal-live)] mx-auto mb-1" />
-                        <p className={`text-lg font-bold font-mono ${u.fly_box_count > 0 ? "text-[var(--signal-live)]" : "text-[var(--text-meta)]"}`}>{u.fly_box_count}</p>
-                        <p className="text-[9px] text-[var(--text-meta)] uppercase">Fly Box</p>
+                      <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3 text-center border border-[var(--border)]">
+                        <Feather className="h-4 w-4 text-[var(--accent)] mx-auto mb-1" />
+                        <p className={`text-lg font-semibold num ${u.fly_box_count > 0 ? "text-[var(--accent)]" : "text-[var(--text-3)]"}`}>{u.fly_box_count}</p>
+                        <p className="text-xs text-[var(--text-3)] uppercase">Fly Box</p>
                       </div>
-                      <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center border border-[var(--border-rule)]">
-                        <Camera className="h-4 w-4 text-[var(--state-positive)] mx-auto mb-1" />
-                        <p className={`text-lg font-bold font-mono ${u.photo_count > 0 ? "text-[var(--state-positive)]" : "text-[var(--text-meta)]"}`}>{u.photo_count}</p>
-                        <p className="text-[9px] text-[var(--text-meta)] uppercase">Photos</p>
+                      <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3 text-center border border-[var(--border)]">
+                        <Camera className="h-4 w-4 text-[var(--success)] mx-auto mb-1" />
+                        <p className={`text-lg font-semibold num ${u.photo_count > 0 ? "text-[var(--success)]" : "text-[var(--text-3)]"}`}>{u.photo_count}</p>
+                        <p className="text-xs text-[var(--text-3)] uppercase">Photos</p>
                       </div>
-                      <div className="bg-[var(--surface-page)] rounded-lg p-3 text-center border border-[var(--border-rule)]">
-                        <MessageSquare className="h-4 w-4 text-[var(--text-body)] mx-auto mb-1" />
-                        <p className={`text-lg font-bold font-mono ${u.review_count > 0 ? "text-[var(--text-primary)]" : "text-[var(--text-meta)]"}`}>{u.review_count}</p>
-                        <p className="text-[9px] text-[var(--text-meta)] uppercase">Reviews</p>
+                      <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3 text-center border border-[var(--border)]">
+                        <MessageSquare className="h-4 w-4 text-[var(--text-2)] mx-auto mb-1" />
+                        <p className={`text-lg font-semibold num ${u.review_count > 0 ? "text-[var(--text-1)]" : "text-[var(--text-3)]"}`}>{u.review_count}</p>
+                        <p className="text-xs text-[var(--text-3)] uppercase">Reviews</p>
                       </div>
                     </div>
 
@@ -418,13 +419,13 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                       <div className="flex gap-2">
                         <input type="text" value={banReason[u.user_id] || ""} onChange={e => setBanReason(prev => ({ ...prev, [u.user_id]: e.target.value }))}
                           placeholder="Ban reason (required)..."
-                          className="flex-1 px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-red-400" />
+                          className="ea-input flex-1 text-xs" />
                         <Button
                           onClick={() => adminAction("ban", u.user_id, { reason: banReason[u.user_id] || "" })}
                           disabled={!!actionLoading || !banReason[u.user_id]?.trim()}
                           variant="destructive"
                           size="sm"
-                         
+
                         >
                           Ban
                         </Button>
@@ -432,9 +433,9 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                     )}
 
                     {u.is_banned && u.ban_reason && (
-                      <div className="px-3 py-2 bg-red-400/5 border border-red-400/20 rounded-lg">
-                        <p className="text-xs text-red-400"><strong>Banned:</strong> {u.ban_reason}</p>
-                        {u.banned_at && <p className="text-[10px] text-red-400/60 mt-1">{formatDate(u.banned_at)} by {u.banned_by || "admin"}</p>}
+                      <div className="px-3 py-2 bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)]">
+                        <p className="text-xs text-[var(--danger)]"><strong>Banned:</strong> {u.ban_reason}</p>
+                        {u.banned_at && <p className="text-xs text-[var(--danger)]/70 mt-1">{formatDate(u.banned_at)} by {u.banned_by || "admin"}</p>}
                       </div>
                     )}
 
@@ -442,9 +443,10 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                     <div className="flex gap-2">
                       <input type="text" value={noteText[u.user_id] || ""} onChange={e => setNoteText(prev => ({ ...prev, [u.user_id]: e.target.value }))}
                         placeholder="Add internal note..."
-                        className="flex-1 px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]" />
+                        className="ea-input flex-1 text-xs" />
                       <button onClick={() => addNote(u.user_id)} disabled={!!actionLoading || !noteText[u.user_id]?.trim()}
-                        className="px-3 py-2 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg text-xs font-bold hover:text-[var(--text-primary)] disabled:opacity-50">
+                        className="ea-btn ea-btn-secondary ea-btn-sm"
+                        aria-label="Add note">
                         <StickyNote className="h-3.5 w-3.5" />
                       </button>
                     </div>
@@ -456,8 +458,8 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
         </div>
 
         {filtered.length === 0 && (
-          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-12 text-center">
-            <p className="text-[var(--text-meta)]">No users match</p>
+          <div className="ea-card ea-empty">
+            <p>No users match</p>
           </div>
         )}
       </div>
@@ -498,59 +500,59 @@ function SessionsPanel({
 }) {
   if (state === undefined || state === "loading") {
     return (
-      <div className="bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg p-4 flex items-center justify-center">
-        <Loader2 className="h-4 w-4 text-[var(--action)] animate-spin" />
+      <div className="bg-[var(--paper-deep)] border border-[var(--border)] rounded-[var(--radius-md)] p-4 flex items-center justify-center">
+        <Loader2 className="h-4 w-4 text-[var(--accent)] animate-spin" />
       </div>
     );
   }
   if (state === "error") {
     return (
-      <div className="bg-red-950/15 border border-red-900/40 rounded-lg p-3 text-xs text-red-400">
+      <div className="bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] p-3 text-xs text-[var(--danger)]">
         Failed to load sessions
       </div>
     );
   }
   if (state.length === 0) {
     return (
-      <div className="bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg p-3 text-xs text-[var(--text-meta)]">
+      <div className="bg-[var(--paper-deep)] border border-[var(--border)] rounded-[var(--radius-md)] p-3 text-xs text-[var(--text-3)]">
         No fishing sessions logged.
       </div>
     );
   }
   const shown = state.slice(0, 10);
   return (
-    <div className="bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg overflow-hidden">
-      <div className="px-3 py-2 border-b border-[var(--border-rule)] flex items-center justify-between">
-        <p className="text-[10px] font-bold text-[var(--text-body)] uppercase tracking-wider">Sessions ({state.length})</p>
+    <div className="bg-[var(--paper-deep)] border border-[var(--border)] rounded-[var(--radius-md)] overflow-hidden">
+      <div className="px-3 py-2 border-b border-[var(--border)] flex items-center justify-between">
+        <p className="ea-overline">Sessions ({state.length})</p>
         {state.length > 10 && (
-          <Link href={`/admin/users/${userId}`} className="text-[10px] text-[var(--action)] hover:underline">
+          <Link href={`/admin/users/${userId}`} className="text-xs text-[var(--accent)] hover:underline">
             View all →
           </Link>
         )}
       </div>
-      <div className="divide-y divide-[#21262D]/50">
+      <div className="divide-y divide-[var(--border)]">
         {shown.map((s) => (
           <button
             key={s.id}
             onClick={() => onOpenSession(s.id)}
-            className="w-full px-3 py-2 flex items-center gap-3 text-left hover:bg-[var(--surface-raised)] transition-colors"
+            className="w-full px-3 py-2 flex items-center gap-3 text-left hover:bg-[var(--surface)] transition-colors duration-150 ease-standard"
           >
-            <Calendar className="h-3.5 w-3.5 text-[var(--text-meta)] shrink-0" />
-            <span className="text-xs text-[var(--text-body)] w-20 shrink-0 font-mono">
+            <Calendar className="h-3.5 w-3.5 text-[var(--text-3)] shrink-0" />
+            <span className="text-xs text-[var(--text-2)] w-20 shrink-0 num">
               {s.date ? formatDate(s.date) : "—"}
             </span>
-            <span className="text-xs text-[var(--text-primary)] flex-1 truncate">
+            <span className="text-xs text-[var(--text-1)] flex-1 truncate">
               {s.river_name || s.location || "Unknown water"}
             </span>
             {s.total_fish != null && s.total_fish > 0 && (
-              <span className="inline-flex items-center gap-1 text-[10px] text-[var(--signal-live)] shrink-0">
+              <span className="inline-flex items-center gap-1 text-xs num text-[var(--accent)] shrink-0">
                 <Fish className="h-3 w-3" /> {s.total_fish}
               </span>
             )}
             {s.broadcast_presence ? (
-              <Globe className="h-3 w-3 text-[var(--text-meta)] shrink-0" />
+              <Globe className="h-3 w-3 text-[var(--text-3)] shrink-0" />
             ) : (
-              <Lock className="h-3 w-3 text-[var(--text-meta)] shrink-0" />
+              <Lock className="h-3 w-3 text-[var(--text-3)] shrink-0" />
             )}
           </button>
         ))}
@@ -561,18 +563,18 @@ function SessionsPanel({
 
 function ProviderBadge({ provider, verified }: { provider: string; verified: boolean }) {
   const map: Record<string, { label: string; bg: string; fg: string }> = {
-    google:  { label: "Google", bg: "bg-[#4285F4]/15", fg: "text-[#8AB4F8]" },
-    apple:   { label: "Apple",  bg: "bg-[var(--text-primary)]/10", fg: "text-[var(--text-primary)]" },
-    email:   { label: "Email",  bg: "bg-[var(--text-meta)]/15", fg: "text-[var(--text-body)]" },
+    google:  { label: "Google", bg: "bg-[var(--accent-soft)]", fg: "text-[var(--accent)]" },
+    apple:   { label: "Apple",  bg: "bg-[var(--paper-deep)]", fg: "text-[var(--text-1)]" },
+    email:   { label: "Email",  bg: "bg-[var(--paper-deep)]", fg: "text-[var(--text-2)]" },
   };
-  const cfg = map[provider] || { label: provider, bg: "bg-[var(--text-meta)]/15", fg: "text-[var(--text-body)]" };
+  const cfg = map[provider] || { label: provider, bg: "bg-[var(--paper-deep)]", fg: "text-[var(--text-2)]" };
   return (
     <span
       title={`Signed up via ${cfg.label}${verified ? "" : " · email NOT confirmed"}`}
-      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold ${cfg.bg} ${cfg.fg}`}
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium ${cfg.bg} ${cfg.fg}`}
     >
       {cfg.label}
-      {!verified && <span className="text-red-400">●</span>}
+      {!verified && <span className="text-[var(--danger)]">●</span>}
     </span>
   );
 }
