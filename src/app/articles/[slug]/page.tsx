@@ -16,7 +16,7 @@ import {
   getAllRivers,
   getAllCanonicalFlies,
 } from "@/lib/db";
-import { resolveAuthorByline } from "@/lib/authors";
+import { isHouseByline, resolveAuthorByline } from "@/lib/authors";
 import { deriveSubjectRivers, deriveSubjectFlies } from "@/lib/articles/subject";
 import { splitBodyAtHeadings } from "@/lib/articles/segments";
 import { extractFaqsFromHtml, faqPageJsonLd } from "@/lib/seo";
@@ -107,7 +107,7 @@ export default async function ArticlePage({ params }: Props) {
   // The house byline carries no visible attribution — it's assumed (client
   // ruling 2026-08-28). Real named authors keep theirs. JSON-LD and
   // metadata keep the resolved author either way.
-  const showByline = article.author.trim() !== "Executive Angler Staff";
+  const showByline = !isHouseByline(article.author);
 
   const [rivers, flies] = await Promise.all([getAllRivers(), getAllCanonicalFlies()]);
   const subjectRivers = deriveSubjectRivers(article, rivers);

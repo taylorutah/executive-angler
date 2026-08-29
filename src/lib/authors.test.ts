@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import {
   articlesByAuthorSlug,
   authorSlugForByline,
+  isHouseAuthor,
+  isHouseByline,
   listAuthors,
   resolveAuthorByline,
   resolveAuthorSlug,
@@ -111,5 +113,30 @@ describe("listAuthors", () => {
       listAuthors([]).map((a) => a.slug),
       ["taylor-warnick"],
     );
+  });
+});
+
+describe("isHouseByline", () => {
+  it("matches only the house byline, ignoring whitespace", () => {
+    assert.equal(isHouseByline("Executive Angler Staff"), true);
+    assert.equal(isHouseByline("  Executive Angler Staff  "), true);
+    assert.equal(isHouseByline("Taylor Warnick"), false);
+  });
+});
+
+describe("isHouseAuthor", () => {
+  it("flags the curated profile that claims the house byline", () => {
+    assert.equal(isHouseAuthor(resolveAuthorByline("Executive Angler Staff")), true);
+  });
+
+  it("flags a bare house byline with no curated profile", () => {
+    assert.equal(
+      isHouseAuthor({ slug: "executive-angler-staff", name: "Executive Angler Staff" }),
+      true,
+    );
+  });
+
+  it("leaves named authors alone", () => {
+    assert.equal(isHouseAuthor(resolveAuthorByline("Jane Q. Angler")), false);
   });
 });

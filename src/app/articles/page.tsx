@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import ArticlesBrowser from "./ArticlesBrowser";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllArticles } from "@/lib/db";
+import { isHouseByline } from "@/lib/authors";
 import { articleListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
@@ -36,7 +37,11 @@ export default async function ArticlesPage() {
       imageAlt: article.title,
       title: article.title,
       subtitle: article.subtitle,
-      meta: `${article.readingTimeMinutes} min read · ${article.author}`,
+      // The house byline carries no visible attribution (client ruling
+      // 2026-08-28); named authors keep theirs in the meta line.
+      meta: isHouseByline(article.author)
+        ? `${article.readingTimeMinutes} min read`
+        : `${article.readingTimeMinutes} min read · ${article.author}`,
       badges: [article.category],
       featured: article.featured,
       description: article.excerpt,

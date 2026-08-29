@@ -22,6 +22,27 @@ export interface ResolvedAuthor {
   imageUrl?: string;
 }
 
+/**
+ * The house byline carries no visible attribution anywhere on the site —
+ * it is assumed (client ruling 2026-08-28). Named authors keep theirs.
+ * JSON-LD and metadata still resolve the author either way.
+ */
+export const HOUSE_BYLINE = "Executive Angler Staff";
+
+export function isHouseByline(name: string): boolean {
+  return name.trim() === HOUSE_BYLINE;
+}
+
+/**
+ * True when a resolved masthead entry stands in for the house byline —
+ * either it IS the bare house name, or its curated profile claims the
+ * house byline via `articleAuthorName`.
+ */
+export function isHouseAuthor(author: ResolvedAuthor): boolean {
+  if (isHouseByline(author.name)) return true;
+  return author.profile ? isHouseByline(author.profile.articleAuthorName) : false;
+}
+
 export function slugifyAuthor(name: string): string {
   return name
     .toLowerCase()

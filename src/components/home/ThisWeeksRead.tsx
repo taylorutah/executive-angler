@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
+import { isHouseByline } from "@/lib/authors";
 import type { Article } from "@/types/entities";
 import { photoAlt } from "./homepage-images";
 
@@ -8,17 +9,19 @@ interface Props {
   rest: Article[];
 }
 
-function byline(article: Article): { author: string; date: string | null } {
+function byline(article: Article): { author: string | null; date: string | null } {
   const date = new Date(article.publishedAt);
   const formatted = Number.isNaN(date.getTime())
     ? null
     : date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-  return { author: article.author, date: formatted };
+  // The house byline carries no visible attribution (client ruling 2026-08-28).
+  return { author: isHouseByline(article.author) ? null : article.author, date: formatted };
 }
 
 /** One feature at magazine scale plus three smaller. Byline on each. Not four equal tiles. */
 export default function ThisWeeksRead({ lead, rest }: Props) {
   const leadBy = byline(lead);
+  const leadMeta = [leadBy.author ? `By ${leadBy.author}` : null, leadBy.date].filter(Boolean).join(" · ");
 
   return (
     <section data-lane="resource" className="bg-[var(--paper)] py-14 sm:py-24">
@@ -53,10 +56,7 @@ export default function ThisWeeksRead({ lead, rest }: Props) {
             <p className="mt-4 text-[var(--text-2)]">
               {lead.excerpt}
             </p>
-            <p className="ea-overline mt-5">
-              By {leadBy.author}
-              {leadBy.date ? ` · ${leadBy.date}` : ""}
-            </p>
+            {leadMeta && <p className="ea-overline mt-5">{leadMeta}</p>}
           </div>
         </Link>
 
@@ -64,6 +64,9 @@ export default function ThisWeeksRead({ lead, rest }: Props) {
           <ul className="mt-8 border-t border-[var(--border)] pt-6">
             {rest.map((article) => {
               const line = byline(article);
+              const meta = [line.author ? `By ${line.author}` : null, line.date]
+                .filter(Boolean)
+                .join(" · ");
               return (
                 <li
                   key={article.id}
@@ -76,10 +79,7 @@ export default function ThisWeeksRead({ lead, rest }: Props) {
                     <h3 className="font-display text-xl font-semibold text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
                       {article.title}
                     </h3>
-                    <p className="ea-overline">
-                      By {line.author}
-                      {line.date ? ` · ${line.date}` : ""}
-                    </p>
+                    {meta && <p className="ea-overline">{meta}</p>}
                   </Link>
                 </li>
               );
