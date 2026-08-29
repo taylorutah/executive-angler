@@ -73,13 +73,14 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
   return (
     <Link
       href={item.href}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+      aria-current={isActive ? "page" : undefined}
+      className={`flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 ease-standard ${
         isActive
-          ? "text-[var(--action)] bg-[var(--action)]/10 border-l-2 border-[var(--action)] -ml-px"
-          : "text-[var(--text-body)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)]/50"
+          ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+          : "text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--surface)]"
       }`}
     >
-      <span className={isActive ? "text-[var(--action)]" : "text-[var(--text-meta)]"}>
+      <span className={isActive ? "text-[var(--accent)]" : "text-[var(--text-3)]"}>
         {item.icon}
       </span>
       {item.label}
@@ -91,7 +92,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 bg-[var(--surface-raised)] border-r border-[var(--border-rule)] min-h-screen px-3 py-6 space-y-6">
+    <aside className="w-56 shrink-0 bg-[var(--paper-deep)] border-r border-[var(--border)] min-h-screen px-3 py-6 space-y-6">
       {/* Dashboard */}
       <div>
         <NavLink item={dashboardLink} pathname={pathname} />
@@ -99,7 +100,7 @@ export default function AdminSidebar() {
 
       {/* Content section */}
       <div>
-        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
+        <p className="ea-overline px-3 mb-2">
           Content
         </p>
         <nav className="space-y-0.5">
@@ -111,7 +112,7 @@ export default function AdminSidebar() {
 
       {/* Moderation */}
       <div>
-        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
+        <p className="ea-overline px-3 mb-2">
           Moderation
         </p>
         <NavLink item={imageGapsLink} pathname={pathname} />
@@ -128,7 +129,7 @@ export default function AdminSidebar() {
 
       {/* Tools */}
       <div>
-        <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-meta)]">
+        <p className="ea-overline px-3 mb-2">
           Tools
         </p>
         <NavLink item={emailPreviewLink} pathname={pathname} />

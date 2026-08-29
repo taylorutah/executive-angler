@@ -20,7 +20,7 @@ export default async function AdminLayout({
   if (!user || !isAdmin(user.email)) redirect("/login");
 
   return (
-    <div className="flex min-h-screen bg-[var(--surface-page)]">
+    <div className="flex min-h-screen bg-[var(--paper)]">
       <AdminSidebar />
       <main className="flex-1 min-w-0">{children}</main>
     </div>
