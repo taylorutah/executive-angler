@@ -20,7 +20,7 @@ export default function OnTheWaterNow({ rivers, snapshots, histories, month }: P
   return (
     <section data-lane="resource" className="bg-[var(--paper-deep)] py-14 sm:py-24">
       <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-        <div className="mb-4 flex items-baseline justify-between gap-4">
+        <div className="mb-6 flex items-baseline justify-between gap-4 border-b border-[var(--border)] pb-4">
           <p className="ea-overline">
             On the water now
           </p>
