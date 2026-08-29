@@ -111,10 +111,11 @@ export default function FlyBoxAddButton({
             e.stopPropagation();
           }
         }}
-        className={`inline-flex items-center text-xs font-medium text-[var(--text-2)] hover:text-[var(--accent)] underline-offset-2 hover:underline ${className ?? ""}`}
-        title="Sign in to save this fly to your box"
+        aria-label="Sign in to save"
+        title="Sign in to save"
+        className={`inline-flex items-center justify-center h-7 w-7 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] text-[var(--text-3)] transition-colors hover:text-[var(--accent)] hover:border-[var(--border-strong)] ${className ?? ""}`}
       >
-        Sign in to save
+        <Plus className="h-3.5 w-3.5" />
       </Link>
     );
   }
