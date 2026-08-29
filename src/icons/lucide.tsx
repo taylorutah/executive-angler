@@ -30,6 +30,7 @@ export const Award = wrap("Award");
 export const Ban = wrap("Ban");
 export const BarChart3 = wrap("BarChart3");
 export const Bell = wrap("Bell");
+export const Bookmark = wrap("Bookmark");
 export const BookOpen = wrap("BookOpen");
 export const Box = wrap("Box");
 export const Boxes = wrap("Boxes");

@@ -104,61 +104,51 @@ export default function BestWindowCalculator({ riverId }: Props) {
           Based on your top sessions ({bestWindow.session_count} total):
         </p>
 
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {bestWindow.flow_min !== null && bestWindow.flow_max !== null && (
-            <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3">
-              <div className="flex items-center gap-1.5 mb-1">
-                <Waves className="h-3.5 w-3.5 text-[var(--accent)]" />
-                <span className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Optimal Flow</span>
-              </div>
-              <p className="num text-sm font-semibold text-[var(--text-1)]">
-                {bestWindow.flow_min}–{bestWindow.flow_max} cfs
-              </p>
-              {currentFlow !== null && (
-                <p className={`num text-xs mt-0.5 ${flowInRange ? "font-semibold text-[var(--text-1)]" : "text-[var(--text-3)]"}`}>
-                  Now: {currentFlow} cfs {flowInRange ? "in range" : "outside range"}
-                </p>
-              )}
+        <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+          <div className="rounded-[var(--radius-md)] bg-[var(--paper-deep)] p-3">
+            <div className="mb-1 flex items-center gap-1.5">
+              <Waves className="h-3.5 w-3.5 text-[var(--accent)]" />
+              <span className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Optimal Flow</span>
             </div>
-          )}
-
-          {bestWindow.temp_min !== null && bestWindow.temp_max !== null && (
-            <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3">
-              <div className="flex items-center gap-1.5 mb-1">
-                <Thermometer className="h-3.5 w-3.5 text-[var(--accent)]" />
-                <span className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Optimal Temp</span>
-              </div>
-              <p className="num text-sm font-semibold text-[var(--text-1)]">
+            <p className="num text-sm font-semibold text-[var(--text-1)]">
+              {bestWindow.flow_min !== null && bestWindow.flow_max !== null
+                ? `${bestWindow.flow_min}–${bestWindow.flow_max} cfs`
+                : "—"}
+            </p>
+            {currentFlow !== null && bestWindow.flow_min !== null && bestWindow.flow_max !== null && (
+              <p className={`num mt-0.5 text-xs ${flowInRange ? "font-semibold text-[var(--text-1)]" : "text-[var(--text-3)]"}`}>
+                Now: {currentFlow} cfs {flowInRange ? "in range" : "outside range"}
+              </p>
+            )}
+            {bestWindow.temp_min !== null && bestWindow.temp_max !== null && (
+              <p className="num mt-1.5 text-xs text-[var(--text-3)]">
+                <Thermometer className="mr-1 inline h-3 w-3 text-[var(--accent)]" />
                 {bestWindow.temp_min}–{bestWindow.temp_max}°F
+                {currentTemp !== null ? ` · now ${currentTemp}°F${tempInRange ? " in range" : ""}` : ""}
               </p>
-              {currentTemp !== null && (
-                <p className={`num text-xs mt-0.5 ${tempInRange ? "font-semibold text-[var(--text-1)]" : "text-[var(--text-3)]"}`}>
-                  Now: {currentTemp}°F {tempInRange ? "in range" : "outside range"}
-                </p>
-              )}
-            </div>
-          )}
+            )}
+          </div>
 
-          {bestWindow.best_fly && (
-            <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3">
-              <div className="flex items-center gap-1.5 mb-1">
-                <TrendingUp className="h-3.5 w-3.5 text-[var(--accent)]" />
-                <span className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Top Fly</span>
-              </div>
-              <p className="text-sm font-semibold text-[var(--text-1)] truncate">{bestWindow.best_fly}</p>
-              <p className="num text-xs text-[var(--text-3)]">{bestWindow.avg_fish} fish/session avg</p>
+          <div className="rounded-[var(--radius-md)] bg-[var(--paper-deep)] p-3">
+            <div className="mb-1 flex items-center gap-1.5">
+              <TrendingUp className="h-3.5 w-3.5 text-[var(--accent)]" />
+              <span className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Top Fly</span>
             </div>
-          )}
+            <p className="truncate text-sm font-semibold text-[var(--text-1)]">
+              {bestWindow.best_fly || "—"}
+            </p>
+            <p className="num text-xs text-[var(--text-3)]">{bestWindow.avg_fish} fish/session avg</p>
+          </div>
 
-          {bestWindow.best_species && (
-            <div className="bg-[var(--paper-deep)] rounded-[var(--radius-md)] p-3">
-              <div className="flex items-center gap-1.5 mb-1">
-                <CloudSun className="h-3.5 w-3.5 text-[var(--accent)]" />
-                <span className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Primary Target</span>
-              </div>
-              <p className="text-sm font-semibold text-[var(--text-1)] truncate">{bestWindow.best_species}</p>
+          <div className="rounded-[var(--radius-md)] bg-[var(--paper-deep)] p-3">
+            <div className="mb-1 flex items-center gap-1.5">
+              <CloudSun className="h-3.5 w-3.5 text-[var(--accent)]" />
+              <span className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--text-3)]">Primary Target</span>
             </div>
-          )}
+            <p className="truncate text-sm font-semibold text-[var(--text-1)]">
+              {bestWindow.best_species || "—"}
+            </p>
+          </div>
         </div>
 
         {/* GO NOW signal */}

@@ -8,6 +8,9 @@ export interface Stat {
  * run of figures, set in the UI face so it reads as instrument rather than
  * argument. Callers pass only facts they hold; the block renders nothing at
  * all below two, because one number is a sentence, not a table.
+ *
+ * Same prose column as pull quotes and tables — symmetric edges, no
+ * leftover aside callout chrome.
  */
 export default function StatBlock({
   caption,
@@ -19,7 +22,7 @@ export default function StatBlock({
   if (stats.length < 2) return null;
 
   return (
-    <aside className="my-10 border-y border-[var(--border)] py-5 not-italic">
+    <aside className="article-statblock not-italic">
       {caption && (
         <p className="ea-overline mb-4">
           {caption}

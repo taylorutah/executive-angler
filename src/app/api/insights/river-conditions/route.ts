@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import {
+  buildFlyLogEvents,
+  collectReferencedFlyIds,
+  computeTopFly,
+  flyIdentity,
+} from "@/lib/insights/top-fly";
 
 /**
  * GET /api/insights/river-conditions?riverId=xxx
@@ -47,20 +53,22 @@ export async function GET(request: NextRequest) {
   // like three different flies in the rollup.
   const { data: catches } = await supabase
     .from("catches")
-    .select("id, session_id, species, length_inches, fly_name, fly_pattern_id, canonical_fly_id, fly_size, time_caught")
+    .select("id, session_id, species, length_inches, fly_name, fly_pattern_id, canonical_fly_id, fly_size, time_caught, quantities")
+    .in("session_id", sessionIds);
+
+  const { data: rigs } = await supabase
+    .from("session_rigs")
+    .select("session_id, fly_name, fly_pattern_id")
     .in("session_id", sessionIds);
 
   // Resolve live fly names by FK (web canonical picks set canonical_fly_id;
   // iOS/Android + web personal picks set fly_pattern_id). Both reference the
   // unified `flies` table post Phase A. The live row is authoritative — a
   // renamed pattern surfaces under its current name across every catch.
-  const referencedFlyIds = Array.from(
-    new Set(
-      (catches ?? [])
-        .flatMap((c) => [c.fly_pattern_id, c.canonical_fly_id])
-        .filter((v): v is string => !!v)
-    )
-  );
+  const referencedFlyIds = collectReferencedFlyIds([
+    ...(catches ?? []),
+    ...(rigs ?? []),
+  ]);
   const { data: rawFlies } = referencedFlyIds.length > 0
     ? await supabase
         .from("flies")
@@ -71,27 +79,6 @@ export async function GET(request: NextRequest) {
   const flyNameById = new Map(
     (rawFlies ?? []).map((f) => [f.id as string, f.name as string])
   );
-
-  // Canonical identity for grouping. If either FK is set, the live fly row
-  // is the source of truth; otherwise fall back to a normalized fly_name
-  // (lowercased, whitespace-collapsed) so freehand snapshots that differ
-  // only in trailing notes still merge.
-  function flyIdentity(c: {
-    fly_pattern_id?: string | null;
-    canonical_fly_id?: string | null;
-    fly_name?: string | null;
-  }): { key: string; displayName: string } | null {
-    const flyId = c.fly_pattern_id || c.canonical_fly_id;
-    if (flyId) {
-      const name = flyNameById.get(flyId);
-      if (name) return { key: `id:${flyId}`, displayName: name };
-    }
-    if (c.fly_name && c.fly_name.trim()) {
-      const norm = c.fly_name.trim().toLowerCase().replace(/\s+/g, " ");
-      return { key: `name:${norm}`, displayName: c.fly_name.trim() };
-    }
-    return null;
-  }
 
   const catchesBySession = new Map<string, typeof catches>();
   for (const c of catches || []) {
@@ -155,11 +142,11 @@ export async function GET(request: NextRequest) {
     const biggest = sc.reduce((max, c) => (c.length_inches || 0) > (max || 0) ? c.length_inches : max, 0 as number | null);
     const flyFreq = new Map<string, { displayName: string; count: number }>();
     for (const c of sc) {
-      const ident = flyIdentity(c);
-      if (!ident) continue;
-      const entry = flyFreq.get(ident.key) || { displayName: ident.displayName, count: 0 };
+      const identity = flyIdentity(c, flyNameById);
+      if (!identity) continue;
+      const entry = flyFreq.get(identity.key) || { displayName: identity.displayName, count: 0 };
       entry.count += 1;
-      flyFreq.set(ident.key, entry);
+      flyFreq.set(identity.key, entry);
     }
     let topFly: string | null = null;
     let topFlyCount = 0;
@@ -181,6 +168,7 @@ export async function GET(request: NextRequest) {
   });
 
   // Calculate "Best Window" — optimal conditions based on catch rate
+  const sessionDateById = new Map(sessions.map((s) => [s.id as string, s.date as string]));
   const sessionsWithFlow = sessionData.filter((s) => s.flow_cfs !== null);
   const sessionsWithTemp = sessionData.filter((s) => s.water_temp_f !== null);
 
@@ -195,22 +183,15 @@ export async function GET(request: NextRequest) {
     const topFlows = topSessions.map((s) => s.flow_cfs).filter((f): f is number => f !== null);
     const topTemps = topSessions.map((s) => s.water_temp_f).filter((t): t is number => t !== null);
 
-    // Fly effectiveness across all sessions
-    const flyTotalFish = new Map<string, number>();
-    const flySessionCount = new Map<string, number>();
-    for (const s of sessionData) {
-      if (s.top_fly) {
-        flyTotalFish.set(s.top_fly, (flyTotalFish.get(s.top_fly) || 0) + s.fish_count);
-        flySessionCount.set(s.top_fly, (flySessionCount.get(s.top_fly) || 0) + 1);
-      }
-    }
-    let bestFly: string | null = null;
-    let bestFlyAvg = 0;
-    for (const [fly, total] of flyTotalFish) {
-      const count = flySessionCount.get(fly) || 1;
-      const avg = total / count;
-      if (avg > bestFlyAvg) { bestFly = fly; bestFlyAvg = avg; }
-    }
+    const bestFly =
+      computeTopFly(
+        buildFlyLogEvents({
+          catches: catches || [],
+          rigs: rigs || [],
+          sessionDateById,
+          flyNameById,
+        }),
+      )?.name ?? null;
 
     // Most common species in top sessions
     const speciesFreq = new Map<string, number>();
@@ -244,14 +225,13 @@ export async function GET(request: NextRequest) {
   // normalized fly_name otherwise) so renames and trailing parenthetical
   // notes don't fragment the rollup. Counts are real catches, not session
   // totals.
-  const sessionDateById = new Map(sessions.map((s) => [s.id, s.date]));
   const flyAgg = new Map<
     string,
     { displayName: string; catches: number; sessions: Set<string>; months: Set<string>; lastDate: string | null }
   >();
   let totalAttributedCatches = 0;
   for (const c of catches ?? []) {
-    const ident = flyIdentity(c);
+    const ident = flyIdentity(c, flyNameById);
     if (!ident) continue;
     const sessionDate = sessionDateById.get(c.session_id);
     if (!sessionDate) continue;

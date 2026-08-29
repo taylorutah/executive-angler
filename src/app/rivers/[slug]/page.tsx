@@ -224,6 +224,16 @@ export default async function RiverPage({ params }: Props) {
         </div>
       </div>
 
+      <section className="bg-[var(--paper)]">
+        <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+          <YourRecordHere riverId={river.id} riverName={river.name} />
+          <SignedOutRiverInsights riverName={river.name} />
+          <PersonalFlowOverlay riverId={river.id} />
+          <PersonalRiverScorecard riverId={river.id} riverName={river.name} />
+          <BestWindowCalculator riverId={river.id} />
+        </div>
+      </section>
+
       <Suspense fallback={null}>
         <RiverLiveInset
           riverId={river.id}
@@ -251,146 +261,45 @@ export default async function RiverPage({ params }: Props) {
         </RiverLiveInset>
       </Suspense>
 
-      <section className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-          <YourRecordHere riverId={river.id} riverName={river.name} />
-          <SignedOutRiverInsights riverName={river.name} />
-          <PersonalFlowOverlay riverId={river.id} />
-          <PersonalRiverScorecard riverId={river.id} riverName={river.name} />
-          <BestWindowCalculator riverId={river.id} />
-        </div>
-      </section>
-
       <section className="bg-[var(--paper)] pb-24">
         <div className="mx-auto max-w-[var(--container)] space-y-12 px-4 sm:px-6 lg:px-8">
-          <ScrollAnimation>
-            <div>
-              <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                Overview
-              </h2>
-              <div className="prose">
-                {river.description.split("\n\n").map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
-              </div>
-              <div className="entity-tags mt-6">
-                {(river.primarySpecies || []).map((speciesName) => {
-                  const matched = riverSpecies.find(
-                    (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
-                  );
-                  const badge = (
-                    <Badge key={speciesName} variant="river" size="md">
-                      <Icon name="hook" className="mr-1.5 h-3.5 w-3.5" />
-                      {speciesName}
-                    </Badge>
-                  );
-                  return matched ? (
-                    <Link key={speciesName} href={`/species/${matched.slug}`}>
-                      {badge}
-                    </Link>
-                  ) : (
-                    badge
-                  );
-                })}
-              </div>
-            </div>
-          </ScrollAnimation>
-
-          {river.slug === "madison-river" && (
+          {fishingNow.length > 0 && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                  Planning a Madison trip in 2026
+                <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  Flies fishing now
                 </h2>
-                <div className="prose">
-                  <p>
-                    The Madison is two fisheries that share a name. Above Ennis Lake you are covering broad riffle-and-run meadow water. Below the lake the wade game opens up and caddis and PMDs do more work than the salmonfly posters suggest. Build the trip around the{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      hatch-chart fly list
-                    </Link>
-                    , the USGS gauge on this page, and Montana&apos;s season dates. We do not publish other anglers&apos; catches or GPS.
-                  </p>
-                  <p>
-                    If this is your first week on the Madison, fish the wade water first. A first float is worth a guide. Walk-up access is real on both the upper and the below-lake stretches if you already nymph. Pair this guide with the{" "}
-                    <Link href="/destinations/montana" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      Montana destination page
-                    </Link>{" "}
-                    for lodges, shops, and neighboring rivers. For a 2026 fly box, read{" "}
-                    <Link href="/articles/best-flies-for-the-madison-river-2026" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      Best Flies for the Madison River in 2026
-                    </Link>
-                    .
-                  </p>
-                </div>
-              </div>
-            </ScrollAnimation>
-          )}
-
-          {river.slug === "green-river" && (
-            <ScrollAnimation>
-              <div>
-                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                  Fishing the Green below Flaming Gorge
-                </h2>
-                <div className="prose">
-                  <p>
-                    This tailwater is A, B, and C sections, clear water, and a crowd that shows up for the same reasons you did. Pack small flies, check the gauge on this page, and read{" "}
-                    <Link href="/articles/green-river-utah-flaming-gorge-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      Fly Fishing the Green River Below Flaming Gorge
-                    </Link>
-                    {" "}before you book a shuttle. The{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      hatch-chart fly list
-                    </Link>
-                    {" "}is public. Other anglers&apos; fish are not.
-                  </p>
-                </div>
-              </div>
-            </ScrollAnimation>
-          )}
-
-          {river.slug === "pecos-river-new-mexico" && (
-            <ScrollAnimation>
-              <div>
-                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                  Pecos pocket water
-                </h2>
-                <div className="prose">
-                  <p>
-                    Above Terrero you can walk. Along the road you share campground runs. After runoff, a dry-dropper and some manners will fish this river. Longer notes are in{" "}
-                    <Link href="/articles/pecos-river-new-mexico-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      Fly Fishing the Pecos River in New Mexico
-                    </Link>
-                    . Flies live on the{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      Pecos hatch-chart fly list
-                    </Link>
-                    .
-                  </p>
-                </div>
-              </div>
-            </ScrollAnimation>
-          )}
-
-          {river.slug === "little-cottonwood-creek" && (
-            <ScrollAnimation>
-              <div>
-                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                  A short Wasatch window
-                </h2>
-                <div className="prose">
-                  <p>
-                    Little Cottonwood is not Big Cottonwood and it is not a tailwater. Fish the cold window, carry a thermometer, and leave when summer heat says so. Read{" "}
-                    <Link href="/articles/little-cottonwood-creek-utah-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      Fly Fishing Little Cottonwood Creek
-                    </Link>
-                    . The{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      creek fly list
-                    </Link>
-                    {" "}follows the hatch chart.
-                  </p>
-                </div>
+                <p className="mb-5 text-sm text-[var(--text-2)]">
+                  {monthNow} on the hatch chart — names and sizes, not a catch report.
+                </p>
+                <ul className="border-t border-[var(--border)]">
+                  {fishingNow.map((hatch, i) => {
+                    const matchedFly = flyByName.get(hatch.pattern?.toLowerCase() ?? "");
+                    return (
+                      <li
+                        key={`${hatch.insect}-${hatch.pattern}-${i}`}
+                        className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-[var(--border)] py-3"
+                      >
+                        <span className="font-medium text-[var(--text-1)]">{hatch.insect}</span>
+                        {hatch.size ? (
+                          <span className="num text-xs text-[var(--text-3)]">{hatch.size}</span>
+                        ) : null}
+                        {hatch.pattern ? (
+                          matchedFly ? (
+                            <Link
+                              href={`/flies/${matchedFly.slug}`}
+                              className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
+                            >
+                              {hatch.pattern}
+                            </Link>
+                          ) : (
+                            <span className="text-[var(--text-2)]">{hatch.pattern}</span>
+                          )
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </ScrollAnimation>
           )}
@@ -403,6 +312,23 @@ export default async function RiverPage({ params }: Props) {
               />
             </ScrollAnimation>
           )}
+
+          <ScrollAnimation>
+            <div className="border-t border-[var(--border)] pt-8">
+              <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                Best flies for {river.name}
+              </h2>
+              <p className="mb-3 text-sm text-[var(--text-2)]">
+                Hatch-chart nymphs, dries, and streamers for this river. Not a crowdsourced catch report.
+              </p>
+              <Link
+                href={`/flies/for/${river.slug}`}
+                className="inline-flex text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
+              >
+                Open the {river.name} fly list →
+              </Link>
+            </div>
+          </ScrollAnimation>
 
           <ScrollAnimation>
             <div>
@@ -460,47 +386,6 @@ export default async function RiverPage({ params }: Props) {
               </div>
             </div>
           </ScrollAnimation>
-
-          {fishingNow.length > 0 && (
-            <ScrollAnimation>
-              <div>
-                <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                  Flies fishing now
-                </h2>
-                <p className="mb-5 text-sm text-[var(--text-2)]">
-                  {monthNow} on the hatch chart — names and sizes, not a catch report.
-                </p>
-                <ul className="border-t border-[var(--border)]">
-                  {fishingNow.map((hatch, i) => {
-                    const matchedFly = flyByName.get(hatch.pattern?.toLowerCase() ?? "");
-                    return (
-                      <li
-                        key={`${hatch.insect}-${hatch.pattern}-${i}`}
-                        className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-[var(--border)] py-3"
-                      >
-                        <span className="font-medium text-[var(--text-1)]">{hatch.insect}</span>
-                        {hatch.size ? (
-                          <span className="num text-xs text-[var(--text-3)]">{hatch.size}</span>
-                        ) : null}
-                        {hatch.pattern ? (
-                          matchedFly ? (
-                            <Link
-                              href={`/flies/${matchedFly.slug}`}
-                              className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
-                            >
-                              {hatch.pattern}
-                            </Link>
-                          ) : (
-                            <span className="text-[var(--text-2)]">{hatch.pattern}</span>
-                          )
-                        ) : null}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </ScrollAnimation>
-          )}
 
           <RiverPhotoStrip riverId={river.id} riverSlug={river.slug} riverName={river.name} />
 
@@ -603,6 +488,145 @@ export default async function RiverPage({ params }: Props) {
             </ScrollAnimation>
           )}
 
+          {river.slug === "madison-river" && (
+            <ScrollAnimation>
+              <div>
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  Planning a Madison trip in 2026
+                </h2>
+                <div className="prose">
+                  <p>
+                    The Madison is two fisheries that share a name. Above Ennis Lake you are covering broad riffle-and-run meadow water. Below the lake the wade game opens up and caddis and PMDs do more work than the salmonfly posters suggest. Build the trip around the{" "}
+                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      hatch-chart fly list
+                    </Link>
+                    , the USGS gauge on this page, and Montana&apos;s season dates. We do not publish other anglers&apos; catches or GPS.
+                  </p>
+                  <p>
+                    If this is your first week on the Madison, fish the wade water first. A first float is worth a guide. Walk-up access is real on both the upper and the below-lake stretches if you already nymph. Pair this guide with the{" "}
+                    <Link href="/destinations/montana" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      Montana destination page
+                    </Link>{" "}
+                    for lodges, shops, and neighboring rivers. For a 2026 fly box, read{" "}
+                    <Link href="/articles/best-flies-for-the-madison-river-2026" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      Best Flies for the Madison River in 2026
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+            </ScrollAnimation>
+          )}
+
+          {river.slug === "green-river" && (
+            <ScrollAnimation>
+              <div>
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  Fishing the Green below Flaming Gorge
+                </h2>
+                <div className="prose">
+                  <p>
+                    This tailwater is A, B, and C sections, clear water, and a crowd that shows up for the same reasons you did. Pack small flies, check the gauge on this page, and read{" "}
+                    <Link href="/articles/green-river-utah-flaming-gorge-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      Fly Fishing the Green River Below Flaming Gorge
+                    </Link>
+                    {" "}before you book a shuttle. The{" "}
+                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      hatch-chart fly list
+                    </Link>
+                    {" "}is public. Other anglers&apos; fish are not.
+                  </p>
+                </div>
+              </div>
+            </ScrollAnimation>
+          )}
+
+          {river.slug === "pecos-river-new-mexico" && (
+            <ScrollAnimation>
+              <div>
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  Pecos pocket water
+                </h2>
+                <div className="prose">
+                  <p>
+                    Above Terrero you can walk. Along the road you share campground runs. After runoff, a dry-dropper and some manners will fish this river. Longer notes are in{" "}
+                    <Link href="/articles/pecos-river-new-mexico-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      Fly Fishing the Pecos River in New Mexico
+                    </Link>
+                    . Flies live on the{" "}
+                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      Pecos hatch-chart fly list
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+            </ScrollAnimation>
+          )}
+
+          {river.slug === "little-cottonwood-creek" && (
+            <ScrollAnimation>
+              <div>
+                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  A short Wasatch window
+                </h2>
+                <div className="prose">
+                  <p>
+                    Little Cottonwood is not Big Cottonwood and it is not a tailwater. Fish the cold window, carry a thermometer, and leave when summer heat says so. Read{" "}
+                    <Link href="/articles/little-cottonwood-creek-utah-fly-fishing" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      Fly Fishing Little Cottonwood Creek
+                    </Link>
+                    . The{" "}
+                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
+                      creek fly list
+                    </Link>
+                    {" "}follows the hatch chart.
+                  </p>
+                </div>
+              </div>
+            </ScrollAnimation>
+          )}
+
+          <ScrollAnimation>
+            <details className="group">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+                <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  Read the river overview
+                </h2>
+                <Icon
+                  name="chevron-down"
+                  className="h-5 w-5 shrink-0 text-[var(--text-3)] transition-transform group-open:rotate-180"
+                  aria-hidden
+                />
+              </summary>
+              <div className="prose mt-5">
+                {river.description.split("\n\n").map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+              <div className="entity-tags mt-6">
+                {(river.primarySpecies || []).map((speciesName) => {
+                  const matched = riverSpecies.find(
+                    (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
+                  );
+                  const badge = (
+                    <Badge key={speciesName} variant="river" size="md">
+                      <Icon name="hook" className="mr-1.5 h-3.5 w-3.5" />
+                      {speciesName}
+                    </Badge>
+                  );
+                  return matched ? (
+                    <Link key={speciesName} href={`/species/${matched.slug}`}>
+                      {badge}
+                    </Link>
+                  ) : (
+                    badge
+                  );
+                })}
+              </div>
+            </details>
+          </ScrollAnimation>
+
           {nearbyRivers.length > 0 && (
             <ScrollAnimation>
               <div>
@@ -625,23 +649,6 @@ export default async function RiverPage({ params }: Props) {
               </div>
             </ScrollAnimation>
           )}
-
-          <ScrollAnimation>
-            <div className="border-t border-[var(--border)] pt-8">
-              <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                Best flies for {river.name}
-              </h2>
-              <p className="mb-3 text-sm text-[var(--text-2)]">
-                Hatch-chart nymphs, dries, and streamers for this river. Not a crowdsourced catch report.
-              </p>
-              <Link
-                href={`/flies/for/${river.slug}`}
-                className="inline-flex text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
-              >
-                Open the {river.name} fly list →
-              </Link>
-            </div>
-          </ScrollAnimation>
         </div>
       </section>
     </>

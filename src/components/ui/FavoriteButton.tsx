@@ -66,7 +66,7 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       type="button"
       onClick={toggleFavorite}
       disabled={loading}
-      className={`ea-focus-ring ${FOCUS_VISIBLE} rounded-[var(--radius-md)] p-2 transition-colors motion-reduce:transition-none ${
+      className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex items-center gap-2 rounded-[var(--radius-md)] px-3 py-2 text-[var(--text-13)] font-medium transition-colors motion-reduce:transition-none ${
         isFavorite
           ? "bg-[var(--accent-soft)] text-[var(--accent)]"
           : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:text-[var(--accent)] hover:border-[var(--border-strong)]"
@@ -75,10 +75,11 @@ export default function FavoriteButton({ entityType, entityId }: FavoriteButtonP
       aria-pressed={isFavorite}
     >
       <Icon
-        name="hook"
-        className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`}
+        name="bookmark"
+        className="h-5 w-5"
         filled={isFavorite}
       />
+      <span>{isFavorite ? "Saved" : "Save"}</span>
     </button>
   );
 }

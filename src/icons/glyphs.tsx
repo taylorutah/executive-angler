@@ -117,6 +117,18 @@ const hackle: GlyphRender = (s) => {
   );
 };
 
+const bookmark: GlyphRender = (s, filled) => {
+  const x = m(s, 4.2, 5.2, 6.2);
+  const top = m(s, 2.4, 2.8, 3.2);
+  const bot = s - m(s, 2.2, 2.6, 3);
+  const notch = m(s, 3.4, 4.2, 5);
+  return path(
+    `M${x} ${top} H${s - x} V${bot} L${s / 2} ${bot - notch} L${x} ${bot} Z`,
+    "mark",
+    filled,
+  );
+};
+
 const hook: GlyphRender = (s) => {
   const x = s * 0.38;
   const top = m(s, 3.2, 3.6, 4);
@@ -1372,6 +1384,7 @@ export const GLYPHS: Record<IconName, GlyphRender> = {
   at,
   ban,
   bell,
+  bookmark,
   box,
   branch,
   building,

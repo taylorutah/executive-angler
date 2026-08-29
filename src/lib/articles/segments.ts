@@ -4,8 +4,9 @@
  *
  * The alternative — rendering those components inside the body wrapper — does
  * not work: the `.article-body` element rules for `blockquote` and `aside` are
- * unlayered, so they beat any utility class the components carry. Breaking the
- * wrapper instead leaves the stored HTML entirely untouched.
+ * unlayered, so they beat any utility class the components carry. Interruptions
+ * sit in `.article-interrupt` (the prose column, no callout chrome).
+ * Breaking the wrapper leaves the stored HTML entirely untouched.
  */
 export function splitBodyAtHeadings(
   html: string,

@@ -199,51 +199,50 @@ export default async function ArticlePage({ params }: Props) {
         }} />
       )}
 
-      <div className="bg-[var(--paper)]">
-        {/* One reading column at the --prose measure: the photograph leads
-            it, graded and flat — no scrim, no overlaid text (DESIGN.md §6). */}
-        <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
-          <figure className="relative m-0">
-            <div className="ea-photo-wide relative w-full overflow-hidden">
-              <div className="absolute top-4 right-4 z-20">
-                <AdminHeroEditor
-                  entityType="articles"
-                  entityId={article.id}
-                  currentImageUrl={article.heroImageUrl}
-                  currentAlt={article.heroImageAlt}
-                  currentCredit={article.heroImageCredit}
-                  currentCreditUrl={article.heroImageCreditUrl}
-                />
-              </div>
-              <SafeEntityImage
-                src={article.heroImageUrl}
-                alt={article.heroImageAlt || article.title}
-                title={article.title}
-                meta={article.category}
-                className="ea-photo"
-                priority
-                sizes="(max-width: 680px) 100vw, 680px"
+      <div className="overflow-x-clip bg-[var(--paper)]">
+        {/* Full-bleed photograph, graded and flat — no scrim, no overlaid
+            text (DESIGN.md §6). Headline sits on paper below. */}
+        <figure className="relative m-0">
+          <div className="relative aspect-[16/9] w-full overflow-hidden sm:aspect-[21/9]">
+            <div className="absolute top-4 right-4 z-20">
+              <AdminHeroEditor
+                entityType="articles"
+                entityId={article.id}
+                currentImageUrl={article.heroImageUrl}
+                currentAlt={article.heroImageAlt}
+                currentCredit={article.heroImageCredit}
+                currentCreditUrl={article.heroImageCreditUrl}
               />
             </div>
-            {article.heroImageCredit && (
-              <figcaption className="pt-2 text-[var(--text-13)] text-[var(--text-3)]">
-                {article.heroImageCreditUrl ? (
-                  <a
-                    href={article.heroImageCreditUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[var(--accent)] transition-colors"
-                  >
-                    {article.heroImageCredit}
-                  </a>
-                ) : (
-                  article.heroImageCredit
-                )}
-              </figcaption>
-            )}
-          </figure>
+            <SafeEntityImage
+              src={article.heroImageUrl}
+              alt={article.heroImageAlt || article.title}
+              title={article.title}
+              meta={article.category}
+              className="ea-photo"
+              priority
+              sizes="100vw"
+            />
+          </div>
+          {article.heroImageCredit && (
+            <figcaption className="mx-auto max-w-[var(--container)] px-4 pt-2 text-[var(--text-13)] text-[var(--text-3)] sm:px-6">
+              {article.heroImageCreditUrl ? (
+                <a
+                  href={article.heroImageCreditUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[var(--accent)] transition-colors"
+                >
+                  {article.heroImageCredit}
+                </a>
+              ) : (
+                article.heroImageCredit
+              )}
+            </figcaption>
+          )}
+        </figure>
 
-          {/* Breadcrumb + favorite */}
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
           <div className="flex items-center justify-between py-6 border-b border-[var(--border)]">
             <Breadcrumbs
               items={[
@@ -255,7 +254,7 @@ export default async function ArticlePage({ params }: Props) {
           </div>
 
           <article className="pb-24">
-            <header className="pt-8 sm:pt-12">
+            <header className="mx-auto max-w-[var(--prose)] pt-8 sm:pt-12">
               <p className="ea-overline">
                 {categoryLabel}
               </p>
@@ -287,8 +286,10 @@ export default async function ArticlePage({ params }: Props) {
               </div>
             </header>
 
-            {/* Body — .prose supplies 18px / 1.7 / 65ch; .article-body keeps
-                the element rules the stored HTML depends on. */}
+            {/* Body — .article-body keeps text-flow on --prose.
+                Figures may open to --article-media (~960).
+                Interruptions use .article-interrupt (same prose column)
+                so they cannot pick up hanging quote/aside styles. */}
             <div className="mt-12">
               {segments.map((segment, i) => (
                 <div key={i}>
@@ -296,16 +297,16 @@ export default async function ArticlePage({ params }: Props) {
                     className={`prose article-body${i > 0 ? " article-body--continued" : ""}`}
                     dangerouslySetInnerHTML={{ __html: segment }}
                   />
-                  {i < segments.length - 1 && (
-                    <div>{interruptions[i]}</div>
-                  )}
+                  {i < segments.length - 1 && interruptions[i] ? (
+                    <div className="article-interrupt">{interruptions[i]}</div>
+                  ) : null}
                 </div>
               ))}
             </div>
 
             {/* The piece ends in the water, not on another article. */}
             {(subjectRivers.length > 0 || subjectFlies.length > 0) && (
-              <div className="mt-16 border-t border-[var(--border)] pt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="mt-16 grid grid-cols-1 gap-6 border-t border-[var(--border)] pt-8 sm:grid-cols-2">
                 {subjectRivers.length > 0 && (
                   <section>
                     <h2 className="ea-overline">

@@ -67,6 +67,7 @@
   /* ── Layout ──────────────────────────────────────────────────── */
   --container: 1200px;
   --prose: 680px;
+  --article-media: 960px;
   --gutter: 16px;
   --header-h: 68px;
 
@@ -784,9 +785,55 @@
 }
 
 .prose.article-body {
-  max-width: 65ch;
+  /* Text-flow stays on --prose. Visual media may open to
+     --article-media (~960), centered on the same axis.
+     Parent must not be --prose. */
+  max-width: none;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    min(var(--prose), 100%)
+    minmax(0, 1fr);
   font-size: var(--text-18);
   line-height: 1.7;
+}
+
+.article-interrupt {
+  /* Pull quotes and stat blocks share the prose column exactly. */
+  max-width: min(var(--prose), 100%);
+  margin-inline: auto;
+}
+
+.article-body > * {
+  grid-column: 2;
+  min-width: 0;
+}
+
+/* Modest media rail. Figures and raster media only — never
+   quotes, tables, asides, pre, or other text-flow elements.
+   margin-inline: 0 kills the UA 40px figure hanging indent. */
+.article-media,
+.article-body > figure:not(.article-pullquote),
+.article-body > img,
+.article-body > picture,
+.article-body > video,
+.article-body > div:has(> figure:not(.article-pullquote)),
+.article-body > div:has(> img),
+.article-body > div:has(> picture),
+.article-body > div:has(> video) {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: min(var(--article-media), 100%);
+  margin-inline: 0;
+  justify-self: center;
+  box-sizing: border-box;
+}
+
+.article-body img,
+.article-body picture,
+.article-body video {
+  display: block;
+  height: auto;
 }
 
 .prose.article-body p {
@@ -949,12 +996,87 @@
 .destination-body aside,
 .river-body aside {
   border-left: 3px solid var(--accent);
-  padding: var(--space-3) var(--space-5);
-  margin: var(--space-5) 0;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-5);
+  margin-block: var(--space-5);
+  margin-inline: 0;
+  width: 100%;
+  max-width: 100%;
   background: var(--accent-soft);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   color: var(--text-body);
   font-style: italic;
+  box-sizing: border-box;
+}
+
+/* Pull quotes and stat blocks must beat the unlayered
+   aside/blockquote callout chrome if they ever sit in .article-body. */
+.article-body .article-pullquote,
+.article-body .article-statblock,
+.article-body aside.article-statblock,
+.article-body figure.article-pullquote {
+  border-left: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  font-style: normal;
+  color: inherit;
+}
+
+.article-pullquote > blockquote {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 0;
+  font-style: inherit;
+  color: inherit;
+}
+
+figure.article-pullquote,
+.article-interrupt .article-pullquote {
+  margin-block: var(--space-6);
+  margin-inline: 0;
+  padding-block: var(--space-4);
+  padding-inline: var(--space-5);
+  border-left: 2px solid var(--accent);
+  background: transparent;
+  font-style: normal;
+  box-sizing: border-box;
+}
+
+aside.article-statblock,
+.article-interrupt .article-statblock {
+  margin-block: var(--space-6);
+  margin-inline: 0;
+  padding-block: var(--space-5);
+  padding-inline: 0;
+  border: none;
+  border-block: 1px solid var(--border);
+  background: transparent;
+  font-style: normal;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.article-body > pre {
+  overflow-x: auto;
+  padding: var(--space-4);
+  background: var(--paper-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-14);
+  line-height: 1.5;
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin-block: var(--space-6);
 }
 
 .article-body blockquote p,
@@ -970,13 +1092,16 @@
 .destination-body table,
 .river-body table {
   width: 100%;
+  max-width: 100%;
   font-size: var(--text-14);
   font-variant-numeric: tabular-nums;
   border-collapse: collapse;
-  margin: var(--space-5) 0;
+  margin-block: var(--space-5);
+  margin-inline: 0;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border-rule);
+  box-sizing: border-box;
 }
 
 .article-body th,
@@ -1063,8 +1188,10 @@
   }
 
   .article-body blockquote {
-    padding: var(--space-3) var(--space-4);
-    margin: var(--space-5) 0;
+    padding-block: var(--space-3);
+    padding-inline: var(--space-4);
+    margin-block: var(--space-5);
+    margin-inline: 0;
   }
 
   .article-body ul,

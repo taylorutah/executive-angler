@@ -2,6 +2,9 @@
  * A pull quote is one of only two things allowed to interrupt a field note's
  * prose column. It sets the piece's own words at display scale — it never
  * introduces text the article did not already carry.
+ *
+ * Lives on the prose column — same left/right edges as body
+ * paragraphs. No hanging indent, no UA figure margin.
  */
 export default function PullQuote({
   children,
@@ -11,7 +14,7 @@ export default function PullQuote({
   attribution?: string;
 }) {
   return (
-    <figure className="my-10 border-l-2 border-[var(--accent)] pl-6">
+    <figure className="article-pullquote">
       <blockquote className="font-display text-[var(--text-24)] sm:text-[var(--text-30)] font-medium leading-[1.2] text-[var(--text-1)]">
         {children}
       </blockquote>

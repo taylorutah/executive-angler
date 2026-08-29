@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import {
+  buildFlyLogEvents,
+  collectReferencedFlyIds,
+  computeTopFly,
+} from "@/lib/insights/top-fly";
 
 /**
  * Personal River Scorecard — owner-only stats for THIS river. Replaces
@@ -78,10 +83,12 @@ export async function GET(
 
   const { data: catches } = await supabase
     .from("catches")
-    .select(`
-      session_id, length_inches, fly_size, fly_name, fly_pattern_id, time_caught,
-      fly_patterns(name)
-    `)
+    .select("session_id, length_inches, fly_size, fly_name, fly_pattern_id, canonical_fly_id, time_caught, quantities")
+    .in("session_id", sessionIds);
+
+  const { data: rigs } = await supabase
+    .from("session_rigs")
+    .select("session_id, fly_name, fly_pattern_id")
     .in("session_id", sessionIds);
 
   // Top-line stats
@@ -98,16 +105,28 @@ export async function GET(
     .map((c) => Number(c.length_inches));
   const biggestFishInches = lengths.length > 0 ? Math.round(Math.max(...lengths) * 10) / 10 : null;
 
-  // Top fly (your favorite catcher on this river)
-  const flyCount = new Map<string, number>();
-  (catches || []).forEach((c) => {
-    const fp = c.fly_patterns as unknown as { name: string } | null;
-    const name = fp?.name ?? c.fly_name ?? null;
-    if (name) flyCount.set(name, (flyCount.get(name) ?? 0) + 1);
-  });
-  const topFlyName = flyCount.size > 0
-    ? [...flyCount.entries()].sort((a, b) => b[1] - a[1])[0][0]
-    : null;
+  const flyRefs = [...(catches || []), ...(rigs || [])];
+  const referencedFlyIds = collectReferencedFlyIds(flyRefs);
+  const { data: rawFlies } = referencedFlyIds.length > 0
+    ? await supabase
+        .from("flies")
+        .select("id, name")
+        .in("id", referencedFlyIds)
+        .is("deleted_at", null)
+    : { data: [] };
+  const flyNameById = new Map(
+    (rawFlies ?? []).map((f) => [f.id as string, f.name as string]),
+  );
+  const sessionDateById = new Map(sessions.map((s) => [s.id as string, s.date as string]));
+  const topFly = computeTopFly(
+    buildFlyLogEvents({
+      catches: catches || [],
+      rigs: rigs || [],
+      sessionDateById,
+      flyNameById,
+    }),
+  );
+  const topFlyName = topFly?.name ?? null;
 
   // Best section
   const sectionMap = new Map<string, { fish: number; count: number }>();

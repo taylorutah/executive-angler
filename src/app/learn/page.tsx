@@ -117,7 +117,7 @@ export default async function LearnPage() {
   ).filter((r): r is LearnRiver => Boolean(r));
 
   return (
-    <div className="bg-[var(--paper)]">
+    <div className="overflow-x-clip bg-[var(--paper)]">
       <header className="mx-auto max-w-[var(--prose)] px-4 py-14 sm:px-6 sm:py-24">
         <Breadcrumbs items={[{ label: "Learn", href: "/learn" }]} />
         <p className="ea-overline mt-8">
@@ -126,7 +126,7 @@ export default async function LearnPage() {
         <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.15] text-[var(--text-1)] sm:text-5xl">
           Learn the water
         </h1>
-        <p className="prose mt-6">
+        <p className="prose max-w-none mt-6">
           Fly fishing is smaller than the catalog makes it look. Gear that earns its
           pocket. Current that holds fish. Five flies that cover most days. Rivers that
           forgive a first cast. How to put a fish back. Then two lists — not a form.
@@ -144,7 +144,7 @@ export default async function LearnPage() {
           <h2 id="gear" className={SECTION_H2}>
             What gear actually matters
           </h2>
-          <p className="prose mt-5">
+          <p className="prose max-w-none mt-5">
             A shop will sell you a quiver. You need one rod that casts, a line that
             matches it, and the three tools that land a fish without hurting it.
           </p>
@@ -175,18 +175,20 @@ export default async function LearnPage() {
       </section>
 
       <section aria-labelledby="water" className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--prose)] px-4 py-14 sm:px-6 sm:py-24">
-          <p className="ea-overline">
-            02
-          </p>
-          <h2 id="water" className={SECTION_H2}>
-            How to read water
-          </h2>
-          <p className="prose mt-5">
-            A trout holds where three things meet: food in the current, a break from
-            that current, and cover from above. Find the convergence. The cast is
-            secondary.
-          </p>
+        <div className="mx-auto max-w-[var(--container)] px-4 py-14 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-[var(--prose)]">
+            <p className="ea-overline">
+              02
+            </p>
+            <h2 id="water" className={SECTION_H2}>
+              How to read water
+            </h2>
+            <p className="prose max-w-none mt-5">
+              A trout holds where three things meet: food in the current, a break from
+              that current, and cover from above. Find the convergence. The cast is
+              secondary.
+            </p>
+          </div>
           <ul className="mt-10 grid gap-px bg-[var(--border)] sm:grid-cols-2">
             {WATER_FEATURES.map((feat) => (
               <li key={feat.name} className="bg-[var(--paper)] p-6">
@@ -202,7 +204,7 @@ export default async function LearnPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-8">
+          <p className="mx-auto mt-8 max-w-[var(--prose)]">
             <Link
               href="/articles/reading-water-complete-guide"
               className={SECTION_LINK}
@@ -225,7 +227,7 @@ export default async function LearnPage() {
             <h2 id="flies" className={SECTION_H2}>
               Your first five flies
             </h2>
-            <p className="prose mt-5">
+            <p className="prose max-w-none mt-5">
               Two dries, a nymph, a streamer, an emerger. Each one has a job. The plate
               is not decoration — it is the box you actually carry.
             </p>
@@ -245,18 +247,20 @@ export default async function LearnPage() {
       </section>
 
       <section aria-labelledby="rivers" className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--prose)] px-4 py-14 sm:px-6 sm:py-24">
-          <p className="ea-overline">
-            04
-          </p>
-          <h2 id="rivers" className={SECTION_H2}>
-            Rivers near you that forgive beginners
-          </h2>
-          <p className="prose mt-5">
-            These are the rivers the catalog already marks beginner — not a new ranking.
-            Wide, wadeable, or close to a town. Use your location to put the nearest
-            first. Location stays on the device.
-          </p>
+        <div className="mx-auto max-w-[var(--container)] px-4 py-14 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-[var(--prose)]">
+            <p className="ea-overline">
+              04
+            </p>
+            <h2 id="rivers" className={SECTION_H2}>
+              Rivers near you that forgive beginners
+            </h2>
+            <p className="prose max-w-none mt-5">
+              These are the rivers the catalog already marks beginner — not a new ranking.
+              Wide, wadeable, or close to a town. Use your location to put the nearest
+              first. Location stays on the device.
+            </p>
+          </div>
           <div className="mt-10">
             <NearRivers rivers={beginnerRivers} />
           </div>
@@ -267,17 +271,19 @@ export default async function LearnPage() {
         aria-labelledby="release"
         className="border-t border-[var(--border)] bg-[var(--paper-deep)]"
       >
-        <div className="mx-auto max-w-[var(--prose)] px-4 py-14 sm:px-6 sm:py-24">
-          <p className="ea-overline">
-            05
-          </p>
-          <h2 id="release" className={SECTION_H2}>
-            Catch-and-release etiquette
-          </h2>
-          <p className="prose mt-5">
-            Done well, almost every trout swims away. Done poorly, it is harvest with
-            extra steps. The difference is a barb, wet hands, and the clock.
-          </p>
+        <div className="mx-auto max-w-[var(--container)] px-4 py-14 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-[var(--prose)]">
+            <p className="ea-overline">
+              05
+            </p>
+            <h2 id="release" className={SECTION_H2}>
+              Catch-and-release etiquette
+            </h2>
+            <p className="prose max-w-none mt-5">
+              Done well, almost every trout swims away. Done poorly, it is harvest with
+              extra steps. The difference is a barb, wet hands, and the clock.
+            </p>
+          </div>
           <ul className="mt-10 divide-y divide-[var(--border)] border-y border-[var(--border)]">
             {ETIQUETTE.map((row) => (
               <li key={row.do} className="grid gap-3 py-6 sm:grid-cols-2 sm:gap-8">
@@ -296,7 +302,7 @@ export default async function LearnPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-8">
+          <p className="mx-auto mt-8 max-w-[var(--prose)]">
             <Link
               href="/articles/catch-and-release-best-practices"
               className={SECTION_LINK}
@@ -319,7 +325,7 @@ export default async function LearnPage() {
             <h2 id="keep" className={SECTION_H2}>
               Two lists. That is the whole path.
             </h2>
-            <p className="prose mt-5">
+            <p className="prose max-w-none mt-5">
               Five flies that cover a first season. Five rivers the catalog already calls
               beginner, spread so one of them is closer than it looks. Keep them — the
               account is just the pocket they live in.
