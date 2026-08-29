@@ -60,16 +60,15 @@ function MetricCard({
   value: number;
 }) {
   return (
-    <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5 flex flex-col gap-3">
-      <div className="flex items-center justify-between">
-        <span className="text-[var(--text-meta)]">{icon}</span>
-      </div>
-      <p className="font-mono text-3xl font-bold text-[var(--action)]">
-        {value.toLocaleString()}
-      </p>
-      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-meta)]">
-        {label}
-      </p>
+    <div className="ea-card flex flex-col gap-3">
+      <span
+        className="h-9 w-9 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)]"
+        aria-hidden
+      >
+        {icon}
+      </span>
+      <p className="ea-stat-value">{value.toLocaleString()}</p>
+      <p className="ea-stat-label">{label}</p>
     </div>
   );
 }
@@ -83,58 +82,58 @@ export default function AdminClient({
   const maxRiverCount = topRivers.length > 0 ? topRivers[0].count : 1;
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--paper)] text-[var(--text-1)]">
       {/* Header */}
-      <header className="border-b border-[var(--border-rule)] px-6 py-6">
-        <div className="mx-auto flex max-w-7xl items-center gap-3">
-          <Shield className="h-7 w-7 text-[var(--action)]" />
-          <h1 className="text-2xl font-bold tracking-tight">Admin Dashboard</h1>
+      <header className="border-b border-[var(--border)] px-6 py-6">
+        <div className="mx-auto flex max-w-[var(--container)] items-center gap-3">
+          <Shield className="h-6 w-6 text-[var(--accent)]" />
+          <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">Admin Dashboard</h1>
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl space-y-10 px-6 py-8">
+      <main className="mx-auto max-w-[var(--container)] space-y-10 px-6 py-8">
         {/* ── Quick Links ── */}
         <section>
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[var(--text-body)]">
+          <h2 className="ea-overline mb-4">
             Manage
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <Link href="/admin/users" className="group flex items-center gap-3 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4 hover:border-[var(--action)] transition-colors">
-              <Users className="h-5 w-5 text-[var(--action)]" />
+            <Link href="/admin/users" className="card-hover group flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors duration-150 ease-standard">
+              <Users className="h-5 w-5 text-[var(--accent)]" />
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">User Management</p>
-                <p className="text-[11px] text-[var(--text-meta)]">View all users, activity, stats</p>
+                <p className="text-sm font-semibold text-[var(--text-1)]">User Management</p>
+                <p className="text-xs text-[var(--text-3)]">View all users, activity, stats</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[var(--text-meta)] group-hover:text-[var(--action)]" />
+              <ChevronRight className="h-4 w-4 text-[var(--text-3)] group-hover:text-[var(--accent)]" />
             </Link>
-            <Link href="/admin/photos" className="group flex items-center gap-3 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4 hover:border-[var(--signal-live)] transition-colors">
-              <ImageIcon className="h-5 w-5 text-[var(--signal-live)]" />
+            <Link href="/admin/photos" className="card-hover group flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors duration-150 ease-standard">
+              <ImageIcon className="h-5 w-5 text-[var(--accent)]" />
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--signal-live)] transition-colors">Photo Moderation</p>
-                <p className="text-[11px] text-[var(--text-meta)]">Review uploaded photos</p>
+                <p className="text-sm font-semibold text-[var(--text-1)]">Photo Moderation</p>
+                <p className="text-xs text-[var(--text-3)]">Review uploaded photos</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[var(--text-meta)] group-hover:text-[var(--signal-live)]" />
+              <ChevronRight className="h-4 w-4 text-[var(--text-3)] group-hover:text-[var(--accent)]" />
             </Link>
-            <Link href="/admin/promo-codes" className="group flex items-center gap-3 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4 hover:border-[var(--action)] transition-colors">
-              <TicketPercent className="h-5 w-5 text-[var(--action)]" />
+            <Link href="/admin/promo-codes" className="card-hover group flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors duration-150 ease-standard">
+              <TicketPercent className="h-5 w-5 text-[var(--accent)]" />
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--action)] transition-colors">Promo Codes</p>
-                <p className="text-[11px] text-[var(--text-meta)]">Track redemptions & active Pro users</p>
+                <p className="text-sm font-semibold text-[var(--text-1)]">Promo Codes</p>
+                <p className="text-xs text-[var(--text-3)]">Track redemptions & active Pro users</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[var(--text-meta)] group-hover:text-[var(--action)]" />
+              <ChevronRight className="h-4 w-4 text-[var(--text-3)] group-hover:text-[var(--accent)]" />
             </Link>
-            <Link href="/admin/submissions" className="group flex items-center gap-3 rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-4 hover:border-purple-400 transition-colors">
-              <Send className="h-5 w-5 text-purple-400" />
+            <Link href="/admin/submissions" className="card-hover group flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors duration-150 ease-standard">
+              <Send className="h-5 w-5 text-[var(--accent)]" />
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-purple-400 transition-colors">Submissions</p>
-                <p className="text-[11px] text-[var(--text-meta)]">Review community content</p>
+                <p className="text-sm font-semibold text-[var(--text-1)]">Submissions</p>
+                <p className="text-xs text-[var(--text-3)]">Review community content</p>
               </div>
-              <ChevronRight className="h-4 w-4 text-[var(--text-meta)] group-hover:text-purple-400" />
+              <ChevronRight className="h-4 w-4 text-[var(--text-3)] group-hover:text-[var(--accent)]" />
             </Link>
           </div>
           <div className="mt-3">
-            <Link href="/admin/setup" className="group inline-flex items-center gap-2 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-raised)] px-3 py-2 text-xs text-[var(--text-body)] hover:border-[var(--state-positive)] hover:text-[var(--state-positive)] transition-colors">
-              <Database className="h-3.5 w-3.5 text-[var(--state-positive)]" />
+            <Link href="/admin/setup" className="group inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard">
+              <Database className="h-3.5 w-3.5 text-[var(--text-3)]" />
               <span>Database Setup · schema & migrations</span>
             </Link>
           </div>
@@ -142,7 +141,7 @@ export default function AdminClient({
 
         {/* ── Metric Cards Grid ── */}
         <section>
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[var(--text-body)]">
+          <h2 className="ea-overline mb-4">
             Overview
           </h2>
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -187,10 +186,10 @@ export default function AdminClient({
         {/* ── Top Rivers ── */}
         {topRivers.length > 0 && (
           <section>
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[var(--text-body)]">
+            <h2 className="ea-overline mb-4">
               Top Rivers
             </h2>
-            <div className="rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)] p-5">
+            <div className="ea-card">
               <ul className="space-y-3">
                 {topRivers.map((river, i) => {
                   const pct = Math.max(
@@ -199,22 +198,22 @@ export default function AdminClient({
                   );
                   return (
                     <li key={river.name} className="flex items-center gap-3">
-                      <span className="w-5 shrink-0 text-right font-mono text-xs text-[var(--text-meta)]">
+                      <span className="w-5 shrink-0 text-right num text-xs text-[var(--text-3)]">
                         {i + 1}
                       </span>
                       <div className="flex-1">
                         <div className="mb-1 flex items-center justify-between">
-                          <span className="flex items-center gap-1.5 text-sm text-[var(--text-primary)]">
-                            <MapPin className="h-3.5 w-3.5 text-[var(--signal-live)]" />
+                          <span className="flex items-center gap-1.5 text-sm text-[var(--text-1)]">
+                            <MapPin className="h-3.5 w-3.5 text-[var(--text-3)]" />
                             {river.name}
                           </span>
-                          <span className="font-mono text-xs text-[var(--action)]">
+                          <span className="num text-xs text-[var(--text-1)]">
                             {river.count}
                           </span>
                         </div>
-                        <div className="h-1.5 w-full rounded-full bg-[var(--border-rule)]">
+                        <div className="h-2 w-full rounded-[var(--radius-sm)] bg-[var(--paper-deep)]">
                           <div
-                            className="h-1.5 rounded-full bg-[var(--signal-live)]"
+                            className="h-2 rounded-[var(--radius-sm)] bg-[var(--accent)]"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
@@ -230,40 +229,37 @@ export default function AdminClient({
         {/* ── Recent Sessions ── */}
         {recentSessions.length > 0 && (
           <section>
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[var(--text-body)]">
+            <h2 className="ea-overline mb-4">
               Recent Sessions
             </h2>
-            <div className="overflow-x-auto rounded-xl border border-[var(--border-rule)] bg-[var(--surface-raised)]">
-              <table className="w-full text-left text-sm">
+            <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+              <table className="ea-table">
                 <thead>
-                  <tr className="border-b border-[var(--border-rule)] text-xs uppercase tracking-wider text-[var(--text-meta)]">
-                    <th className="px-5 py-3 font-semibold">Date</th>
-                    <th className="px-5 py-3 font-semibold">River</th>
-                    <th className="px-5 py-3 font-semibold">Angler</th>
-                    <th className="px-5 py-3 text-right font-semibold">Fish</th>
+                  <tr>
+                    <th>Date</th>
+                    <th>River</th>
+                    <th>Angler</th>
+                    <th className="text-right">Fish</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#21262D]">
+                <tbody>
                   {recentSessions.map((s) => {
                     const displayName =
                       s.profiles?.display_name ||
                       s.profiles?.username ||
                       s.user_id.slice(0, 8);
                     return (
-                      <tr
-                        key={s.id}
-                        className="transition-colors hover:bg-[var(--border-rule)]/40"
-                      >
-                        <td className="whitespace-nowrap px-5 py-3 font-mono text-xs text-[var(--text-body)]">
+                      <tr key={s.id}>
+                        <td className="whitespace-nowrap num text-[var(--text-2)]">
                           {s.date}
                         </td>
-                        <td className="px-5 py-3 text-[var(--text-primary)]">
+                        <td className="text-[var(--text-1)]">
                           {s.river_name ?? "—"}
                         </td>
-                        <td className="px-5 py-3 text-[var(--text-body)]">
+                        <td className="text-[var(--text-2)]">
                           {displayName}
                         </td>
-                        <td className="px-5 py-3 text-right font-mono text-[var(--action)]">
+                        <td className="text-right num text-[var(--text-1)]">
                           {s.total_fish ?? 0}
                         </td>
                       </tr>
