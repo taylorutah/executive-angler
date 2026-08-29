@@ -87,22 +87,22 @@ export default function AdminFlySubmissionsClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] text-cream">
-      <div className="border-b border-white/10 bg-[var(--surface-raised)]">
+    <div className="min-h-screen bg-[var(--paper)] text-[var(--text-1)]">
+      <div className="border-b border-[var(--border)]">
         <div className="mx-auto max-w-6xl px-6 py-4 flex items-center gap-3">
           <Link
             href="/admin"
-            className="text-sm text-cream/70 hover:text-cream flex items-center gap-1.5"
+            className="text-sm text-[var(--text-2)] hover:text-[var(--text-1)] flex items-center gap-1.5 transition-colors duration-150 ease-standard"
           >
             <ArrowLeft className="w-4 h-4" /> Admin
           </Link>
-          <span className="text-cream/30">/</span>
-          <h1 className="text-lg font-heading">Fly Submissions</h1>
+          <span className="text-[var(--text-3)]">/</span>
+          <h1 className="font-display text-xl font-semibold text-[var(--text-1)]">Fly Submissions</h1>
         </div>
       </div>
 
       <div className="mx-auto max-w-6xl px-6 py-6">
-        <div className="flex gap-1 mb-6 border-b border-white/10">
+        <div className="flex flex-wrap gap-2 mb-6">
           {TABS.map((t) => {
             const Icon = t.icon;
             const isActive = tab === t.key;
@@ -110,13 +110,14 @@ export default function AdminFlySubmissionsClient() {
               <button
                 key={t.key}
                 onClick={() => setTab(t.key)}
-                className={`px-4 py-2.5 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                aria-pressed={isActive}
+                className={`inline-flex items-center gap-2 rounded-[var(--radius-pill)] border px-3 py-1.5 text-[13px] font-medium whitespace-nowrap transition-colors duration-150 ease-standard ${
                   isActive
-                    ? "border-[var(--action)] text-cream"
-                    : "border-transparent text-cream/60 hover:text-cream"
+                    ? "border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)]"
+                    : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-3.5 h-3.5" />
                 {t.label}
               </button>
             );
@@ -125,21 +126,21 @@ export default function AdminFlySubmissionsClient() {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-6 h-6 animate-spin text-cream/50" />
+            <Loader2 className="w-6 h-6 animate-spin text-[var(--accent)]" />
           </div>
         ) : rows.length === 0 ? (
-          <div className="text-center py-20 text-cream/50">
-            No {tab.replace("_", " ")} submissions.
+          <div className="ea-card ea-empty">
+            <p>No {tab.replace("_", " ")} submissions.</p>
           </div>
         ) : (
           <div className="space-y-4">
             {rows.map((sub) => (
               <div
                 key={sub.id}
-                className="bg-[var(--surface-raised)] border border-white/10 rounded-lg p-5 flex gap-5"
+                className="ea-card flex gap-5"
               >
                 {sub.hero_image_url ? (
-                  <div className="relative w-32 h-32 flex-shrink-0 rounded overflow-hidden bg-black/30">
+                  <div className="relative w-32 h-32 flex-shrink-0 rounded-[var(--radius-md)] overflow-hidden bg-[var(--paper-deep)]">
                     <Image
                       src={sub.hero_image_url}
                       alt={sub.name}
@@ -149,7 +150,7 @@ export default function AdminFlySubmissionsClient() {
                     />
                   </div>
                 ) : (
-                  <div className="w-32 h-32 flex-shrink-0 rounded bg-black/30 flex items-center justify-center text-cream/30 text-xs">
+                  <div className="w-32 h-32 flex-shrink-0 rounded-[var(--radius-md)] bg-[var(--paper-deep)] flex items-center justify-center text-[var(--text-3)] text-xs">
                     no photo
                   </div>
                 )}
@@ -157,12 +158,12 @@ export default function AdminFlySubmissionsClient() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="font-heading text-lg leading-tight">{sub.name}</h3>
-                      <div className="text-xs text-cream/50 mt-0.5">
+                      <h3 className="font-display text-lg font-semibold leading-tight text-[var(--text-1)]">{sub.name}</h3>
+                      <div className="text-xs text-[var(--text-3)] mt-0.5">
                         {sub.category ?? "uncategorized"}
                         {sub.parent_canonical_id && " · variant of canonical fly"}
                       </div>
-                      <div className="text-xs text-cream/50 mt-0.5">
+                      <div className="text-xs text-[var(--text-3)] mt-0.5">
                         by {sub.submitter?.display_name ?? sub.submitter?.username ?? "unknown"}
                         {" · "}
                         {new Date(sub.created_at).toLocaleDateString()}
@@ -171,7 +172,7 @@ export default function AdminFlySubmissionsClient() {
                     {sub.promoted_canonical_id && (
                       <Link
                         href={`/flies/${sub.promoted_canonical_id}`}
-                        className="text-xs text-[var(--signal-live)] hover:underline"
+                        className="text-xs text-[var(--accent)] hover:underline"
                       >
                         view canonical →
                       </Link>
@@ -179,10 +180,10 @@ export default function AdminFlySubmissionsClient() {
                   </div>
 
                   {sub.description && (
-                    <p className="text-sm text-cream/70 mt-2 line-clamp-3">{sub.description}</p>
+                    <p className="text-sm text-[var(--text-2)] mt-2 line-clamp-3">{sub.description}</p>
                   )}
 
-                  <div className="text-xs text-cream/50 mt-2 flex flex-wrap gap-3">
+                  <div className="text-xs text-[var(--text-3)] mt-2 flex flex-wrap gap-3">
                     {sub.sizes?.length ? <span>sizes: {sub.sizes.join(", ")}</span> : null}
                     {sub.colors?.length ? <span>colors: {sub.colors.join(", ")}</span> : null}
                     {sub.bead_options?.length ? (
@@ -191,7 +192,7 @@ export default function AdminFlySubmissionsClient() {
                   </div>
 
                   {sub.admin_notes && (
-                    <div className="text-xs text-cream/60 mt-2 italic">
+                    <div className="text-xs text-[var(--text-2)] mt-2 italic">
                       admin notes: {sub.admin_notes}
                     </div>
                   )}
@@ -205,7 +206,7 @@ export default function AdminFlySubmissionsClient() {
                           setNotesById((m) => ({ ...m, [sub.id]: e.target.value }))
                         }
                         rows={2}
-                        className="w-full bg-[var(--surface-page)] border border-white/10 rounded px-3 py-2 text-sm placeholder:text-cream/30"
+                        className="ea-input"
                       />
                       <div className="flex gap-2">
                         <Button
