@@ -59,10 +59,10 @@ export default async function AdminImageGapsPage() {
   const flagged = permissions.filter((p) => p.flagged_for_taylor).length;
 
   return (
-    <div className="min-h-screen text-[var(--text-primary)]">
-      <header className="border-b border-[var(--border-rule)] px-6 py-6">
-        <h1 className="text-2xl font-bold tracking-tight">Image gaps</h1>
-        <p className="mt-1 text-sm text-[var(--text-body)] max-w-2xl">
+    <div className="min-h-screen text-[var(--text-1)]">
+      <header className="border-b border-[var(--border)] px-6 py-6">
+        <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">Image gaps</h1>
+        <p className="mt-1 text-sm text-[var(--text-2)] max-w-2xl">
           We host every image. Unsplash ingest strips EXIF including GPS.
           Gear-brand and lodge shots are not bulk-downloaded — they sit in the
           permissions table until Taylor picks a route. Rehost stays disabled
@@ -71,30 +71,30 @@ export default async function AdminImageGapsPage() {
       </header>
 
       <section className="px-6 pt-8 max-w-5xl">
-        <h2 className="font-heading text-lg font-semibold">Tier 3 — ask, don’t copy</h2>
-        <p className="text-xs text-[var(--text-meta)] mb-3">
+        <h2 className="font-display text-lg font-semibold text-[var(--text-1)]">Tier 3 — ask, don’t copy</h2>
+        <p className="text-xs text-[var(--text-3)] mb-3">
           {flagged} unresolved items flagged for Taylor. Removing a hotlink
           does not remove the copyright.
         </p>
-        <div className="overflow-x-auto rounded-lg border border-[var(--border-rule)] mb-10">
-          <table className="w-full text-sm">
-            <thead className="bg-[var(--surface-raised)] text-left text-[10px] uppercase tracking-wider text-[var(--text-meta)]">
+        <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] mb-10">
+          <table className="ea-table">
+            <thead>
               <tr>
-                <th className="px-3 py-2 font-medium">Brand</th>
-                <th className="px-3 py-2 font-medium">Entity</th>
-                <th className="px-3 py-2 font-medium">Route</th>
-                <th className="px-3 py-2 font-medium">Status</th>
-                <th className="px-3 py-2 font-medium">Asset</th>
+                <th>Brand</th>
+                <th>Entity</th>
+                <th>Route</th>
+                <th>Status</th>
+                <th>Asset</th>
               </tr>
             </thead>
             <tbody>
               {permissions.map((p) => (
-                <tr key={p.asset} className="border-t border-[var(--border-rule)]">
-                  <td className="px-3 py-2">{p.brand}</td>
-                  <td className="px-3 py-2 font-mono text-xs">{p.entity}</td>
-                  <td className="px-3 py-2">{p.route}</td>
-                  <td className="px-3 py-2 text-[var(--state-negative)]">{p.status}</td>
-                  <td className="px-3 py-2 font-mono text-xs text-[var(--text-meta)] max-w-[280px] truncate">
+                <tr key={p.asset}>
+                  <td className="text-[var(--text-1)]">{p.brand}</td>
+                  <td className="num text-xs text-[var(--text-2)]">{p.entity}</td>
+                  <td className="text-[var(--text-2)]">{p.route}</td>
+                  <td className="text-[var(--danger)]">{p.status}</td>
+                  <td className="num text-xs text-[var(--text-3)] max-w-[280px] truncate">
                     {p.asset}
                   </td>
                 </tr>
@@ -113,8 +113,8 @@ export default async function AdminImageGapsPage() {
             <section key={entity}>
               <div className="flex items-end justify-between gap-4 mb-3">
                 <div>
-                  <h2 className="font-heading text-lg font-semibold">{entity}</h2>
-                  <p className="text-xs text-[var(--text-meta)]">
+                  <h2 className="font-display text-lg font-semibold text-[var(--text-1)]">{entity}</h2>
+                  <p className="text-xs text-[var(--text-3)] num">
                     {nulls} null · {unsplash} Unsplash · {rows.length} total
                   </p>
                 </div>
@@ -122,47 +122,44 @@ export default async function AdminImageGapsPage() {
                   type="button"
                   disabled
                   title="Rehost is read-only until confirmed. Ingest must strip EXIF including GPS."
-                  className="text-xs font-medium px-3 py-1.5 rounded-md border border-[var(--border-rule)] text-[var(--text-meta)] cursor-not-allowed"
+                  className="ea-btn ea-btn-secondary ea-btn-sm"
                 >
                   Rehost Unsplash to Supabase
                 </button>
               </div>
-              <div className="overflow-x-auto rounded-lg border border-[var(--border-rule)]">
-                <table className="w-full text-sm">
-                  <thead className="bg-[var(--surface-raised)] text-left text-[10px] uppercase tracking-wider text-[var(--text-meta)]">
+              <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+                <table className="ea-table">
+                  <thead>
                     <tr>
-                      <th className="px-3 py-2 font-medium">Name</th>
-                      <th className="px-3 py-2 font-medium">Slug</th>
-                      <th className="px-3 py-2 font-medium">Kind</th>
-                      <th className="px-3 py-2 font-medium">Column</th>
-                      <th className="px-3 py-2 font-medium">URL</th>
+                      <th>Name</th>
+                      <th>Slug</th>
+                      <th>Kind</th>
+                      <th>Column</th>
+                      <th>URL</th>
                     </tr>
                   </thead>
                   <tbody>
                     {rows.map((r) => (
-                      <tr
-                        key={`${r.entity}-${r.id}-${r.column}-${r.kind}`}
-                        className="border-t border-[var(--border-rule)]"
-                      >
-                        <td className="px-3 py-2 text-[var(--text-primary)]">{r.name}</td>
-                        <td className="px-3 py-2 font-mono text-xs text-[var(--text-body)]">
+                      <tr key={`${r.entity}-${r.id}-${r.column}-${r.kind}`}>
+                        <td className="text-[var(--text-1)]">{r.name}</td>
+                        <td className="num text-xs text-[var(--text-2)]">
                           {r.slug}
                         </td>
-                        <td className="px-3 py-2">
+                        <td>
                           <span
                             className={
                               r.kind === "null"
-                                ? "text-[var(--state-negative)]"
-                                : "text-[var(--action)]"
+                                ? "text-[var(--danger)]"
+                                : "text-[var(--accent)]"
                             }
                           >
                             {r.kind}
                           </span>
                         </td>
-                        <td className="px-3 py-2 font-mono text-xs text-[var(--text-meta)]">
+                        <td className="num text-xs text-[var(--text-3)]">
                           {r.column}
                         </td>
-                        <td className="px-3 py-2 font-mono text-xs text-[var(--text-meta)] max-w-[280px] truncate">
+                        <td className="num text-xs text-[var(--text-3)] max-w-[280px] truncate">
                           {r.url || "—"}
                         </td>
                       </tr>
