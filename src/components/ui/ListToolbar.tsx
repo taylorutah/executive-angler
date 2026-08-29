@@ -25,6 +25,9 @@ interface ListToolbarProps {
   showOptionalFilters?: boolean;
   /** Extra controls (near me, map) sit in the filter panel. */
   toolbarExtra?: ReactNode;
+  /** Page default. Falls back to the first sort option. A non-default
+      sort counts as an active filter (badge, Clear, URL auto-open). */
+  defaultSort?: string;
   /** Controlled open state. Uncontrolled default: closed, unless the URL
       arrives with an active filter — then the panel starts open so the
       filtering is visible (client ruling 2026-08-28). */
@@ -61,6 +64,7 @@ export default function ListToolbar({
   availableViews,
   showOptionalFilters = false,
   toolbarExtra,
+  defaultSort,
   filtersOpen: filtersOpenProp,
   onFiltersOpenChange,
 }: ListToolbarProps) {
@@ -80,12 +84,16 @@ export default function ListToolbar({
     return true;
   });
 
-  const hasActiveFilters = Object.keys(activeFilters).length > 0;
+  const defaultSortValue = defaultSort ?? sortOptions[0]?.value ?? "";
+  const hasNonDefaultSort = Boolean(defaultSortValue) && activeSort !== defaultSortValue;
+  const activeFilterCount =
+    Object.keys(activeFilters).length + (hasNonDefaultSort ? 1 : 0);
+  const hasActiveFilters = activeFilterCount > 0;
 
   // Closed on a plain visit; a shared filtered link opens the panel so the
   // active filtering is visible. Initializer reads the first render's URL.
   const [internalOpen, setInternalOpen] = useState(
-    () => Object.keys(activeFilters).length > 0,
+    () => Object.keys(activeFilters).length > 0 || hasNonDefaultSort,
   );
   const filtersOpen = filtersOpenProp ?? internalOpen;
   const setFiltersOpen = (open: boolean) => {
@@ -151,7 +159,7 @@ export default function ListToolbar({
             Filters
             {hasActiveFilters && (
               <span className="num rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-2 py-1 text-xs font-medium leading-none text-[var(--accent)]">
-                {Object.keys(activeFilters).length}
+                {activeFilterCount}
               </span>
             )}
           </button>
@@ -160,6 +168,9 @@ export default function ListToolbar({
               type="button"
               onClick={() => {
                 clearableFilters.forEach((f) => onFilterChange(f.key, null));
+                if (hasNonDefaultSort && defaultSortValue) {
+                  onSortChange(defaultSortValue);
+                }
               }}
               className={`ea-focus-ring ${FOCUS_VISIBLE} px-2 py-1.5 text-sm text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors`}
             >
@@ -194,24 +205,6 @@ export default function ListToolbar({
               </button>
             ))}
           </div>
-
-          <div className="relative">
-            <label className="sr-only" htmlFor="browse-sort">
-              Sort
-            </label>
-            <select
-              id="browse-sort"
-              value={activeSort}
-              onChange={(e) => onSortChange(e.target.value)}
-              className={`ea-focus-ring ${FOCUS_VISIBLE} appearance-none rounded-[var(--radius-md)] bg-[var(--surface)] border border-[var(--border)] pl-3 pr-8 py-1.5 text-sm text-[var(--text-2)] hover:border-[var(--border-strong)] outline-none cursor-pointer`}
-            >
-              {sortOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
       </div>
 
@@ -222,6 +215,25 @@ export default function ListToolbar({
       >
         <div>
           <div className="mt-3 pt-3 pb-1 border-t border-[var(--border)] flex flex-col gap-3">
+            {sortOptions.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                <label htmlFor="browse-sort" className="ea-overline w-20 shrink-0">
+                  Sort
+                </label>
+                <select
+                  id="browse-sort"
+                  value={activeSort}
+                  onChange={(e) => onSortChange(e.target.value)}
+                  className={`ea-focus-ring ${FOCUS_VISIBLE} appearance-none rounded-[var(--radius-md)] bg-[var(--surface)] border border-[var(--border)] pl-3 pr-8 py-1.5 text-sm text-[var(--text-2)] hover:border-[var(--border-strong)] outline-none cursor-pointer`}
+                >
+                  {sortOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             {visibleFilters.map((dimension) => {
               const ui = dimensionUi(dimension);
               return (
