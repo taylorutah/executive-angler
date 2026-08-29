@@ -104,7 +104,7 @@ describe("toRiverBrowseItem", () => {
       { label: "Access", value: "Mixed" },
       { label: "Difficulty", value: "Intermediate" },
     ]);
-    assert.equal(item.hoverPanel?.bestMonths, "Jun–Oct");
+    assert.equal(item.hoverPanel?.footer, "Best: Jun–Oct");
     assert.match(item.hoverPanel?.brief ?? "", /crown jewel/);
     assert.equal((item.hoverPanel?.brief ?? "").includes("salmonfly"), true);
   });

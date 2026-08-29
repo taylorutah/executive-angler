@@ -8,7 +8,7 @@ import EntityCard from "./EntityCard";
 import CompactCard from "./CompactCard";
 import ListCard from "./ListCard";
 import MagazineGrid from "./MagazineGrid";
-import RiverCard from "@/components/rivers/RiverCard";
+import HoverReferenceCard from "@/components/ui/HoverReferenceCard";
 import ScrollAnimation from "./ScrollAnimation";
 import { itemMatchesFilters } from "@/lib/browse/match";
 
@@ -296,7 +296,7 @@ export default function EntityListView({
               {visibleItems.map((item, i) => (
                 <ScrollAnimation key={item.href} index={i}>
                   {item.hoverPanel ? (
-                    <RiverCard {...item} />
+                    <HoverReferenceCard {...item} />
                   ) : (
                     <EntityCard
                       href={item.href}

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import EntityListView from "@/components/ui/EntityListView";
 import { getAllSpecies } from "@/lib/db";
 import { speciesListConfig } from "@/lib/list-configs";
-import type { CardData } from "@/types/list-config";
+import { toSpeciesBrowseItem } from "@/lib/browse/species-items";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
 
@@ -29,23 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function SpeciesListPage() {
   const allSpecies = await getAllSpecies();
 
-  const items: (CardData & { _filterValues: Record<string, string> })[] = allSpecies.map(
-    (sp) => ({
-      href: `/species/${sp.slug}`,
-      imageUrl: sp.imageUrl || sp.illustrationUrl || undefined,
-      imageAlt: `${sp.commonName} — ${sp.scientificName || "fly fishing species"}`,
-      title: sp.commonName,
-      subtitle: sp.scientificName,
-      meta: [sp.family, sp.conservationStatus].filter(Boolean).join(" · ") || undefined,
-      badges: sp.family ? [sp.family] : undefined,
-      featured: sp.featured,
-      description: sp.description?.substring(0, 150),
-      imageContain: true,
-      _filterValues: {
-        family: sp.family || "",
-      },
-    }),
-  );
+  const items = allSpecies.map(toSpeciesBrowseItem);
 
   return (
     <>

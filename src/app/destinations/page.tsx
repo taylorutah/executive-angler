@@ -7,20 +7,11 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import EntityListView from "@/components/ui/EntityListView";
 import { getAllDestinations } from "@/lib/db";
-import { destinationListConfig, destinationRegionGroups } from "@/lib/list-configs";
-import { seasonsFromBestMonths, tripLengthFromPlace } from "@/lib/browse/place-filters";
-import { speciesTokens } from "@/lib/browse/species-tokens";
-import type { CardData } from "@/types/list-config";
+import { destinationListConfig } from "@/lib/list-configs";
+import { toDestinationBrowseItem } from "@/lib/browse/destination-items";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
 export const revalidate = 3600;
-
-function getRegionGroup(region: string): string {
-  for (const [group, regions] of Object.entries(destinationRegionGroups)) {
-    if (regions.includes(region)) return group;
-  }
-  return "north-america";
-}
 
 export async function generateMetadata(): Promise<Metadata> {
   const destinations = await getAllDestinations();
@@ -42,28 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DestinationsPage() {
   const destinations = await getAllDestinations();
 
-  const items: (CardData & { _filterValues: Record<string, string> })[] = destinations.map(
-    (dest) => ({
-      href: `/destinations/${dest.slug}`,
-      imageUrl: dest.heroImageUrl,
-      imageAlt: `Fly fishing in ${dest.name}`,
-      title: dest.name,
-      subtitle: dest.tagline,
-      meta: dest.primarySpecies.slice(0, 3).join(" · "),
-      badges: [dest.region],
-      featured: dest.featured,
-      description: dest.description?.substring(0, 150),
-      _filterValues: {
-        region: getRegionGroup(dest.region),
-        season: seasonsFromBestMonths(dest.bestMonths).join(","),
-        species: speciesTokens(dest.primarySpecies).join(","),
-        tripLength: tripLengthFromPlace({
-          country: dest.country,
-          state: dest.state,
-        }),
-      },
-    }),
-  );
+  const items = destinations.map(toDestinationBrowseItem);
 
   return (
     <>

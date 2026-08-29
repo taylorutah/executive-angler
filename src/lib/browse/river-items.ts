@@ -1,9 +1,12 @@
 import { DESTINATION_STATE_MAP } from "@/lib/destination-state-map";
 import { currentHatchMonth } from "@/lib/flies/fishing-now";
 import { normalizeImageUrl } from "@/lib/media/image-url";
+import { excerptBrief, formatBestMonthsLine } from "./hover-panel";
 import { speciesTokens } from "./species-tokens";
 import type { River } from "@/types/entities";
 import type { CardData } from "@/types/list-config";
+
+export { excerptBrief as excerptRiverBrief, formatBestMonthsLine } from "./hover-panel";
 
 export type RiverBrowseSource = Pick<
   River,
@@ -53,48 +56,6 @@ function hatchThisMonth(hatchChart: River["hatchChart"], month: string): string 
   return insect ? shortInsect(insect) : "";
 }
 
-const MONTH_INDEX: Record<string, number> = {
-  january: 0,
-  jan: 0,
-  february: 1,
-  feb: 1,
-  march: 2,
-  mar: 2,
-  april: 3,
-  apr: 3,
-  may: 4,
-  june: 5,
-  jun: 5,
-  july: 6,
-  jul: 6,
-  august: 7,
-  aug: 7,
-  september: 8,
-  sep: 8,
-  sept: 8,
-  october: 9,
-  oct: 9,
-  november: 10,
-  nov: 10,
-  december: 11,
-  dec: 11,
-};
-
-const MONTH_ABBR = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-] as const;
-
 /** Title-case a stored water-type string. Does not invent a type. */
 export function waterTypeLabel(flowType: string): string | undefined {
   const raw = (flowType ?? "").trim();
@@ -123,58 +84,6 @@ export function difficultyLabel(difficulty: string): string | undefined {
   return raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
 }
 
-/** Collapse stored month names into "Apr–Jun, Sep–Oct". Drops unparseable tokens. */
-export function formatBestMonthsLine(months: string[]): string {
-  const idxs = [
-    ...new Set(
-      (months ?? [])
-        .map((m) => MONTH_INDEX[m.trim().toLowerCase()])
-        .filter((n): n is number => n !== undefined),
-    ),
-  ].sort((a, b) => a - b);
-  if (idxs.length === 0) return "";
-
-  const ranges: [number, number][] = [];
-  let start = idxs[0];
-  let prev = idxs[0];
-  for (let i = 1; i < idxs.length; i++) {
-    if (idxs[i] === prev + 1) {
-      prev = idxs[i];
-      continue;
-    }
-    ranges.push([start, prev]);
-    start = idxs[i];
-    prev = idxs[i];
-  }
-  ranges.push([start, prev]);
-
-  return ranges
-    .map(([a, b]) => (a === b ? MONTH_ABBR[a] : `${MONTH_ABBR[a]}–${MONTH_ABBR[b]}`))
-    .join(", ");
-}
-
-/** First 2–3 sentences of a river description, clamped at a word boundary. */
-export function excerptRiverBrief(description: string, maxChars = 280): string {
-  const text = (description ?? "").replace(/\s+/g, " ").trim();
-  if (!text) return "";
-  const sentences =
-    text.match(/[^.!?]+[.!?]+(?:\s|$)/g)?.map((s) => s.trim()) ?? (text ? [text] : []);
-  let out = "";
-  for (let i = 0; i < sentences.length && i < 3; i++) {
-    const next = out ? `${out} ${sentences[i]}` : sentences[i];
-    if (next.length > maxChars) {
-      if (!out) {
-        const cut = next.slice(0, maxChars);
-        const space = cut.lastIndexOf(" ");
-        return `${(space > 80 ? cut.slice(0, space) : cut).replace(/[.,;:]+$/, "")}…`;
-      }
-      break;
-    }
-    out = next;
-  }
-  return out;
-}
-
 function hoverChips(river: RiverBrowseSource): { label: string; value: string }[] {
   const chips: { label: string; value: string }[] = [];
   const water = waterTypeLabel(river.flowType);
@@ -195,6 +104,7 @@ export function toRiverBrowseItem(
   const species = speciesTokens(river.primarySpecies ?? []);
   const hatch = hatchThisMonth(river.hatchChart, month);
   const state = states[0] ?? "";
+  const best = formatBestMonthsLine(river.bestMonths ?? []);
   return {
     riverId: river.id,
     href: `/rivers/${river.slug}`,
@@ -210,8 +120,8 @@ export function toRiverBrowseItem(
     description: river.description?.slice(0, 150),
     hoverPanel: {
       chips: hoverChips(river),
-      brief: excerptRiverBrief(river.description ?? ""),
-      bestMonths: formatBestMonthsLine(river.bestMonths ?? []),
+      brief: excerptBrief(river.description ?? ""),
+      footer: best ? `Best: ${best}` : undefined,
     },
     tags: undefined,
     latitude: Number(river.latitude) || 0,
