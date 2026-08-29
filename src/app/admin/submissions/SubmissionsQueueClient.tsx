@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  ChevronLeft, ChevronRight, Eye, CheckCircle, XCircle, MessageCircle,
-  Clock, Send, AlertCircle, Loader2, Shield
+  ChevronLeft, ChevronRight, CheckCircle, XCircle, MessageCircle, Shield,
+  Waves, Store, User, Home, Compass, Fish, Feather, FileText, Camera,
 } from "@/icons";
 import { Button } from "@/components/ui/Button";
 
@@ -26,9 +26,23 @@ interface Submission {
   reviewed_at?: string;
 }
 
-const TYPE_EMOJI: Record<string, string> = {
-  river: "🏞️", fly_shop: "🏪", guide: "🎣", lodge: "🏡", destination: "🗺️", species: "🐟", fly_pattern: "🪰", photo_update: "📷",
+const TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  river: Waves,
+  fly_shop: Store,
+  guide: User,
+  lodge: Home,
+  destination: Compass,
+  species: Fish,
+  fly_pattern: Feather,
+  photo_update: Camera,
 };
+
+function statusPillCls(status: string): string {
+  if (status === "submitted" || status === "in_review") {
+    return "bg-[var(--accent-soft)] text-[var(--accent)]";
+  }
+  return "bg-[var(--warning)]/10 border border-[var(--warning)]/30 text-[var(--warning)]";
+}
 
 export default function SubmissionsQueueClient({ pending, recent }: { pending: Submission[]; recent: Submission[] }) {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -59,23 +73,25 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
+    <div className="min-h-screen bg-[var(--paper)]">
+      <div className="max-w-[var(--container)] mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/admin" className="text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors">
+          <Link href="/admin" className="text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard">
             <ChevronLeft className="h-5 w-5" />
           </Link>
-          <Shield className="h-5 w-5 text-[var(--action)]" />
-          <h1 className="font-serif text-2xl text-[var(--text-primary)]">Submissions Queue</h1>
-          <span className="ml-auto px-3 py-1 bg-[var(--action)]/15 text-[var(--action)] rounded-full text-xs font-bold">
+          <Shield className="h-5 w-5 text-[var(--accent)]" />
+          <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">Submissions Queue</h1>
+          <span className="ea-badge ml-auto bg-[var(--accent-soft)] text-[var(--accent)]">
             {pending.length} pending
           </span>
         </div>
 
         {message && (
-          <div className={`mb-4 px-4 py-3 rounded-lg border text-sm ${
-            message.type === "success" ? "bg-green-950/30 border-green-800 text-green-400" : "bg-red-950/30 border-red-800 text-red-400"
+          <div className={`mb-4 px-4 py-3 rounded-[var(--radius-md)] border text-sm ${
+            message.type === "success"
+              ? "bg-[var(--success)]/10 border-[var(--success)]/30 text-[var(--success)]"
+              : "bg-[var(--danger)]/10 border-[var(--danger)]/30 text-[var(--danger)]"
           }`}>
             {message.text}
           </div>
@@ -83,10 +99,10 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
 
         {/* Pending submissions */}
         {pending.length === 0 ? (
-          <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl p-12 text-center">
-            <CheckCircle className="h-10 w-10 text-[var(--state-positive)] mx-auto mb-3" />
-            <p className="text-[var(--text-primary)] font-semibold">Queue is clear!</p>
-            <p className="text-sm text-[var(--text-body)] mt-1">No pending submissions to review.</p>
+          <div className="ea-card ea-empty">
+            <CheckCircle className="h-10 w-10 text-[var(--success)]" />
+            <p className="text-[var(--text-1)] font-semibold">Queue is clear!</p>
+            <p>No pending submissions to review.</p>
           </div>
         ) : (
           <div className="space-y-3 mb-10">
@@ -94,29 +110,31 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
               const isExpanded = expandedId === s.id;
               const submitter = s.profiles?.display_name || s.profiles?.username || s.user_id.slice(0, 8);
               const isLoading = (action: string) => actionLoading === `${s.id}-${action}`;
+              const TypeIcon = TYPE_ICONS[s.entity_type] ?? FileText;
 
               return (
-                <div key={s.id} className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl overflow-hidden">
+                <div key={s.id} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
                   {/* Main row */}
                   <div className="px-5 py-4 flex items-center gap-3">
-                    <span className="text-2xl">{TYPE_EMOJI[s.entity_type] || "📄"}</span>
+                    <span
+                      className="h-9 w-9 shrink-0 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center"
+                      aria-hidden
+                    >
+                      <TypeIcon className="h-4 w-4 text-[var(--accent)]" />
+                    </span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-bold text-[var(--text-primary)] truncate">{s.name}</h3>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          s.status === "submitted" ? "bg-[var(--signal-live)]/15 text-[var(--signal-live)]"
-                            : s.status === "in_review" ? "bg-[var(--action)]/15 text-[var(--action)]"
-                              : "bg-yellow-400/15 text-yellow-400"
-                        }`}>
+                        <h3 className="text-sm font-semibold text-[var(--text-1)] truncate">{s.name}</h3>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusPillCls(s.status)}`}>
                           {s.status.replace("_", " ").toUpperCase()}
                         </span>
                       </div>
-                      <p className="text-xs text-[var(--text-meta)] mt-0.5">
+                      <p className="text-xs text-[var(--text-3)] mt-0.5">
                         {s.entity_type === "photo_update" ? (
                           <>
-                            <span className="text-[var(--action)] font-semibold">PHOTO UPDATE</span>
+                            <span className="text-[var(--accent)] font-medium">PHOTO UPDATE</span>
                             {s.entity_data?.target_entity_type && (
-                              <> · updating {s.entity_data.target_entity_type.replace("_", " ")} <span className="text-[var(--text-body)]">{s.entity_data.target_slug}</span></>
+                              <> · updating {s.entity_data.target_entity_type.replace("_", " ")} <span className="text-[var(--text-2)]">{s.entity_data.target_slug}</span></>
                             )}
                           </>
                         ) : (
@@ -137,13 +155,13 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                         icon={CheckCircle}
                         loading={isLoading("approve")}
                         title="Approve"
-                       
+
                       >
                         Approve
                       </Button>
                       <button
                         onClick={() => setExpandedId(isExpanded ? null : s.id)}
-                        className="p-2 bg-[var(--border-rule)] text-[var(--text-body)] rounded-lg hover:text-[var(--text-primary)] transition-colors"
+                        className="p-2 rounded-[var(--radius-md)] text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors duration-150 ease-standard"
                         title="More options"
                       >
                         <ChevronRight className={`h-4 w-4 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
@@ -153,9 +171,9 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
 
                   {/* Expanded detail */}
                   {isExpanded && (
-                    <div className="px-5 pb-4 border-t border-[var(--border-rule)] pt-4 space-y-3">
+                    <div className="px-5 pb-4 border-t border-[var(--border)] pt-4 space-y-3">
                       {s.hero_image_url && (
-                        <div className="rounded-lg overflow-hidden border border-[var(--border-rule)]">
+                        <div className="rounded-[var(--radius-md)] overflow-hidden border border-[var(--border)]">
                           {/* User-supplied URL — host may not be in next/image allowlist */}
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={s.hero_image_url} alt={`${s.name} hero photo`} className="w-full h-40 object-cover" />
@@ -164,7 +182,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
 
                       <Link
                         href={`/admin/submissions/${s.id}`}
-                        className="text-xs text-[var(--signal-live)] hover:underline"
+                        className="text-xs text-[var(--accent)] hover:underline"
                       >
                         View full submission details →
                       </Link>
@@ -176,7 +194,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           value={feedback[s.id] || ""}
                           onChange={e => setFeedback(prev => ({ ...prev, [s.id]: e.target.value }))}
                           placeholder="Reason / feedback..."
-                          className="flex-1 px-3 py-2 bg-[var(--surface-page)] border border-[var(--border-rule)] rounded-lg text-xs text-[var(--text-primary)] placeholder-[#6E7681] focus:outline-none focus:border-[var(--action)]"
+                          className="ea-input"
                         />
                         <Button
                           onClick={() => handleAction(s.id, "needs_info", { feedback: feedback[s.id] || "" })}
@@ -185,7 +203,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           size="sm"
                           icon={MessageCircle}
                           loading={isLoading("needs_info")}
-                         
+
                         >
                           Need Info
                         </Button>
@@ -196,7 +214,7 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
                           size="sm"
                           icon={XCircle}
                           loading={isLoading("reject")}
-                         
+
                         >
                           Reject
                         </Button>
@@ -212,20 +230,25 @@ export default function SubmissionsQueueClient({ pending, recent }: { pending: S
         {/* Recent decisions */}
         {recent.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold text-[var(--text-body)] uppercase tracking-wider mb-3">Recent Decisions</h2>
-            <div className="bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-xl divide-y divide-[#21262D]">
-              {recent.map(s => (
-                <div key={s.id} className="px-5 py-3 flex items-center gap-3">
-                  <span>{TYPE_EMOJI[s.entity_type]}</span>
-                  <span className="text-sm text-[var(--text-primary)] flex-1 truncate">{s.name}</span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    s.status === "approved" ? "bg-[var(--state-positive)]/15 text-[var(--state-positive)]" : "bg-red-400/15 text-red-400"
-                  }`}>
-                    {s.status.toUpperCase()}
-                  </span>
-                  <span className="text-xs text-[var(--text-meta)]">{formatDate(s.reviewed_at || s.updated_at)}</span>
-                </div>
-              ))}
+            <h2 className="ea-overline mb-3">Recent Decisions</h2>
+            <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] divide-y divide-[var(--border)]">
+              {recent.map(s => {
+                const TypeIcon = TYPE_ICONS[s.entity_type] ?? FileText;
+                return (
+                  <div key={s.id} className="px-5 py-3 flex items-center gap-3">
+                    <TypeIcon className="h-4 w-4 text-[var(--text-3)] shrink-0" />
+                    <span className="text-sm text-[var(--text-1)] flex-1 truncate">{s.name}</span>
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                      s.status === "approved"
+                        ? "bg-[var(--success)]/10 border border-[var(--success)]/30 text-[var(--success)]"
+                        : "bg-[var(--danger)]/10 border border-[var(--danger)]/30 text-[var(--danger)]"
+                    }`}>
+                      {s.status.toUpperCase()}
+                    </span>
+                    <span className="text-xs text-[var(--text-3)]">{formatDate(s.reviewed_at || s.updated_at)}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
