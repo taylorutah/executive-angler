@@ -4,7 +4,7 @@
  * FlyCardModal — branded printable/shareable recipe card.
  *
  * Renders a light-themed Executive Angler card for a fly pattern in a modal.
- * The card itself is real DOM (cream/copper/forest palette) and is converted
+ * The card itself is real DOM (design-token palette) and is converted
  * to a PNG on demand for download, clipboard copy, native share, or print.
  */
 
@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { X, Download, Copy, Share2, Printer, Loader2 } from "@/icons";
 import { domToBlob } from "modern-screenshot";
 import { formatHookSizes } from "@/lib/flies/variant-format";
+import { PAPER } from "@/lib/palette";
 
 type FlyForCard = {
   id?: string;
@@ -45,12 +46,12 @@ type Props = {
   username?: string | null;
 };
 
-const CARD_BG = "#F7F3EC";
-const CARD_INK = "#1F2937";
-const CARD_INK_MUTED = "#6B7280";
-const CARD_BORDER = "#D4CBB8";
-const CARD_COPPER = "#D4751F";
-const CARD_FOREST = "#1F3A2E";
+const CARD_BG = "var(--paper)";
+const CARD_INK = "var(--text-1)";
+const CARD_INK_MUTED = "var(--text-3)";
+const CARD_BORDER = "var(--border)";
+const CARD_COPPER = "var(--ember)";
+const CARD_FOREST = "var(--accent)";
 
 const BEAD_MATERIAL_LABEL: Record<string, string> = {
   none: "None",
@@ -163,7 +164,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
     if (!cardRef.current) return null;
     const render = domToBlob(cardRef.current, {
       scale: 2,
-      backgroundColor: CARD_BG,
+      backgroundColor: PAPER,
       type: "image/png",
       features: { removeControlCharacter: true },
     });
@@ -278,28 +279,28 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
   return (
     <>
       <div
-        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[var(--surface-page)]/85 backdrop-blur-sm p-0 sm:p-4"
+        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-ink/50 p-0 sm:p-4"
         onMouseDown={handleBackdropMouseDown}
         onMouseUp={handleBackdropMouseUp}
         role="presentation"
       >
         <div
-          className="w-full sm:max-w-xl bg-[var(--surface-raised)] border border-[var(--border-rule)] sm:rounded-2xl rounded-t-2xl max-h-[94vh] overflow-hidden flex flex-col"
+          className="w-full sm:max-w-xl bg-[var(--surface)] border border-[var(--border)] sm:rounded-[var(--radius-card)] rounded-t-[var(--radius-card)] shadow-[var(--shadow-float)] max-h-[94vh] overflow-hidden flex flex-col"
           role="dialog"
           aria-modal="true"
           aria-label={`Recipe card for ${fly.name || "fly pattern"}`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between gap-4 px-5 py-3 border-b border-[var(--border-rule)]">
+          <div className="flex items-center justify-between gap-4 px-5 py-3 border-b border-[var(--border)]">
             <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-meta)]">Recipe Card</p>
-              <h2 className="font-heading text-base font-bold text-[var(--text-primary)] truncate">
+              <p className="text-xs uppercase tracking-[0.06em] text-[var(--text-3)]">Recipe Card</p>
+              <h2 className="font-heading text-base font-semibold text-[var(--text-1)] truncate">
                 {fly.name || "Untitled fly"}
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-1.5 text-[var(--text-meta)] hover:text-[var(--text-primary)] hover:bg-[var(--border-rule)] transition-colors"
+              className="rounded-[var(--radius-md)] p-1.5 text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
@@ -307,18 +308,18 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
           </div>
 
           {/* Card preview area (scrollable on tall content) */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[var(--surface-page)]/60 flex justify-center items-start">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[var(--paper)] flex justify-center items-start">
             <div
               ref={cardRef}
               id="ea-fly-card-printable"
-              className="w-full max-w-[560px] shadow-2xl"
+              className="w-full max-w-[560px]"
               style={{
                 background: CARD_BG,
                 color: CARD_INK,
-                borderRadius: 16,
+                border: `1px solid ${CARD_BORDER}`,
+                borderRadius: "var(--radius-card)",
                 overflow: "hidden",
-                fontFamily:
-                  "var(--font-sans), 'DM Sans', system-ui, -apple-system, sans-serif",
+                fontFamily: "var(--font-sans)",
               }}
             >
               {/* Brand header strip */}
@@ -329,7 +330,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                   justifyContent: "space-between",
                   padding: "14px 20px",
                   borderBottom: `1px solid ${CARD_BORDER}`,
-                  background: "#FFFFFF",
+                  background: "var(--surface)",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -344,10 +345,9 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontFamily:
-                        "var(--font-heading), system-ui, sans-serif",
+                      fontFamily: "var(--font-heading)",
                       fontSize: 17,
-                      fontWeight: 400,
+                      fontWeight: 500,
                       lineHeight: 1,
                     }}
                   >
@@ -356,8 +356,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                   <div style={{ lineHeight: 1.1 }}>
                     <div
                       style={{
-                        fontFamily:
-                          "var(--font-heading), system-ui, sans-serif",
+                        fontFamily: "var(--font-heading)",
                         fontSize: 14,
                         color: CARD_FOREST,
                         letterSpacing: "0.01em",
@@ -369,7 +368,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                       style={{
                         fontSize: 9.5,
                         textTransform: "uppercase",
-                        letterSpacing: "0.16em",
+                        letterSpacing: "0.06em",
                         color: CARD_INK_MUTED,
                         marginTop: 1,
                       }}
@@ -383,11 +382,11 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                     style={{
                       fontSize: 10,
                       fontWeight: 600,
-                      letterSpacing: "0.08em",
+                      letterSpacing: "0.06em",
                       textTransform: "uppercase",
                       color: CARD_COPPER,
-                      border: `1px solid ${CARD_COPPER}66`,
-                      background: "#D4751F14",
+                      border: "1px solid color-mix(in srgb, var(--ember) 40%, transparent)",
+                      background: "color-mix(in srgb, var(--ember) 10%, var(--surface))",
                       padding: "4px 9px",
                       borderRadius: 999,
                     }}
@@ -411,9 +410,9 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                     width: 132,
                     height: 132,
                     flexShrink: 0,
-                    borderRadius: 12,
+                    borderRadius: "var(--radius-card)",
                     overflow: "hidden",
-                    background: "#EDE8DF",
+                    background: "var(--paper-deep)",
                     border: `1px solid ${CARD_BORDER}`,
                     position: "relative",
                   }}
@@ -431,26 +430,18 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                       style={{
                         width: "100%",
                         height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: CARD_INK_MUTED,
-                        fontSize: 28,
                       }}
-                    >
-                      🪰
-                    </div>
+                    />
                   )}
                 </div>
 
                 <div style={{ minWidth: 0, flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
                   <h1
                     style={{
-                      fontFamily:
-                        "var(--font-heading), system-ui, sans-serif",
+                      fontFamily: "var(--font-heading)",
                       fontSize: 26,
                       lineHeight: 1.1,
-                      fontWeight: 400,
+                      fontWeight: 600,
                       color: CARD_FOREST,
                       margin: 0,
                       wordBreak: "break-word",
@@ -476,7 +467,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                           style={{
                             fontSize: 10,
                             color: CARD_INK_MUTED,
-                            background: "#EDE8DF",
+                            background: "var(--paper-deep)",
                             padding: "2px 8px",
                             borderRadius: 999,
                           }}
@@ -514,7 +505,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                         style={{
                           fontSize: 9.5,
                           textTransform: "uppercase",
-                          letterSpacing: "0.12em",
+                          letterSpacing: "0.06em",
                           color: CARD_INK_MUTED,
                           fontWeight: 600,
                         }}
@@ -542,7 +533,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                   style={{
                     margin: "0 20px 16px 20px",
                     padding: 14,
-                    background: "#FFFFFF",
+                    background: "var(--surface)",
                     border: `1px solid ${CARD_BORDER}`,
                     borderRadius: 10,
                   }}
@@ -551,9 +542,9 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                     style={{
                       fontSize: 9.5,
                       textTransform: "uppercase",
-                      letterSpacing: "0.14em",
+                      letterSpacing: "0.06em",
                       color: CARD_COPPER,
-                      fontWeight: 700,
+                      fontWeight: 600,
                       marginBottom: 6,
                     }}
                   >
@@ -561,7 +552,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                   </div>
                   <div
                     style={{
-                      fontFamily: "var(--font-mono), 'IBM Plex Mono', ui-monospace, monospace",
+                      fontFamily: "var(--font-mono)",
                       fontSize: 11.5,
                       lineHeight: 1.55,
                       color: CARD_INK,
@@ -585,7 +576,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                     style={{
                       fontSize: 9.5,
                       textTransform: "uppercase",
-                      letterSpacing: "0.12em",
+                      letterSpacing: "0.06em",
                       color: CARD_INK_MUTED,
                       fontWeight: 600,
                       marginBottom: 4,
@@ -614,7 +605,7 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  background: "#FFFFFF",
+                  background: "var(--surface)",
                 }}
               >
                 <div
@@ -635,10 +626,10 @@ export default function FlyCardModal({ open, onClose, fly, imageUrl, username }:
           </div>
 
           {/* Action bar */}
-          <div className="border-t border-[var(--border-rule)] px-4 py-3 bg-[var(--surface-page)]">
+          <div className="border-t border-[var(--border)] px-4 py-3 bg-[var(--paper)]">
             {status && (
               <p
-                className={`text-xs mb-2 ${status.kind === "ok" ? "text-emerald-400" : "text-red-400"}`}
+                className={`text-xs mb-2 ${status.kind === "ok" ? "text-[var(--success)]" : "text-[var(--danger)]"}`}
                 role="status"
               >
                 {status.msg}
@@ -691,7 +682,7 @@ function SpecChip({ label, value }: { label: string; value: string }) {
         display: "inline-flex",
         alignItems: "baseline",
         gap: 5,
-        background: "#FFFFFF",
+        background: "var(--surface)",
         border: `1px solid ${CARD_BORDER}`,
         padding: "4px 10px",
         borderRadius: 999,
@@ -703,9 +694,9 @@ function SpecChip({ label, value }: { label: string; value: string }) {
         style={{
           fontSize: 9,
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.06em",
           color: CARD_INK_MUTED,
-          fontWeight: 700,
+          fontWeight: 600,
         }}
       >
         {label}
@@ -731,14 +722,14 @@ function ActionButton({
   primary?: boolean;
 }) {
   const cls = primary
-    ? "bg-[var(--action)] text-[var(--surface-page)] hover:bg-[#F0A45A] disabled:opacity-50"
-    : "border border-[var(--border-rule)] bg-[var(--surface-raised)] text-[var(--text-body)] hover:text-[var(--text-primary)] hover:border-[var(--action)]/40 disabled:opacity-50";
+    ? "bg-[var(--accent)] text-[var(--on-action)] hover:bg-[var(--accent-hover)] disabled:opacity-50"
+    : "border border-[var(--border-strong)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50";
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${cls}`}
+      className={`inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-md)] px-3 py-2 text-sm font-semibold transition-colors ${cls}`}
     >
       {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" />}
       {label}
