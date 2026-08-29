@@ -106,11 +106,27 @@ const nextConfig: NextConfig = {
         destination: "/rivers/mine",
         permanent: true,
       },
+      // Retired gear brand/SKU/category pages. Same targets as today; 308 not 307.
+      {
+        source: "/gear/category/:slug",
+        destination: "/gear?category=:slug",
+        statusCode: 308,
+      },
+      {
+        source: "/gear/:brand/:product",
+        destination: "/gear",
+        statusCode: 308,
+      },
+      {
+        source: "/gear/:brand",
+        destination: "/gear",
+        statusCode: 308,
+      },
       {
         source: "/:path*",
         has: [{ type: "host", value: "executiveangler.com" }],
         destination: "https://www.executiveangler.com/:path*",
-        permanent: true,
+        statusCode: 308,
       },
     ];
   },

@@ -144,6 +144,7 @@ export default async function HomePage() {
   ]);
   const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
   const madisonCfs = madison ? snapshots.get(madison.id)?.cfs ?? null : null;
+  const headline = `${rivers.length} Rivers, ${allFlies.length} Flies, and Hatches`;
 
   const usedImages = new Set<string>();
   claimImageUrl(HERO_IMAGE.src, usedImages);
@@ -158,7 +159,7 @@ export default async function HomePage() {
         <ConditionsRail rivers={flagshipRivers} snapshots={snapshots} />
       </div>
 
-      <HomeHero cfs={madisonCfs} />
+      <HomeHero cfs={madisonCfs} headline={headline} />
 
       <CategoryIndex
         rivers={rivers.length}

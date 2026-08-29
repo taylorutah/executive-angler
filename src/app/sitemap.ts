@@ -8,14 +8,10 @@ import {
   getAllFlyShops,
   getAllSpecies,
   getAllCanonicalFlies,
-  getAllGearBrands,
-  getAllGearProducts,
 } from "@/lib/db";
 import { pageUrl } from "@/lib/seo";
 
 export const revalidate = 86400;
-
-const MIN_PRODUCT_COPY = 80;
 
 function loc(path: string): string {
   const url = pageUrl(path);
@@ -26,7 +22,7 @@ function loc(path: string): string {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [destinations, rivers, species, lodges, articles, guides, flyShops, canonicalFlies, gearBrands, gearProducts] =
+  const [destinations, rivers, species, lodges, articles, guides, flyShops, canonicalFlies] =
     await Promise.all([
       getAllDestinations(),
       getAllRivers(),
@@ -36,8 +32,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getAllGuides(),
       getAllFlyShops(),
       getAllCanonicalFlies(),
-      getAllGearBrands(),
-      getAllGearProducts(),
     ]);
 
   const now = new Date();
@@ -55,7 +49,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: loc("/contact"), lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: loc("/privacy"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: loc("/terms"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: loc("/flies"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: loc("/flies/library"), lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: loc("/gear"), lastModified: now, changeFrequency: "weekly", priority: 0.7 },
   ];
@@ -108,36 +101,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
-
-  const brandById = new Map(gearBrands.map((b) => [b.id, b]));
-
-  const gearCategoryPages = ["rod", "reel", "waders"].map((cat) => ({
-    url: loc(`/gear/category/${cat}`),
-    lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
-
-  const gearBrandPages = gearBrands.map((b) => ({
-    url: loc(`/gear/${b.slug}`),
-    lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
-
-  const gearProductPages: MetadataRoute.Sitemap = [];
-  for (const p of gearProducts) {
-    const brand = brandById.get(p.brandId);
-    if (!brand) continue;
-    const copyLen = (p.description ?? "").trim().length;
-    const thin = copyLen < MIN_PRODUCT_COPY;
-    gearProductPages.push({
-      url: loc(`/gear/${brand.slug}/${p.slug}`),
-      lastModified: thin ? undefined : now,
-      changeFrequency: thin ? "yearly" : "monthly",
-      priority: thin ? 0.3 : 0.6,
-    });
-  }
 
   const flyPages = canonicalFlies.map((f) => ({
     url: loc(`/flies/${f.slug}`),
@@ -193,8 +156,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...flyCategoryPages,
     ...flyForRiverPages,
     ...flyHatchPages,
-    ...gearCategoryPages,
-    ...gearBrandPages,
-    ...gearProductPages,
   ];
 }

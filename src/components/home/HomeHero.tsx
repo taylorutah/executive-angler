@@ -12,6 +12,7 @@ import {
 
 interface Props {
   cfs: number | null;
+  headline: string;
 }
 
 /**
@@ -19,7 +20,7 @@ interface Props {
  * band, graded; headline, dek, and search sit on paper below. No scrim, no
  * text-shadow, no text over the photo — gradients are banned.
  */
-export default function HomeHero({ cfs }: Props) {
+export default function HomeHero({ cfs, headline }: Props) {
   const eyebrow = formatHeroEyebrow(cfs);
   const caption = formatHeroCaption(cfs);
 
@@ -53,11 +54,14 @@ export default function HomeHero({ cfs }: Props) {
           </p>
 
           <h1 className="text-[var(--text-1)]">
+            {headline}
+          </h1>
+          <p className="mt-6 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
             {HERO_HEADLINE_LEAD}
             {" — "}
             <em className="italic">{HERO_HEADLINE_CLOSE}</em>
-          </h1>
-          <p className="mt-6 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
+          </p>
+          <p className="mt-4 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
             {heroDek(cfs)}
           </p>
 
