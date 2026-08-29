@@ -160,10 +160,24 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
           ? haversineKm(userLocation.lat, userLocation.lng, item.latitude, item.longitude)
           : undefined;
       const flowLabel = flow ? FLOW_STATE_LABEL[flow.state] : undefined;
+      const liveChip =
+        flow && Number.isFinite(flow.cfs)
+          ? {
+              label: "Now",
+              value: `${Math.round(flow.cfs).toLocaleString("en-US")} cfs`,
+            }
+          : null;
+      const chips = [
+        ...(item.hoverPanel?.chips ?? []),
+        ...(liveChip ? [liveChip] : []),
+      ];
       return {
         ...item,
         badges: flowLabel ? [flowLabel] : undefined,
         meta: [item.meta, flowLabel].filter(Boolean).join(" · "),
+        hoverPanel: item.hoverPanel
+          ? { ...item.hoverPanel, chips }
+          : undefined,
         _filterValues: {
           ...(item._filterValues ?? {}),
           flow: flow?.state ?? "",

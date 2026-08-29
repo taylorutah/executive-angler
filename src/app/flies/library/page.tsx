@@ -6,6 +6,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import FlyLibraryClient from "./FlyLibraryClient";
+import LibraryNotebookLinks from "./LibraryNotebookLinks";
 import { formatHookSize } from "@/lib/flies/variant-format";
 import { hatchTokens, sizeListValue } from "@/lib/browse/fly-filters";
 import { getAllCanonicalFlies } from "@/lib/db";
@@ -94,6 +95,7 @@ export default async function FliesPage() {
             {allFlies.length} patterns. Filter by hatch, size, and — when you are signed
             in — what you can tie from your own materials.
           </p>
+          <LibraryNotebookLinks />
         </div>
       </section>
 

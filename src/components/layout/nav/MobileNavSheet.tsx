@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { X, FishSymbol, Bug, Bell, MessageSquare, Anchor, User, Package, Users, ChevronDown } from "@/icons";
 import type { AuthUser } from "@/lib/auth-context";
-import { EXPLORE_ITEMS, FOCUS_VISIBLE, LEARN_LINK, MEGA_MENU_LINKS, MOTION_SAFE, PUBLIC_NOUNS, isSectionActive } from "./links";
+import { EXPLORE_ITEMS, FOCUS_VISIBLE, LEARN_LINK, MEGA_MENU_LINKS, MOTION_SAFE, MY_FLIES_LINK, PUBLIC_NOUNS, isSectionActive } from "./links";
 import { useModalChrome } from "./useModalChrome";
 
 type Props = {
@@ -43,6 +43,7 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
   // vocabulary, accordion pattern per the 2026-08-28 chrome ruling).
   const listed = new Set((user ? EXPLORE_ITEMS : PUBLIC_NOUNS).map((item) => item.href));
   if (!user) listed.add(LEARN_LINK.href);
+  if (user) listed.add(MY_FLIES_LINK.href);
   const directoryLinks = MEGA_MENU_LINKS.filter((item) => !listed.has(item.href));
 
   // Accordion child rows indent one step past the sheet's px-4/sm:px-6 rows.
@@ -84,6 +85,25 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
             <span className="text-[13px] text-[var(--text-meta)]">River, fly, hatch, destination</span>
           </span>
         </Link>
+
+        {user && (
+          <Link
+            href={MY_FLIES_LINK.href}
+            aria-current={isSectionActive(pathname, MY_FLIES_LINK.section) ? "page" : undefined}
+            onClick={onClose}
+            className={rowClass(isSectionActive(pathname, MY_FLIES_LINK.section))}
+          >
+            <span className="flex flex-col">
+              <span className="font-medium">{MY_FLIES_LINK.label}</span>
+              {MY_FLIES_LINK.descriptor && (
+                <span className="text-[13px] text-[var(--text-meta)]">{MY_FLIES_LINK.descriptor}</span>
+              )}
+            </span>
+            {isSectionActive(pathname, MY_FLIES_LINK.section) && (
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" aria-hidden />
+            )}
+          </Link>
+        )}
 
         {(user ? EXPLORE_ITEMS : PUBLIC_NOUNS).map((item) => {
           const active = isSectionActive(pathname, item.section);
@@ -128,12 +148,10 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
               <div id="mobile-directory-links">
                 {directoryLinks.map((item) => {
                   const active = isSectionActive(pathname, item.section);
-                  const href =
-                    user && item.href === "/flies/library" ? "/flies" : item.href;
                   return (
                     <Link
                       key={item.href}
-                      href={href}
+                      href={item.href}
                       aria-current={active ? "page" : undefined}
                       onClick={onClose}
                       className={subRowClass(active)}

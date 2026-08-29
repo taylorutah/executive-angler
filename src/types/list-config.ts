@@ -39,6 +39,15 @@ export interface CardData {
   group?: string;
   badges?: string[];
   featured?: boolean;
+  /**
+   * Desktop hover panel (rivers listing). Same crossfade as ArticleCard.
+   * Absent on other entity cards. Live CFS is filled client-side.
+   */
+  hoverPanel?: {
+    chips: { label: string; value: string }[];
+    brief?: string;
+    bestMonths?: string;
+  };
   /** Extra text shown in list view */
   description?: string;
   /** Icon-only cards (guides, fly shops) */

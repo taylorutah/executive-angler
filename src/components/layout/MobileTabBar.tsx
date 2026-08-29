@@ -11,7 +11,7 @@ const TABS = [
   { href: "/today", label: "Today", icon: Sunrise, section: "/today" },
   { href: "/journal", label: "Journal", icon: BookOpen, section: "/journal" },
   { href: "/rivers", label: "Rivers", icon: Waves, section: "/rivers" },
-  { href: "/flies", label: "Flies", icon: Leaf, section: "/flies" },
+  { href: "/flies/library", label: "Flies", icon: Leaf, section: "/flies" },
 ] as const;
 
 export default function MobileTabBar() {

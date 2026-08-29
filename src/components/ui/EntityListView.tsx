@@ -8,6 +8,7 @@ import EntityCard from "./EntityCard";
 import CompactCard from "./CompactCard";
 import ListCard from "./ListCard";
 import MagazineGrid from "./MagazineGrid";
+import RiverCard from "@/components/rivers/RiverCard";
 import ScrollAnimation from "./ScrollAnimation";
 import { itemMatchesFilters } from "@/lib/browse/match";
 
@@ -294,19 +295,23 @@ export default function EntityListView({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {visibleItems.map((item, i) => (
                 <ScrollAnimation key={item.href} index={i}>
-                  <EntityCard
-                    href={item.href}
-                    imageUrl={item.imageUrl}
-                    imageAlt={item.imageAlt}
-                    title={item.title}
-                    subtitle={item.subtitle}
-                    meta={item.meta}
-                    badges={item.badges}
-                    iconOnly={item.iconOnly}
-                    imageContain={item.imageContain}
-                    imageZoom={(item as { imageZoom?: number }).imageZoom}
-                    actionSlot={item.actionSlot}
-                  />
+                  {item.hoverPanel ? (
+                    <RiverCard {...item} />
+                  ) : (
+                    <EntityCard
+                      href={item.href}
+                      imageUrl={item.imageUrl}
+                      imageAlt={item.imageAlt}
+                      title={item.title}
+                      subtitle={item.subtitle}
+                      meta={item.meta}
+                      badges={item.badges}
+                      iconOnly={item.iconOnly}
+                      imageContain={item.imageContain}
+                      imageZoom={(item as { imageZoom?: number }).imageZoom}
+                      actionSlot={item.actionSlot}
+                    />
+                  )}
                 </ScrollAnimation>
               ))}
             </div>

@@ -1,8 +1,8 @@
 /**
  * Navigation configuration for the site chrome.
  *
- * The public bar is four nouns plus Learn. Everything else lives in the
- * signed-in Explore menu or the footer — never in the primary row.
+ * The public bar is four nouns plus Learn. Logged-in adds notebook nouns
+ * (Today, Journal, My Flies). Directory items live in Explore or the footer.
  */
 
 export type NavItem = {
@@ -59,12 +59,26 @@ export const LEARN_LINK: NavItem = {
   descriptor: "Start here if you are new",
 };
 
-/** Logged-in primary row. Flies is the workspace once you have an account. */
+/** Personal fly inventory. Logged-in only — never labeled "Flies". */
+export const MY_FLIES_LINK: NavItem = {
+  label: "My Flies",
+  href: "/flybox",
+  section: "/flybox",
+  descriptor: "Your boxes and patterns",
+};
+
+/** Logged-in primary row. Flies is the public catalogue, same as logged-out. */
 export const MEMBER_NOUNS: NavItem[] = [
   { label: "Today", href: "/today", section: "/today" },
   { label: "Journal", href: "/journal", section: "/journal" },
   { label: "Rivers", href: "/rivers", section: "/rivers" },
-  { label: "Flies", href: "/flies", section: "/flies" },
+  {
+    label: "Flies",
+    href: "/flies/library",
+    section: "/flies",
+    descriptor: "Patterns, recipes, and materials",
+  },
+  MY_FLIES_LINK,
 ];
 
 /** The one dropdown in the bar: utility routes for signed-in anglers. */
@@ -95,19 +109,32 @@ export type MenuTileKey =
   | "rivers"
   | "destinations"
   | "species"
-  | "directory"
+  | "shops"
+  | "guides"
+  | "lodges"
   | "flies"
-  | "craft";
+  | "gear"
+  | "notes"
+  | "learn";
 
-/** key → src of an existing site photograph. Decorative: rendered aria-hidden. */
+/**
+ * key → src of an existing site photograph. Decorative: rendered aria-hidden.
+ * Prefer already-small hosted files (hover tile is 360px). Shared keys are
+ * forbidden — each link must swap a distinct image.
+ */
 export const MENU_TILES: Record<MenuTileKey, string> = {
-  default: "/images/henrys-fork.jpg",
-  rivers: "/images/rivers/gallatin-river-hero.jpg",
-  destinations: "/images/destinations/montana-hero.jpg",
+  default: "/images/home/madison-three-dollar-bridge-828.jpg",
+  rivers: "/images/rivers/clearwater-river-idaho-hero.jpg",
+  destinations: "/images/destinations/montana-card.jpg",
   species: "/images/articles/euro-nymphing-rainbow-trout-catch-fly-fishing.jpg",
-  directory: "/images/guides/bud-lillys-guide-service.jpg",
-  flies: "/images/articles/essential-fly-box-20-patterns-hero.jpg",
-  craft: "/images/articles/dry-fly-anglers-guide-matching-the-hatch-hero.jpg",
+  shops: "/images/nav/shops.jpg",
+  guides: "/images/guides/bud-lillys-guide-service.jpg",
+  lodges: "/images/nav/lodges.jpg",
+  flies:
+    "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/fly-pattern-images/hares-ear-nymph.jpg",
+  gear: "/images/articles/complete-guide-fly-rod-selection-hero.jpg",
+  notes: "/images/nav/notes.jpg",
+  learn: "/images/nav/learn.jpg",
 };
 
 export type MegaMenuLink = NavItem & { tile: MenuTileKey };
@@ -148,21 +175,21 @@ export const MEGA_MENU_COLUMNS: MegaMenuColumn[] = [
         label: "Fly Shops",
         href: "/fly-shops",
         section: "/fly-shops",
-        tile: "directory",
+        tile: "shops",
         descriptor: "Hours, services, local patterns",
       },
       {
         label: "Guides",
         href: "/guides",
         section: "/guides",
-        tile: "directory",
+        tile: "guides",
         descriptor: "Guides who row these rivers",
       },
       {
         label: "Lodges",
         href: "/lodges",
         section: "/lodges",
-        tile: "directory",
+        tile: "lodges",
         descriptor: "Stay close to the water",
       },
     ],
@@ -181,21 +208,21 @@ export const MEGA_MENU_COLUMNS: MegaMenuColumn[] = [
         label: "Gear",
         href: "/gear",
         section: "/gear",
-        tile: "craft",
+        tile: "gear",
         descriptor: "Rods, reels, and lines",
       },
       {
         label: "Field Notes",
         href: "/articles",
         section: "/articles",
-        tile: "craft",
+        tile: "notes",
         descriptor: "Reading water, gear, and craft",
       },
       {
         label: "Learn",
         href: "/learn",
         section: "/learn",
-        tile: "craft",
+        tile: "learn",
         descriptor: "Start here if you are new",
       },
     ],

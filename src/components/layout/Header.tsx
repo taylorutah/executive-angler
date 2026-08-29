@@ -67,7 +67,7 @@ export default function Header() {
                 const active = isSectionActive(pathname, item.section);
                 return (
                   <Link
-                    key={item.label}
+                    key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className="ea-nav-link ea-focus-ring"
