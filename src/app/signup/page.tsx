@@ -8,6 +8,7 @@ import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
+import { CheckCircle } from "@/icons";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -162,29 +163,31 @@ function SignupForm() {
 
   const usernameBorder =
     usernameStatus === "available"
-      ? "border-green-500"
+      ? "border-[var(--success)]"
       : usernameStatus === "taken" || usernameStatus === "invalid"
-      ? "border-red-500"
-      : "border-[var(--border-rule)]";
+      ? "border-[var(--danger)]"
+      : "";
 
   const usernameMessageColor =
     usernameStatus === "available"
-      ? "text-green-400"
+      ? "text-[var(--success)]"
       : usernameStatus === "taken" || usernameStatus === "invalid"
-      ? "text-red-400"
-      : "text-[var(--text-meta)]";
+      ? "text-[var(--danger)]"
+      : "text-[var(--text-3)]";
 
   if (success) {
     const firstName = fullName.trim().split(" ")[0];
     return (
-      <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
-          <div className="bg-[var(--surface-raised)] rounded-xl shadow-md p-8">
-            <div className="text-4xl mb-4">🎣</div>
-            <h2 className="font-heading text-2xl font-bold text-[var(--action)] mb-3">
+          <div className="ea-card">
+            <div className="mx-auto w-14 h-14 rounded-[var(--radius-card)] bg-[var(--accent-soft)] flex items-center justify-center mb-4">
+              <CheckCircle className="h-7 w-7 text-[var(--accent)]" />
+            </div>
+            <h2 className="font-display text-2xl font-semibold text-[var(--text-1)] mb-3">
               Welcome, {firstName}!
             </h2>
-            <p className="text-[var(--text-body)]">
+            <p className="text-[var(--text-2)]">
               Your account is ready. Start logging sessions, exploring rivers, and building your fly box.
             </p>
             <div className="mt-6">
@@ -199,27 +202,27 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="font-heading text-3xl font-bold text-[var(--action)]">
+          <Link href="/" className="font-display text-3xl font-semibold text-[var(--accent)]">
             {SITE_NAME}
           </Link>
-          <p className="mt-2 text-[var(--text-body)]">
+          <p className="mt-2 text-[var(--text-2)]">
             Create a free account to save favorites and log your sessions.
           </p>
         </div>
 
-        <div className="bg-[var(--surface-raised)] rounded-xl shadow-md p-8 space-y-5">
+        <div className="ea-card space-y-5">
           {/* OAuth — fastest path for new users */}
           <OAuthButtons redirectTo={postSignupRedirect} />
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[var(--border-rule)]" />
+              <div className="w-full border-t border-[var(--border)]" />
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-[var(--surface-raised)] px-3 text-[var(--text-meta)] tracking-wider">
+            <div className="relative flex justify-center">
+              <span className="ea-overline bg-[var(--surface)] px-3">
                 or sign up with email
               </span>
             </div>
@@ -228,7 +231,7 @@ function SignupForm() {
           <form onSubmit={handleSignup} className="space-y-4">
             {/* Full name — primary identity */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+              <label htmlFor="fullName" className="ea-label">
                 Your Name
               </label>
               <input
@@ -249,7 +252,7 @@ function SignupForm() {
                     triggerUsernameCheck(suggested);
                   }
                 }}
-                className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] outline-none"
+                className="ea-input"
                 placeholder="John Smith"
                 autoComplete="name"
               />
@@ -257,9 +260,9 @@ function SignupForm() {
 
             {/* Username — optional, auto-suggested from name */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
-                USERNAME{" "}
-                <span className="text-[var(--text-meta)] font-normal">· optional</span>
+              <label htmlFor="username" className="ea-label">
+                Username{" "}
+                <span className="text-[var(--text-3)] font-normal">· optional</span>
               </label>
               <div className="relative">
                 <input
@@ -271,7 +274,7 @@ function SignupForm() {
                     setUsername(e.target.value);
                     triggerUsernameCheck(e.target.value);
                   }}
-                  className={`w-full px-4 py-3 rounded-lg border ${usernameBorder} bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] outline-none pr-10`}
+                  className={`ea-input ${usernameBorder} pr-10`}
                   placeholder="yourhandle"
                   autoComplete="username"
                   autoCapitalize="none"
@@ -279,30 +282,30 @@ function SignupForm() {
                 {/* Status indicator */}
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                   {usernameStatus === "checking" && (
-                    <svg className="animate-spin h-4 w-4 text-[var(--text-meta)]" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4 text-[var(--text-3)]" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
                   )}
                   {usernameStatus === "available" && (
-                    <svg className="h-4 w-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <svg className="h-4 w-4 text-[var(--success)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   )}
                   {(usernameStatus === "taken" || usernameStatus === "invalid") && (
-                    <svg className="h-4 w-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <svg className="h-4 w-4 text-[var(--danger)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   )}
                 </div>
               </div>
-              <p className={`mt-1 text-xs ${usernameMessageColor}`}>
+              <p className={`ea-field-helper ${usernameMessageColor}`}>
                 {usernameMessage || "Skip to use your name publicly, or set a handle like john_smith"}
               </p>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+              <label htmlFor="email" className="ea-label">
                 Email
               </label>
               <input
@@ -311,13 +314,13 @@ function SignupForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] outline-none"
+                className="ea-input"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+              <label htmlFor="password" className="ea-label">
                 Password
               </label>
               <input
@@ -327,7 +330,7 @@ function SignupForm() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] outline-none"
+                className="ea-input"
                 placeholder="At least 8 characters"
               />
             </div>
@@ -345,7 +348,7 @@ function SignupForm() {
             />
 
             {error && (
-              <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900">
+              <p className="text-sm text-[var(--danger)] bg-[var(--danger)]/10 px-4 py-3 rounded-[var(--radius-md)] border border-[var(--danger)]/30">
                 {error}
               </p>
             )}
@@ -357,17 +360,17 @@ function SignupForm() {
               size="lg"
               fullWidth
               loading={loading}
-             
+
             >
               {loading ? "Creating account…" : "Create Account"}
             </Button>
           </form>
 
-          <p className="text-center text-sm text-[var(--text-body)]">
+          <p className="text-center text-sm text-[var(--text-2)]">
             Already have an account?{" "}
             <Link
               href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"}
-              className="text-[var(--action)] font-medium hover:text-[#cf7d30]"
+              className="text-[var(--accent)] font-medium hover:underline"
             >
               Sign in
             </Link>
@@ -382,8 +385,8 @@ export default function SignupPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center">
-          <div className="animate-pulse text-[var(--action)]">Loading…</div>
+        <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center">
+          <div className="animate-pulse text-[var(--accent)]">Loading…</div>
         </div>
       }
     >

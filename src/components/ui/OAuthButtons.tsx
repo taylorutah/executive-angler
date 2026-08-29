@@ -39,7 +39,7 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
   return (
     <div className="space-y-3">
       {error && (
-        <p className="text-sm text-red-400 bg-red-950/40 px-4 py-2 rounded-lg border border-red-900 text-center">
+        <p className="text-sm text-[var(--danger)] bg-[var(--danger)]/10 px-4 py-3 rounded-[var(--radius-md)] border border-[var(--danger)]/30 text-center">
           {error}
         </p>
       )}
@@ -47,10 +47,10 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
         type="button"
         onClick={() => signInWith("google")}
         disabled={!!loading}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} w-full flex items-center justify-center gap-3 px-4 py-3 bg-[var(--surface-raised)] border border-[var(--border-rule)] rounded-lg text-[var(--text-primary)] font-medium text-sm hover:bg-[var(--surface-card)] transition-colors shadow-sm disabled:opacity-50 motion-reduce:transition-none`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} w-full flex items-center justify-center gap-3 px-4 py-3 bg-[var(--surface)] border border-[var(--border-strong)] rounded-[var(--radius-md)] text-[var(--text-1)] font-medium text-sm hover:border-[var(--text-3)] transition-colors duration-150 ease-standard disabled:opacity-50 motion-reduce:transition-none`}
       >
         {loading === "google" ? (
-          <span className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--text-meta)] border-t-transparent" aria-hidden />
+          <span className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--text-3)] border-t-transparent" aria-hidden />
         ) : (
           <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden>
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -66,7 +66,7 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
         type="button"
         onClick={() => signInWith("apple")}
         disabled={!!loading}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} w-full flex items-center justify-center gap-3 px-4 py-3 bg-black border border-black rounded-lg text-white font-medium text-sm hover:bg-gray-900 transition-colors shadow-sm disabled:opacity-50 motion-reduce:transition-none`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} w-full flex items-center justify-center gap-3 px-4 py-3 bg-black border border-black rounded-[var(--radius-md)] text-white font-medium text-sm hover:bg-black/85 transition-colors duration-150 ease-standard disabled:opacity-50 motion-reduce:transition-none`}
       >
         {loading === "apple" ? (
           <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden />

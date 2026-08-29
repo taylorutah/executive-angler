@@ -29,7 +29,7 @@ export default function ResendButton({ email }: { email: string }) {
 
   if (state === "sent") {
     return (
-      <p className="text-sm text-green-400 bg-green-950/30 border border-green-900 rounded-lg px-4 py-3">
+      <p className="text-sm text-[var(--success)] bg-[var(--success)]/10 border border-[var(--success)]/30 rounded-[var(--radius-md)] px-4 py-3">
         Sent — check your inbox.
       </p>
     );
@@ -40,12 +40,12 @@ export default function ResendButton({ email }: { email: string }) {
       <button
         onClick={resend}
         disabled={state === "sending"}
-        className="w-full py-3 bg-[var(--action)] text-white font-semibold rounded-lg hover:bg-[#cf7d30] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="ea-btn ea-btn-primary ea-btn-lg w-full"
       >
         {state === "sending" ? "Sending…" : "Resend confirmation email"}
       </button>
       {error && (
-        <p className="text-sm text-red-400 bg-red-950/40 border border-red-900 rounded-lg px-4 py-2">
+        <p className="text-sm text-[var(--danger)] bg-[var(--danger)]/10 border border-[var(--danger)]/30 rounded-[var(--radius-md)] px-4 py-3">
           {error}
         </p>
       )}

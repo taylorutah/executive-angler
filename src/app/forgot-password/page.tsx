@@ -33,31 +33,31 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--surface-page)] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="font-heading text-3xl font-bold text-[var(--action)]">
+          <Link href="/" className="font-display text-3xl font-semibold text-[var(--accent)]">
             {SITE_NAME}
           </Link>
         </div>
 
-        <div className="bg-[var(--surface-raised)] rounded-xl shadow-md p-8">
+        <div className="ea-card">
           {sent ? (
             <div className="text-center space-y-4">
-              <div className="mx-auto w-14 h-14 rounded-full bg-[var(--action)]/10 flex items-center justify-center">
-                <CheckCircle className="h-7 w-7 text-[var(--action)]" />
+              <div className="mx-auto w-14 h-14 rounded-[var(--radius-card)] bg-[var(--accent-soft)] flex items-center justify-center">
+                <CheckCircle className="h-7 w-7 text-[var(--accent)]" />
               </div>
-              <h1 className="text-xl font-bold text-[var(--text-primary)]">Check your email</h1>
-              <p className="text-sm text-[var(--text-body)] leading-relaxed">
+              <h1 className="font-display text-2xl font-semibold text-[var(--text-1)]">Check your email</h1>
+              <p className="text-sm text-[var(--text-2)] leading-relaxed">
                 We sent a password reset link to{" "}
-                <span className="text-[var(--text-primary)] font-medium">{email}</span>.
+                <span className="text-[var(--text-1)] font-medium">{email}</span>.
                 Click the link in the email to reset your password.
               </p>
-              <p className="text-xs text-[var(--text-meta)]">
+              <p className="text-xs text-[var(--text-3)]">
                 Didn&apos;t receive it? Check your spam folder, or{" "}
                 <button
                   onClick={() => { setSent(false); setError(""); }}
-                  className="text-[var(--action)] hover:underline"
+                  className="text-[var(--accent)] hover:underline"
                 >
                   try again
                 </button>
@@ -65,7 +65,7 @@ export default function ForgotPasswordPage() {
               </p>
               <Link
                 href="/login"
-                className="inline-flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors mt-2"
+                className="inline-flex items-center gap-1.5 text-sm text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard mt-2"
               >
                 <ArrowLeft className="h-3.5 w-3.5" />
                 Back to sign in
@@ -74,18 +74,18 @@ export default function ForgotPasswordPage() {
           ) : (
             <div className="space-y-5">
               <div className="text-center">
-                <div className="mx-auto w-14 h-14 rounded-full bg-[var(--action)]/10 flex items-center justify-center mb-4">
-                  <Mail className="h-7 w-7 text-[var(--action)]" />
+                <div className="mx-auto w-14 h-14 rounded-[var(--radius-card)] bg-[var(--accent-soft)] flex items-center justify-center mb-4">
+                  <Mail className="h-7 w-7 text-[var(--accent)]" />
                 </div>
-                <h1 className="text-xl font-bold text-[var(--text-primary)]">Reset your password</h1>
-                <p className="text-sm text-[var(--text-body)] mt-1">
+                <h1 className="font-display text-2xl font-semibold text-[var(--text-1)]">Reset your password</h1>
+                <p className="text-sm text-[var(--text-2)] mt-1">
                   Enter the email address associated with your account and we&apos;ll send you a link to reset your password.
                 </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                  <label htmlFor="email" className="ea-label">
                     Email address
                   </label>
                   <input
@@ -94,14 +94,14 @@ export default function ForgotPasswordPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg border border-[var(--border-rule)] bg-[var(--surface-page)] focus:ring-2 focus:ring-[var(--action)] focus:border-[var(--action)] text-[var(--text-primary)] placeholder-[#6E7681]"
+                    className="ea-input"
                     placeholder="you@example.com"
                     autoFocus
                   />
                 </div>
 
                 {error && (
-                  <p className="text-sm text-[var(--state-negative)] bg-[var(--state-negative)]/10 px-4 py-2.5 rounded-lg">
+                  <p className="text-sm text-[var(--danger)] bg-[var(--danger)]/10 px-4 py-3 rounded-[var(--radius-md)] border border-[var(--danger)]/30">
                     {error}
                   </p>
                 )}
@@ -109,7 +109,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-[var(--action)] text-white font-semibold rounded-lg hover:bg-[#d17d28] transition-colors disabled:opacity-50"
+                  className="ea-btn ea-btn-primary ea-btn-lg w-full"
                 >
                   {loading ? "Sending…" : "Send Reset Link"}
                 </button>
@@ -118,7 +118,7 @@ export default function ForgotPasswordPage() {
               <div className="text-center">
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-1.5 text-sm text-[var(--text-body)] hover:text-[var(--text-primary)] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-sm text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-150 ease-standard"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                   Back to sign in

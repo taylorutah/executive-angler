@@ -118,7 +118,7 @@ export default function TurnstileWidget({
           setHasToken(false);
           onToken("");
         },
-        theme: "dark",
+        theme: "light",
         size: "flexible",
       });
     } catch (err) {
@@ -159,7 +159,7 @@ export default function TurnstileWidget({
     <>
       <div ref={containerRef} className="mt-2" />
       {failedOpen && !hasToken && (
-        <p className="mt-2 text-xs text-[var(--text-meta)]">
+        <p className="mt-2 text-xs text-[var(--text-3)]">
           Having trouble with verification? You can still submit — we&apos;ll
           verify on the server.
         </p>
