@@ -8,16 +8,9 @@ import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
-import { POST_LOGIN_PATH } from "@/lib/auth-paths";
+import { POST_LOGIN_PATH, safeInternalPath } from "@/lib/auth-paths";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
-
-// Prevents open-redirect: only allow same-origin path redirects.
-function safeNext(raw: string | null): string | null {
-  if (!raw) return null;
-  if (!raw.startsWith("/") || raw.startsWith("//")) return null;
-  return raw;
-}
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -32,8 +25,8 @@ function LoginForm() {
   // `next` is the canonical name (matches auth/callback); `redirect` kept as
   // a legacy fallback so existing links don't break.
   const redirect =
-    safeNext(searchParams.get("next")) ??
-    safeNext(searchParams.get("redirect")) ??
+    safeInternalPath(searchParams.get("next")) ??
+    safeInternalPath(searchParams.get("redirect")) ??
     POST_LOGIN_PATH;
   const authError = searchParams.get("error");
 

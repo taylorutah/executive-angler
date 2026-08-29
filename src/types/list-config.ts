@@ -31,6 +31,10 @@ export interface CardData {
   title: string;
   subtitle?: string;
   meta?: string;
+  /** Lead token on a magazine meta line (state, then live CFS, then meta). */
+  kicker?: string;
+  /** Also-kept grouping key (state, country, category). */
+  group?: string;
   badges?: string[];
   featured?: boolean;
   /** Extra text shown in list view */

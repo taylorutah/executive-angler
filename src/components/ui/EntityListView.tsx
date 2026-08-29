@@ -31,6 +31,8 @@ interface EntityListViewProps {
   onFiltersOpenChange?: (open: boolean) => void;
   /** When set, replace the card grid (e.g. river map). */
   resultsOverride?: ReactNode;
+  /** Origin Water Desk leftover pages pass this; unused on the token-system list. */
+  deskLayout?: string;
 }
 
 export default function EntityListView({

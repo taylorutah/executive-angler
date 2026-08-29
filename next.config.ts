@@ -1,6 +1,24 @@
 import type { NextConfig } from "next";
+import { createRequire } from "node:module";
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/_next/static/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       {
@@ -98,6 +116,9 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24,
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -299,4 +320,20 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+function withOptionalAnalyzer(config: NextConfig): NextConfig {
+  if (process.env.ANALYZE !== "1") return config;
+  try {
+    const req = createRequire(__filename);
+    const bundleAnalyzer = req("@next/bundle-analyzer") as (opts: {
+      enabled: boolean;
+    }) => (inner: NextConfig) => NextConfig;
+    return bundleAnalyzer({ enabled: true })(config);
+  } catch {
+    console.warn(
+      "[perf] ANALYZE=1 but @next/bundle-analyzer is not installed. One-off: npx --yes @next/bundle-analyzer",
+    );
+    return config;
+  }
+}
+
+export default withOptionalAnalyzer(nextConfig);

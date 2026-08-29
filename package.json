@@ -16,7 +16,7 @@
     "dedup-flies": "npx tsx scripts/dedup-flies.ts",
     "audit:images": "npx tsx scripts/audit-images.ts",
     "ingest:images": "npx tsx scripts/ingest-images.ts",
-    "test": "tsx --test src/lib/search/index.test.ts src/lib/auth-paths.test.ts src/lib/today/worth-window.test.ts src/lib/plan/window.test.ts src/lib/media/licence.test.ts src/lib/media/unsplash-credit.test.ts src/lib/media/wikimedia-credit.test.ts src/lib/media/phase2-hosts.test.ts src/lib/media/place-paths.test.ts src/components/home/conditions.test.ts src/components/home/homepage-images.test.ts src/components/home/fly-plate.test.ts src/lib/browse/match.test.ts src/lib/workbench/keymap.test.ts src/lib/workbench/optimistic.test.ts src/lib/articles/subject.test.ts src/lib/authors.test.ts scripts/check-contrast-rendered.test.ts scripts/strip-authored-html.test.ts scripts/check-home-rail.test.ts src/app/learn/keep-response.test.ts src/lib/rivers/missing-gauge.test.ts src/lib/insights/top-fly.test.ts src/app/globals.geometry.test.ts src/app/globals.icons.test.ts src/icons/icons.test.ts",
+    "test": "tsx --test src/lib/search/index.test.ts src/lib/auth-paths.test.ts src/lib/today/worth-window.test.ts src/lib/plan/window.test.ts src/lib/media/licence.test.ts src/lib/media/unsplash-credit.test.ts src/lib/media/wikimedia-credit.test.ts src/lib/media/phase2-hosts.test.ts src/lib/media/place-paths.test.ts src/components/home/conditions.test.ts src/components/home/homepage-images.test.ts src/components/home/fly-plate.test.ts src/lib/browse/match.test.ts src/lib/workbench/keymap.test.ts src/lib/workbench/optimistic.test.ts src/lib/articles/subject.test.ts src/lib/authors.test.ts scripts/check-contrast-rendered.test.ts scripts/strip-authored-html.test.ts scripts/check-home-rail.test.ts src/app/learn/keep-response.test.ts src/lib/rivers/missing-gauge.test.ts src/lib/rivers/week-flies.test.ts src/lib/insights/top-fly.test.ts src/app/globals.geometry.test.ts src/app/globals.icons.test.ts src/icons/icons.test.ts",
     "test:e2e": "playwright test --project=e2e",
     "test:visual": "playwright test --project=visual",
     "check:home-rail": "npx tsx scripts/check-home-rail.ts",
@@ -34,7 +34,8 @@
     "check:baseline-quality": "npx tsx scripts/check-baseline-quality.ts",
     "check:a11y": "npx tsx scripts/check-a11y.ts",
     "check:river-integrity": "npx tsx scripts/check-river-integrity.ts",
-    "check:empty-states": "npx tsx scripts/check-empty-states.ts"
+    "check:empty-states": "npx tsx scripts/check-empty-states.ts",
+    "check:perf": "npx tsx scripts/check-perf.ts docs/audits/perf-after.json"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",

@@ -19,6 +19,8 @@ interface SafeEntityImageProps {
   loading?: "lazy" | "eager";
   /** object-contain + padding for illustrations */
   contain?: boolean;
+  /** Origin leftover desks pass this; default stays the named plate. */
+  fallback?: "quiet" | "named";
 }
 
 /**
@@ -36,11 +38,12 @@ export default function SafeEntityImage({
   priority,
   loading,
   contain,
+  fallback = "named",
 }: SafeEntityImageProps) {
   const [failed, setFailed] = useState(false);
 
   if (!isUsableImageUrl(src) || failed) {
-    return <PlateFallback title={title} meta={meta} />;
+    return <PlateFallback title={title} meta={meta} quiet={fallback === "quiet"} />;
   }
 
   return (

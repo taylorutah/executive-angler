@@ -9,22 +9,16 @@ import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
 import { CheckCircle } from "@/icons";
+import { safeInternalPath } from "@/lib/auth-paths";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 type UsernameStatus = "idle" | "checking" | "available" | "taken" | "invalid";
 
-// Prevents open-redirect: only allow same-origin path redirects.
-function safeNext(raw: string | null): string | null {
-  if (!raw) return null;
-  if (!raw.startsWith("/") || raw.startsWith("//")) return null;
-  return raw;
-}
-
 function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = safeNext(searchParams.get("next"));
+  const next = safeInternalPath(searchParams.get("next"));
   const postSignupRedirect = next || "/journal";
 
   const [fullName, setFullName] = useState("");

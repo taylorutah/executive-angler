@@ -26,8 +26,8 @@ test.describe("journey smoke", () => {
   test("destinations index renders the places desk, not a blank bounce", async ({ page }) => {
     await page.goto("/destinations", { waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/destinations\/?$/);
-    await expect(page.getByRole("heading", { level: 1, name: /\d+\s+destinations/i })).toBeVisible();
-    await expect(page.locator("body")).toContainText(/\d+\s+results/i);
+    await expect(page.getByRole("heading", { level: 1, name: /every place we keep/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /pictures/i })).toBeVisible();
   });
 
   test('"green river" ranks Green River first among rivers', async ({ page }) => {
@@ -45,10 +45,11 @@ test.describe("journey smoke", () => {
     await expect(page).toHaveURL(/\/login\?redirect=/);
   });
 
-  test("logged-out /flies permanently redirects to /flies/library", async ({ page }) => {
+  test("logged-out /flies is The plate, not a redirect to the library", async ({ page }) => {
     const res = await page.goto("/flies", { waitUntil: "domcontentloaded" });
-    expect(res?.request().redirectedFrom() || page.url()).toBeTruthy();
-    await expect(page).toHaveURL(/\/flies\/library\/?$/);
+    expect(res?.status()).toBeLessThan(400);
+    await expect(page).toHaveURL(/\/flies\/?$/);
+    await expect(page.getByRole("heading", { name: /the plate/i })).toBeVisible();
   });
 
   test("/dashboard permanently lands on /today", async ({ page }) => {
