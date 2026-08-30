@@ -12,6 +12,7 @@ import { hatchTokens, sizeListValue } from "@/lib/browse/fly-filters";
 import { getAllCanonicalFlies } from "@/lib/db";
 import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
+import { plateImageUrl } from "@/lib/media/image-url";
 import { brandedTitle } from "@/lib/seo";
 export const revalidate = 3600;
 
@@ -49,7 +50,7 @@ export default async function FliesPage() {
   const items: (CardData & { _filterValues: Record<string, string> })[] = allFlies.map(
     (fly) => ({
       href: `/flies/${fly.slug}`,
-      imageUrl: fly.heroImageUrl || undefined,
+      imageUrl: plateImageUrl(fly.heroImageUrl),
       imageAlt: `${fly.name} fly pattern for trout fishing`,
       title: fly.name,
       subtitle: fly.tagline || undefined,
@@ -86,14 +87,15 @@ export default async function FliesPage() {
       <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <p className="ea-overline">
-            The complete reference
+            Fly library
           </p>
           <h1 className="mt-3 text-[var(--text-1)]">
             {allFlies.length} trout fly patterns
           </h1>
           <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
-            {allFlies.length} patterns. Filter by hatch, size, and — when you are signed
-            in — what you can tie from your own materials.
+            {allFlies.length} patterns on the bench. Twelve on the plate, the rest in
+            columns. Filters stay behind the toggle. Signed in, you can also filter
+            by what you can tie from your materials.
           </p>
           <LibraryNotebookLinks />
         </div>

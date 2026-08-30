@@ -634,6 +634,69 @@
     background: var(--paper-deep);
   }
 
+  /* ── Fly desk sheet (Water Desk structure, DESIGN.md paint) ───── */
+  .desk-sheet {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .desk-sheet-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+  @media (min-width: 768px) {
+    .desk-sheet-grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: var(--space-8);
+    }
+  }
+  .desk-sheet-photo {
+    position: relative;
+    aspect-ratio: 1;
+    width: 100%;
+    overflow: hidden;
+    background: var(--paper);
+  }
+  .desk-sheet-name {
+    min-width: 0;
+  }
+  .desk-sheet-stack {
+    width: 100%;
+  }
+  .desk-spec > div,
+  .desk-recipe li,
+  .desk-rule-list > * {
+    display: grid;
+    grid-template-columns: 7em minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: baseline;
+  }
+  .desk-recipe-label {
+    font-family: var(--font-ui);
+    font-size: var(--text-12);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .desk-table-wrap {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--vellum);
+    padding: var(--space-5);
+  }
+  .desk-table-wrap .ea-table {
+    background: transparent;
+  }
+  .desk-form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   /* ── Modal: the one allowed shadow ─────────────────────────────── */
   .ea-modal-overlay {
     position: fixed;
@@ -1479,6 +1542,10 @@ input.ea-focus-ring:focus-visible,
 
 .ea-wb-row:hover {
   background: var(--paper-deep);
+}
+
+.desk-sheet-stack {
+  width: 100%;
 }
 
 /* Motion law: 150–200ms opacity/transform, and honor the OS setting. */

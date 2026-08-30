@@ -6,22 +6,10 @@ import { hatchMatchesSlug, hatchSlugsFor } from "@/lib/search";
 import { SITE_URL } from "@/lib/constants";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
-import EntityCard from "@/components/ui/EntityCard";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { formatHookSize } from "@/lib/flies/variant-format";
+import DeskFlyIndex from "@/components/desk/DeskFlyIndex";
+import { canonicalFlyToCard } from "@/lib/flies/desk-cards";
 
 export const revalidate = 3600;
-
-const FLY_CATEGORY_LABELS: Record<string, string> = {
-  dry: "Dry Fly",
-  nymph: "Nymph",
-  streamer: "Streamer",
-  emerger: "Emerger",
-  wet: "Wet Fly",
-  terrestrial: "Terrestrial",
-  egg: "Egg",
-  midge: "Midge",
-};
 
 /** Convert a display name to a URL slug */
 function slugify(value: string): string {
@@ -70,8 +58,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const displayName = unslugify(slug);
 
   return {
-    title: `${displayName} Fly Patterns — Best Imitations for Trout`,
-    description: `The best fly patterns that imitate ${displayName.toLowerCase()}. Browse proven imitations with tying guides, sizes, materials, and fishing tips for matching this hatch.`,
+    title: `${displayName} fly patterns`,
+    description: `Catalog patterns that imitate ${displayName.toLowerCase()}.`,
     openGraph: {
       title: `${displayName} Fly Patterns`,
       description: `Top fly patterns imitating ${displayName.toLowerCase()} — matched to hatches and trout feeding behavior.`,
@@ -152,16 +140,13 @@ export default async function HatchInsectPage({ params }: Props) {
       <section className="bg-[var(--paper)] pb-10 sm:pb-12">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <p className="ea-overline">
-            Hatch Imitations
+            Hatch imitations
           </p>
           <h1 className="mt-3 text-[var(--text-1)]">
-            Flies That Imitate {displayName}
+            {flies.length} {flies.length === 1 ? "pattern" : "patterns"} for {displayName}
           </h1>
           <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
-            {flies.length} proven pattern{flies.length !== 1 ? "s" : ""} designed
-            to match {displayName.toLowerCase()} across multiple life stages.
-            From subsurface nymphs to surface duns, these are the flies that
-            consistently fool selective trout.
+            Catalog patterns whose imitates field names {displayName.toLowerCase()}.
           </p>
         </div>
       </section>
@@ -170,34 +155,7 @@ export default async function HatchInsectPage({ params }: Props) {
       <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {flies.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {flies.map((fly, i) => (
-                <ScrollAnimation key={fly.id} delay={Math.min(i * 0.05, 0.3)}>
-                  <EntityCard
-                    href={`/flies/${fly.slug}`}
-                    imageUrl={
-                      fly.heroImageUrl ||
-                      "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&q=80"
-                    }
-                    imageAlt={`${fly.name} fly pattern`}
-                    title={fly.name}
-                    subtitle={fly.tagline || fly.description?.substring(0, 100)}
-                    meta={
-                      fly.sizes.length > 0
-                        ? `Sizes ${formatHookSize(fly.sizes[0])}–${formatHookSize(fly.sizes[fly.sizes.length - 1])}`
-                        : undefined
-                    }
-                    badges={[FLY_CATEGORY_LABELS[fly.category] || fly.category]}
-                    iconOnly={!fly.heroImageUrl}
-                    actionSlot={{
-                      kind: "add-to-fly-box",
-                      canonicalFlyId: fly.id,
-                      flyName: fly.name,
-                    }}
-                  />
-                </ScrollAnimation>
-              ))}
-            </div>
+            <DeskFlyIndex items={flies.map(canonicalFlyToCard)} />
           ) : (
             <div className="ea-empty">
               <p>

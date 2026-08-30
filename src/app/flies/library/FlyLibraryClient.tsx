@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import DeskFlyIndex from "@/components/desk/DeskFlyIndex";
 import EntityListView from "@/components/ui/EntityListView";
 import { useAuth } from "@/lib/auth-context";
 import { flyListConfig } from "@/lib/list-configs";
@@ -62,6 +63,7 @@ export default function FlyLibraryClient({ items }: FlyLibraryClientProps) {
       storageKey="flies"
       liveValues={liveValues}
       showOptionalFilters={!isLoading && Boolean(user)}
+      resultsOverride={(sorted) => <DeskFlyIndex items={sorted} />}
       toolbarExtra={
         !user ? (
           <p className="text-[13px] text-[var(--text-2)]">

@@ -1,78 +1,63 @@
 import Link from "next/link";
 import type { LinkedMaterialSlot } from "@/lib/flies/link-materials";
-
-function formatSlotLabel(slot: string): string {
-  return (
-    slot
-      .split(/[_\s]+/)
-      .filter(Boolean)
-      .map((w) => w[0].toUpperCase() + w.slice(1).toLowerCase())
-      .join(" ") || "Material"
-  );
-}
+import { uniqueRecipeRows } from "@/lib/flies/recipe-slots";
 
 interface Props {
   materials: LinkedMaterialSlot[];
   notes?: string | null;
 }
 
+function materialLine(material?: string | null, brand?: string | null): string {
+  return [material, brand].filter(Boolean).join(" · ");
+}
+
+function withTabularSizes(text: string) {
+  const sizeMatch = text.match(/#\d+/);
+  if (!sizeMatch || sizeMatch.index == null) return text;
+  return (
+    <>
+      {text.slice(0, sizeMatch.index)}
+      <span className="num">{sizeMatch[0]}</span>
+      {text.slice(sizeMatch.index + sizeMatch[0].length)}
+    </>
+  );
+}
+
 /**
- * Hook / thread / bead / dubbing as a bill of materials.
- * Tabular numerals (`.num`) for sizes — mono is retired (DESIGN.md §2).
+ * Hook / bead / thread / tail / body / rib / wingcase / thorax.
+ * Inter labels, tabular sizes, materials linked. One slot label each.
  */
 export default function RecipeStrip({ materials, notes }: Props) {
-  const hasMaterials = materials.length > 0;
+  const rows = uniqueRecipeRows(materials);
 
   return (
-    <section aria-labelledby="recipe-strip-heading" className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-      <h2
-        id="recipe-strip-heading"
-        className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]"
-      >
-        Recipe
-      </h2>
-      {hasMaterials ? (
-        <ul className="mt-4 max-w-[var(--prose)] divide-y divide-[var(--border)] border-y border-[var(--border)]">
-          {materials.map((m, i) => {
-            const slotLabel = formatSlotLabel(String(m.slot ?? "Material"));
-            const detail = [m.material, m.brand].filter(Boolean).join(" · ");
-            const sizeMatch = detail.match(/#\d+/);
+    <section aria-labelledby="recipe-strip-heading" className="desk-recipe">
+      <h2 id="recipe-strip-heading">Recipe</h2>
+      {rows.length > 0 ? (
+        <ul className="desk-rule-list mt-4 divide-y divide-[var(--border)] border-y border-[var(--border)]">
+          {rows.map((m, i) => {
+            const detail = materialLine(m.material, m.brand);
+            const text = detail || m.catalogName || "—";
             return (
-              <li key={i} className="flex items-baseline gap-3 py-3 text-[14px]">
-                <span className="ea-overline w-24 shrink-0">
-                  {slotLabel}
+              <li key={`${m.label}-${i}`} className="py-3 text-[14px]">
+                <span className="desk-recipe-label">{m.label}</span>
+                <span>
+                  {m.href ? (
+                    <Link
+                      href={m.href}
+                      className="text-[var(--text-1)] underline-offset-4 hover:text-[var(--accent)] hover:underline"
+                    >
+                      {withTabularSizes(text)}
+                    </Link>
+                  ) : (
+                    <span className="text-[var(--text-1)]">{withTabularSizes(text)}</span>
+                  )}
+                  {m.description ? (
+                    <span className="mt-1 block text-[13px] text-[var(--text-2)]">
+                      {m.description}
+                    </span>
+                  ) : null}
                 </span>
-                {m.href ? (
-                  <Link
-                    href={m.href}
-                    className="text-[var(--text-1)] underline-offset-4 hover:text-[var(--accent)] hover:underline"
-                  >
-                    {sizeMatch ? (
-                      <>
-                        {detail.slice(0, sizeMatch.index)}
-                        <span className="num">{sizeMatch[0]}</span>
-                        {detail.slice((sizeMatch.index ?? 0) + sizeMatch[0].length)}
-                      </>
-                    ) : (
-                      detail || m.catalogName || "—"
-                    )}
-                  </Link>
-                ) : (
-                  <span className="text-[var(--text-1)]">
-                    {sizeMatch ? (
-                      <>
-                        {detail.slice(0, sizeMatch.index)}
-                        <span className="num">{sizeMatch[0]}</span>
-                        {detail.slice((sizeMatch.index ?? 0) + sizeMatch[0].length)}
-                      </>
-                    ) : (
-                      detail || "—"
-                    )}
-                  </span>
-                )}
-                {m.description && (
-                  <span className="text-[13px] text-[var(--text-2)]">{m.description}</span>
-                )}
               </li>
             );
           })}
@@ -80,11 +65,11 @@ export default function RecipeStrip({ materials, notes }: Props) {
       ) : (
         <p className="mt-3 text-[14px] text-[var(--text-2)]">Recipe not filled in yet.</p>
       )}
-      {notes && (
-        <div className="prose mt-6 max-w-[var(--prose)]">
+      {notes ? (
+        <div className="prose mt-6">
           <p className="whitespace-pre-line">{notes}</p>
         </div>
-      )}
+      ) : null}
     </section>
   );
 }

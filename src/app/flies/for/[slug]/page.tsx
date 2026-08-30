@@ -24,9 +24,8 @@ import {
 import type { CanonicalFly, HatchMonth } from "@/types/entities";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
-import EntityCard from "@/components/ui/EntityCard";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { formatHookSize } from "@/lib/flies/variant-format";
+import DeskPhotoCard from "@/components/desk/DeskPhotoCard";
+import { canonicalFlyToCard } from "@/lib/flies/desk-cards";
 
 export const revalidate = 3600;
 
@@ -50,13 +49,6 @@ export async function generateStaticParams() {
 
 function placeLabel(state?: string, region?: string, country?: string): string {
   return [state, region, country].filter(Boolean)[0] ?? "";
-}
-
-function sizeMeta(fly: CanonicalFly): string | undefined {
-  const sizes = fly.sizes ?? [];
-  if (sizes.length === 0) return undefined;
-  if (sizes.length === 1) return `Size ${formatHookSize(sizes[0])}`;
-  return `Sizes ${formatHookSize(sizes[0])}–${formatHookSize(sizes[sizes.length - 1])}`;
 }
 
 function HatchTable({ chart, currentMonth }: { chart: HatchMonth[]; currentMonth: string }) {
@@ -100,22 +92,23 @@ function FlyGrid({ flies }: { flies: CanonicalFly[] }) {
     return <p className="text-[var(--text-2)]">No catalog patterns in this group yet. Use the hatch chart and the river guide.</p>;
   }
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {flies.map((fly, i) => (
-        <ScrollAnimation key={fly.id} delay={Math.min(i * 0.04, 0.24)}>
-          <EntityCard
-            href={`/flies/${fly.slug}`}
-            imageUrl={fly.heroImageUrl}
-            imageAlt={`${fly.name} fly pattern`}
-            title={fly.name}
-            subtitle={fly.tagline || fly.description?.slice(0, 110)}
-            meta={sizeMeta(fly)}
-            badges={[CATEGORY_LABEL[fly.category] || fly.category]}
-            iconOnly={!fly.heroImageUrl}
-          />
-        </ScrollAnimation>
-      ))}
-    </div>
+    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      {flies.map((fly) => {
+        const card = canonicalFlyToCard(fly);
+        return (
+          <li key={fly.id}>
+            <DeskPhotoCard
+              href={card.href}
+              imageUrl={card.imageUrl}
+              imageAlt={card.imageAlt}
+              title={card.title}
+              meta={card.meta}
+              density="plate"
+            />
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

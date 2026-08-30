@@ -186,25 +186,27 @@ export default function ListToolbar({
               : `${filteredCount} of ${totalCount}`}
           </span>
 
-          <div
-            className="ea-segmented"
-            role="group"
-            aria-label="View density"
-          >
-            {filteredViewModes.map(({ mode, icon: Icon, label }) => (
-              <button
-                key={mode}
-                type="button"
-                onClick={() => onViewChange(mode)}
-                aria-label={label}
-                aria-pressed={viewMode === mode}
-                title={label}
-                className={`ea-focus-ring ${FOCUS_VISIBLE} ea-segment ea-segment-icon`}
-              >
-                <Icon className="h-4 w-4" aria-hidden />
-              </button>
-            ))}
-          </div>
+          {filteredViewModes.length > 0 ? (
+            <div
+              className="ea-segmented"
+              role="group"
+              aria-label="View density"
+            >
+              {filteredViewModes.map(({ mode, icon: Icon, label }) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => onViewChange(mode)}
+                  aria-label={label}
+                  aria-pressed={viewMode === mode}
+                  title={label}
+                  className={`ea-focus-ring ${FOCUS_VISIBLE} ea-segment ea-segment-icon`}
+                >
+                  <Icon className="h-4 w-4" aria-hidden />
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
 

@@ -30,8 +30,8 @@ interface EntityListViewProps {
   toolbarExtra?: ReactNode;
   filtersOpen?: boolean;
   onFiltersOpenChange?: (open: boolean) => void;
-  /** When set, replace the card grid (e.g. river map). */
-  resultsOverride?: ReactNode;
+  /** When set, replace the card grid (e.g. river map or fly desk). */
+  resultsOverride?: ReactNode | ((items: CardData[]) => ReactNode);
   /** Origin Water Desk leftover pages pass this; unused on the token-system list. */
   deskLayout?: string;
 }
@@ -223,9 +223,12 @@ export default function EntityListView({
   }, [filteredItems, activeSort]);
 
   const pageSize = config.pageSize;
+  const hasOverride = resultsOverride != null;
   const visibleItems =
-    pageSize && !resultsOverride ? sortedItems.slice(0, visibleCount) : sortedItems;
-  const canLoadMore = Boolean(pageSize && !resultsOverride && visibleCount < sortedItems.length);
+    pageSize && !hasOverride ? sortedItems.slice(0, visibleCount) : sortedItems;
+  const canLoadMore = Boolean(pageSize && !hasOverride && visibleCount < sortedItems.length);
+  const overrideNode =
+    typeof resultsOverride === "function" ? resultsOverride(sortedItems) : resultsOverride;
 
   // Use defaultView on server, real viewMode only after mount
   const displayView = mounted ? viewMode : config.defaultView;
@@ -247,6 +250,7 @@ export default function EntityListView({
         onSearchChange={handleSearchChange}
         searchPlaceholder={config.searchPlaceholder}
         availableViews={config.availableViews}
+        defaultSort={config.defaultSort}
         showOptionalFilters={showOptionalFilters}
         toolbarExtra={toolbarExtra}
         filtersOpen={filtersOpen}
@@ -254,9 +258,7 @@ export default function EntityListView({
       />
 
       <div>
-        {resultsOverride ? (
-          resultsOverride
-        ) : sortedItems.length === 0 ? (
+        {sortedItems.length === 0 ? (
             <div className="ea-empty">
               <p>
                 {searchQuery ? "No results match your search." : "No results match your filters."}
@@ -272,6 +274,8 @@ export default function EntityListView({
                 Clear all filters
               </button>
             </div>
+          ) : overrideNode ? (
+            overrideNode
           ) : displayView === "magazine" ? (
             <MagazineGrid items={visibleItems} />
           ) : displayView === "list" ? (

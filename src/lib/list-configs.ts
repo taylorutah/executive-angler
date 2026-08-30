@@ -322,9 +322,8 @@ export const flyListConfig: EntityListConfig = {
   ],
   defaultSort: "rank",
   defaultView: "grid",
-  availableViews: ["grid", "compact", "list", "magazine"],
+  availableViews: [],
   searchPlaceholder: "Search flies...",
-  pageSize: 24,
 };
 
 export const articleListConfig: EntityListConfig = {

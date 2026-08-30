@@ -30,10 +30,7 @@ export function arrangeFlyIndex(items: CardData[]): {
 }
 
 function categoryKey(item: CardData): string {
-  const raw = String(
-    (item as CardData & { _filterValues?: Record<string, string | number> })._filterValues
-      ?.category ?? "",
-  ).toLowerCase();
+  const raw = String(item._filterValues?.category ?? "").toLowerCase();
   if (raw === "emerger" || raw === "midge" || raw === "egg") return "nymph";
   if (raw === "terrestrial" || raw === "wet") return "dry";
   if (raw === "nymph" || raw === "dry" || raw === "streamer") return raw;
@@ -51,7 +48,7 @@ function benchColumns(rest: CardData[]): { key: string; label: string }[] {
   return [...COLUMNS, ...[...extra].map(([key, label]) => ({ key, label }))];
 }
 
-/** Flies Index 81:17 — plate of twelve, then the rest of the bench. */
+/** Plate of twelve specimens, then the rest of the bench in scan-dense columns. */
 export default function DeskFlyIndex({ items }: { items: CardData[] }) {
   if (items.length === 0) return null;
 
@@ -59,12 +56,7 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
 
   return (
     <div>
-      <h2
-        className="mb-5 font-heading text-[28px] font-semibold text-[var(--text-primary)]"
-        style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
-      >
-        On the water this week
-      </h2>
+      <h2 className="mb-5 text-[var(--text-1)]">On the plate</h2>
       <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {plate.map((item) => (
           <li key={item.href}>
@@ -82,14 +74,9 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
 
       {rest.length > 0 ? (
         <div className="mt-12">
-          <h2
-            className="font-heading text-[28px] font-semibold text-[var(--text-primary)]"
-            style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
-          >
-            The rest of the bench
-          </h2>
-          <p className="prose mt-2 max-w-[640px] text-[16px] text-[var(--text-body)]">
-            Patterns we actually keep. Sizes we fish. Not a catalog dump.
+          <h2 className="text-[var(--text-1)]">The rest of the bench</h2>
+          <p className="prose mt-2">
+            Patterns we keep, with the sizes on file. Not a catalog dump.
           </p>
           <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {benchColumns(rest).map((col) => {
@@ -97,21 +84,19 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
               if (rows.length === 0) return null;
               return (
                 <div key={col.key}>
-                  <p className="mb-3 font-ui text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--text-meta)]">
-                    {col.label}
-                  </p>
+                  <p className="ea-overline mb-3">{col.label}</p>
                   <ul className="space-y-2">
                     {rows.map((item) => (
                       <li key={item.href}>
                         <Link
                           href={item.href}
-                          className="ea-focus-ring group flex items-baseline justify-between gap-3"
+                          className="card-hover ea-focus-ring group flex items-baseline justify-between gap-3"
                         >
-                          <span className="hover-copper font-ui text-[14px] text-[var(--text-primary)] group-hover:text-[var(--action)]">
+                          <span className="text-[14px] text-[var(--text-1)] group-hover:text-[var(--accent)]">
                             {item.title}
                           </span>
                           {item.meta ? (
-                            <span className="shrink-0 font-ui text-[12px] text-[var(--text-meta)]">
+                            <span className="num shrink-0 text-[12px] text-[var(--text-3)]">
                               {item.meta}
                             </span>
                           ) : null}

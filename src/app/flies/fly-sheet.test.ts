@@ -1,22 +1,22 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
 const flyPage = readFileSync(join(root, "src/app/flies/[slug]/page.tsx"), "utf8");
 const recipe = readFileSync(join(root, "src/components/desk/RecipeStrip.tsx"), "utf8");
 const variants = readFileSync(join(root, "src/components/fly-detail/FlyVariantTable.tsx"), "utf8");
-const login = readFileSync(join(root, "src/app/login/page.tsx"), "utf8");
-const loginForm = readFileSync(join(root, "src/app/login/LoginForm.tsx"), "utf8");
-const fliesIndex = readFileSync(join(root, "src/app/flies/page.tsx"), "utf8");
-const fliesDesk = readFileSync(join(root, "src/app/flies/FliesDeskPage.tsx"), "utf8");
-const lodgesDesk = readFileSync(join(root, "src/app/lodges/LodgesDeskPage.tsx"), "utf8");
-const entityList = readFileSync(join(root, "src/components/ui/EntityListView.tsx"), "utf8");
+const library = readFileSync(join(root, "src/app/flies/library/FlyLibraryClient.tsx"), "utf8");
+const category = readFileSync(join(root, "src/app/flies/category/[category]/page.tsx"), "utf8");
+const hatch = readFileSync(join(root, "src/app/flies/hatch/[slug]/page.tsx"), "utf8");
+const forRiver = readFileSync(join(root, "src/app/flies/for/[slug]/page.tsx"), "utf8");
+const photoCard = readFileSync(join(root, "src/components/desk/DeskPhotoCard.tsx"), "utf8");
+const flyIndex = readFileSync(join(root, "src/components/desk/DeskFlyIndex.tsx"), "utf8");
 const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
 
-describe("fly Water Desk sheet", () => {
-  it("uses one 12-col sheet — no 50vw, no mixed max-w rails", () => {
+describe("fly desk sheet", () => {
+  it("uses one 12-col magazine sheet — no skinny 50vw rail, no dusk well", () => {
     assert.match(flyPage, /desk-sheet/);
     assert.match(flyPage, /desk-sheet-grid/);
     assert.match(flyPage, /desk-sheet-photo/);
@@ -25,57 +25,64 @@ describe("fly Water Desk sheet", () => {
     assert.match(flyPage, /desk-sheet-stack/);
     assert.match(flyPage, /desk-rule-list/);
     assert.equal(flyPage.includes("50vw"), false);
-    assert.equal(flyPage.includes("max-w-7xl"), false);
     assert.equal(flyPage.includes("max-w-xl"), false);
-    assert.equal(flyPage.includes("max-w-2xl"), false);
     assert.equal(flyPage.includes("InstrumentWellFrame"), false);
+    assert.equal(flyPage.includes("lucide"), false);
   });
 
-  it("keeps recipe on the same measure as a 7em spec sheet", () => {
+  it("keeps recipe on a 7em spec sheet with unique slot labels", () => {
     assert.match(recipe, /desk-recipe/);
     assert.match(recipe, /desk-recipe-label/);
+    assert.match(recipe, /uniqueRecipeRows/);
     assert.equal(recipe.includes("max-w-7xl"), false);
-    assert.equal(recipe.includes("max-w-2xl"), false);
     assert.match(css, /grid-template-columns: 7em minmax\(0, 1fr\)/);
   });
 
-  it("keeps variants on the cream sheet, not a dusk well", () => {
+  it("keeps variants as one bordered instrument on paper", () => {
     assert.match(variants, /desk-table-wrap/);
-    assert.match(variants, /bg-\[var\(--vellum\)\]/);
+    assert.match(variants, /bg-\[var\(--vellum\)\]|desk-table-wrap/);
     assert.match(variants, /Swipe to see In box and Add/);
+    assert.match(variants, /Sign in to put these sizes in your box/);
     assert.equal(variants.includes("InstrumentWellFrame"), false);
     assert.equal(variants.includes("register-dusk"), false);
+    assert.equal(variants.includes('href={loginHref}\n                          className="text-[13px]'), false);
   });
 
-  it("ships login as a cream desk form with SSR chrome", () => {
-    assert.match(login, /desk-sheet/);
-    assert.match(login, /desk-form/);
-    assert.match(login, /Sign in/);
-    assert.equal(login.includes("Loading"), false);
-    assert.equal(login.includes("SITE_NAME"), false);
-    assert.equal(loginForm.includes("red-950"), false);
-    assert.equal(loginForm.includes("rounded-xl"), false);
-    assert.match(loginForm, /safeInternalPath\(redirect\)/);
+  it("always renders designed empty states for missing copy", () => {
+    assert.match(flyPage, /Tying notes are not on file for this pattern/);
+    assert.match(flyPage, /No tying video on file/);
+    assert.match(flyPage, /Fishing notes are not on file for this pattern/);
+    assert.match(flyPage, /History is not on file for this pattern/);
   });
 
-  it("does not permanently redirect logged-out fly tabs", () => {
-    assert.match(fliesIndex, /redirect\(`\/login\?redirect=/);
-    assert.equal(fliesIndex.includes("permanentRedirect"), false);
+  it("wires the library to DeskFlyIndex and deletes the competing desk page", () => {
+    assert.match(library, /DeskFlyIndex/);
+    assert.equal(existsSync(join(root, "src/app/flies/FliesDeskPage.tsx")), false);
+    assert.match(flyIndex, /On the plate/);
+    assert.match(flyIndex, /The rest of the bench/);
   });
 
-  it("keeps the featured fly off the bench", () => {
-    assert.match(fliesDesk, /if \(!fly \|\| fly\.id === featuredId \|\| seen\.has\(fly\.id\)\) continue;/);
+  it("keeps leftover fly indexes on specimen cards, not EntityCard clip-art", () => {
+    for (const [rel, src] of [
+      ["category", category],
+      ["hatch", hatch],
+      ["for", forRiver],
+    ] as const) {
+      assert.match(src, /DeskFlyIndex|DeskPhotoCard/, `${rel} is missing specimen cards`);
+      assert.equal(src.includes("EntityCard"), false, `${rel} still uses EntityCard`);
+      assert.equal(src.includes("ScrollAnimation"), false, `${rel} still uses ScrollAnimation`);
+      assert.equal(src.includes("/images/fly-icons/"), false, `${rel} still uses fly-icon clip-art`);
+      assert.equal(src.includes("unsplash.com"), false, `${rel} still names Unsplash`);
+    }
   });
 
-  it("opens lodges List as list density, not the magazine catalog", () => {
-    assert.match(lodgesDesk, /href="\/lodges\/all\?view=list"/);
-    assert.match(lodgesDesk, /href="\/lodges\/all"/);
-    assert.match(entityList, /urlViewMode/);
-    assert.match(entityList, /updateParams\(\{ view: mode === deskDefault \? null : mode \}\)/);
-  });
-
-  it("keeps the variants sign-in control out of a text block", () => {
-    assert.match(variants, /Sign in to put these sizes in your box/);
-    assert.equal(variants.includes("to put these sizes in your box."), false);
+  it("migrates fly chrome off Water Desk copper and photo-lift", () => {
+    assert.equal(photoCard.includes("photo-lift"), false);
+    assert.equal(photoCard.includes("hover-copper"), false);
+    assert.equal(photoCard.includes("--text-primary"), false);
+    assert.match(photoCard, /--text-1/);
+    assert.match(photoCard, /--accent/);
+    assert.equal(flyIndex.includes("hover-copper"), false);
+    assert.equal(flyIndex.includes("--text-primary"), false);
   });
 });

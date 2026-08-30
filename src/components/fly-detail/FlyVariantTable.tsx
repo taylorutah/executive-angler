@@ -1,12 +1,9 @@
 "use client";
 
 /**
- * Variant table — the one public workbench module on a fly page, rendered
- * to the DESIGN.md §4 table spec (`.ea-table`: 12px/0.06em uppercase header
- * in --text-3, 1px row borders, 12px cell padding, row hover --paper-deep,
- * tabular numerals). Public HTML is the size/bead/body spec. Stock and
- * "add to box" hydrate after auth so the cached page never contains
- * another angler's counts.
+ * Variant table — one bordered instrument on paper (DESIGN.md §4 `.ea-table`).
+ * Public HTML is size / bead / body. Stock and add-to-box hydrate after auth.
+ * Signed-out: one sign-in line for the module, not a control on every row.
  */
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -16,7 +13,6 @@ import {
   normalizeSizeKey,
   type PublicVariantRow,
 } from "@/lib/flies/variant-rows";
-import InstrumentWell, { InstrumentWellFrame } from "@/components/desk/InstrumentWell";
 
 type BoxOption = { id: string; name: string; tier: string; is_default?: boolean };
 
@@ -173,175 +169,144 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
   }
 
   return (
-    <InstrumentWellFrame>
-      <InstrumentWell label={`Variants — ${flyName}`} className="p-4 sm:p-6">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="ea-overline">
-              Workbench
-            </p>
-            <h2
-              id="fly-variants-heading"
-              className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]"
+    <section className="desk-table-wrap bg-[var(--vellum)]" aria-labelledby="fly-variants-heading">
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="ea-overline">Workbench</p>
+          <h2 id="fly-variants-heading">Variants</h2>
+        </div>
+        {!user && (
+          <p className="text-[13px] text-[var(--text-2)]">
+            <Link
+              href={loginHref}
+              className="text-[var(--accent)] underline-offset-4 hover:underline"
             >
-              Variants
-            </h2>
-          </div>
-          {!user && (
-            <p className="text-[13px] text-[var(--text-2)]">
-              <Link
-                href={loginHref}
-                className="text-[var(--accent)] underline-offset-4 hover:underline"
-              >
-                Sign in
-              </Link>{" "}
-              to put these sizes in your box.
-            </p>
-          )}
-        </div>
-
-        <div className="overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
-          <table className="ea-table min-w-[32rem] text-left">
-            <thead>
-              <tr>
-                <th>
-                  Size
-                </th>
-                <th>
-                  Bead
-                </th>
-                <th>
-                  Body
-                </th>
-                <th className="text-right">
-                  In box
-                </th>
-                <th className="text-right">
-                  Add to box
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => {
-                return (
-                  <tr key={row.key}>
-                    <td className="align-middle text-[var(--text-1)]">
-                      {row.size}
-                    </td>
-                    <td className="align-middle text-[var(--text-2)]">{row.bead}</td>
-                    <td className="align-middle text-[var(--text-2)]">{row.body}</td>
-                    <td className="align-middle text-right">
-                      {user && row.stock != null ? (
-                        <span className="num text-[var(--text-1)]">{row.stock}</span>
-                      ) : (
-                        <span className="text-[var(--text-3)]">—</span>
-                      )}
-                    </td>
-                    <td className="align-middle text-right">
-                      {!user ? (
-                        <Link
-                          href={loginHref}
-                          className="text-[13px] text-[var(--accent)] underline-offset-4 hover:underline"
-                        >
-                          Sign in
-                        </Link>
-                      ) : row.configurationId && row.stock != null ? (
-                        <span className="inline-flex items-center justify-end gap-1">
-                          <button
-                            type="button"
-                            disabled={busyKey === row.key || row.stock === 0}
-                            onClick={() => setTied(row, (row.stock ?? 0) - 1)}
-                            aria-label={`Remove one ${flyName} ${row.size}`}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50"
-                          >
-                            −
-                          </button>
-                          <span className="num w-6 text-center text-[var(--text-1)]">
-                            {row.stock}
-                          </span>
-                          <button
-                            type="button"
-                            disabled={busyKey === row.key}
-                            onClick={() => setTied(row, (row.stock ?? 0) + 1)}
-                            aria-label={`Add one ${flyName} ${row.size}`}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50"
-                          >
-                            +
-                          </button>
-                        </span>
-                      ) : (
-                        <button
-                          type="button"
-                          disabled={!!busyKey}
-                          onClick={() => addSize(row.size)}
-                          className="ea-btn ea-btn-sm ea-btn-primary"
-                        >
-                          {busyKey === row.size ? "Adding…" : "Add"}
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {error && (
-          <p className="mt-3 text-[12px] text-[var(--danger)]" role="status">
-            {error}
+              Sign in to put these sizes in your box
+            </Link>
           </p>
         )}
+      </div>
 
-        {picker && (
-          <div
-            className="ea-modal-overlay z-50 flex items-end justify-center sm:items-center"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="variant-box-picker"
-            onClick={() => setPicker(null)}
-          >
-            <div onClick={(e) => e.stopPropagation()}>
-            <InstrumentWell
-              className="w-full max-w-md bg-[var(--surface)] p-6 shadow-[var(--shadow-float)]"
-              label="Which box?"
-            >
-              <h3 id="variant-box-picker" className="font-heading text-lg text-[var(--text-1)]">
-                Which box?
-              </h3>
-              <p className="mt-1 text-[13px] text-[var(--text-3)]">
-                Add {flyName} {picker.size} to one of your boxes.
-              </p>
-              <ul className="mt-4 space-y-1">
-                {picker.boxes.map((b) => (
-                  <li key={b.id}>
+      <p className="mb-3 text-[13px] text-[var(--text-3)] md:hidden">
+        Swipe to see In box and Add
+      </p>
+
+      <div className="overflow-x-auto">
+        <table className="ea-table min-w-[32rem] text-left">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Bead</th>
+              <th>Body</th>
+              <th className="text-right">In box</th>
+              <th className="text-right">Add to box</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.key}>
+                <td className="align-middle text-[var(--text-1)]">
+                  <span className="num">{row.size}</span>
+                </td>
+                <td className="align-middle text-[var(--text-2)]">{row.bead}</td>
+                <td className="align-middle text-[var(--text-2)]">{row.body}</td>
+                <td className="align-middle text-right">
+                  {user && row.stock != null ? (
+                    <span className="num text-[var(--text-1)]">{row.stock}</span>
+                  ) : (
+                    <span className="text-[var(--text-3)]">—</span>
+                  )}
+                </td>
+                <td className="align-middle text-right">
+                  {!user ? (
+                    <span className="text-[var(--text-3)]">—</span>
+                  ) : row.configurationId && row.stock != null ? (
+                    <span className="inline-flex items-center justify-end gap-1">
+                      <button
+                        type="button"
+                        disabled={busyKey === row.key || row.stock === 0}
+                        onClick={() => setTied(row, (row.stock ?? 0) - 1)}
+                        aria-label={`Remove one ${flyName} ${row.size}`}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50"
+                      >
+                        −
+                      </button>
+                      <span className="num w-6 text-center text-[var(--text-1)]">
+                        {row.stock}
+                      </span>
+                      <button
+                        type="button"
+                        disabled={busyKey === row.key}
+                        onClick={() => setTied(row, (row.stock ?? 0) + 1)}
+                        aria-label={`Add one ${flyName} ${row.size}`}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50"
+                      >
+                        +
+                      </button>
+                    </span>
+                  ) : (
                     <button
                       type="button"
-                      onClick={() => addSize(picker.size, b.id)}
-                      className="flex w-full items-center justify-between rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-2 text-left text-[13px] hover:border-[var(--accent)]"
+                      disabled={!!busyKey}
+                      onClick={() => addSize(row.size)}
+                      className="ea-btn ea-btn-sm ea-btn-primary"
                     >
-                      <span>{b.name}</span>
-                      {b.tier && (
-                        <span className="ea-overline">
-                          {b.tier}
-                        </span>
-                      )}
+                      {busyKey === row.size ? "Adding…" : "Add"}
                     </button>
-                  </li>
-                ))}
-              </ul>
-              <button
-                type="button"
-                onClick={() => setPicker(null)}
-                className="mt-4 w-full rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-2 text-[14px] font-medium text-[var(--text-2)] hover:border-[var(--accent)]"
-              >
-                Cancel
-              </button>
-            </InstrumentWell>
-            </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {error && (
+        <p className="mt-3 text-[12px] text-[var(--danger)]" role="status">
+          {error}
+        </p>
+      )}
+
+      {picker && (
+        <div
+          className="ea-modal-overlay z-50 flex items-end justify-center sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="variant-box-picker"
+          onClick={() => setPicker(null)}
+        >
+          <div
+            className="ea-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 id="variant-box-picker">Which box?</h3>
+            <p className="mt-1 text-[13px] text-[var(--text-3)]">
+              Add {flyName} {picker.size} to one of your boxes.
+            </p>
+            <ul className="mt-4 space-y-1">
+              {picker.boxes.map((b) => (
+                <li key={b.id}>
+                  <button
+                    type="button"
+                    onClick={() => addSize(picker.size, b.id)}
+                    className="flex w-full items-center justify-between rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-2 text-left text-[13px] hover:border-[var(--accent)]"
+                  >
+                    <span>{b.name}</span>
+                    {b.tier ? <span className="ea-overline">{b.tier}</span> : null}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              onClick={() => setPicker(null)}
+              className="mt-4 w-full rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-2 text-[14px] font-medium text-[var(--text-2)] hover:border-[var(--accent)]"
+            >
+              Cancel
+            </button>
           </div>
-        )}
-      </InstrumentWell>
-    </InstrumentWellFrame>
+        </div>
+      )}
+    </section>
   );
 }

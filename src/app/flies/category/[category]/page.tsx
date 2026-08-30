@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { getFliesByCategory } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
-import EntityCard from "@/components/ui/EntityCard";
-import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import { formatHookSize } from "@/lib/flies/variant-format";
+import DeskFlyIndex from "@/components/desk/DeskFlyIndex";
+import { canonicalFlyToCard } from "@/lib/flies/desk-cards";
 
 export const revalidate = 3600;
 
@@ -33,26 +31,15 @@ const CATEGORY_LABELS: Record<string, string> = {
   midge: "Midges",
 };
 
-const CATEGORY_ICONS: Record<string, string> = {
-  dry: "/images/fly-icons/dry.svg",
-  nymph: "/images/fly-icons/nymph.svg",
-  streamer: "/images/fly-icons/streamer.svg",
-  emerger: "/images/fly-icons/emerger.svg",
-  wet: "/images/fly-icons/wet.svg",
-  terrestrial: "/images/fly-icons/terrestrial.svg",
-  egg: "/images/fly-icons/egg.svg",
-  midge: "/images/fly-icons/midge.svg",
-};
-
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
-  dry: "Dry flies ride on the surface film, imitating adult mayflies, caddis, stoneflies, and other insects. Few moments in fly fishing rival the explosive take of a trout sipping a well-presented dry.",
-  nymph: "Nymphs imitate the subsurface larval and pupal stages of aquatic insects where trout feed roughly 80% of the time. Mastering nymph fishing is the fastest path to consistent success on any trout stream.",
-  streamer: "Streamers imitate baitfish, sculpins, leeches, and crayfish — the big-protein meals that draw aggressive strikes from the largest trout in the river. Fish them on sink-tip lines with an active retrieve.",
-  emerger: "Emergers imitate insects transitioning from nymph to adult, suspended in or just below the surface film. During a heavy hatch, trout often key on emergers over fully formed duns — the most overlooked stage in the drift.",
-  wet: "Wet flies are the oldest form of the artificial fly, designed to be fished below the surface on a downstream swing. Their soft hackle and slim profiles suggest drowned insects and emerging pupae tumbling in the current.",
-  terrestrial: "Terrestrials imitate land-born insects — ants, beetles, hoppers, crickets — that get blown or fall onto the water. From midsummer through early fall, terrestrial patterns can salvage otherwise slow fishing days.",
-  egg: "Egg patterns imitate the single most calorie-dense food item in a trout stream during spawning season. Simple to tie and deadly effective, egg flies are a must-have from late summer through winter.",
-  midge: "Midges are the smallest and most abundant aquatic insects on most trout waters, hatching year-round even in the coldest months. When nothing else is hatching, trout are almost certainly eating midges.",
+  dry: "Patterns that ride the surface film: adult mayflies, caddis, and stoneflies.",
+  nymph: "Subsurface patterns for larval and pupal stages.",
+  streamer: "Baitfish, sculpin, leech, and crayfish patterns, usually retrieved.",
+  emerger: "Patterns for the nymph-to-adult transition, in or just under the film.",
+  wet: "Soft-hackle and slim patterns fished below the surface on a swing.",
+  terrestrial: "Ants, beetles, hoppers, and other land insects on the water.",
+  egg: "Spawn-season egg imitations.",
+  midge: "Small dipteran patterns. Midges hatch in cold months as well as warm.",
 };
 
 type Props = { params: Promise<{ category: string }> };
@@ -64,15 +51,17 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
   const label = CATEGORY_LABELS[category] || category;
+  const flies = CATEGORY_LABELS[category] ? await getFliesByCategory(category) : [];
+  const n = flies.length;
 
   return {
-    title: `${label} — Complete Pattern Guide`,
-    description: CATEGORY_DESCRIPTIONS[category] || `Browse all ${label.toLowerCase()} patterns with tying guides, materials, and fishing tips.`,
+    title: `${n} ${label}`,
+    description: CATEGORY_DESCRIPTIONS[category] || `Browse ${label.toLowerCase()} in the fly library.`,
     openGraph: {
-      title: `${label} — Trout Fly Pattern Guide`,
-      description: CATEGORY_DESCRIPTIONS[category]?.substring(0, 160) || `Complete guide to ${label.toLowerCase()} for trout fishing.`,
+      title: `${n} ${label}`,
+      description: CATEGORY_DESCRIPTIONS[category]?.substring(0, 160) || `${label} in the fly library.`,
       images: [
-        `/api/og?title=${encodeURIComponent(label)}&subtitle=Fly%20Pattern%20Guide&type=fly`,
+        `/api/og?title=${encodeURIComponent(label)}&subtitle=Fly%20library&type=fly`,
       ],
     },
     alternates: {
@@ -87,8 +76,8 @@ export default async function FlyCategoryPage({ params }: Props) {
   if (!label) notFound();
 
   const flies = await getFliesByCategory(category);
-  const icon = CATEGORY_ICONS[category] || CATEGORY_ICONS.dry;
   const description = CATEGORY_DESCRIPTIONS[category] || "";
+  const items = flies.map(canonicalFlyToCard);
 
   return (
     <>
@@ -96,86 +85,42 @@ export default async function FlyCategoryPage({ params }: Props) {
         data={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: `${label} — Fly Pattern Guide`,
+          name: `${label} — Fly library`,
           description,
           url: `${SITE_URL}/flies/category/${category}`,
         }}
       />
 
-      {/* Breadcrumbs */}
       <div className="bg-[var(--paper)] pt-6 pb-4">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
-              { label: "Fly Library", href: "/flies" },
+              { label: "Fly Library", href: "/flies/library" },
               { label },
             ]}
           />
         </div>
       </div>
 
-      {/* Editorial header */}
       <section className="bg-[var(--paper)] pb-10 sm:pb-12">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-2">
-            <Image src={icon} alt={label} width={48} height={48} />
-          </div>
-          <p className="ea-overline">
-            Fly Library
-          </p>
+          <p className="ea-overline">Fly library</p>
           <h1 className="mt-3 text-[var(--text-1)]">
-            {label}
+            {flies.length} {label.toLowerCase()}
           </h1>
           <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
             {description}
           </p>
-          <p className="mt-3 text-sm text-[var(--text-3)]">
-            {flies.length} pattern{flies.length !== 1 ? "s" : ""} in this category
-          </p>
         </div>
       </section>
 
-      {/* Fly grid */}
       <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          {flies.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {flies.map((fly, i) => (
-                <ScrollAnimation key={fly.id} delay={Math.min(i * 0.05, 0.3)}>
-                  <EntityCard
-                    href={`/flies/${fly.slug}`}
-                    imageUrl={
-                      fly.heroImageUrl ||
-                      "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&q=80"
-                    }
-                    imageAlt={`${fly.name} fly pattern`}
-                    title={fly.name}
-                    subtitle={fly.tagline || fly.description?.substring(0, 100)}
-                    meta={
-                      fly.sizes.length > 0
-                        ? `Sizes ${formatHookSize(fly.sizes[0])}–${formatHookSize(fly.sizes[fly.sizes.length - 1])}`
-                        : undefined
-                    }
-                    badges={
-                      fly.imitates.length > 0
-                        ? fly.imitates.slice(0, 2)
-                        : undefined
-                    }
-                    iconOnly={!fly.heroImageUrl}
-                    actionSlot={{
-                      kind: "add-to-fly-box",
-                      canonicalFlyId: fly.id,
-                      flyName: fly.name,
-                    }}
-                  />
-                </ScrollAnimation>
-              ))}
-            </div>
+          {items.length > 0 ? (
+            <DeskFlyIndex items={items} />
           ) : (
             <div className="ea-empty">
-              <p>
-                No patterns found in this category yet. Check back soon.
-              </p>
+              <p>No patterns in this category yet.</p>
             </div>
           )}
         </div>
