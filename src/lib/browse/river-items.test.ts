@@ -109,9 +109,8 @@ describe("toRiverBrowseItem", () => {
       { label: "Water", value: "Freestone" },
       { label: "Access", value: "Wade / boat" },
       { label: "Difficulty", value: "Intermediate" },
-      { label: "Hatch", value: "Pale Morning Dun" },
     ]);
-    assert.equal(item.hoverPanel?.footer, "Best: Jun–Oct");
+    assert.equal(item.hoverPanel?.footer, "Hatch: Pale Morning Dun · Best: Jun–Oct");
     assert.match(item.hoverPanel?.brief ?? "", /crown jewel/);
     assert.equal((item.hoverPanel?.brief ?? "").includes("salmonfly"), true);
   });

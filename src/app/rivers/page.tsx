@@ -59,7 +59,7 @@ export default async function RiversPage() {
                   <li key={river.id}>
                     <Link
                       href={`/rivers/${river.slug}`}
-                      className="ea-chip transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                      className="ea-chip border border-[var(--border)] bg-[var(--surface)] transition-colors hover:border-[var(--border-strong)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
                     >
                       {river.name}
                     </Link>

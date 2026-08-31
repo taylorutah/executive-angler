@@ -85,7 +85,7 @@ export default function HoverReferenceCard({
       {showPanel && (
         <div
           aria-hidden="true"
-          className={`absolute inset-0 hidden flex-col bg-[var(--paper-deep)] p-6 opacity-0 transition-opacity duration-200 ease-standard md:flex group-hover:opacity-100 group-focus-visible:opacity-100 [@media(hover:none)]:group-hover:opacity-0 ${MOTION_SAFE}`}
+          className={`absolute inset-0 hidden flex-col bg-[var(--paper-deep)] p-6 opacity-0 transition-opacity duration-200 ease-standard md:flex [@media(hover:hover)]:group-hover:opacity-100 group-focus-visible:opacity-100 ${MOTION_SAFE}`}
         >
           <div
             data-excerpt-rule
@@ -96,17 +96,13 @@ export default function HoverReferenceCard({
             {title}
           </p>
           {featured && measure && (
-            <div className="mt-3">
-              <p className="ea-stat-label">{featured.label}</p>
-              <p className="mt-1 flex items-baseline gap-2">
-                <span className="num font-heading [font-size:var(--text-18)] font-semibold leading-none text-[var(--text-1)]">
-                  {measure.amount}
-                </span>
-                {measure.unit ? (
-                  <span className="ea-overline">{measure.unit}</span>
-                ) : null}
-              </p>
-            </div>
+            <p className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <span className="ea-stat-label">{featured.label}</span>
+              <span className="num font-heading [font-size:var(--text-18)] font-semibold leading-none text-[var(--accent)]">
+                {measure.amount}
+              </span>
+              {measure.unit ? <span className="ea-overline">{measure.unit}</span> : null}
+            </p>
           )}
           {factChips.length > 0 && (
             <dl className={`mt-3 grid shrink-0 gap-x-3 gap-y-2 ${factCols}`}>
@@ -121,7 +117,7 @@ export default function HoverReferenceCard({
             </dl>
           )}
           {brief && (
-            <p className={`min-h-0 flex-1 font-sans [font-size:var(--text-14)] leading-[1.45] text-[var(--text-2)] ${featured ? "mt-3 line-clamp-2" : "mt-3 line-clamp-3"}`}>
+            <p className="mt-3 min-h-0 flex-1 font-sans [font-size:var(--text-14)] leading-[1.45] text-[var(--text-2)] line-clamp-3">
               {brief}
             </p>
           )}

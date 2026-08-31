@@ -84,10 +84,7 @@ export function difficultyLabel(difficulty: string): string | undefined {
   return raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
 }
 
-function hoverChips(
-  river: RiverBrowseSource,
-  hatch: string,
-): { label: string; value: string }[] {
+function hoverChips(river: RiverBrowseSource): { label: string; value: string }[] {
   const chips: { label: string; value: string }[] = [];
   const water = waterTypeLabel(river.flowType);
   const access = accessLabel(river.wadingType);
@@ -95,7 +92,6 @@ function hoverChips(
   if (water) chips.push({ label: "Water", value: water });
   if (access) chips.push({ label: "Access", value: access });
   if (difficulty) chips.push({ label: "Difficulty", value: difficulty });
-  if (hatch) chips.push({ label: "Hatch", value: hatch });
   return chips;
 }
 
@@ -123,9 +119,11 @@ export function toRiverBrowseItem(
     featured: river.featured,
     description: river.description?.slice(0, 150),
     hoverPanel: {
-      chips: hoverChips(river, hatch),
+      chips: hoverChips(river),
       brief: excerptBrief(river.description ?? ""),
-      footer: best ? `Best: ${best}` : undefined,
+      footer: [hatch ? `Hatch: ${hatch}` : "", best ? `Best: ${best}` : ""]
+        .filter(Boolean)
+        .join(" · ") || undefined,
     },
     tags: undefined,
     latitude: Number(river.latitude) || 0,
