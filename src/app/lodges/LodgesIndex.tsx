@@ -5,6 +5,7 @@ import EntityListView from "@/components/ui/EntityListView";
 import { getAllLodges, getAllDestinations, getAllRivers } from "@/lib/db";
 import { lodgeListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
+import { hostedStillUrl } from "@/lib/media/image-url";
 
 /** Every lodge — magazine + Also kept. Frame 84:95 lands here. */
 export default async function LodgesIndex() {
@@ -51,7 +52,7 @@ export default async function LodgesIndex() {
       const dest = destinations.find((d) => d.id === lodge.destinationId);
       return {
         href: `/lodges/${lodge.slug}`,
-        imageUrl: lodge.heroImageUrl,
+        imageUrl: hostedStillUrl(lodge.heroImageUrl),
         imageAlt: lodge.name,
         title: lodge.name,
         subtitle: dest?.name,

@@ -34,6 +34,7 @@ function mapRow(row: Record<string, unknown>): River {
     metaDescription: (row.meta_description ?? "") as string,
     usgsGaugeId: (row.usgs_gauge_id as string | null) ?? null,
     featured: (row.featured ?? false) as boolean,
+    updatedAt: (row.updated_at as string | undefined) ?? undefined,
   };
 }
 

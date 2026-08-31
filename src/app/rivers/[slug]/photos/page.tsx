@@ -12,7 +12,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const river = await getRiverBySlug(slug);
-  if (!river) return { title: "Photos Not Found" };
+  if (!river) notFound();
   return {
     title: `${river.name} Photos — Community Fishing Photos`,
     description: `Browse and submit community fishing photos from ${river.name}. See catches, scenery, and access points shared by anglers.`,
@@ -26,6 +26,7 @@ export async function generateStaticParams() {
 }
 
 export const revalidate = 300;
+export const dynamicParams = false;
 
 export default async function RiverPhotosPage({ params }: Props) {
   const { slug } = await params;

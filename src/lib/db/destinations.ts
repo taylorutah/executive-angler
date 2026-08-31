@@ -29,6 +29,7 @@ function mapRow(r: Record<string, unknown>): Destination {
     metaDescription: (r.meta_description ?? undefined) as string | undefined,
     featured: (r.featured ?? false) as boolean,
     sortOrder: r.sort_order ? Number(r.sort_order) : undefined,
+    updatedAt: (r.updated_at as string | undefined) ?? undefined,
   };
 }
 

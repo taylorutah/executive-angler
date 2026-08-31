@@ -31,6 +31,26 @@ const nextConfig: NextConfig = {
         destination: "/rivers/madison-river",
         permanent: true,
       },
+      {
+        source: "/rivers/fryingpan-river",
+        destination: "/destinations/colorado",
+        permanent: true,
+      },
+      {
+        source: "/rivers/frying-pan",
+        destination: "/destinations/colorado",
+        permanent: true,
+      },
+      {
+        source: "/rivers/battenkill",
+        destination: "/rivers/batten-kill-vermont",
+        permanent: true,
+      },
+      {
+        source: "/rivers/batten-kill",
+        destination: "/rivers/batten-kill-vermont",
+        permanent: true,
+      },
       // Phase 1 — fly-box surfaces collapse to /flybox (inventory)
       // and /flies/workbench (tying). permanent: true → 308.
       {

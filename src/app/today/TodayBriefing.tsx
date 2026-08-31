@@ -218,7 +218,11 @@ export default function TodayBriefing({ data }: { data: TodayBriefingData }) {
                     " has no live reading right now."
                   )}
                 </p>
-                <ol className="-mx-4 mt-5 flex gap-3 overflow-x-auto px-4 pb-1 snap-x snap-mandatory lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0 lg:pb-0">
+                <ol
+                  tabIndex={0}
+                  aria-label="Worth going this week"
+                  className="-mx-4 mt-5 flex gap-3 overflow-x-auto px-4 pb-1 snap-x snap-mandatory lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0 lg:pb-0"
+                >
                   {data.worthGoing.days.map((day) => (
                     <li
                       key={day.date}

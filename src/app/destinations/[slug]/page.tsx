@@ -39,7 +39,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const dest = await getDestinationBySlug(slug);
-  if (!dest) return { title: "Destination Not Found" };
+  if (!dest) notFound();
 
   const speciesList = (dest.primarySpecies || []).slice(0, 3).join(", ");
   const speciesCount = (dest.primarySpecies || []).length;
@@ -71,6 +71,7 @@ export async function generateStaticParams() {
 }
 
 export const revalidate = 3600;
+export const dynamicParams = false;
 
 export default async function DestinationPage({ params }: Props) {
   const { slug } = await params;
