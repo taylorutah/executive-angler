@@ -24,6 +24,15 @@ describe("parseRiverGauges", () => {
     assert.equal(g[0]?.site_id, "06038500");
   });
 
+  it("keeps optional coordinates from a jsonb row", () => {
+    const g = parseRiverGauges(
+      [{ site_id: "06038500", name: "Hebgen", latitude: 44.86, longitude: -111.33 }],
+      "Madison",
+    );
+    assert.equal(g[0]?.latitude, 44.86);
+    assert.equal(g[0]?.longitude, -111.33);
+  });
+
   it("does not throw on a parsed object and skips junk ids", () => {
     assert.deepEqual(parseRiverGauges({ site_id: "not-a-site" }), []);
     assert.deepEqual(parseRiverGauges(12), []);

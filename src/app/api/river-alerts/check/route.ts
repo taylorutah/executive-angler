@@ -8,7 +8,7 @@ import {
   PER_USER_DAILY_CAP,
   RIVER_ALERT_ENTITY,
 } from "../constants";
-import { parseRiverGauges } from "@/lib/usgs/gauges";
+import { parseRiverGauges, type RiverGauge } from "@/lib/usgs/gauges";
 import { PARAM_DISCHARGE, fetchContinuous } from "@/lib/usgs/client";
 import { chooseAlert, personalBand, type GaugeReading } from "../evaluate";
 
@@ -109,7 +109,7 @@ async function runCheck() {
 
   const riverMap = new Map<
     string,
-    { name: string; gauges: GaugeConfig[] }
+    { name: string; gauges: RiverGauge[] }
   >();
   for (const river of rivers ?? []) {
     riverMap.set(river.id, {

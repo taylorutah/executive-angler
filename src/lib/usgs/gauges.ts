@@ -5,6 +5,8 @@ export interface RiverGauge {
   site_id: string;
   name: string;
   section: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 type GaugeRecord = {
@@ -13,7 +15,16 @@ type GaugeRecord = {
   id?: unknown;
   name?: unknown;
   section?: unknown;
+  latitude?: unknown;
+  longitude?: unknown;
 };
+
+function asCoord(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value !== "string") return undefined;
+  const n = Number(value.trim());
+  return Number.isFinite(n) ? n : undefined;
+}
 
 function asSiteId(value: unknown): string | undefined {
   if (typeof value !== "string") return undefined;
@@ -33,7 +44,9 @@ function normalizeOne(raw: unknown, fallbackName: string): RiverGauge | null {
   const name = typeof rec.name === "string" && rec.name.trim() ? rec.name.trim() : fallbackName;
   const section =
     typeof rec.section === "string" && rec.section.trim() ? rec.section.trim() : "Main";
-  return { site_id, name, section };
+  const latitude = asCoord(rec.latitude);
+  const longitude = asCoord(rec.longitude);
+  return { site_id, name, section, latitude, longitude };
 }
 
 function normalizeList(list: unknown[], fallbackName: string): RiverGauge[] {
