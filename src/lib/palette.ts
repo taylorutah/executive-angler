@@ -21,8 +21,8 @@ export const RULE = "#E4E0D6";
 export const INK = "#131815";
 /** --text-2 — body text */
 export const GRAPHITE = "#525B55";
-/** --text-3 — metadata/overlines. Amended from #969E97 (2.61:1 on paper, failed AA) to the lightest same-hue value passing 4.5:1. */
-export const SLATE = "#6E746F";
+/** --text-3 — metadata/overlines. #616863 clears 4.5:1 on paper and paper-deep. */
+export const SLATE = "#616863";
 
 /** Daylight action = --accent, deep river green */
 export const COPPER_700 = "#1E4D3B";

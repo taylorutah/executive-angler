@@ -15,10 +15,9 @@ interface HeroSectionProps {
   /** Optional link to photographer's site or portfolio */
   imageCreditUrl?: string;
   /**
-   * "chip" (default) — the solid-ink credit pill on the photograph, used by
+   * "chip" (default) — the solid-ink credit pill in the paper band, used by
    * fly-shops/species/lodges heroes. "overlay" — a plain metadata line under
-   * the subtitle in the paper band. Do not use "chip" on the place page; a
-   * solid pill reads as app chrome next to the essay-style hero.
+   * the subtitle in the paper band. Credit never sits on the photograph.
    */
   creditStyle?: "chip" | "overlay";
 }
@@ -60,26 +59,6 @@ export default function HeroSection({
           priority
           sizes="100vw"
         />
-        {showCredit && creditStyle === "chip" && (
-          <div className="absolute bottom-3 right-4 z-10">
-            {imageCreditUrl ? (
-              <a
-                href={imageCreditUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)] hover:opacity-90 transition-opacity"
-              >
-                <Camera className="h-3.5 w-3.5" />
-                {imageCredit}
-              </a>
-            ) : (
-              <span className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)]">
-                <Camera className="h-3.5 w-3.5" />
-                {imageCredit}
-              </span>
-            )}
-          </div>
-        )}
       </div>
 
       <div className="border-b border-[var(--border)]">
@@ -91,6 +70,26 @@ export default function HeroSection({
             </p>
           )}
           {children}
+          {showCredit && creditStyle === "chip" && (
+            <div className="mt-3">
+              {imageCreditUrl ? (
+                <a
+                  href={imageCreditUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)] hover:opacity-90 transition-opacity"
+                >
+                  <Camera className="h-3.5 w-3.5" />
+                  {imageCredit}
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)]">
+                  <Camera className="h-3.5 w-3.5" />
+                  {imageCredit}
+                </span>
+              )}
+            </div>
+          )}
           {showCredit && creditStyle === "overlay" && (
             <p className="mt-3 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
               {imageCreditUrl ? (
