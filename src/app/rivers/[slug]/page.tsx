@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import RiverHeroImage from "@/components/ui/RiverHeroImage";
 import ReportButton from "@/components/ui/ReportButton";
-import EntityChrome from "@/components/ui/EntityChrome";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FactList from "@/components/ui/FactList";
 import TokenRow, { Token } from "@/components/ui/TokenRow";
 import EntityCard from "@/components/ui/EntityCard";
@@ -188,6 +188,73 @@ export default async function RiverPage({ params }: Props) {
         title={river.name}
         subtitle={heroSubtitle || undefined}
         meta={river.lengthMiles ? `${river.lengthMiles} miles` : undefined}
+        toolbar={
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+            <Breadcrumbs
+              items={[
+                { label: "Rivers", href: "/rivers" },
+                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+                ...(additionalDests && additionalDests.length > 0
+                  ? additionalDests
+                      .filter(Boolean)
+                      .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
+                  : []),
+                { label: river.name },
+              ]}
+            />
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:shrink-0 sm:justify-end">
+              <Link
+                href={`/plan/${river.slug}`}
+                className="font-ui text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
+              >
+                Trip brief →
+              </Link>
+              <ReportButton entityType="river" entityId={river.id} />
+              <FavoriteButton entityType="river" entityId={river.id} />
+            </div>
+          </div>
+        }
+        spec={
+          difficulty || access || speciesNames.length > 0 ? (
+            <FactList
+              className="grid grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-3"
+              facts={[
+                ...(difficulty ? [{ label: "Difficulty", value: difficulty }] : []),
+                ...(access ? [{ label: "Access", value: access }] : []),
+                ...(speciesNames.length > 0
+                  ? [
+                      {
+                        label: "Fish",
+                        value: (
+                          <TokenRow>
+                            {speciesNames.map((speciesName, i) => {
+                              const matched = riverSpecies.find(
+                                (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
+                              );
+                              return (
+                                <Token key={speciesName} lead={i > 0}>
+                                  {matched ? (
+                                    <Link
+                                      href={`/species/${matched.slug}`}
+                                      className="underline-offset-4 hover:text-[var(--text-1)] hover:underline"
+                                    >
+                                      {speciesName}
+                                    </Link>
+                                  ) : (
+                                    speciesName
+                                  )}
+                                </Token>
+                              );
+                            })}
+                          </TokenRow>
+                        ),
+                      },
+                    ]
+                  : []),
+              ]}
+            />
+          ) : undefined
+        }
       >
         <AdminHeroEditor
           entityType="rivers"
@@ -199,68 +266,6 @@ export default async function RiverPage({ params }: Props) {
           aspectRatio={16 / 9}
         />
       </RiverHeroImage>
-
-      <EntityChrome
-        items={[
-          { label: "Rivers", href: "/rivers" },
-          ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-          ...(additionalDests && additionalDests.length > 0
-            ? additionalDests
-                .filter(Boolean)
-                .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
-            : []),
-          { label: river.name },
-        ]}
-        actions={
-          <>
-            <Link
-              href={`/plan/${river.slug}`}
-              className="font-ui text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
-            >
-              Trip brief →
-            </Link>
-            <ReportButton entityType="river" entityId={river.id} />
-            <FavoriteButton entityType="river" entityId={river.id} />
-          </>
-        }
-      >
-        {(difficulty || access || speciesNames.length > 0) && (
-          <div className="mt-5 space-y-4">
-            <FactList
-              facts={[
-                ...(difficulty ? [{ label: "Difficulty", value: difficulty }] : []),
-                ...(access ? [{ label: "Access", value: access }] : []),
-              ]}
-            />
-            {speciesNames.length > 0 && (
-              <div>
-                <p className="ea-overline">Fish</p>
-                <TokenRow className="mt-1.5">
-                  {speciesNames.map((speciesName, i) => {
-                    const matched = riverSpecies.find(
-                      (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
-                    );
-                    return (
-                      <Token key={speciesName} lead={i > 0}>
-                        {matched ? (
-                          <Link
-                            href={`/species/${matched.slug}`}
-                            className="underline-offset-4 hover:text-[var(--text-1)] hover:underline"
-                          >
-                            {speciesName}
-                          </Link>
-                        ) : (
-                          speciesName
-                        )}
-                      </Token>
-                    );
-                  })}
-                </TokenRow>
-              </div>
-            )}
-          </div>
-        )}
-      </EntityChrome>
 
       <section className="bg-[var(--paper)]">
         <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 py-8 sm:px-6 lg:px-8">

@@ -20,6 +20,10 @@ interface RiverHeroImageProps {
   /** Destination / water-type overline above the name. */
   subtitle?: string;
   meta?: string;
+  /** Breadcrumbs + actions — sits on the same paper band as the title. */
+  toolbar?: React.ReactNode;
+  /** Spec facts — fills the right column so the title band is not a left-only stack. */
+  spec?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -41,6 +45,8 @@ export default function RiverHeroImage({
   title,
   subtitle,
   meta,
+  toolbar,
+  spec,
   children,
 }: RiverHeroImageProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -98,30 +104,44 @@ export default function RiverHeroImage({
         </div>
 
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto w-full max-w-[var(--container)] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-            {subtitle ? <p className="ea-overline">{subtitle}</p> : null}
-            <h1 className="mt-2 max-w-4xl text-[var(--text-1)]">{title}</h1>
-            {meta ? (
-              <p className="mt-3 text-[var(--text-14)] text-[var(--text-2)]">
-                {meta}
-              </p>
-            ) : null}
-            {showPhoto && heroImageCredit ? (
-              <p className="mt-3 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
-                {heroImageCreditUrl ? (
-                  <a
-                    href={heroImageCreditUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-4 hover:text-[var(--text-1)]"
-                  >
-                    {heroImageCredit}
-                  </a>
-                ) : (
-                  heroImageCredit
-                )}
-              </p>
-            ) : null}
+          <div className="mx-auto w-full max-w-[var(--container)] px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
+            {toolbar}
+            <div
+              className={`grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,36rem)] lg:items-end lg:gap-10 ${
+                toolbar ? "mt-4" : ""
+              }`}
+            >
+              <div className="min-w-0">
+                {subtitle ? <p className="ea-overline">{subtitle}</p> : null}
+                <h1 className="mt-1 text-[var(--text-1)]">{title}</h1>
+                {meta ? (
+                  <p className="mt-1.5 text-[var(--text-14)] text-[var(--text-2)]">
+                    {meta}
+                  </p>
+                ) : null}
+                {showPhoto && heroImageCredit ? (
+                  <p className="mt-2 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
+                    {heroImageCreditUrl ? (
+                      <a
+                        href={heroImageCreditUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-4 hover:text-[var(--text-1)]"
+                      >
+                        {heroImageCredit}
+                      </a>
+                    ) : (
+                      heroImageCredit
+                    )}
+                  </p>
+                ) : null}
+              </div>
+              {spec ? (
+                <div className="min-w-0 border-t border-[var(--border)] pt-4 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">
+                  {spec}
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </section>

@@ -25,7 +25,9 @@ describe("river hero paper band", () => {
     assert.match(page, /accessLabel\(river\.wadingType\)/);
     assert.match(page, /label: "Difficulty"/);
     assert.match(page, /label: "Access"/);
-    assert.match(page, /EntityChrome/);
+    assert.match(page, /spec=/);
+    assert.match(page, /toolbar=/);
+    assert.equal(page.includes("EntityChrome"), false);
     assert.equal(
       page.includes("[river.difficulty, river.wadingType, ...(river.primarySpecies ?? [])]"),
       false,
@@ -36,7 +38,7 @@ describe("river hero paper band", () => {
   it("keeps overview prose and does not repeat species as badges", () => {
     assert.match(page, /Read the river overview/);
     assert.match(page, /river\.description\.split/);
-    assert.match(page, /Fish/);
+    assert.match(page, /label: "Fish"/);
     assert.match(page, /TokenRow/);
     assert.equal(page.includes("entity-tags"), false);
     assert.equal(page.includes('variant="river"'), false);
