@@ -48,6 +48,7 @@ interface Props {
 }
 
 export const revalidate = 3600;
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
