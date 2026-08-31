@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import HomeGutter from "@/components/home/HomeGutter";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
+import { firstUsgsSiteId } from "@/lib/search/usgs";
 import RiverConditionsCard from "./RiverConditionsCard";
 import YourRecordHere from "./YourRecordHere";
 import type { Article } from "@/types/entities";
@@ -162,7 +163,7 @@ export default function RiverDeskBody({
               <Suspense fallback={<LiveFallback riverName={riverName} />}>
                 <RiverConditionsCard
                   riverId={riverId}
-                  usgsSiteId={usgsGaugeId ?? undefined}
+                  usgsSiteId={firstUsgsSiteId(usgsGaugeId)}
                   riverName={riverName}
                   riverLatitude={riverLatitude}
                   riverLongitude={riverLongitude}

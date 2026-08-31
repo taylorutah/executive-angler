@@ -73,7 +73,7 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
                   )}
                 </>
               ) : lastSeen ? (
-                <span className="num text-[var(--text-3)]">
+                <span className="num text-[var(--text-3)]" data-live>
                   {snapshot.cfs!.toLocaleString("en-US")}
                   <span className="ml-0.5">cfs</span>
                   <span className="ea-overline ml-1.5">

@@ -5,9 +5,28 @@ test.describe("journey smoke", () => {
   test("stranger on a river page sees flow, hatch, and access", async ({ page }) => {
     await page.goto("/rivers/madison-river", { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: /madison river/i }).first()).toBeVisible();
-    await expect(page.locator("body")).toContainText(/cfs/i, { timeout: 15_000 });
+    await expect(page.locator("body")).toContainText(/\d[\d,]*\s*cfs/i, { timeout: 15_000 });
+    await expect(page.getByRole("heading", { name: /on the water/i }).first()).toBeVisible();
     await expect(page.locator("body")).toContainText(/hatch/i);
     await expect(page.locator("body")).toContainText(/access/i);
+  });
+
+  test("home rail shows a numeric cfs on first paint", async ({ page }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await expect(page.locator("[data-home-rail]")).toContainText(/\d[\d,]*\s*cfs/i, {
+      timeout: 20_000,
+    });
+    await expect(page.locator("[data-home-rail]")).not.toContainText(/no reading/i);
+  });
+
+  test.describe("gauges without JavaScript", () => {
+    test.use({ javaScriptEnabled: false });
+
+    test("home rail HTML still has a numeric cfs", async ({ page }) => {
+      await page.goto("/", { waitUntil: "domcontentloaded" });
+      await expect(page.locator("[data-home-rail]")).toContainText(/\d[\d,]*\s*cfs/i);
+      await expect(page.locator("[data-home-rail]")).not.toContainText(/no reading/i);
+    });
   });
 
   test('"pmd hatch" returns hatches and flies, not fly shops first', async ({ page }) => {

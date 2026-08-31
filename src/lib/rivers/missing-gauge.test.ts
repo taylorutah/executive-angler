@@ -20,6 +20,13 @@ describe("missingGaugeCopy", () => {
       "USGS site not-a-site is not a valid gauge id for Madison River. We do not guess a flow.",
     );
   });
+
+  it("does not throw when the column arrives as a jsonb array", () => {
+    assert.match(
+      missingGaugeCopy("Madison River", [{ site_id: "not-a-site" }]),
+      /Madison River/,
+    );
+  });
 });
 
 describe("missingInstantaneousCopy", () => {
@@ -27,6 +34,13 @@ describe("missingInstantaneousCopy", () => {
     assert.equal(
       missingInstantaneousCopy("Madison River", "06038500"),
       "USGS site 06038500 on Madison River did not return an instantaneous reading. Daily means below are the last published values. We do not guess a live flow.",
+    );
+  });
+
+  it("does not throw when a jsonb gauge array is passed as the site id", () => {
+    assert.match(
+      missingInstantaneousCopy("Madison River", [{ site_id: "06038500", name: "Hebgen" }]),
+      /USGS site 06038500 on Madison River/,
     );
   });
 });

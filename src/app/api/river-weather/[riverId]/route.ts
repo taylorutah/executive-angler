@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createStaticClient } from "@/lib/supabase/static";
+import { parseRiverGauges } from "@/lib/usgs/gauges";
+import { fetchSiteLocations } from "@/lib/usgs/client";
 
 // ── In-memory cache (per-instance, survives across requests until redeploy) ──
 const cache = new Map<string, { data: WeatherSection[]; expires: number }>();
@@ -121,25 +123,9 @@ async function fetchUSGSSiteCoords(
   siteIds: string[]
 ): Promise<Map<string, { lat: number; lng: number }>> {
   const result = new Map<string, { lat: number; lng: number }>();
-  if (siteIds.length === 0) return result;
-  try {
-    const url = `https://waterservices.usgs.gov/nwis/site/?format=rdb&sites=${siteIds.join(",")}&siteOutput=basic`;
-    const res = await fetch(url, { next: { revalidate: 86400 } }); // site coords change rarely
-    if (!res.ok) return result;
-    const text = await res.text();
-    for (const line of text.split("\n")) {
-      if (line.startsWith("#") || line.startsWith("agency") || line.startsWith("5s")) continue;
-      const cols = line.split("\t");
-      if (cols.length < 6) continue;
-      const siteId = cols[1]?.trim();
-      const lat = parseFloat(cols[4]);
-      const lng = parseFloat(cols[5]);
-      if (siteId && !isNaN(lat) && !isNaN(lng)) {
-        result.set(siteId, { lat, lng });
-      }
-    }
-  } catch {
-    // Non-fatal — fall back to river coords
+  const locations = await fetchSiteLocations(siteIds);
+  for (const [siteId, loc] of locations) {
+    result.set(siteId, { lat: loc.latitude, lng: loc.longitude });
   }
   return result;
 }
@@ -205,17 +191,7 @@ export async function GET(
   }
 
   // Parse gauge configs for per-section coordinates
-  let gauges: GaugeConfig[] = [];
-  if (river.usgs_gauge_id) {
-    const raw = (river.usgs_gauge_id as string).trim();
-    if (raw.startsWith("[")) {
-      try {
-        gauges = JSON.parse(raw) as GaugeConfig[];
-      } catch {
-        // Fall through to river-level coords
-      }
-    }
-  }
+  const gauges = parseRiverGauges(river.usgs_gauge_id, river.name);
 
   // Build coordinate list: per-section if available, else look up from USGS
   interface CoordEntry {

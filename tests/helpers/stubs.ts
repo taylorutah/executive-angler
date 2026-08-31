@@ -8,6 +8,29 @@ const REMOTE_HOST = /unsplash\.com|upload\.wikimedia\.org|cloudinary\.com|imgix\
 /** Frozen instant so "last checked" / relative times do not flake baselines. */
 export const FROZEN_NOW = "2026-08-24T18:00:00.000Z";
 
+const FLAGSHIP_SNAPSHOT = {
+  cfs: 740,
+  deltaCfs: 0,
+  waterTempF: 46,
+  observedAt: FROZEN_NOW,
+  stale: false,
+};
+
+const FLAGSHIP_HISTORY = [
+  { date: "2026-07-25", discharge: 740 },
+  { date: "2026-08-24", discharge: 740 },
+];
+
+/** Real `rivers.id` values for the six homepage flagships. */
+const FLAGSHIP_RIVER_IDS = [
+  "river-madison",
+  "green-river-utah",
+  "river-henry-s-fork",
+  "river-yellowstone",
+  "river-snake-river",
+  "river-missouri",
+] as const;
+
 const STABLE_FLOW = {
   discharge: { value: 740, unit: "ft3/s" },
   gageHeight: { value: 1.81, unit: "ft" },
@@ -35,6 +58,25 @@ export async function stubLiveData(
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({ value: { timeSeries: [] } }),
+    }),
+  );
+
+  await page.route("https://api.waterdata.usgs.gov/**", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ type: "FeatureCollection", features: [] }),
+    }),
+  );
+
+  await page.route("**/api/home/flagship-gauges", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        snapshots: Object.fromEntries(FLAGSHIP_RIVER_IDS.map((id) => [id, FLAGSHIP_SNAPSHOT])),
+        histories: Object.fromEntries(FLAGSHIP_RIVER_IDS.map((id) => [id, FLAGSHIP_HISTORY])),
+      }),
     }),
   );
 

@@ -16,6 +16,7 @@ import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import WhereToGo from "@/components/home/WhereToGo";
 import { selectFlagshipRivers } from "@/components/home/conditions";
+import { loadFlagshipGaugePayload } from "@/components/home/flagship-cache";
 import {
   LiveConditionsRail,
   LiveHomeHero,
@@ -138,6 +139,10 @@ export default async function HomePage() {
   }));
   const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
   const headline = `${rivers.length} Rivers, ${allFlies.length} Flies, and Hatches`;
+  const gauges = await loadFlagshipGaugePayload(flagshipRivers).catch(() => ({
+    snapshots: {},
+    histories: {},
+  }));
 
   const usedImages = new Set<string>();
   claimImageUrl(HERO_IMAGE.src, usedImages);
@@ -149,10 +154,10 @@ export default async function HomePage() {
   return (
     <>
       <div data-lane="resource">
-        <LiveConditionsRail rivers={flagshipRivers} />
+        <LiveConditionsRail rivers={flagshipRivers} initial={gauges} />
       </div>
 
-      <LiveHomeHero headline={headline} madisonId={madison?.id} />
+      <LiveHomeHero headline={headline} madisonId={madison?.id} initial={gauges} />
 
       <CategoryIndex
         rivers={rivers.length}
@@ -161,7 +166,7 @@ export default async function HomePage() {
         notes={articles.length}
       />
 
-      <LiveOnTheWaterNow rivers={flagshipRivers} month={month} />
+      <LiveOnTheWaterNow rivers={flagshipRivers} month={month} initial={gauges} />
 
       {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
 

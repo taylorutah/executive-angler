@@ -20,14 +20,18 @@ export default defineConfig({
     baseURL: BASE,
     trace: "on-first-retry",
   },
-  webServer: process.env.PW_NO_WEBSERVER
-    ? undefined
-    : {
-        command: process.env.PW_WEB_COMMAND ?? "npm run start -- -p 3000",
-        url: BASE,
-        reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
-      },
+      webServer: process.env.PW_NO_WEBSERVER
+        ? undefined
+        : {
+            command: process.env.PW_WEB_COMMAND ?? "npm run start -- -p 3000",
+            url: BASE,
+            reuseExistingServer: !process.env.CI,
+            timeout: 120_000,
+            env: {
+              ...process.env,
+              EA_USGS_FIXTURE: "1",
+            },
+          },
   projects: [
     {
       name: "e2e",

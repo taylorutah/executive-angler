@@ -26,12 +26,22 @@ export const HERO_IMAGE = {
 
 export const SEARCH_PLACEHOLDER = "Search a river, a fly, a hatch, a destination.";
 
+/** Visual / e2e freeze — same instant as tests/helpers/stubs FROZEN_NOW. */
+function clock(now?: Date): Date {
+  if (now) return now;
+  if (process.env.EA_USGS_FIXTURE === "1") {
+    return new Date("2026-08-24T18:00:00.000Z");
+  }
+  return new Date();
+}
+
 /** Date and place always; CFS only when the gauge answered. */
-export function formatHeroEyebrow(cfs: number | null, now = new Date()): string {
-  const month = now
+export function formatHeroEyebrow(cfs: number | null, now?: Date): string {
+  const d = clock(now);
+  const month = d
     .toLocaleString("en-US", { month: "long", timeZone: "America/Denver" })
     .toUpperCase();
-  const day = now.toLocaleString("en-US", { day: "numeric", timeZone: "America/Denver" });
+  const day = d.toLocaleString("en-US", { day: "numeric", timeZone: "America/Denver" });
   const place = HERO_PLACE.toUpperCase();
   if (cfs == null) return `${month} ${day} · ${place}`;
   return `${month} ${day} · ${place} · ${cfs.toLocaleString("en-US")} CFS`;
@@ -43,8 +53,9 @@ export function heroDek(cfs: number | null): string {
 }
 
 /** Field-note caption: place · CFS · date. CFS only when the gauge answered. */
-export function formatHeroCaption(cfs: number | null, now = new Date()): string {
-  const date = now.toLocaleDateString("en-US", {
+export function formatHeroCaption(cfs: number | null, now?: Date): string {
+  const d = clock(now);
+  const date = d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     timeZone: "America/Denver",

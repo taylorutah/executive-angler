@@ -1,43 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { isUsgsSiteId } from "@/lib/search/usgs";
+import {
+  PARAM_DISCHARGE,
+  PARAM_GAGE_HEIGHT,
+  fetchContinuous,
+} from "@/lib/usgs/client";
 
 /**
  * GET /api/rivers/flow?siteId=USGS_SITE_ID&days=30
  *
- * Fetches instantaneous values from USGS Water Services API.
- * Returns discharge (cfs) and/or gage height (ft) as simple arrays.
- *
- * Response shape:
- * {
- *   discharge: { datetime: string, value: number, unit: "cfs" }[],
- *   gageHeight: { datetime: string, value: number, unit: "ft" }[],
- *   siteName: string
- * }
+ * Instantaneous discharge and gage height for a window.
  */
-
-const PARAM_DISCHARGE = "00060"; // Streamflow, ft³/s
-const PARAM_GAGE_HEIGHT = "00065"; // Gage height, ft
 
 interface FlowPoint {
   datetime: string;
   value: number;
   unit: string;
-}
-
-interface USGSValue {
-  value: string;
-  qualifiers: string[];
-  dateTime: string;
-}
-
-interface USGSTimeSeries {
-  sourceInfo: { siteName: string };
-  variable: { variableCode: { value: string }[] };
-  values: { value: USGSValue[] }[];
-}
-
-interface USGSResponse {
-  value: { timeSeries: USGSTimeSeries[] };
 }
 
 export async function GET(request: NextRequest) {
@@ -53,69 +32,38 @@ export async function GET(request: NextRequest) {
     120
   );
 
-  if (!siteId) {
+  if (!siteId || !isUsgsSiteId(siteId)) {
     return NextResponse.json(
       { error: "siteId query parameter is required" },
       { status: 400 }
     );
   }
 
-  const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${siteId}&period=P${days}D&parameterCd=${PARAM_DISCHARGE},${PARAM_GAGE_HEIGHT}`;
+  const end = new Date();
+  const start = new Date();
+  start.setDate(end.getDate() - days);
 
   try {
-    const res = await fetch(url, {
-      headers: { Accept: "application/json" },
-      next: { revalidate: 3600 },
-      signal: AbortSignal.timeout(8000),
-    });
-
-    if (!res.ok) {
-      console.error(`[USGS Flow] Failed for site ${siteId}: ${res.status}`);
-      return NextResponse.json(
-        { error: "USGS API returned an error" },
-        { status: 502 }
-      );
-    }
-
-    const data: USGSResponse = await res.json();
-    const allSeries = data?.value?.timeSeries;
-    if (!allSeries || allSeries.length === 0) {
-      return NextResponse.json({
-        discharge: [],
-        gageHeight: [],
-        siteName: "",
-      });
-    }
+    const obs = await fetchContinuous(
+      [siteId],
+      start.toISOString(),
+      end.toISOString(),
+      [PARAM_DISCHARGE, PARAM_GAGE_HEIGHT],
+    );
 
     let siteName = "";
     const discharge: FlowPoint[] = [];
     const gageHeight: FlowPoint[] = [];
 
-    for (const ts of allSeries) {
-      if (!siteName && ts.sourceInfo?.siteName) {
-        siteName = ts.sourceInfo.siteName;
-      }
-
-      const paramCode = ts.variable?.variableCode?.[0]?.value;
-      const rawValues = ts.values?.[0]?.value || [];
-
-      for (const v of rawValues) {
-        if (!v.value || v.value === "" || v.value === "-999999") continue;
-        const numVal = parseFloat(v.value);
-        if (isNaN(numVal)) continue;
-
-        const point: FlowPoint = {
-          datetime: v.dateTime,
-          value: Math.round(numVal * 100) / 100,
-          unit: paramCode === PARAM_DISCHARGE ? "cfs" : "ft",
-        };
-
-        if (paramCode === PARAM_DISCHARGE) {
-          discharge.push(point);
-        } else if (paramCode === PARAM_GAGE_HEIGHT) {
-          gageHeight.push(point);
-        }
-      }
+    for (const point of obs) {
+      if (!siteName && point.siteName) siteName = point.siteName;
+      const row: FlowPoint = {
+        datetime: point.dateTime,
+        value: Math.round(point.value * 100) / 100,
+        unit: point.parameterCode === PARAM_DISCHARGE ? "cfs" : "ft",
+      };
+      if (point.parameterCode === PARAM_DISCHARGE) discharge.push(row);
+      else if (point.parameterCode === PARAM_GAGE_HEIGHT) gageHeight.push(row);
     }
 
     return NextResponse.json(

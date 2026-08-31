@@ -8,6 +8,7 @@ import { fetchOnce } from "./fetch-once";
 import Hydrograph from "@/components/hydrograph/Hydrograph";
 import { HYDRO, hydroScales, type HydroReading } from "@/components/hydrograph/geometry";
 import { flowTrend } from "@/lib/rivers/missing-gauge";
+import { parseRiverGauges } from "@/lib/usgs/gauges";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -39,24 +40,15 @@ interface GaugeOption {
 }
 
 interface Props {
-  usgsGaugeId: string | null; // JSON array string or single site ID or null
+  usgsGaugeId: unknown;
   riverName: string;
   riverId: string;
 }
 
 /* ── Helpers ───────────────────────────────────────────── */
 
-function parseGauges(raw: string | null): GaugeOption[] {
-  if (!raw) return [];
-  const trimmed = raw.trim();
-  if (trimmed.startsWith("[")) {
-    try {
-      return JSON.parse(trimmed) as GaugeOption[];
-    } catch {
-      return [];
-    }
-  }
-  return [{ site_id: trimmed, name: "Main Gauge", section: "Main" }];
+function parseGauges(raw: unknown): GaugeOption[] {
+  return parseRiverGauges(raw, "Main Gauge");
 }
 
 function formatShortDate(iso: string): string {

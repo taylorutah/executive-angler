@@ -6,6 +6,8 @@ import {
   computeTopFly,
   flyIdentity,
 } from "@/lib/insights/top-fly";
+import { firstUsgsSiteId } from "@/lib/usgs/gauges";
+import { fetchDaily } from "@/lib/usgs/client";
 
 /**
  * GET /api/insights/river-conditions?riverId=xxx
@@ -95,18 +97,7 @@ export async function GET(request: NextRequest) {
     .eq("id", riverId)
     .maybeSingle();
 
-  let gaugeId: string | null = null;
-  if (river?.usgs_gauge_id) {
-    const raw = river.usgs_gauge_id.trim();
-    if (raw.startsWith("[")) {
-      try {
-        const parsed = JSON.parse(raw);
-        gaugeId = parsed[0]?.site_id || null;
-      } catch { /* ignore */ }
-    } else {
-      gaugeId = raw;
-    }
-  }
+  const gaugeId = firstUsgsSiteId(river?.usgs_gauge_id);
 
   // Build flow lookup from USGS daily values if gauge available
   const flowByDate = new Map<string, number>();
@@ -114,17 +105,9 @@ export async function GET(request: NextRequest) {
     const startDate = sessions[0].date;
     const endDate = sessions[sessions.length - 1].date;
     try {
-      const url = `https://waterservices.usgs.gov/nwis/dv/?format=json&sites=${gaugeId}&parameterCd=00060&startDT=${startDate}&endDT=${endDate}&statCd=00003`;
-      const res = await fetch(url, { headers: { Accept: "application/json" } });
-      if (res.ok) {
-        const data = await res.json();
-        const ts = data?.value?.timeSeries?.[0];
-        const values = ts?.values?.[0]?.value || [];
-        for (const v of values) {
-          if (v.value && v.value !== "-999999") {
-            flowByDate.set(v.dateTime.split("T")[0], Math.round(parseFloat(v.value)));
-          }
-        }
+      const points = await fetchDaily([gaugeId], startDate, endDate);
+      for (const point of points) {
+        flowByDate.set(point.date, Math.round(point.value));
       }
     } catch {
       // Silently skip flow correlation if USGS unavailable
