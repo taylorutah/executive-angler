@@ -77,13 +77,13 @@ export default function HeroSection({
                   href={imageCreditUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)] hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[length:var(--text-12)] font-medium text-[color:var(--paper)] hover:opacity-90 transition-opacity"
                 >
                   <Camera className="h-3.5 w-3.5" />
                   {imageCredit}
                 </a>
               ) : (
-                <span className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)]">
+                <span className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[length:var(--text-12)] font-medium text-[color:var(--paper)]">
                   <Camera className="h-3.5 w-3.5" />
                   {imageCredit}
                 </span>
