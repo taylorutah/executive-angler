@@ -29,20 +29,12 @@ const MIN_DISTINCT = 500;
 
 /** Declared page fills from globals.css. Anti-aliasing may land 1 off. */
 const PAGE_FILLS = new Set([
-<<<<<<< HEAD
   "250,249,245", // --paper #FAF9F5
   "242,239,232", // --paper-deep / --vellum #F2EFE8
   "250,246,240", // retired paper (kept so old dusk-era baselines still classify)
   "242,237,228", // retired vellum
   "11,17,18", // --riverbed (retired dusk)
   "19,27,29", // --pool (retired dusk)
-=======
-  "250,246,240", // --paper (legacy painted fill)
-  "250,249,245", // --paper #FAF9F5
-  "242,237,228", // --vellum
-  "11,17,18", // --riverbed
-  "19,27,29", // --pool
->>>>>>> 04cbc3d7 (Fix hover-panel contrast and refresh /rivers baselines.)
 ]);
 const MASK_FILL = "255,0,255";
 
