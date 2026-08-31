@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { MapPin, ChevronRight, Star } from "@/icons";
+import { MapPin, ChevronRight } from "@/icons";
+import RatingStars from "@/components/ui/RatingStars";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
@@ -150,14 +151,14 @@ export default async function LodgesPage() {
                       <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
                       <span>West Yellowstone, Montana</span>
                     </div>
-                    {heroLodge.averageRating && (
-                      <div className="mt-2 flex items-center gap-1.5">
-                        <Star className="h-4 w-4 fill-[var(--accent)] text-[var(--accent)]" />
-                        <span className="text-[var(--text-2)] text-sm font-medium">
-                          {heroLodge.averageRating} · {heroLodge.reviewCount} reviews
-                        </span>
+                    {heroLodge.averageRating ? (
+                      <div className="mt-2">
+                        <RatingStars
+                          rating={heroLodge.averageRating}
+                          count={heroLodge.reviewCount}
+                        />
                       </div>
-                    )}
+                    ) : null}
                     <p className="mt-4 text-[var(--text-2)] text-sm leading-relaxed line-clamp-3">
                       {heroLodge.description?.substring(0, 240)}...
                     </p>
@@ -217,14 +218,14 @@ export default async function LodgesPage() {
                           </span>
                         ))}
                       </div>
-                      {lodge.averageRating && (
-                        <div className="mt-3 flex items-center gap-1">
-                          <Star className="h-3.5 w-3.5 fill-[var(--accent)] text-[var(--accent)]" />
-                          <span className="text-[var(--text-2)] text-xs">
-                            {lodge.averageRating} ({lodge.reviewCount} reviews)
-                          </span>
+                      {lodge.averageRating ? (
+                        <div className="mt-3">
+                          <RatingStars
+                            rating={lodge.averageRating}
+                            count={lodge.reviewCount}
+                          />
                         </div>
-                      )}
+                      ) : null}
                       <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[var(--accent)] group-hover:underline">
                         Explore <ChevronRight className="h-3.5 w-3.5" />
                       </span>

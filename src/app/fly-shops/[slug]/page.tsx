@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExternalLink, Phone, MapPin, Clock, Waves, User, Fish } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import EntityChrome from "@/components/ui/EntityChrome";
+import SpecList from "@/components/ui/SpecList";
 import QuickFacts from "@/components/ui/QuickFacts";
 import Badge from "@/components/ui/Badge";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
@@ -165,20 +166,14 @@ export default async function FlyShopPage({ params }: Props) {
         )}
       </div>
 
-      <div className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between">
-            <Breadcrumbs
-              items={[
-                { label: "Fly Shops", href: "/fly-shops" },
-                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-                { label: shop.name },
-              ]}
-            />
-            <FavoriteButton entityType="fly_shop" entityId={shop.id} />
-          </div>
-        </div>
-      </div>
+      <EntityChrome
+        items={[
+          { label: "Fly Shops", href: "/fly-shops" },
+          ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+          { label: shop.name },
+        ]}
+        actions={<FavoriteButton entityType="fly_shop" entityId={shop.id} />}
+      />
 
       <section className="bg-[var(--paper)] pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
@@ -199,13 +194,7 @@ export default async function FlyShopPage({ params }: Props) {
                 <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                   Services
                 </h2>
-                <div className="flex flex-wrap gap-2">
-                  {(shop.services || []).map((s) => (
-                    <Badge key={s} variant="forest" size="md">
-                      {s}
-                    </Badge>
-                  ))}
-                </div>
+                <SpecList items={shop.services || []} />
               </ScrollAnimation>
 
               {(shop.brandsCarried || []).length > 0 && (

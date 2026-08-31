@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ExternalLink, Phone, Mail, Award, Home, MapPin, Fish, Star } from "@/icons";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { ExternalLink, Phone, Mail, Home, MapPin, Fish } from "@/icons";
+import EntityChrome from "@/components/ui/EntityChrome";
+import FactList from "@/components/ui/FactList";
+import SpecList from "@/components/ui/SpecList";
+import RatingStars from "@/components/ui/RatingStars";
 import QuickFacts from "@/components/ui/QuickFacts";
 import Badge from "@/components/ui/Badge";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
@@ -80,16 +83,13 @@ export default async function GuidePage({ params }: Props) {
     dest ? getSpeciesByCommonNames(dest.primarySpecies || []) : Promise.resolve([]),
   ]);
 
+  const specialties = guide.specialties || [];
   const quickFacts = [
     ...(dest ? [{ label: "Location", value: dest.name }] : []),
     ...(guide.yearsExperience
       ? [{ label: "Experience", value: `${guide.yearsExperience}+ years` }]
       : []),
-    ...(guide.dailyRate ? [{ label: "Daily Rate", value: guide.dailyRate }] : []),
-    {
-      label: "Specialties",
-      value: (guide.specialties || []).join(", "),
-    },
+    ...(guide.dailyRate ? [{ label: "Daily rate", value: guide.dailyRate }] : []),
   ];
 
   return (
@@ -149,65 +149,43 @@ export default async function GuidePage({ params }: Props) {
         }}
       />
 
-      {/* Text Hero */}
+      <EntityChrome
+        items={[
+          { label: "Guides", href: "/guides" },
+          ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+          { label: guide.name },
+        ]}
+        actions={<FavoriteButton entityType="guide" entityId={guide.id} />}
+      />
+
       <section className="bg-[var(--paper)] pt-6 pb-10">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <Breadcrumbs
-            items={[
-              { label: "Guides", href: "/guides" },
-              ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-              { label: guide.name },
-            ]}
-          />
+          <h1 className="text-[var(--text-1)]">{guide.name}</h1>
 
-          <div className="mt-6 flex items-start gap-4">
-            <h1 className="text-[var(--text-1)] flex-1">
-              {guide.name}
-            </h1>
-            <div className="mt-2 shrink-0">
-              <FavoriteButton entityType="guide" entityId={guide.id} />
+          <div className="mt-5">
+            <FactList
+              facts={[
+                ...(dest ? [{ label: "Location", value: dest.name }] : []),
+                ...(guide.yearsExperience
+                  ? [{ label: "Experience", value: `${guide.yearsExperience}+ years` }]
+                  : []),
+                ...(guide.dailyRate
+                  ? [{ label: "Daily rate", value: guide.dailyRate }]
+                  : []),
+              ]}
+            />
+          </div>
+
+          {guide.googleRating ? (
+            <div className="mt-5">
+              <RatingStars
+                rating={guide.googleRating}
+                count={guide.googleReviewCount}
+                size="md"
+                suffix="on Google"
+              />
             </div>
-          </div>
-
-          {/* Badge Row: Destination, Experience, Rate */}
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            {dest && (
-              <span className="ea-chip">
-                <MapPin className="text-[var(--accent)]" />
-                {dest.name}
-              </span>
-            )}
-            {guide.yearsExperience && (
-              <span className="ea-chip">
-                {guide.yearsExperience}+ years experience
-              </span>
-            )}
-            {guide.dailyRate && (
-              <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-[var(--accent-soft)] text-[var(--accent)] rounded-chip">
-                {guide.dailyRate}
-              </span>
-            )}
-          </div>
-
-          {/* Specialty Pills */}
-          <div className="mt-5 flex flex-wrap gap-2">
-            {(guide.specialties || []).map((s) => (
-              <span key={s} className="ea-chip">
-                {s}
-              </span>
-            ))}
-          </div>
-
-          {/* Rating */}
-          {guide.googleRating && (
-            <div className="mt-6 flex items-center gap-1.5">
-              <Star className="h-5 w-5 fill-[var(--accent)] text-[var(--accent)]" />
-              <span className="text-[var(--text-1)] font-semibold">{guide.googleRating}</span>
-              {guide.googleReviewCount && (
-                <span className="text-[var(--text-3)] text-sm">({guide.googleReviewCount} reviews)</span>
-              )}
-            </div>
-          )}
+          ) : null}
         </div>
       </section>
 
@@ -226,19 +204,14 @@ export default async function GuidePage({ params }: Props) {
                 ))}
               </ScrollAnimation>
 
-              <ScrollAnimation>
-                <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
-                  Specialties
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {(guide.specialties || []).map((s) => (
-                    <Badge key={s} variant="forest" size="md">
-                      <Award className="h-3.5 w-3.5 mr-1.5" />
-                      {s}
-                    </Badge>
-                  ))}
-                </div>
-              </ScrollAnimation>
+              {specialties.length > 0 && (
+                <ScrollAnimation>
+                  <h2 className="mb-4 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                    Specialties
+                  </h2>
+                  <SpecList items={specialties} />
+                </ScrollAnimation>
+              )}
 
               {guideRivers.length > 0 && (
                 <ScrollAnimation>

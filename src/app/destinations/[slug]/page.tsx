@@ -7,7 +7,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import EntityChrome from "@/components/ui/EntityChrome";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import LazyMapView from "@/components/maps/LazyMapView";
@@ -167,19 +167,13 @@ export default async function DestinationPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <Breadcrumbs
-              items={[
-                { label: "Places", href: "/destinations" },
-                { label: dest.name },
-              ]}
-            />
-            <FavoriteButton entityType="destination" entityId={dest.id} />
-          </div>
-        </div>
-      </div>
+      <EntityChrome
+        items={[
+          { label: "Places", href: "/destinations" },
+          { label: dest.name },
+        ]}
+        actions={<FavoriteButton entityType="destination" entityId={dest.id} />}
+      />
 
       {destRivers.length > 0 && (
         <section className="bg-[var(--paper)] pb-16">

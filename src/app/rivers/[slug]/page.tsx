@@ -5,7 +5,9 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import RiverHeroImage from "@/components/ui/RiverHeroImage";
 import ReportButton from "@/components/ui/ReportButton";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import EntityChrome from "@/components/ui/EntityChrome";
+import FactList from "@/components/ui/FactList";
+import TokenRow, { Token, TokenSep } from "@/components/ui/TokenRow";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
@@ -198,67 +200,68 @@ export default async function RiverPage({ params }: Props) {
         />
       </RiverHeroImage>
 
-      <div className="border-b border-[var(--border)] bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <Breadcrumbs
-                items={[
-                  { label: "Rivers", href: "/rivers" },
-                  ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-                  ...(additionalDests && additionalDests.length > 0
-                    ? additionalDests
-                        .filter(Boolean)
-                        .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
-                    : []),
-                  { label: river.name },
-                ]}
-              />
-              {(difficulty || access || speciesNames.length > 0) && (
-                <div className="mt-2.5 text-sm leading-relaxed text-[var(--text-2)]">
-                  {(difficulty || access) && (
-                    <p>{[difficulty, access].filter(Boolean).join(" · ")}</p>
-                  )}
-                  {speciesNames.length > 0 && (
-                    <p className={difficulty || access ? "mt-1" : undefined}>
-                      {speciesNames.map((speciesName, i) => {
-                        const matched = riverSpecies.find(
-                          (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
-                        );
-                        return (
-                          <span key={speciesName}>
-                            {i > 0 ? ", " : ""}
-                            {matched ? (
-                              <Link
-                                href={`/species/${matched.slug}`}
-                                className="underline-offset-4 hover:underline hover:text-[var(--text-1)]"
-                              >
-                                {speciesName}
-                              </Link>
-                            ) : (
-                              speciesName
-                            )}
-                          </span>
-                        );
-                      })}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-            <div className="mt-0.5 flex shrink-0 items-center gap-3">
-              <Link
-                href={`/plan/${river.slug}`}
-                className="text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
-              >
-                Trip brief →
-              </Link>
-              <ReportButton entityType="river" entityId={river.id} />
-              <FavoriteButton entityType="river" entityId={river.id} />
-            </div>
+      <EntityChrome
+        items={[
+          { label: "Rivers", href: "/rivers" },
+          ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+          ...(additionalDests && additionalDests.length > 0
+            ? additionalDests
+                .filter(Boolean)
+                .map((d) => ({ label: d!.name, href: `/destinations/${d!.slug}` }))
+            : []),
+          { label: river.name },
+        ]}
+        actions={
+          <>
+            <Link
+              href={`/plan/${river.slug}`}
+              className="font-ui text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
+            >
+              Trip brief →
+            </Link>
+            <ReportButton entityType="river" entityId={river.id} />
+            <FavoriteButton entityType="river" entityId={river.id} />
+          </>
+        }
+      >
+        {(difficulty || access || speciesNames.length > 0) && (
+          <div className="mt-5 space-y-4">
+            <FactList
+              facts={[
+                ...(difficulty ? [{ label: "Difficulty", value: difficulty }] : []),
+                ...(access ? [{ label: "Access", value: access }] : []),
+              ]}
+            />
+            {speciesNames.length > 0 && (
+              <div>
+                <p className="ea-overline">Fish</p>
+                <TokenRow className="mt-1.5">
+                  {speciesNames.flatMap((speciesName, i) => {
+                    const matched = riverSpecies.find(
+                      (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
+                    );
+                    const name = (
+                      <Token key={speciesName}>
+                        {matched ? (
+                          <Link
+                            href={`/species/${matched.slug}`}
+                            className="underline-offset-4 hover:text-[var(--text-1)] hover:underline"
+                          >
+                            {speciesName}
+                          </Link>
+                        ) : (
+                          speciesName
+                        )}
+                      </Token>
+                    );
+                    return i === 0 ? [name] : [<TokenSep key={`${speciesName}-sep`} />, name];
+                  })}
+                </TokenRow>
+              </div>
+            )}
           </div>
-        </div>
-      </div>
+        )}
+      </EntityChrome>
 
       <section className="bg-[var(--paper)]">
         <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 py-8 sm:px-6 lg:px-8">

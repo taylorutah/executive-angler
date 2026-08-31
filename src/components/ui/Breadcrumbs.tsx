@@ -43,7 +43,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
 
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-1.5 text-sm font-medium min-w-0 max-w-full overflow-x-auto whitespace-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="flex min-w-0 max-w-full items-center gap-1.5 overflow-x-auto whitespace-nowrap font-ui text-sm font-medium [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
         <Link
           href="/"

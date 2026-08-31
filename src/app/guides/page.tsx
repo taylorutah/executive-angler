@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Star } from "@/icons";
+import { ChevronRight } from "@/icons";
+import RatingStars from "@/components/ui/RatingStars";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
@@ -102,23 +103,19 @@ export default async function GuidesPage() {
                       <p className="mt-4 text-sm text-[var(--text-2)] leading-relaxed line-clamp-3">
                         {guide.bio.substring(0, 150)}...
                       </p>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {guide.specialties.slice(0, 3).map((sp) => (
-                          <span key={sp} className="ea-chip">
-                            {sp}
-                          </span>
-                        ))}
-                      </div>
+                      {guide.specialties.length > 0 && (
+                        <p className="mt-4 font-ui text-sm leading-5 text-[var(--text-2)]">
+                          {guide.specialties.slice(0, 2).join(" · ")}
+                        </p>
+                      )}
                       <div className="mt-5 flex items-center justify-between border-t border-[var(--border)] pt-4">
                         <div className="flex items-center gap-4">
-                          {guide.googleRating && (
-                            <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4 fill-[var(--accent)] text-[var(--accent)]" />
-                              <span className="text-sm text-[var(--text-2)]">
-                                {guide.googleRating}
-                              </span>
-                            </div>
-                          )}
+                          {guide.googleRating ? (
+                            <RatingStars
+                              rating={guide.googleRating}
+                              count={guide.googleReviewCount}
+                            />
+                          ) : null}
                           {guide.yearsExperience && (
                             <span className="text-xs text-[var(--text-3)]">
                               {guide.yearsExperience}+ yrs
@@ -177,13 +174,9 @@ export default async function GuidesPage() {
                         )}
                       </p>
                       {guide.specialties.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-1.5">
-                          {guide.specialties.slice(0, 3).map((sp) => (
-                            <span key={sp} className="ea-chip">
-                              {sp}
-                            </span>
-                          ))}
-                        </div>
+                        <p className="mt-2 font-ui text-sm leading-5 text-[var(--text-2)]">
+                          {guide.specialties.slice(0, 2).join(" · ")}
+                        </p>
                       )}
                       <p className="mt-1 text-sm text-[var(--text-3)] line-clamp-2">
                         {truncateBio(guide.bio)}
