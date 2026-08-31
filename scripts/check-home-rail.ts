@@ -14,7 +14,8 @@ export async function railCfsCount(htmlOrPageCfs: string[]): Promise<number> {
 export function railHtmlHasCfs(html: string): boolean {
   const idx = html.indexOf("data-home-rail");
   if (idx < 0) return false;
-  return /\d[\d,]*\s*cfs/i.test(html.slice(idx, idx + 12_000));
+  const slice = html.slice(idx, idx + 12_000).replace(/<[^>]+>/g, " ");
+  return /\d[\d,]*\s*cfs/i.test(slice);
 }
 
 async function main() {

@@ -18,5 +18,11 @@ describe("home rail smoke", () => {
       railHtmlHasCfs('<div data-home-rail><span>Madison</span><span>760 cfs</span></div>'),
       true,
     );
+    assert.equal(
+      railHtmlHasCfs(
+        '<div data-home-rail><span class="num">760<span class="ml-0.5">cfs</span></span></div>',
+      ),
+      true,
+    );
   });
 });
