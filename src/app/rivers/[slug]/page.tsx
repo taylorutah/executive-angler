@@ -189,7 +189,7 @@ export default async function RiverPage({ params }: Props) {
         subtitle={heroSubtitle || undefined}
         meta={river.lengthMiles ? `${river.lengthMiles} miles` : undefined}
         toolbar={
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
             <Breadcrumbs
               items={[
                 { label: "Rivers", href: "/rivers" },
@@ -217,7 +217,7 @@ export default async function RiverPage({ params }: Props) {
         spec={
           difficulty || access || speciesNames.length > 0 ? (
             <FactList
-              className="grid grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-3"
+              className="grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-3 lg:grid-cols-3"
               facts={[
                 ...(difficulty ? [{ label: "Difficulty", value: difficulty }] : []),
                 ...(access ? [{ label: "Access", value: access }] : []),

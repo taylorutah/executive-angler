@@ -22,7 +22,7 @@ interface RiverHeroImageProps {
   meta?: string;
   /** Breadcrumbs + actions — sits on the same paper band as the title. */
   toolbar?: React.ReactNode;
-  /** Spec facts — fills the right column so the title band is not a left-only stack. */
+  /** Spec facts — full-width rail under the name so the band is not a left stack. */
   spec?: React.ReactNode;
   children?: React.ReactNode;
 }
@@ -104,44 +104,38 @@ export default function RiverHeroImage({
         </div>
 
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto w-full max-w-[var(--container)] px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
+          <div className="mx-auto w-full max-w-[var(--container)] px-4 py-4 sm:px-6 lg:px-8">
             {toolbar}
-            <div
-              className={`grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,36rem)] lg:items-end lg:gap-10 ${
-                toolbar ? "mt-4" : ""
-              }`}
-            >
-              <div className="min-w-0">
-                {subtitle ? <p className="ea-overline">{subtitle}</p> : null}
-                <h1 className="mt-1 text-[var(--text-1)]">{title}</h1>
+            <div className={toolbar ? "mt-3" : undefined}>
+              {subtitle ? <p className="ea-overline">{subtitle}</p> : null}
+              <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h1 className="text-[var(--text-1)]">{title}</h1>
                 {meta ? (
-                  <p className="mt-1.5 text-[var(--text-14)] text-[var(--text-2)]">
-                    {meta}
-                  </p>
-                ) : null}
-                {showPhoto && heroImageCredit ? (
-                  <p className="mt-2 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
-                    {heroImageCreditUrl ? (
-                      <a
-                        href={heroImageCreditUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline underline-offset-4 hover:text-[var(--text-1)]"
-                      >
-                        {heroImageCredit}
-                      </a>
-                    ) : (
-                      heroImageCredit
-                    )}
-                  </p>
+                  <p className="text-[var(--text-14)] text-[var(--text-2)]">{meta}</p>
                 ) : null}
               </div>
-              {spec ? (
-                <div className="min-w-0 border-t border-[var(--border)] pt-4 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">
-                  {spec}
-                </div>
+              {showPhoto && heroImageCredit ? (
+                <p className="mt-1.5 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
+                  {heroImageCreditUrl ? (
+                    <a
+                      href={heroImageCreditUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-4 hover:text-[var(--text-1)]"
+                    >
+                      {heroImageCredit}
+                    </a>
+                  ) : (
+                    heroImageCredit
+                  )}
+                </p>
               ) : null}
             </div>
+            {spec ? (
+              <div className="mt-4 border-t border-[var(--border)] pt-4">
+                {spec}
+              </div>
+            ) : null}
           </div>
         </div>
       </section>

@@ -27,6 +27,10 @@ describe("river hero paper band", () => {
     assert.match(page, /label: "Access"/);
     assert.match(page, /spec=/);
     assert.match(page, /toolbar=/);
+    assert.equal(
+      page.includes("lg:grid-cols-[minmax(0,1fr)_minmax(18rem,36rem)]"),
+      false,
+    );
     assert.equal(page.includes("EntityChrome"), false);
     assert.equal(
       page.includes("[river.difficulty, river.wadingType, ...(river.primarySpecies ?? [])]"),
