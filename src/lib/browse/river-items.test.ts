@@ -51,6 +51,7 @@ describe("toRiverBrowseItem", () => {
     assert.equal(item.group, "Montana");
     assert.equal(item.meta, "Pale Morning Dun");
     assert.equal(item.href, "/rivers/madison-river");
+    assert.equal(item.badges, undefined);
   });
 
   it("falls back to flow type when the chart has no insect this month", () => {
@@ -101,7 +102,7 @@ describe("toRiverBrowseItem", () => {
     );
     assert.deepEqual(item.hoverPanel?.chips, [
       { label: "Water", value: "Freestone" },
-      { label: "Access", value: "Mixed" },
+      { label: "Access", value: "Wade / boat" },
       { label: "Difficulty", value: "Intermediate" },
     ]);
     assert.equal(item.hoverPanel?.footer, "Best: Jun–Oct");
@@ -114,7 +115,7 @@ describe("accessLabel", () => {
   it("maps wade / float / both and drops unknown values", () => {
     assert.equal(accessLabel("wade"), "Wade");
     assert.equal(accessLabel("float"), "Boat");
-    assert.equal(accessLabel("both"), "Mixed");
+    assert.equal(accessLabel("both"), "Wade / boat");
     assert.equal(accessLabel("walk"), undefined);
   });
 });

@@ -8,7 +8,6 @@ import ReportButton from "@/components/ui/ReportButton";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
-import Badge from "@/components/ui/Badge";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import LazyMapView from "@/components/maps/LazyMapView";
@@ -22,6 +21,8 @@ import SignedOutRiverInsights from "@/components/rivers/SignedOutRiverInsights";
 import HatchSeasonGrid from "@/components/rivers/HatchSeasonGrid";
 import YourRecordHere from "@/components/rivers/YourRecordHere";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
+import ContributeStrip from "@/components/desk/ContributeStrip";
+import { accessLabel, difficultyLabel, waterTypeLabel } from "@/lib/browse/river-items";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
@@ -122,6 +123,9 @@ export default async function RiverPage({ params }: Props) {
   const heroSubtitle = [destinationLabel, (river.flowType ?? "").replace(/-/g, " ")]
     .filter(Boolean)
     .join(" · ");
+  const difficulty = difficultyLabel(river.difficulty);
+  const access = accessLabel(river.wadingType);
+  const speciesNames = river.primarySpecies ?? [];
 
   return (
     <>
@@ -163,12 +167,7 @@ export default async function RiverPage({ params }: Props) {
         galleryPhotos={galleryPhotos}
         title={river.name}
         subtitle={heroSubtitle || undefined}
-        meta={[
-          (river.flowType ?? "").replace(/-/g, " "),
-          dest?.state ?? dest?.name,
-        ]
-          .filter(Boolean)
-          .join(" · ")}
+        meta={river.lengthMiles ? `${river.lengthMiles} miles` : undefined}
       >
         <AdminHeroEditor
           entityType="rivers"
@@ -197,18 +196,37 @@ export default async function RiverPage({ params }: Props) {
                   { label: river.name },
                 ]}
               />
-              <div className="mt-2.5 flex flex-wrap gap-1.5">
-                {[river.flowType, river.difficulty, river.wadingType, ...(river.primarySpecies ?? [])]
-                  .filter(Boolean)
-                  .map((chip) => (
-                    <span
-                      key={chip}
-                      className="ea-chip"
-                    >
-                      {chip}
-                    </span>
-                  ))}
-              </div>
+              {(difficulty || access || speciesNames.length > 0) && (
+                <div className="mt-2.5 text-sm leading-relaxed text-[var(--text-2)]">
+                  {(difficulty || access) && (
+                    <p>{[difficulty, access].filter(Boolean).join(" · ")}</p>
+                  )}
+                  {speciesNames.length > 0 && (
+                    <p className={difficulty || access ? "mt-1" : undefined}>
+                      {speciesNames.map((speciesName, i) => {
+                        const matched = riverSpecies.find(
+                          (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
+                        );
+                        return (
+                          <span key={speciesName}>
+                            {i > 0 ? ", " : ""}
+                            {matched ? (
+                              <Link
+                                href={`/species/${matched.slug}`}
+                                className="underline-offset-4 hover:underline hover:text-[var(--text-1)]"
+                              >
+                                {speciesName}
+                              </Link>
+                            ) : (
+                              speciesName
+                            )}
+                          </span>
+                        );
+                      })}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
             <div className="mt-0.5 flex shrink-0 items-center gap-3">
               <Link
@@ -604,26 +622,6 @@ export default async function RiverPage({ params }: Props) {
                   <p key={i}>{p}</p>
                 ))}
               </div>
-              <div className="entity-tags mt-6">
-                {(river.primarySpecies || []).map((speciesName) => {
-                  const matched = riverSpecies.find(
-                    (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
-                  );
-                  const badge = (
-                    <Badge key={speciesName} variant="river" size="md">
-                      <Icon name="hook" className="mr-1.5 h-3.5 w-3.5" />
-                      {speciesName}
-                    </Badge>
-                  );
-                  return matched ? (
-                    <Link key={speciesName} href={`/species/${matched.slug}`}>
-                      {badge}
-                    </Link>
-                  ) : (
-                    badge
-                  );
-                })}
-              </div>
             </details>
           </ScrollAnimation>
 
@@ -641,7 +639,7 @@ export default async function RiverPage({ params }: Props) {
                       imageUrl={near.heroImageUrl ?? near.thumbnailUrl}
                       imageAlt={near.name}
                       title={near.name}
-                      subtitle={near.flowType}
+                      subtitle={waterTypeLabel(near.flowType)}
                       meta={(near.primarySpecies || []).slice(0, 3).join(" · ") || undefined}
                     />
                   ))}
@@ -649,6 +647,11 @@ export default async function RiverPage({ params }: Props) {
               </div>
             </ScrollAnimation>
           )}
+
+          <ContributeStrip
+            href={`/contribute/river?for=${river.slug}`}
+            buttonLabel="Contribute to this river"
+          />
         </div>
       </section>
     </>

@@ -68,13 +68,13 @@ export function waterTypeLabel(flowType: string): string | undefined {
 
 /**
  * Access chip from `wadingType` only.
- * wade → Wade, float → Boat, both → Mixed. Unknown values are dropped.
+ * wade → Wade, float → Boat, both → Wade / boat. Unknown values are dropped.
  */
 export function accessLabel(wadingType: string): string | undefined {
   const key = (wadingType ?? "").trim().toLowerCase();
   if (key === "wade") return "Wade";
   if (key === "float") return "Boat";
-  if (key === "both") return "Mixed";
+  if (key === "both") return "Wade / boat";
   return undefined;
 }
 

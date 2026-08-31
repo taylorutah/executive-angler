@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import EntityCard from "@/components/ui/EntityCard";
+import { accessLabel } from "@/lib/browse/river-items";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 
@@ -114,6 +115,7 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {rivers.map((river) => {
           const fished = ready && fishedIds.has(river.id);
+          const access = accessLabel(river.wadingType);
           return (
             <div
               key={river.id}
@@ -126,7 +128,7 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
                 title={river.name}
                 subtitle={(river.primarySpecies || []).join(", ")}
                 meta={`${river.flowType} · ${river.difficulty}`}
-                badges={[river.wadingType]}
+                badges={access ? [access] : undefined}
               />
               {fished ? (
                 <span className="absolute top-3 right-3 z-10 bg-[var(--accent)] px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--on-action)]">
