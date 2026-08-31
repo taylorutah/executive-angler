@@ -91,24 +91,24 @@ export default function HoverReferenceCard({
             data-excerpt-rule
             className="mb-[var(--space-3)] h-[2px] w-[var(--space-6)] bg-[var(--accent)]"
           />
-          {kicker && <p className="ea-overline">{kicker}</p>}
+          {kicker && <p className="ea-overline text-[var(--text-2)]">{kicker}</p>}
           <p className={`font-heading [font-size:var(--text-18)] font-semibold leading-[1.2] text-[var(--text-1)] line-clamp-2 ${kicker ? "mt-1" : ""}`}>
             {title}
           </p>
           {featured && measure && (
             <p className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-              <span className="ea-stat-label">{featured.label}</span>
+              <span className="ea-stat-label text-[var(--text-2)]">{featured.label}</span>
               <span className="num font-heading [font-size:var(--text-18)] font-semibold leading-none text-[var(--accent)]">
                 {measure.amount}
               </span>
-              {measure.unit ? <span className="ea-overline">{measure.unit}</span> : null}
+              {measure.unit ? <span className="ea-overline text-[var(--text-2)]">{measure.unit}</span> : null}
             </p>
           )}
           {factChips.length > 0 && (
             <dl className={`mt-3 grid shrink-0 gap-x-3 gap-y-2 ${factCols}`}>
               {factChips.map((chip, i) => (
                 <div key={`${chip.label}:${chip.value}:${i}`} className="min-w-0">
-                  <dt className="ea-stat-label truncate">{chip.label}</dt>
+                  <dt className="ea-stat-label truncate text-[var(--text-2)]">{chip.label}</dt>
                   <dd className="mt-0.5 font-medium [font-size:var(--text-14)] leading-tight text-[var(--text-1)] truncate">
                     {chip.value}
                   </dd>
@@ -123,7 +123,7 @@ export default function HoverReferenceCard({
           )}
           <div className="mt-auto flex items-end justify-between gap-3 pt-3">
             {footer ? (
-              <p className="ea-overline min-w-0 line-clamp-2">{footer}</p>
+              <p className="ea-overline min-w-0 line-clamp-2 text-[var(--text-2)]">{footer}</p>
             ) : (
               <span />
             )}
