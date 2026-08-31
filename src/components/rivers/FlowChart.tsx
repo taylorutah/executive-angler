@@ -261,34 +261,25 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
   return (
     <div className="mt-6 border-t border-[var(--border)] pt-5">
-      <div className="mb-3 flex items-end justify-between gap-4">
-        <div>
-          <h3 className="ea-overline">
-            30-day daily means
-          </h3>
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+        <div className="min-w-0">
+          <h3 className="ea-overline">30-day daily means</h3>
           {siteName ? (
-            <p className="mt-1 text-xs text-[var(--text-3)]">
-              {siteName}
-            </p>
+            <p className="mt-1 font-ui text-sm text-[var(--text-2)]">{siteName}</p>
           ) : null}
         </div>
-        <p className="text-right">
-          <span className="num text-3xl font-semibold leading-none text-[var(--text-1)]">
-            {currentFlow.value.toLocaleString("en-US")}
-          </span>
-          <span className="ml-2 text-xs uppercase tracking-[0.06em] text-[var(--text-3)]">
-            cfs daily mean
-          </span>
-          {trend ? (
-            <span
-              className={`mt-1 block text-xs text-[var(--text-1)] ${
-                trend === "steady" ? "font-normal" : "font-semibold"
-              }`}
-            >
-              {trend}
+        <div className="sm:text-right">
+          <p className="flex items-baseline gap-2 sm:justify-end">
+            <span className="num text-[2rem] font-semibold leading-none text-[var(--text-1)]">
+              {currentFlow.value.toLocaleString("en-US")}
             </span>
-          ) : null}
-        </p>
+            <span className="font-ui text-sm text-[var(--text-2)]">cfs</span>
+          </p>
+          <p className="mt-1 font-ui text-xs text-[var(--text-3)]">
+            Daily mean
+            {trend ? ` · ${trend}` : ""}
+          </p>
+        </div>
       </div>
 
       <div className="relative">

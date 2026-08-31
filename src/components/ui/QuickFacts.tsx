@@ -18,10 +18,12 @@ export default function QuickFacts({ title = "Quick Facts", facts }: QuickFactsP
         {facts.map((fact) => (
           <div
             key={fact.label}
-            className="flex justify-between items-start gap-4 py-2 border-b border-[var(--border)] last:border-0"
+            className="flex flex-col items-start gap-1 border-b border-[var(--border)] py-2.5 last:border-0 sm:flex-row sm:justify-between sm:gap-4"
           >
-            <dt className="text-sm text-[var(--text-2)] shrink-0">{fact.label}</dt>
-            <dd className="text-sm font-medium text-[var(--text-1)] text-right break-words min-w-0">
+            <dt className="shrink-0 font-ui text-xs uppercase tracking-[0.12em] text-[var(--text-3)]">
+              {fact.label}
+            </dt>
+            <dd className="min-w-0 text-sm font-medium leading-5 text-[var(--text-1)] sm:text-right">
               {fact.value}
             </dd>
           </div>

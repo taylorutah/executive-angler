@@ -8,7 +8,7 @@ export interface HydroReading {
 export const HYDRO = {
   W: 800,
   H: 156,
-  PAD: { top: 10, right: 78, bottom: 22, left: 48 },
+  PAD: { top: 10, right: 78, bottom: 24, left: 54 },
 } as const;
 
 export function withLiveReading(

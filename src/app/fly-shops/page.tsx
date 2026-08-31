@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { MapPin, ChevronRight, Star } from "@/icons";
+import { MapPin, ChevronRight } from "@/icons";
+import RatingStars from "@/components/ui/RatingStars";
 import EntityListView from "@/components/ui/EntityListView";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
@@ -134,14 +135,14 @@ export default async function FlyShopsPage() {
                         className="ea-photo"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
-                      {shop.googleRating && (
-                        <div className="absolute top-3 right-3 flex items-center gap-1 rounded-[var(--radius-sm)] bg-[var(--ink)] px-2 py-1">
-                          <Star className="h-3 w-3 fill-[var(--paper)] text-[var(--paper)]" />
-                          <span className="text-xs font-medium text-[var(--paper)]">
-                            {shop.googleRating}
-                          </span>
+                      {shop.googleRating ? (
+                        <div className="absolute bottom-3 left-3 rounded-[var(--radius-sm)] bg-[var(--paper)]/95 px-2 py-1">
+                          <RatingStars
+                            rating={shop.googleRating}
+                            count={shop.googleReviewCount}
+                          />
                         </div>
-                      )}
+                      ) : null}
                     </div>
                     <div className="p-5 flex flex-col h-full">
                       <h3 className="font-heading text-lg font-semibold text-[var(--text-1)] group-hover:text-[var(--accent)] transition-colors leading-snug">
@@ -165,11 +166,6 @@ export default async function FlyShopsPage() {
                           </span>
                         ))}
                       </div>
-                      {shop.googleReviewCount && (
-                        <p className="mt-3 text-xs text-[var(--text-3)]">
-                          {shop.googleReviewCount.toLocaleString()} Google reviews
-                        </p>
-                      )}
                       <span className="mt-auto pt-3 inline-flex items-center gap-1 text-sm font-medium text-[var(--accent)] group-hover:underline">
                         Visit Shop <ChevronRight className="h-3.5 w-3.5" />
                       </span>

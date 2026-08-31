@@ -82,8 +82,8 @@ export default function Hydrograph({ readings, liveCfs, label, children }: Props
           x={HYDRO.PAD.left - 8}
           y={yAt(tick) + 3}
           textAnchor="end"
-          fill="var(--text-meta)"
-          fontSize="11"
+          fill="var(--text-2)"
+          fontSize="13"
           fontFamily="var(--font-ibm-plex-mono), ui-monospace, monospace"
         >
           {formatAxisCfs(tick)}
@@ -128,8 +128,8 @@ export default function Hydrograph({ readings, liveCfs, label, children }: Props
       <text
         x={HYDRO.PAD.left}
         y={HYDRO.H - 6}
-        fill="var(--text-meta)"
-        fontSize="11"
+        fill="var(--text-2)"
+        fontSize="13"
         fontFamily="var(--font-ibm-plex-mono), ui-monospace, monospace"
       >
         {formatAxisDay(first.date)}
@@ -138,8 +138,8 @@ export default function Hydrograph({ readings, liveCfs, label, children }: Props
         x={HYDRO.W - HYDRO.PAD.right}
         y={HYDRO.H - 6}
         textAnchor="end"
-        fill="var(--text-meta)"
-        fontSize="11"
+        fill="var(--text-2)"
+        fontSize="13"
         fontFamily="var(--font-ibm-plex-mono), ui-monospace, monospace"
       >
         {formatAxisDay(last.date)}

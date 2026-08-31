@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import EntityChrome from "@/components/ui/EntityChrome";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import PullQuote from "@/components/article/PullQuote";
@@ -242,17 +242,15 @@ export default async function ArticlePage({ params }: Props) {
           )}
         </figure>
 
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-          <div className="flex items-center justify-between py-6 border-b border-[var(--border)]">
-            <Breadcrumbs
-              items={[
-                { label: "Field Notes", href: "/articles" },
-                { label: article.title },
-              ]}
-            />
-            <FavoriteButton entityType="article" entityId={article.id} />
-          </div>
+        <EntityChrome
+          items={[
+            { label: "Field Notes", href: "/articles" },
+            { label: article.title },
+          ]}
+          actions={<FavoriteButton entityType="article" entityId={article.id} />}
+        />
 
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
           <article className="pb-24">
             <header className="mx-auto max-w-[var(--prose)] pt-8 sm:pt-12">
               <p className="ea-overline">

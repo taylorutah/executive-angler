@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Fish, MapPin, Droplets, Leaf, Bug, ChevronDown } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
 import HeroCompact from "@/components/ui/HeroCompact";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import EntityChrome from "@/components/ui/EntityChrome";
 import QuickFacts from "@/components/ui/QuickFacts";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
@@ -220,19 +220,13 @@ export default async function SpeciesDetailPage({ params }: Props) {
         </div>
       )}
 
-      <div className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <Breadcrumbs
-              items={[
-                { label: "Species", href: "/species" },
-                { label: sp.commonName },
-              ]}
-            />
-            <FavoriteButton entityType="species" entityId={sp.id} />
-          </div>
-        </div>
-      </div>
+      <EntityChrome
+        items={[
+          { label: "Species", href: "/species" },
+          { label: sp.commonName },
+        ]}
+        actions={<FavoriteButton entityType="species" entityId={sp.id} />}
+      />
 
       <section className="bg-[var(--paper)] pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">

@@ -536,11 +536,11 @@ const heart: GlyphRender = (s, filled) => {
 const star: GlyphRender = (s, filled) => {
   const cx = s / 2;
   const cy = s / 2;
-  const outer = m(s, 5.4, 6.8, 8.2);
-  const inner = outer * 0.4;
+  const outer = m(s, 6.2, 7.8, 9.4);
+  const inner = outer * 0.382;
   const pts: string[] = [];
-  for (let i = 0; i < 8; i++) {
-    const ang = (Math.PI / 4) * i - Math.PI / 2;
+  for (let i = 0; i < 10; i++) {
+    const ang = (Math.PI / 5) * i - Math.PI / 2;
     const r = i % 2 === 0 ? outer : inner;
     pts.push(`${(cx + r * Math.cos(ang)).toFixed(2)} ${(cy + r * Math.sin(ang)).toFixed(2)}`);
   }

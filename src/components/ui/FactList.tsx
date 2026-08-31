@@ -1,0 +1,27 @@
+import type { ReactNode } from "react";
+
+export interface FactItem {
+  label: string;
+  value: ReactNode;
+}
+
+/**
+ * Labeled facts for entity pages. Overline + value, never a wrapping
+ * middot paragraph that splits "Rainbow Trout" across three lines.
+ */
+export default function FactList({ facts }: { facts: FactItem[] }) {
+  if (facts.length === 0) return null;
+
+  return (
+    <dl className="grid grid-cols-2 gap-x-6 gap-y-3 sm:flex sm:flex-wrap sm:gap-x-10">
+      {facts.map((fact) => (
+        <div key={fact.label} className="min-w-0">
+          <dt className="ea-overline">{fact.label}</dt>
+          <dd className="mt-1 font-ui text-sm leading-5 text-[var(--text-1)]">
+            {fact.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}

@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, Phone, Mail, Calendar, Users, DollarSign, Fish } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import EntityChrome from "@/components/ui/EntityChrome";
+import SpecList from "@/components/ui/SpecList";
 import QuickFacts from "@/components/ui/QuickFacts";
 import RatingStars from "@/components/ui/RatingStars";
 import Badge from "@/components/ui/Badge";
@@ -178,20 +179,14 @@ export default async function LodgePage({ params }: Props) {
         )}
       </div>
 
-      <div className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between">
-            <Breadcrumbs
-              items={[
-                { label: "Lodges", href: "/lodges" },
-                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-                { label: lodge.name },
-              ]}
-            />
-            <FavoriteButton entityType="lodge" entityId={lodge.id} />
-          </div>
-        </div>
-      </div>
+      <EntityChrome
+        items={[
+          { label: "Lodges", href: "/lodges" },
+          ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+          { label: lodge.name },
+        ]}
+        actions={<FavoriteButton entityType="lodge" entityId={lodge.id} />}
+      />
 
       <section className="bg-[var(--paper)] pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
@@ -226,13 +221,7 @@ export default async function LodgePage({ params }: Props) {
                 <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)] mb-4">
                   Amenities & Services
                 </h2>
-                <div className="flex flex-wrap gap-2">
-                  {(lodge.amenities || []).map((amenity) => (
-                    <Badge key={amenity} variant="forest" size="md">
-                      {amenity}
-                    </Badge>
-                  ))}
-                </div>
+                <SpecList items={lodge.amenities || []} />
               </ScrollAnimation>
 
               {/* Photo Gallery */}
