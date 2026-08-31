@@ -42,10 +42,10 @@ export function opticalFor(size: number | undefined, className?: string): Optica
   return 24;
 }
 
-function isFilled(filled: boolean | undefined, fill: string | undefined, className?: string): boolean {
+export function isFilled(filled: boolean | undefined, fill: string | undefined, className?: string): boolean {
   if (filled) return true;
   if (fill && fill !== "none") return true;
-  return Boolean(className && /\bfill-current\b/.test(className));
+  return Boolean(className && /\bfill-(?!none(?:\/|\b))/.test(className));
 }
 
 export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(

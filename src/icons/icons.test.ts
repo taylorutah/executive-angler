@@ -2,7 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { iconMark, isIconName } from "./names.ts";
-import { opticalFor } from "./Icon.tsx";
+import { isFilled, opticalFor } from "./Icon.tsx";
 
 describe("icon fallback mark", () => {
   it("renders a small-caps abbreviation, never a square", () => {
@@ -26,6 +26,16 @@ describe("rating star", () => {
     assert.match(block, /Math\.PI \/ 5/);
     assert.equal(block.includes("i < 8"), false);
     assert.equal(block.includes("Math.PI / 4"), false);
+  });
+});
+
+describe("filled marks", () => {
+  it("treats fill-[token] as a filled rank star, not only fill-current", () => {
+    assert.equal(isFilled(true, undefined, undefined), true);
+    assert.equal(isFilled(undefined, undefined, "h-4 w-4 fill-[var(--accent)]"), true);
+    assert.equal(isFilled(undefined, undefined, "h-4 w-4 fill-current"), true);
+    assert.equal(isFilled(undefined, undefined, "h-4 w-4 fill-none"), false);
+    assert.equal(isFilled(undefined, undefined, "h-4 w-4 text-[var(--accent)]"), false);
   });
 });
 

@@ -20,14 +20,22 @@ export default function TokenRow({
   );
 }
 
-export function Token({ children }: { children: ReactNode }) {
-  return <span className="whitespace-nowrap">{children}</span>;
-}
-
-export function TokenSep() {
+export function Token({
+  children,
+  lead,
+}: {
+  children: ReactNode;
+  /** Middot stays on this token so it never wraps alone. */
+  lead?: boolean;
+}) {
   return (
-    <span className="select-none text-[var(--text-3)]" aria-hidden>
-      ·
+    <span className="whitespace-nowrap">
+      {lead ? (
+        <span className="select-none text-[var(--text-3)]" aria-hidden>
+          ·{" "}
+        </span>
+      ) : null}
+      {children}
     </span>
   );
 }

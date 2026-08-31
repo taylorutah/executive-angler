@@ -26,10 +26,9 @@ export default function RatingStars({
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
+            filled={star <= filledThrough}
             className={`${starSize} ${
-              star <= filledThrough
-                ? "fill-[var(--accent)] text-[var(--accent)]"
-                : "text-[var(--text-3)]"
+              star <= filledThrough ? "text-[var(--accent)]" : "text-[var(--text-3)]"
             }`}
           />
         ))}

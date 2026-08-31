@@ -7,7 +7,7 @@ import RiverHeroImage from "@/components/ui/RiverHeroImage";
 import ReportButton from "@/components/ui/ReportButton";
 import EntityChrome from "@/components/ui/EntityChrome";
 import FactList from "@/components/ui/FactList";
-import TokenRow, { Token, TokenSep } from "@/components/ui/TokenRow";
+import TokenRow, { Token } from "@/components/ui/TokenRow";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
@@ -236,12 +236,12 @@ export default async function RiverPage({ params }: Props) {
               <div>
                 <p className="ea-overline">Fish</p>
                 <TokenRow className="mt-1.5">
-                  {speciesNames.flatMap((speciesName, i) => {
+                  {speciesNames.map((speciesName, i) => {
                     const matched = riverSpecies.find(
                       (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
                     );
-                    const name = (
-                      <Token key={speciesName}>
+                    return (
+                      <Token key={speciesName} lead={i > 0}>
                         {matched ? (
                           <Link
                             href={`/species/${matched.slug}`}
@@ -254,7 +254,6 @@ export default async function RiverPage({ params }: Props) {
                         )}
                       </Token>
                     );
-                    return i === 0 ? [name] : [<TokenSep key={`${speciesName}-sep`} />, name];
                   })}
                 </TokenRow>
               </div>
