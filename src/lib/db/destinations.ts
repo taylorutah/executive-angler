@@ -1,7 +1,13 @@
 import type { Destination } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
-import { normalizeImageUrl } from "@/lib/media/image-url";
+import { isUsableImageUrl, normalizeImageUrl } from "@/lib/media/image-url";
+
+export function isCatalogDestination(
+  dest: Pick<Destination, "heroImageUrl">,
+): boolean {
+  return isUsableImageUrl(dest.heroImageUrl);
+}
 
 function mapRow(r: Record<string, unknown>): Destination {
   return {
@@ -29,6 +35,7 @@ function mapRow(r: Record<string, unknown>): Destination {
     metaDescription: (r.meta_description ?? undefined) as string | undefined,
     featured: (r.featured ?? false) as boolean,
     sortOrder: r.sort_order ? Number(r.sort_order) : undefined,
+    updatedAt: (r.updated_at as string | undefined) ?? undefined,
   };
 }
 
@@ -47,6 +54,11 @@ export async function getAllDestinations(): Promise<Destination[]> {
     }
     return (data ?? []).map(mapRow);
   }, "getAllDestinations");
+}
+
+export async function getPublicDestinations(): Promise<Destination[]> {
+  const destinations = await getAllDestinations();
+  return destinations.filter(isCatalogDestination);
 }
 
 export async function getDestinationBySlug(slug: string): Promise<Destination | undefined> {

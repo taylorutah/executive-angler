@@ -9,6 +9,8 @@ export const rivers: River[] = [
     description:
       "The Madison River is the crown jewel of Montana fly fishing and one of the most storied trout streams in the world. Born at the confluence of the Firehole and Gibbon rivers in the heart of Yellowstone National Park, the Madison flows north and west through three distinct sections, each offering a fundamentally different fishing experience. The upper Madison inside Yellowstone Park provides easy wading on broad, shallow riffles with abundant rainbow trout and the occasional brown. Between Hebgen Lake and Quake Lake, the river takes on a tailwater character with cooler temperatures and larger fish. Below Quake Lake, the river enters the famous fifty-mile riffle that defines Madison River fishing for most anglers, a continuous stretch of fast, productive water that rarely exceeds chest depth and holds staggering numbers of rainbow and brown trout.\n\nThe lower Madison below Ennis Lake, flowing through the dramatic Beartrap Canyon before joining the Jefferson and Gallatin to form the Missouri River at Three Forks, offers a completely different experience. The canyon section is remote, rugged, and holds trophy-sized brown trout that see very little pressure. Between Ennis and the canyon, the broad valley section known as the lower Madison provides outstanding hopper fishing in summer and consistent nymphing through the shoulder seasons. The river's annual salmonfly hatch in late May and early June is one of the great spectacles in American fly fishing, as enormous stoneflies blanket the water and even the largest, most wary trout abandon caution to feed on these protein-rich insects.\n\nWhat makes the Madison truly special is its accessibility and its forgiving nature. The river's broad, relatively uniform depth makes it ideal for wade fishing, and its aggressive trout population rewards good technique without demanding the hair-fine tippets and perfect presentations required on technical spring creeks. Whether drifting dry flies through the riffles on a July afternoon, swinging soft hackles through the evening caddis hatch, or bouncing nymphs along the bottom during a March bluebird day, the Madison delivers consistent, high-quality fly fishing throughout its long season. It is the river that has introduced more anglers to Montana fly fishing than any other, and it continues to earn its reputation as one of the finest trout streams on Earth.",
     heroImageUrl: "/images/madison-river-three-dollar-bridge.jpg",
+    heroImageAlt:
+      "The Madison River running low and clear below Three Dollar Bridge, Montana",
     thumbnailUrl: "/images/madison-river-three-dollar-bridge.jpg",
     lengthMiles: 183,
     flowType: "freestone",
@@ -19,49 +21,65 @@ export const rivers: River[] = [
       "Check Montana FWP for current regulations. Catch-and-release on sections. Barbless hooks recommended. Specific gear restrictions apply on certain sections. The section inside Yellowstone National Park requires a separate Yellowstone fishing permit.",
     accessPoints: [
       {
+        name: "Raynolds' Pass FAS",
+        latitude: 44.82871,
+        longitude: -111.47933,
+        description:
+          "Montana FWP fishing access at Raynolds' Pass on the upper Madison below Hebgen. Official FAS lot.",
+        parking: true,
+      },
+      {
+        name: "Three Dollar Bridge FAS",
+        latitude: 44.83194,
+        longitude: -111.51417,
+        description:
+          "Montana FWP Three Dollar Bridge FAS. The homepage photograph is this reach. Boat ramp and wade access.",
+        parking: true,
+      },
+      {
         name: "Quake Lake",
         latitude: 44.8406,
         longitude: -111.4261,
         description:
-          "Upper access near the slide. Walk-in only. Rugged terrain but excellent fishing in a less-pressured area.",
+          "Upper access near the 1959 slide. Walk-in. Rugged terrain. Not an FWP FAS lot.",
         parking: true,
       },
       {
         name: "Lyons Bridge FAS",
-        latitude: 44.9383,
-        longitude: -111.5906,
+        latitude: 44.8991,
+        longitude: -111.5926,
         description:
           "Popular put-in for float trips. Boat ramp and parking. Good wade access upstream and downstream of the bridge.",
         parking: true,
       },
       {
         name: "McAtee Bridge FAS",
-        latitude: 45.0833,
-        longitude: -111.65,
+        latitude: 45.09665,
+        longitude: -111.66152,
         description:
           "Good wade access with parking available. A solid midpoint access for both float and wade anglers working the upper sections.",
         parking: true,
       },
       {
         name: "Varney Bridge FAS",
-        latitude: 45.2083,
-        longitude: -111.6833,
+        latitude: 45.229,
+        longitude: -111.75196,
         description:
           "Major access point for both float and wade fishing. Popular takeout for upper float trips and launch point for the lower section to Ennis.",
         parking: true,
       },
       {
         name: "Ennis Bridge FAS",
-        latitude: 45.35,
-        longitude: -111.7333,
+        latitude: 45.34443,
+        longitude: -111.7231,
         description:
           "Town of Ennis access. Good wade fishing both upstream and downstream. Close to shops and services in town.",
         parking: true,
       },
       {
         name: "Valley Garden FAS",
-        latitude: 45.4167,
-        longitude: -111.75,
+        latitude: 45.36726,
+        longitude: -111.7054,
         description:
           "Lower Madison access below Ennis. Good wade fishing with easier wading than the upper sections. Less pressure than bridge access points.",
         parking: true,
@@ -369,26 +387,26 @@ export const rivers: River[] = [
     accessPoints: [
       {
         name: "Greek Creek Campground",
-        latitude: 45.3833,
-        longitude: -111.2333,
+        latitude: 45.3725,
+        longitude: -111.1764,
         description:
           "Upper canyon access with good pocket water. Campground parking and short walks to prime water.",
         parking: true,
       },
       {
         name: "Moose Creek Flat",
-        latitude: 45.45,
-        longitude: -111.25,
+        latitude: 45.356,
+        longitude: -111.1721,
         description:
           "Mid-canyon access point. Excellent wade fishing in a section with a good mix of pools and riffles.",
         parking: true,
       },
       {
-        name: "Gallatin Gateway (Squaw Creek Bridge)",
+        name: "Storm Castle Creek Bridge",
         latitude: 45.5667,
         longitude: -111.2333,
         description:
-          "Lower canyon access near Gallatin Gateway. Good water for both dry flies and nymphs. Easy roadside parking.",
+          "Lower canyon access at Storm Castle Creek (formerly Squaw Creek). Good water for both dry flies and nymphs. Easy roadside parking.",
         parking: true,
       },
     ],
@@ -437,16 +455,16 @@ export const rivers: River[] = [
       },
       {
         name: "Mallard's Rest FAS",
-        latitude: 45.5833,
-        longitude: -110.55,
+        latitude: 45.48483,
+        longitude: -110.62164,
         description:
           "Mid-valley access with boat ramp. Popular float trip put-in and takeout. Good wade fishing in side channels nearby.",
         parking: true,
       },
       {
         name: "Loch Leven FAS (Emigrant area)",
-        latitude: 45.4833,
-        longitude: -110.5667,
+        latitude: 45.45722,
+        longitude: -110.62424,
         description:
           "Near Emigrant, MT. Excellent wade access to productive riffles and runs. Close to Chico Hot Springs for post-fishing relaxation.",
         parking: true,
@@ -496,16 +514,16 @@ export const rivers: River[] = [
       },
       {
         name: "Craig FAS (Craig Bridge)",
-        latitude: 46.9333,
-        longitude: -112.05,
+        latitude: 47.07256,
+        longitude: -111.96305,
         description:
           "Town of Craig access. Primary takeout for upper float trips and put-in for lower trips. Good wade fishing upstream and downstream. Fly shops nearby.",
         parking: true,
       },
       {
         name: "Mountain Palace FAS",
-        latitude: 46.8833,
-        longitude: -112.0167,
+        latitude: 47.16256,
+        longitude: -111.82311,
         description:
           "Below Craig with good wade access to productive runs and riffles. Less crowded than the Craig and Holter Dam access points.",
         parking: true,
@@ -564,8 +582,8 @@ export const rivers: River[] = [
       },
       {
         name: "Maiden Rock FAS",
-        latitude: 45.7333,
-        longitude: -113.0,
+        latitude: 45.65559,
+        longitude: -112.69612,
         description:
           "Upper river access with scenic canyon setting. Good wade fishing in pocket water.",
         parking: true,
@@ -969,7 +987,7 @@ export const rivers: River[] = [
     heroImageUrl: "/images/rivers/firehole-river-hero.jpg",
     thumbnailUrl: "/images/rivers/firehole-river-hero.jpg",
     lengthMiles: 21,
-    flowType: "spring creek",
+    flowType: "freestone",
     difficulty: "advanced",
     wadingType: "wade",
     primarySpecies: ["Brown Trout", "Rainbow Trout", "Brook Trout"],

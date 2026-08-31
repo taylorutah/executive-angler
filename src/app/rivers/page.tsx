@@ -6,7 +6,7 @@
  */
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { getAllRivers } from "@/lib/db";
+import { getPublicRivers } from "@/lib/db";
 import RiversPageClient from "./RiversPageClient";
 import { toRiverBrowseItem, statesForRiver } from "@/lib/browse/river-items";
 import { SITE_URL } from "@/lib/constants";
@@ -14,7 +14,7 @@ import { brandedTitle } from "@/lib/seo";
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const rivers = await getAllRivers();
+  const rivers = await getPublicRivers();
   const n = rivers.length;
   return {
     title: brandedTitle(`${n} Fly Fishing Rivers — Maps, Hatches & Access Points`),
@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RiversPage() {
-  const rivers = await getAllRivers();
+  const rivers = await getPublicRivers();
   const items = rivers.map((river) => toRiverBrowseItem(river));
   const stateOptions = [...new Set(rivers.flatMap((r) => statesForRiver(r)))]
     .sort((a, b) => a.localeCompare(b))

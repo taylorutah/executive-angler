@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
-  getAllDestinations,
-  getAllRivers,
+  getPublicDestinations,
+  getPublicRivers,
   getAllLodges,
   getAllArticles,
   getAllGuides,
@@ -11,7 +11,7 @@ import {
 } from "@/lib/db";
 import { pageUrl } from "@/lib/seo";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 function loc(path: string): string {
   const url = pageUrl(path);
@@ -24,8 +24,8 @@ function loc(path: string): string {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [destinations, rivers, species, lodges, articles, guides, flyShops, canonicalFlies] =
     await Promise.all([
-      getAllDestinations(),
-      getAllRivers(),
+      getPublicDestinations(),
+      getPublicRivers(),
       getAllSpecies(),
       getAllLodges(),
       getAllArticles(),
@@ -35,6 +35,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]);
 
   const now = new Date();
+  const riverStamp = (r: { updatedAt?: string }) =>
+    r.updatedAt ? new Date(r.updatedAt) : now;
+  const destStamp = (d: { updatedAt?: string }) =>
+    d.updatedAt ? new Date(d.updatedAt) : now;
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: loc("/"), lastModified: now, changeFrequency: "daily", priority: 1 },
@@ -55,16 +59,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const destinationPages = destinations.map((d) => ({
     url: loc(`/destinations/${d.slug}`),
-    lastModified: now,
+    lastModified: destStamp(d),
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
   const riverPages = rivers.map((r) => ({
     url: loc(`/rivers/${r.slug}`),
-    lastModified: now,
+    lastModified: riverStamp(r),
     changeFrequency: "weekly" as const,
     priority: 0.8,
+  }));
+
+  const planPages = rivers.map((r) => ({
+    url: loc(`/plan/${r.slug}`),
+    lastModified: riverStamp(r),
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
   }));
 
   const speciesPages = species.map((s) => ({
@@ -119,7 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const flyForRiverPages = rivers.map((r) => ({
     url: loc(`/flies/for/${r.slug}`),
-    lastModified: now,
+    lastModified: riverStamp(r),
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
@@ -147,6 +158,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...destinationPages,
     ...riverPages,
+    ...planPages,
     ...speciesPages,
     ...lodgePages,
     ...articlePages,

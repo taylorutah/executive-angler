@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createStaticClient } from "@/lib/supabase/static";
+import { allowRequest, clientKey, tooManyRequests } from "@/lib/api/rate-limit";
 
 // ── In-memory cache (per-instance, survives across requests until redeploy) ──
 const cache = new Map<string, { data: GaugeReading[]; expires: number }>();
@@ -146,6 +147,9 @@ export async function GET(
   { params }: { params: Promise<{ riverId: string }> }
 ) {
   const { riverId } = await params;
+  if (!allowRequest(clientKey(request, "usgs-conditions"), 60, 60_000)) {
+    return tooManyRequests();
+  }
 
   // Check cache first
   const cached = cache.get(riverId);

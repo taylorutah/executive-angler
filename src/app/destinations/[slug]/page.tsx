@@ -30,7 +30,9 @@ import {
   getGuidesByDestination,
   getFlyShopsByDestination,
   getApprovedPhotosByEntity,
+  isCatalogDestination,
 } from "@/lib/db";
+import { PRIVATE_ROBOTS } from "@/lib/robots-disallow";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -39,7 +41,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const dest = await getDestinationBySlug(slug);
-  if (!dest) return { title: "Destination Not Found" };
+  if (!dest) notFound();
 
   const speciesList = (dest.primarySpecies || []).slice(0, 3).join(", ");
   const speciesCount = (dest.primarySpecies || []).length;
@@ -62,6 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `${SITE_URL}/destinations/${slug}`,
     },
+    ...(!isCatalogDestination(dest) ? { robots: PRIVATE_ROBOTS } : {}),
   };
 }
 

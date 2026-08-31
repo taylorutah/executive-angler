@@ -2,33 +2,31 @@ import type { Metadata } from "next";
 import {
   getAllArticles,
   getAllCanonicalFlies,
-  getAllDestinations,
-  getAllRivers,
+  getPublicDestinations,
+  getPublicRivers,
   getFeaturedFlies,
 } from "@/lib/db";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
 import type { Article, CanonicalFly, Destination } from "@/types/entities";
-import ConditionsRail from "@/components/home/ConditionsRail";
 import CategoryIndex from "@/components/home/CategoryIndex";
 import FlyPlate from "@/components/home/FlyPlate";
-import HomeHero from "@/components/home/HomeHero";
 import JournalBand from "@/components/home/JournalBand";
-import OnTheWaterNow from "@/components/home/OnTheWaterNow";
 import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import WhereToGo from "@/components/home/WhereToGo";
+import { selectFlagshipRivers } from "@/components/home/conditions";
 import {
-  getFlagshipHistories,
-  getGaugeSnapshots,
-  selectFlagshipRivers,
-} from "@/components/home/conditions";
+  LiveConditionsRail,
+  LiveHomeHero,
+  LiveOnTheWaterNow,
+} from "@/components/home/LiveHomeGauges";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [rivers, allFlies] = await Promise.all([
-    getAllRivers().catch(() => []),
+    getPublicRivers().catch(() => []),
     getAllCanonicalFlies().catch(() => []),
   ]);
   const titlePart = `${rivers.length} Rivers, ${allFlies.length} Flies, and Hatches`;
@@ -125,10 +123,10 @@ function pickPlaces(
 
 export default async function HomePage() {
   const [rivers, allFlies, featuredFlies, destinations, articles] = await Promise.all([
-    getAllRivers().catch(() => []),
+    getPublicRivers().catch(() => []),
     getAllCanonicalFlies().catch(() => []),
     getFeaturedFlies().catch(() => []),
-    getAllDestinations().catch(() => []),
+    getPublicDestinations().catch(() => []),
     getAllArticles().catch(() => []),
   ]);
 
@@ -138,12 +136,7 @@ export default async function HomePage() {
     ...river,
     state: destById.get(river.destinationId)?.state ?? destById.get(river.destinationId)?.name,
   }));
-  const [snapshots, histories] = await Promise.all([
-    getGaugeSnapshots(flagshipRivers),
-    getFlagshipHistories(flagshipRivers).catch(() => new Map()),
-  ]);
   const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
-  const madisonCfs = madison ? snapshots.get(madison.id)?.cfs ?? null : null;
   const headline = `${rivers.length} Rivers, ${allFlies.length} Flies, and Hatches`;
 
   const usedImages = new Set<string>();
@@ -156,10 +149,10 @@ export default async function HomePage() {
   return (
     <>
       <div data-lane="resource">
-        <ConditionsRail rivers={flagshipRivers} snapshots={snapshots} />
+        <LiveConditionsRail rivers={flagshipRivers} />
       </div>
 
-      <HomeHero cfs={madisonCfs} headline={headline} />
+      <LiveHomeHero headline={headline} madisonId={madison?.id} />
 
       <CategoryIndex
         rivers={rivers.length}
@@ -168,12 +161,7 @@ export default async function HomePage() {
         notes={articles.length}
       />
 
-      <OnTheWaterNow
-        rivers={flagshipRivers}
-        snapshots={snapshots}
-        histories={histories}
-        month={month}
-      />
+      <LiveOnTheWaterNow rivers={flagshipRivers} month={month} />
 
       {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
 

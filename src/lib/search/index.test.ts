@@ -280,7 +280,7 @@ describe("rankSearch", () => {
       }),
       ...CORPUS,
     ];
-    for (const q of ["henry's fork", "henrys fork", "Henry’s Fork"]) {
+    for (const q of ["henry's fork", "henrys fork", "Henry’s Fork", "henrys"]) {
       const r = rankSearch(q, docs);
       const first = r.groups.find((g) => g.type === "river")?.items[0]?.doc;
       assert.equal(first?.slug, "henrys-fork", q);
@@ -466,5 +466,6 @@ describe("alias expansions", () => {
     assert.ok(expandTerm("barbless").includes("barbless hook"));
     assert.ok(expandTerm("yellowstone").includes("yellowstone river"));
     assert.ok(expandTerm("henry fork").includes("henrys fork") || expandTerm("henry fork").includes("henry's fork"));
+    assert.ok(expandTerm("henrys").some((v) => v.includes("henrys fork") || v.includes("henry's fork")));
   });
 });

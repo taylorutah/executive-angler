@@ -36,7 +36,12 @@ import {
   getAllCanonicalFlies,
   getApprovedPhotosByEntity,
   getRiversByDestination,
+  isCatalogRiver,
 } from "@/lib/db";
+import { PRIVATE_ROBOTS } from "@/lib/robots-disallow";
+import { hostedStillUrl } from "@/lib/media/image-url";
+import { regulationSource } from "@/lib/rivers/regulations";
+import { groupAccessPoints } from "@/lib/rivers/access-groups";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -47,7 +52,7 @@ export const revalidate = 3600;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const river = await getRiverBySlug(slug);
-  if (!river) return { title: "River Not Found" };
+  if (!river) notFound();
 
   const speciesList = (river.primarySpecies || []).slice(0, 3).join(", ");
   const flowLabel = river.flowType ? river.flowType.charAt(0).toUpperCase() + river.flowType.slice(1) : "";
@@ -67,6 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `${SITE_URL}/rivers/${slug}`,
     },
+    ...(!isCatalogRiver(river) ? { robots: PRIVATE_ROBOTS } : {}),
   };
 }
 
@@ -126,6 +132,12 @@ export default async function RiverPage({ params }: Props) {
   const difficulty = difficultyLabel(river.difficulty);
   const access = accessLabel(river.wadingType);
   const speciesNames = river.primarySpecies ?? [];
+  const regsSource = regulationSource({
+    riverSlug: river.slug,
+    destinationSlug: dest?.slug,
+    destinationState: dest?.state,
+    destinationCountry: dest?.country,
+  });
 
   return (
     <>
@@ -161,7 +173,12 @@ export default async function RiverPage({ params }: Props) {
 
       <RiverHeroImage
         heroImageUrl={river.heroImageUrl}
-        heroImageAlt={river.heroImageAlt || `${river.name} fly fishing`}
+        heroImageAlt={
+          river.heroImageAlt ||
+          (river.slug === "madison-river"
+            ? "The Madison River running low and clear below Three Dollar Bridge, Montana"
+            : `${river.name} fly fishing`)
+        }
         heroImageCredit={river.heroImageCredit}
         heroImageCreditUrl={river.heroImageCreditUrl}
         galleryPhotos={galleryPhotos}
@@ -371,34 +388,43 @@ export default async function RiverPage({ params }: Props) {
                 tone="desk"
                 className="h-[450px] w-full overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)]"
               />
-              <div className="mt-6 space-y-0 border-t border-[var(--border)]">
-                {(river.accessPoints || []).map((ap, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-3 border-b border-[var(--border)] py-4"
-                  >
-                    <div className="num flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--paper-deep)] text-sm font-semibold text-[var(--text-1)]">
-                      {i + 1}
-                    </div>
-                    <div>
-                      <h3 className="font-ui text-base font-medium text-[var(--text-1)]">{ap.name}</h3>
-                      {ap.description && (
-                        <p className="mt-0.5 text-sm text-[var(--text-2)]">{ap.description}</p>
-                      )}
-                      <div className="mt-1.5 flex items-center gap-3 text-xs text-[var(--text-3)]">
-                        <span className="flex items-center gap-1">
-                          <Icon name="map" className="h-3.5 w-3.5" />
-                          <span className="num">
-                            {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
-                          </span>
-                        </span>
-                        {ap.parking && (
-                          <span className="font-medium text-[var(--text-1)]">
-                            Parking available
-                          </span>
-                        )}
+              <div className="mt-6 space-y-8 border-t border-[var(--border)]">
+                {groupAccessPoints(river.slug, river.accessPoints).map((group) => (
+                  <div key={group.label ?? "access"}>
+                    {group.label && (
+                      <h3 className="mb-2 pt-4 font-heading text-lg font-semibold text-[var(--text-1)]">
+                        {group.label}
+                      </h3>
+                    )}
+                    {group.points.map((ap, i) => (
+                      <div
+                        key={`${group.label ?? "access"}-${i}`}
+                        className="flex items-start gap-3 border-b border-[var(--border)] py-4"
+                      >
+                        <div className="num flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--paper-deep)] text-sm font-semibold text-[var(--text-1)]">
+                          {i + 1}
+                        </div>
+                        <div>
+                          <h3 className="font-ui text-base font-medium text-[var(--text-1)]">{ap.name}</h3>
+                          {ap.description && (
+                            <p className="mt-0.5 text-sm text-[var(--text-2)]">{ap.description}</p>
+                          )}
+                          <div className="mt-1.5 flex items-center gap-3 text-xs text-[var(--text-3)]">
+                            <span className="flex items-center gap-1">
+                              <Icon name="map" className="h-3.5 w-3.5" />
+                              <span className="num">
+                                {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
+                              </span>
+                            </span>
+                            {ap.parking && (
+                              <span className="font-medium text-[var(--text-1)]">
+                                Parking available
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 ))}
               </div>
@@ -418,6 +444,17 @@ export default async function RiverPage({ params }: Props) {
                     </h2>
                     <p className="text-sm leading-relaxed text-[var(--text-2)]">
                       {river.regulations}
+                    </p>
+                    <p className="mt-3 text-xs leading-relaxed text-[var(--text-3)]">
+                      Verify with{" "}
+                      <a
+                        href={regsSource.url}
+                        className="text-[var(--accent)] underline-offset-4 hover:underline"
+                        rel="noopener noreferrer"
+                      >
+                        {regsSource.label}
+                      </a>
+                      . Retrieved {regsSource.retrievedOn}. Seasons and gear rules change.
                     </p>
                   </div>
                 </div>
@@ -444,7 +481,7 @@ export default async function RiverPage({ params }: Props) {
                           <EntityCard
                             key={lodge.id}
                             href={`/lodges/${lodge.slug}`}
-                            imageUrl={lodge.heroImageUrl}
+                            imageUrl={hostedStillUrl(lodge.heroImageUrl)}
                             imageAlt={lodge.name}
                             title={lodge.name}
                             subtitle={lodge.priceRange}

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { stripExif } from "@/lib/media/strip-exif";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -35,13 +36,13 @@ export async function POST(request: NextRequest) {
     const ext = file.name.split(".").pop() || "jpg";
     const filePath = `${user.id}/${sessionId}/${uuid}.${ext}`;
 
-    // Upload to storage
+    // Upload to storage (re-encode so EXIF/GPS does not persist)
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const stripped = await stripExif(Buffer.from(arrayBuffer), file.type);
     const { error: uploadError } = await serviceClient.storage
       .from("session-photos")
-      .upload(filePath, buffer, {
-        contentType: file.type,
+      .upload(filePath, stripped.buffer, {
+        contentType: stripped.contentType,
         upsert: false,
       });
 

@@ -66,7 +66,7 @@ export function buildWelcome(args: {
       {
         title: "Explore rivers you fish",
         body:
-          "Live USGS flow, hatch charts, access points, and regs for 138 rivers across the West &mdash; plus community photos from anglers who've been there.",
+          "Live USGS flow, hatch charts, access points, and regs for every river we publish &mdash; plus community photos from anglers who've been there.",
       },
       {
         title: "Your own intelligence layer",

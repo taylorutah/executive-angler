@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { firstUsgsSiteId, isUsgsSiteId } from "@/lib/search/usgs";
 import { classifyFlowState, median, type FlowState } from "@/lib/browse/flow-state";
 import { getAllRivers } from "@/lib/db";
+import { allowRequest, clientKey, tooManyRequests } from "@/lib/api/rate-limit";
 
 const PARAM_DISCHARGE = "00060";
 const USGS_MISSING = "-999999";
@@ -80,7 +81,10 @@ function chunk<T>(arr: T[], size: number): T[][] {
  * GET /api/rivers/flow-states
  * Current discharge vs that site's 30-day daily median. Public. No journal data.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!allowRequest(clientKey(request, "usgs-flow-states"), 20, 60_000)) {
+    return tooManyRequests();
+  }
   const rivers = await getAllRivers();
   const riverBySite = new Map<string, string[]>();
   for (const river of rivers) {

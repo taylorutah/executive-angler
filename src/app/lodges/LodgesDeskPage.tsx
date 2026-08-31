@@ -6,6 +6,7 @@ import HomeGutter from "@/components/home/HomeGutter";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllDestinations, getAllLodges, getAllRivers } from "@/lib/db";
 import type { Destination, Lodge, River } from "@/types/entities";
+import { hostedStillUrl } from "@/lib/media/image-url";
 
 function excerpt(text: string, max = 280): string {
   const t = text.trim();
@@ -99,7 +100,7 @@ export default async function LodgesDeskPage() {
                 className="photo-lift relative aspect-[794/420] w-full border border-[var(--border-rule)]"
               >
                 <SafeEntityImage
-                  src={featured.heroImageUrl}
+                  src={hostedStillUrl(featured.heroImageUrl)}
                   alt={featured.heroImageAlt || featured.name}
                   title={featured.name}
                   fallback="quiet"
@@ -165,7 +166,7 @@ export default async function LodgesDeskPage() {
                     <li key={lodge.id}>
                       <DeskPhotoCard
                         href={`/lodges/${lodge.slug}`}
-                        imageUrl={lodge.heroImageUrl}
+                        imageUrl={hostedStillUrl(lodge.heroImageUrl)}
                         imageAlt={lodge.heroImageAlt || lodge.name}
                         title={lodge.name}
                         meta={lodgeMeta(lodge, dest, river) || lodge.priceRange}

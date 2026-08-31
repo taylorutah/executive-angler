@@ -1,6 +1,19 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/constants";
+import { ROBOTS_DISALLOW } from "@/lib/robots-disallow";
 import { pageUrl } from "@/lib/seo";
+
+const AI_BOTS = [
+  "GPTBot",
+  "ChatGPT-User",
+  "ClaudeBot",
+  "Anthropic-AI",
+  "Anthropic-Ai",
+  "PerplexityBot",
+  "Google-Extended",
+  "Applebot-Extended",
+  "CCBot",
+] as const;
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,64 +21,13 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: [
-          "/_next/",
-          "/api/",
-          "/admin/",
-          "/account/",
-          "/journal/",
-          "/auth/",
-          "/dashboard",
-          "/feed",
-          "/favorites/",
-          "/flybox",
-          "/rivers/mine",
-          "/messages/",
-          "/notifications",
-          "/anglers/",
-          "/login",
-          "/signup",
-          "/forgot-password",
-          "/reset-password",
-          "/search",
-        ],
+        disallow: [...ROBOTS_DISALLOW],
       },
-      {
-        userAgent: "GPTBot",
+      ...AI_BOTS.map((userAgent) => ({
+        userAgent,
         allow: "/",
-      },
-      {
-        userAgent: "ChatGPT-User",
-        allow: "/",
-      },
-      {
-        userAgent: "ClaudeBot",
-        allow: "/",
-      },
-      {
-        userAgent: "Anthropic-AI",
-        allow: "/",
-      },
-      {
-        userAgent: "Anthropic-Ai",
-        allow: "/",
-      },
-      {
-        userAgent: "PerplexityBot",
-        allow: "/",
-      },
-      {
-        userAgent: "Google-Extended",
-        allow: "/",
-      },
-      {
-        userAgent: "Applebot-Extended",
-        allow: "/",
-      },
-      {
-        userAgent: "CCBot",
-        allow: "/",
-      },
+        disallow: [...ROBOTS_DISALLOW],
+      })),
     ],
     sitemap: pageUrl("/sitemap.xml"),
     host: SITE_URL,

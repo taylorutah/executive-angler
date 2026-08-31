@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { stripExif } from "@/lib/media/strip-exif";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,11 +15,12 @@ export async function POST(req: NextRequest) {
     const ext = file.name.split(".").pop() || "jpg";
     const path = `${user.id}/avatar.${ext}`;
     const arrayBuffer = await file.arrayBuffer();
+    const stripped = await stripExif(Buffer.from(arrayBuffer), file.type);
 
     const { error: uploadError } = await supabase.storage
       .from("avatars")
-      .upload(path, arrayBuffer, {
-        contentType: file.type,
+      .upload(path, stripped.buffer, {
+        contentType: stripped.contentType,
         upsert: true,
       });
 

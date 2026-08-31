@@ -9,6 +9,7 @@ import { getAllLodges, getAllDestinations, getAllRivers } from "@/lib/db";
 import { lodgeListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
+import { hostedStillUrl } from "@/lib/media/image-url";
 
 export const revalidate = 3600;
 
@@ -76,7 +77,7 @@ export default async function LodgesPage() {
   const items: (CardData & { _filterValues: Record<string, string | number> })[] = lodges.map(
     (lodge) => ({
       href: `/lodges/${lodge.slug}`,
-      imageUrl: lodge.heroImageUrl,
+      imageUrl: hostedStillUrl(lodge.heroImageUrl),
       imageAlt: lodge.name,
       title: lodge.name,
       subtitle: lodge.priceRange,
@@ -130,7 +131,7 @@ export default async function LodgesPage() {
                 <div className="grid lg:grid-cols-5 rounded-[var(--radius-card)] overflow-hidden border border-[var(--border)] bg-[var(--surface)] card-hover min-h-[380px]">
                   <div className="relative lg:col-span-3 h-72 lg:h-auto min-h-[288px] overflow-hidden">
                     <SafeEntityImage
-                      src={heroLodge.heroImageUrl}
+                      src={hostedStillUrl(heroLodge.heroImageUrl)}
                       alt={heroLodge.name}
                       title={heroLodge.name}
                       className="ea-photo"
@@ -193,7 +194,7 @@ export default async function LodgesPage() {
                   >
                     <div className="relative h-52 overflow-hidden">
                       <SafeEntityImage
-                        src={lodge.heroImageUrl}
+                        src={hostedStillUrl(lodge.heroImageUrl)}
                         alt={lodge.name}
                         title={lodge.name}
                         className="ea-photo"

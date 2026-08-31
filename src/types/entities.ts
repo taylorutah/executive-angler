@@ -24,6 +24,7 @@ export interface Destination {
   metaDescription?: string;
   featured: boolean;
   sortOrder?: number;
+  updatedAt?: string;
 }
 
 export interface River {
@@ -52,8 +53,9 @@ export interface River {
   hatchChart?: HatchMonth[];
   metaTitle?: string;
   metaDescription?: string;
-  usgsGaugeId?: string | null;
-  featured: boolean;
+    usgsGaugeId?: string | null;
+    featured: boolean;
+    updatedAt?: string;
 }
 
 export interface AccessPoint {

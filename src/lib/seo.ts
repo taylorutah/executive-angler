@@ -114,15 +114,15 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
 
 export async function catalogCounts() {
   const {
-    getAllDestinations,
-    getAllRivers,
+    getPublicDestinations,
+    getPublicRivers,
     getAllCanonicalFlies,
     getAllGuides,
     getAllArticles,
   } = await import("@/lib/db");
   const [destinations, rivers, flies, guides, articles] = await Promise.all([
-    getAllDestinations(),
-    getAllRivers(),
+    getPublicDestinations(),
+    getPublicRivers(),
     getAllCanonicalFlies(),
     getAllGuides(),
     getAllArticles(),

@@ -1,7 +1,7 @@
 import { catalogCounts, pageUrl } from "@/lib/seo";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 export async function GET() {
   const generated = new Date().toISOString().slice(0, 10);

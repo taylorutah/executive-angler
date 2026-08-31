@@ -1,5 +1,7 @@
 export {
   getAllDestinations,
+  getPublicDestinations,
+  isCatalogDestination,
   getDestinationBySlug,
   getFeaturedDestinations,
   getDestinationById,
@@ -8,6 +10,8 @@ export {
 
 export {
   getAllRivers,
+  getPublicRivers,
+  isCatalogRiver,
   getRiverBySlug,
   getFeaturedRivers,
   getRiversByDestination,

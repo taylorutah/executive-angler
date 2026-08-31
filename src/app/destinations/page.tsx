@@ -6,7 +6,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import EntityListView from "@/components/ui/EntityListView";
-import { getAllDestinations } from "@/lib/db";
+import { getPublicDestinations } from "@/lib/db";
 import { destinationListConfig } from "@/lib/list-configs";
 import { toDestinationBrowseItem } from "@/lib/browse/destination-items";
 import { SITE_URL } from "@/lib/constants";
@@ -14,7 +14,7 @@ import { brandedTitle } from "@/lib/seo";
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const destinations = await getAllDestinations();
+  const destinations = await getPublicDestinations();
   const n = destinations.length;
   return {
     title: brandedTitle(`${n} Fly Fishing Destinations`),
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DestinationsPage() {
-  const destinations = await getAllDestinations();
+  const destinations = await getPublicDestinations();
 
   const items = destinations.map(toDestinationBrowseItem);
 
