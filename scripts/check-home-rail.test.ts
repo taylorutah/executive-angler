@@ -1,11 +1,22 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { railCfsCount } from "./check-home-rail";
+import { railCfsCount, railHtmlHasCfs } from "./check-home-rail";
 
 describe("home rail smoke", () => {
   it("counts numeric cfs strings the rail must show", async () => {
     assert.equal(await railCfsCount(["Madison gauge offline", "Green no reading"]), 0);
     assert.equal(await railCfsCount(["Madison 760 cfs", "Green last seen"]), 1);
     assert.equal(await railCfsCount(["Madison 760 cfs", "Green 1,810 cfs"]), 2);
+  });
+
+  it("requires the CFS figure in the SSR rail, not after hydration", () => {
+    assert.equal(
+      railHtmlHasCfs('<div data-home-rail><span>Madison</span><span>no reading</span></div>'),
+      false,
+    );
+    assert.equal(
+      railHtmlHasCfs('<div data-home-rail><span>Madison</span><span>760 cfs</span></div>'),
+      true,
+    );
   });
 });

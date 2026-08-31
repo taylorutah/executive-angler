@@ -7,6 +7,7 @@
  * metadata so callers can render section names without re-parsing.
  */
 import { createClient } from "@/lib/supabase/server";
+import { parseRiverGauges } from "@/lib/usgs/gauges";
 
 export interface GaugeEntry {
   site_id: string;
@@ -28,21 +29,6 @@ export interface FavoriteSection {
 export interface RiverSectionPref {
   river_id: string;
   usgs_site_id: string;
-}
-
-function parseGauges(raw: unknown): GaugeEntry[] {
-  if (!raw) return [];
-  if (Array.isArray(raw)) return raw as GaugeEntry[];
-  if (typeof raw === "string") {
-    const trimmed = raw.trim();
-    if (!trimmed.startsWith("[")) return [];
-    try {
-      return JSON.parse(trimmed) as GaugeEntry[];
-    } catch {
-      return [];
-    }
-  }
-  return [];
 }
 
 /** All favorite sections for the current user, ordered by position. */
@@ -71,7 +57,7 @@ export async function listMyFavoriteSections(): Promise<FavoriteSection[]> {
     riverMap.set(r.id, {
       name: r.name,
       slug: r.slug,
-      gauges: parseGauges(r.usgs_gauge_id),
+      gauges: parseRiverGauges(r.usgs_gauge_id, r.name),
     });
   });
 

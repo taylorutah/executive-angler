@@ -8,6 +8,8 @@ import {
   PER_USER_DAILY_CAP,
   RIVER_ALERT_ENTITY,
 } from "../constants";
+import { parseRiverGauges } from "@/lib/usgs/gauges";
+import { PARAM_DISCHARGE, fetchContinuous } from "@/lib/usgs/client";
 import { chooseAlert, personalBand, type GaugeReading } from "../evaluate";
 
 /**
@@ -16,14 +18,6 @@ import { chooseAlert, personalBand, type GaugeReading } from "../evaluate";
  * Vercel Cron hits GET. Contract: docs/decisions/river-alerts.md
  * Do not change triggers or recipients without updating that file first.
  */
-
-const PARAM_DISCHARGE = "00060";
-
-interface GaugeConfig {
-  site_id: string;
-  name?: string;
-  section?: string;
-}
 
 function getSupabaseAdmin() {
   return createClient(
@@ -39,65 +33,31 @@ function authorize(req: NextRequest): boolean {
   return authHeader === cronSecret || authHeader === `Bearer ${cronSecret}`;
 }
 
-function parseGauges(raw: unknown): GaugeConfig[] {
-  if (!raw) return [];
-  if (Array.isArray(raw)) return raw as GaugeConfig[];
-  if (typeof raw === "string") {
-    const trimmed = raw.trim();
-    if (trimmed.startsWith("[")) {
-      try {
-        return JSON.parse(trimmed) as GaugeConfig[];
-      } catch {
-        return [];
-      }
-    }
-    if (trimmed) return [{ site_id: trimmed }];
-  }
-  return [];
-}
-
 type UsgsPoint = { value: number; at: number };
 
 async function fetchUsgsWeek(siteIds: string[]): Promise<Map<string, UsgsPoint[]>> {
   const out = new Map<string, UsgsPoint[]>();
   if (siteIds.length === 0) return out;
   const unique = [...new Set(siteIds.filter(Boolean))];
-  const chunkSize = 40;
-  for (let i = 0; i < unique.length; i += chunkSize) {
-    const chunk = unique.slice(i, i + chunkSize);
-    const url =
-      `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${chunk.join(",")}` +
-      `&parameterCd=${PARAM_DISCHARGE}&period=P7D&siteStatus=all`;
-    try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(20000) });
-      if (!res.ok) continue;
-      const json = (await res.json()) as {
-        value?: {
-          timeSeries?: Array<{
-            sourceInfo?: { siteCode?: Array<{ value?: string }> };
-            variable?: { variableCode?: Array<{ value?: string }> };
-            values?: Array<{
-              value?: Array<{ value?: string; dateTime?: string }>;
-            }>;
-          }>;
-        };
-      };
-      for (const ts of json.value?.timeSeries ?? []) {
-        const siteId = ts.sourceInfo?.siteCode?.[0]?.value;
-        const param = ts.variable?.variableCode?.[0]?.value;
-        if (!siteId || param !== PARAM_DISCHARGE) continue;
-        const points: UsgsPoint[] = [];
-        for (const raw of ts.values?.[0]?.value ?? []) {
-          const value = parseFloat(raw.value ?? "");
-          const at = raw.dateTime ? Date.parse(raw.dateTime) : NaN;
-          if (!Number.isFinite(value) || value <= 0 || !Number.isFinite(at)) continue;
-          points.push({ value, at });
-        }
-        if (points.length) out.set(siteId, points);
-      }
-    } catch {
-      // A failed chunk leaves those sites without readings → gauge_quiet.
+  const end = new Date();
+  const start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
+  try {
+    const obs = await fetchContinuous(
+      unique,
+      start.toISOString(),
+      end.toISOString(),
+      [PARAM_DISCHARGE],
+    );
+    for (const point of obs) {
+      if (point.parameterCode !== PARAM_DISCHARGE) continue;
+      const at = Date.parse(point.dateTime);
+      if (!Number.isFinite(at) || point.value <= 0) continue;
+      const list = out.get(point.siteId) ?? [];
+      list.push({ value: point.value, at });
+      out.set(point.siteId, list);
     }
+  } catch {
+    // A failed fetch leaves those sites without readings → gauge_quiet.
   }
   return out;
 }
@@ -154,7 +114,7 @@ async function runCheck() {
   for (const river of rivers ?? []) {
     riverMap.set(river.id, {
       name: river.name,
-      gauges: parseGauges(river.usgs_gauge_id),
+      gauges: parseRiverGauges(river.usgs_gauge_id),
     });
   }
 

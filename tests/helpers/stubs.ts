@@ -38,6 +38,33 @@ export async function stubLiveData(
     }),
   );
 
+  await page.route("https://api.waterdata.usgs.gov/**", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ type: "FeatureCollection", features: [] }),
+    }),
+  );
+
+  await page.route("**/api/home/flagship-gauges", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        snapshots: {
+          "river-madison": {
+            cfs: 740,
+            deltaCfs: 0,
+            waterTempF: 46,
+            observedAt: FROZEN_NOW,
+            stale: false,
+          },
+        },
+        histories: {},
+      }),
+    }),
+  );
+
   await page.route("**/api/river-**", (route) => {
     const url = route.request().url();
     if (url.includes("/api/river-history")) {

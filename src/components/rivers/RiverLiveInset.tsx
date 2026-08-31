@@ -6,7 +6,8 @@ import RiverConditionsCard from "./RiverConditionsCard";
 interface Props {
   riverId: string;
   riverName: string;
-  usgsGaugeId?: string | null;
+  /** Bare site id, JSON string, or PostgREST jsonb — never assume `.trim()`. */
+  usgsGaugeId?: unknown;
   riverLatitude?: number | null;
   riverLongitude?: number | null;
   children?: React.ReactNode;
@@ -55,7 +56,7 @@ function EmptyGauge({
   usgsGaugeId,
 }: {
   riverName: string;
-  usgsGaugeId?: string | null;
+  usgsGaugeId?: unknown;
 }) {
   return (
     <div>

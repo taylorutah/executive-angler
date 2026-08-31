@@ -1,5 +1,14 @@
-import { unstable_noStore as noStore } from "next/cache";
 import type { River } from "@/types/entities";
+import { parseRiverGauges } from "@/lib/usgs/gauges";
+import {
+  PARAM_DISCHARGE,
+  PARAM_WATER_TEMP,
+  fetchDaily,
+  fetchLatest,
+  latestBySiteParam,
+  type UsgsDailyPoint,
+  type UsgsObservation,
+} from "@/lib/usgs/client";
 
 /**
  * The six rivers on the conditions rail. Slugs are real rows in `rivers`;
@@ -48,47 +57,16 @@ export interface DailyReading {
   discharge: number;
 }
 
-const PARAM_DISCHARGE = "00060";
-const PARAM_WATER_TEMP = "00010";
 const STALE_AFTER_MS = 2 * 60 * 60 * 1000;
-
-type GaugeRecord = { site_id?: string; siteId?: string; name?: string; section?: string };
-
-export function siteIdOf(record: GaugeRecord | null | undefined): string | null {
-  const id = record?.site_id ?? record?.siteId;
-  return id ? String(id).trim() : null;
-}
-
-function fromList(list: GaugeRecord[], riverName: string): GaugeConfig | null {
-  const first = list.find((g) => siteIdOf(g));
-  const id = siteIdOf(first);
-  if (!first || !id) return null;
-  return {
-    siteId: id,
-    name: first.name ?? riverName,
-    section: first.section ?? "Main",
-  };
-}
 
 /**
  * `usgs_gauge_id` is a bare site id, a JSON array, or (from PostgREST) the
  * already-parsed array. Accept `site_id` and `siteId`.
  */
 export function primaryGauge(raw: unknown, riverName: string): GaugeConfig | null {
-  if (raw == null) return null;
-  if (Array.isArray(raw)) return fromList(raw as GaugeRecord[], riverName);
-  if (typeof raw === "object") return fromList([raw as GaugeRecord], riverName);
-  const value = String(raw).trim();
-  if (!value) return null;
-  if (!value.startsWith("[")) {
-    return { siteId: value, name: riverName, section: "Main" };
-  }
-  try {
-    const parsed = JSON.parse(value) as GaugeRecord[];
-    return fromList(parsed, riverName);
-  } catch {
-    return null;
-  }
+  const first = parseRiverGauges(raw, riverName)[0];
+  if (!first) return null;
+  return { siteId: first.site_id, name: first.name, section: first.section };
 }
 
 export function selectFlagshipRivers(rivers: River[]): FlagshipRiver[] {
@@ -220,14 +198,70 @@ export function applyDvSeries(
   }
 }
 
-async function readUsgs(url: string): Promise<USGSTimeSeries[]> {
-  const res = await fetch(url, {
-    headers: { Accept: "application/json" },
-    cache: "no-store",
-  });
-  if (!res.ok) return [];
-  const json = (await res.json()) as { value?: { timeSeries?: USGSTimeSeries[] } };
-  return json?.value?.timeSeries ?? [];
+export function applyLatestObservations(
+  observations: UsgsObservation[],
+  bySite: Map<string, string[]>,
+  into: Map<string, GaugeSnapshot>,
+): void {
+  const grouped = latestBySiteParam(observations);
+  for (const [siteId, riverIds] of bySite) {
+    const byParam = grouped.get(siteId);
+    if (!byParam) continue;
+    const discharge = byParam.get(PARAM_DISCHARGE);
+    const temp = byParam.get(PARAM_WATER_TEMP);
+    for (const riverId of riverIds) {
+      const snapshot: GaugeSnapshot = into.get(riverId) ?? {
+        cfs: null,
+        deltaCfs: null,
+        waterTempF: null,
+        observedAt: null,
+        stale: false,
+      };
+      if (discharge) {
+        snapshot.cfs = Math.round(discharge.value);
+        const age = Date.now() - new Date(discharge.dateTime).getTime();
+        snapshot.stale = Number.isFinite(age) && age > STALE_AFTER_MS;
+        snapshot.observedAt = discharge.dateTime;
+      }
+      if (temp) {
+        snapshot.waterTempF = Math.round((temp.value * 9) / 5 + 32);
+        if (!snapshot.observedAt || temp.dateTime > snapshot.observedAt) {
+          snapshot.observedAt = temp.dateTime;
+        }
+      }
+      into.set(riverId, snapshot);
+    }
+  }
+}
+
+export function applyDailyPoints(
+  points: UsgsDailyPoint[],
+  bySite: Map<string, string[]>,
+  into: Map<string, GaugeSnapshot>,
+): void {
+  const byGauge = new Map<string, UsgsDailyPoint[]>();
+  for (const point of points) {
+    const list = byGauge.get(point.siteId) ?? [];
+    list.push(point);
+    byGauge.set(point.siteId, list);
+  }
+  for (const [siteId, riverIds] of bySite) {
+    const series = (byGauge.get(siteId) ?? []).slice().sort((a, b) => a.date.localeCompare(b.date));
+    if (series.length === 0) continue;
+    const latest = series[series.length - 1];
+    const previous = series.length > 1 ? series[series.length - 2] : null;
+    for (const riverId of riverIds) {
+      const existing = into.get(riverId);
+      if (existing?.cfs != null && !existing.stale) continue;
+      into.set(riverId, {
+        cfs: Math.round(latest.value),
+        deltaCfs: previous ? Math.round(latest.value - previous.value) : null,
+        waterTempF: existing?.waterTempF ?? null,
+        observedAt: latest.date,
+        stale: true,
+      });
+    }
+  }
 }
 
 export function applyDvHistory(
@@ -250,11 +284,7 @@ export function applyDvHistory(
   }
 }
 
-/** Thirty daily means for the flagship gauges. Empty map if USGS is silent. */
-export async function getFlagshipHistories(
-  rivers: FlagshipRiver[],
-): Promise<Map<string, DailyReading[]>> {
-  noStore();
+function flagshipBySite(rivers: FlagshipRiver[]): Map<string, string[]> {
   const bySite = new Map<string, string[]>();
   for (const river of rivers) {
     if (!river.gauge) continue;
@@ -262,6 +292,14 @@ export async function getFlagshipHistories(
     existing.push(river.id);
     bySite.set(river.gauge.siteId, existing);
   }
+  return bySite;
+}
+
+/** Thirty daily means for the flagship gauges. Empty map if USGS is silent. */
+export async function getFlagshipHistories(
+  rivers: FlagshipRiver[],
+): Promise<Map<string, DailyReading[]>> {
+  const bySite = flagshipBySite(rivers);
   const into = new Map<string, DailyReading[]>();
   if (bySite.size === 0) return into;
 
@@ -269,17 +307,22 @@ export async function getFlagshipHistories(
   const start = new Date();
   start.setDate(end.getDate() - 30);
   try {
-    applyDvHistory(
-      await readUsgs(
-        dailyUrl(
-          [...bySite.keys()],
-          start.toISOString().slice(0, 10),
-          end.toISOString().slice(0, 10),
-        ),
-      ),
-      bySite,
-      into,
+    const points = await fetchDaily(
+      [...bySite.keys()],
+      start.toISOString().slice(0, 10),
+      end.toISOString().slice(0, 10),
     );
+    const grouped = new Map<string, DailyReading[]>();
+    for (const point of points) {
+      const list = grouped.get(point.siteId) ?? [];
+      list.push({ date: point.date, discharge: point.value });
+      grouped.set(point.siteId, list);
+    }
+    for (const [siteId, riverIds] of bySite) {
+      const readings = grouped.get(siteId);
+      if (!readings?.length) continue;
+      for (const riverId of riverIds) into.set(riverId, readings);
+    }
   } catch {
     // Roster sparks and the instrument fall back to a client fetch / empty cell.
   }
@@ -289,27 +332,23 @@ export async function getFlagshipHistories(
 /**
  * Live snapshots for the rail. Must not run a 24-hour IV dump — that payload
  * truncates and this function used to swallow the parse error as "offline".
- * `noStore` keeps `/` from baking a failed build-time fetch into ISR HTML.
+ * Callers cache successful results (~5 min). Empty maps are not the homepage's
+ * only state — the client still refreshes after paint.
  */
 export async function getGaugeSnapshots(
   rivers: FlagshipRiver[],
 ): Promise<Map<string, GaugeSnapshot>> {
-  noStore();
-
-  const bySite = new Map<string, string[]>();
-  for (const river of rivers) {
-    if (!river.gauge) continue;
-    const existing = bySite.get(river.gauge.siteId) ?? [];
-    existing.push(river.id);
-    bySite.set(river.gauge.siteId, existing);
-  }
-
+  const bySite = flagshipBySite(rivers);
   const snapshots = new Map<string, GaugeSnapshot>();
   if (bySite.size === 0) return snapshots;
 
   const siteIds = [...bySite.keys()];
   try {
-    applyIvSeries(await readUsgs(instantaneousUrl(siteIds)), bySite, snapshots);
+    applyLatestObservations(
+      await fetchLatest(siteIds, [PARAM_DISCHARGE, PARAM_WATER_TEMP]),
+      bySite,
+      snapshots,
+    );
   } catch {
     // IV failed closed — last-seen daily mean is the honest fallback.
   }
@@ -321,10 +360,12 @@ export async function getGaugeSnapshots(
     const end = new Date();
     const start = new Date();
     start.setDate(end.getDate() - 3);
-    const startStr = start.toISOString().slice(0, 10);
-    const endStr = end.toISOString().slice(0, 10);
     try {
-      applyDvSeries(await readUsgs(dailyUrl(missing, startStr, endStr)), bySite, snapshots);
+      applyDailyPoints(
+        await fetchDaily(missing, start.toISOString().slice(0, 10), end.toISOString().slice(0, 10)),
+        bySite,
+        snapshots,
+      );
     } catch {
       // Leave those rivers without a number; the rail will say last seen if we have one.
     }

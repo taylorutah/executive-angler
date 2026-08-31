@@ -59,6 +59,7 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
           {cfs != null ? (
             <span
               className={`num block text-base font-semibold ${live ? "text-[var(--accent)]" : "text-[var(--text-1)]"}`}
+              data-live
             >
               {cfs.toLocaleString("en-US")}
               <span className="ea-overline ml-1">

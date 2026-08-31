@@ -7,6 +7,11 @@ import {
   buildFiveDayOutlook,
   deriveBestWindow,
 } from "@/lib/today/worth-window";
+import {
+  PARAM_DISCHARGE,
+  fetchLatest,
+  latestBySiteParam,
+} from "@/lib/usgs/client";
 import TodayBriefing, { type TodayBriefingData } from "./TodayBriefing";
 import TodaySignedOut from "./TodaySignedOut";
 
@@ -18,39 +23,16 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const PARAM_DISCHARGE = "00060";
-
 async function liveCfs(siteIds: string[]): Promise<Map<string, { cfs: number; observedAt: string }>> {
   const out = new Map<string, { cfs: number; observedAt: string }>();
   const ids = siteIds.filter(Boolean);
   if (ids.length === 0) return out;
-  const url =
-    `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${ids.join(",")}` +
-    `&parameterCd=${PARAM_DISCHARGE}&siteStatus=all`;
   try {
-    const res = await fetch(url, {
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-    if (!res.ok) return out;
-    const data = (await res.json()) as {
-      value?: {
-        timeSeries?: Array<{
-          sourceInfo?: { siteCode?: Array<{ value?: string }> };
-          variable?: { variableCode?: Array<{ value?: string }> };
-          values?: Array<{ value?: Array<{ value?: string; dateTime?: string }> }>;
-        }>;
-      };
-    };
-    for (const series of data.value?.timeSeries ?? []) {
-      const code = series.variable?.variableCode?.[0]?.value;
-      if (code !== PARAM_DISCHARGE) continue;
-      const siteId = series.sourceInfo?.siteCode?.[0]?.value;
-      const point = series.values?.[0]?.value?.[0];
-      if (!siteId || !point?.value) continue;
-      const cfs = Number(point.value);
-      if (!Number.isFinite(cfs)) continue;
-      out.set(siteId, { cfs, observedAt: point.dateTime ?? "" });
+    const grouped = latestBySiteParam(await fetchLatest(ids, [PARAM_DISCHARGE]));
+    for (const [siteId, byParam] of grouped) {
+      const discharge = byParam.get(PARAM_DISCHARGE);
+      if (!discharge) continue;
+      out.set(siteId, { cfs: discharge.value, observedAt: discharge.dateTime });
     }
   } catch {
     return out;

@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllDestinations, getAllRivers } from "@/lib/db";
-import {
-  getFlagshipHistories,
-  getGaugeSnapshots,
-  selectFlagshipRivers,
-} from "@/components/home/conditions";
+import { selectFlagshipRivers } from "@/components/home/conditions";
+import { loadFlagshipGaugePayload } from "@/components/home/flagship-cache";
 
 export const dynamic = "force-dynamic";
 
@@ -18,19 +15,10 @@ export async function GET() {
     ...river,
     state: destById.get(river.destinationId)?.state ?? destById.get(river.destinationId)?.name,
   }));
-  const [snapshots, histories] = await Promise.all([
-    getGaugeSnapshots(flagship),
-    getFlagshipHistories(flagship).catch(() => new Map()),
-  ]);
-  return NextResponse.json(
-    {
-      snapshots: Object.fromEntries(snapshots),
-      histories: Object.fromEntries(histories),
+  const payload = await loadFlagshipGaugePayload(flagship);
+  return NextResponse.json(payload, {
+    headers: {
+      "Cache-Control": "public, s-maxage=300, stale-while-revalidate=900",
     },
-    {
-      headers: {
-        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=900",
-      },
-    },
-  );
+  });
 }

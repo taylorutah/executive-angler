@@ -30,6 +30,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsYXN4dGZib2R5eGJjdWNodnh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODY4NzYsImV4cCI6MjA4Nzk2Mjg3Nn0.d2G5aihAAyCNubzz_toIp2LUSrqTc5BOHTNeRipK5R0
       - run: npm run check:empty-states
       - run: npm test
+      - run: npm run check:usgs
       - run: npm run check:no-review-account
       - run: npm run check:baseline-quality
 
@@ -58,6 +59,9 @@ jobs:
       - run: npm run check:contrast:rendered
         env:
           BASE_URL: http://localhost:3000
+      - run: npm run check:home-rail
+        env:
+          BASE_URL: http://localhost:3000
 
   harness:
     runs-on: ubuntu-latest
@@ -67,6 +71,7 @@ jobs:
       NEXT_PUBLIC_SITE_URL: https://www.executiveangler.com
       EA_FIXTURE_EMAIL: ${{ secrets.EA_FIXTURE_EMAIL }}
       EA_FIXTURE_PASSWORD: ${{ secrets.EA_FIXTURE_PASSWORD }}
+      EA_USGS_FIXTURE: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -97,6 +102,7 @@ jobs:
       NEXT_PUBLIC_SITE_URL: https://www.executiveangler.com
       EA_FIXTURE_EMAIL: ${{ secrets.EA_FIXTURE_EMAIL }}
       EA_FIXTURE_PASSWORD: ${{ secrets.EA_FIXTURE_PASSWORD }}
+      EA_USGS_FIXTURE: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

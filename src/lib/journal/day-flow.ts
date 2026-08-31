@@ -5,7 +5,8 @@
  * runs this after the owner check. Nothing here reaches a public surface.
  */
 
-const PARAM_DISCHARGE = "00060";
+import { clockMinutes, fetchContinuous, PARAM_DISCHARGE } from "@/lib/usgs/client";
+import { parseRiverGauges } from "@/lib/usgs/gauges";
 
 export interface DayFlowReading {
   /** Minutes past local midnight — the x axis. */
@@ -26,16 +27,7 @@ interface GaugeConfig {
 }
 
 function parseGauges(raw: string | null | undefined): GaugeConfig[] {
-  if (!raw) return [];
-  const trimmed = raw.trim();
-  if (trimmed.startsWith("[")) {
-    try {
-      return JSON.parse(trimmed) as GaugeConfig[];
-    } catch {
-      return [];
-    }
-  }
-  return [{ site_id: trimmed, name: "Gauge", section: "Main" }];
+  return parseRiverGauges(raw, "Gauge");
 }
 
 /** Picks the gauge whose section names the section fished, else the first. */
@@ -72,29 +64,20 @@ export async function fetchDayFlow(
   const gauge = pickGauge(parseGauges(usgsGaugeId), section);
   if (!gauge) return null;
 
-  const url =
-    `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${gauge.site_id}` +
-    `&parameterCd=${PARAM_DISCHARGE}&startDT=${date}&endDT=${date}`;
-
   try {
-    const res = await fetch(url, {
-      headers: { Accept: "application/json" },
-      next: { revalidate: 21600 },
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    const values: { dateTime: string; value: string }[] =
-      json?.value?.timeSeries?.[0]?.values?.[0]?.value ?? [];
-
+    const obs = await fetchContinuous(
+      [gauge.site_id],
+      `${date}T00:00:00.000Z`,
+      `${date}T23:59:59.000Z`,
+      [PARAM_DISCHARGE],
+    );
     const readings: DayFlowReading[] = [];
-    for (const v of values) {
-      const cfs = Number(v.value);
-      if (!Number.isFinite(cfs) || cfs < 0) continue;
-      // USGS returns site-local wall time with an offset; the clock face is
-      // what the angler experienced, so read the hour/minute literally.
-      const m = /T(\d{2}):(\d{2})/.exec(v.dateTime);
-      if (!m) continue;
-      readings.push({ minutes: Number(m[1]) * 60 + Number(m[2]), cfs });
+    for (const point of obs) {
+      if (point.parameterCode !== PARAM_DISCHARGE) continue;
+      if (!Number.isFinite(point.value) || point.value < 0) continue;
+      const minutes = clockMinutes(point.dateTime);
+      if (minutes == null) continue;
+      readings.push({ minutes, cfs: point.value });
     }
     if (readings.length < 2) return null;
     return { gaugeName: gauge.name, siteId: gauge.site_id, readings };

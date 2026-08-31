@@ -17,16 +17,22 @@ function loadFlagshipGauges(): Promise<Payload | null> {
   if (!inflight) {
     inflight = fetch("/api/home/flagship-gauges")
       .then((res) => (res.ok ? (res.json() as Promise<Payload>) : null))
-      .catch(() => null);
+      .catch(() => null)
+      .then((payload) => {
+        if (!payload?.snapshots || Object.keys(payload.snapshots).length === 0) {
+          inflight = null;
+        }
+        return payload;
+      });
   }
   return inflight;
 }
 
-function useFlagshipGauges(): {
+function useFlagshipGauges(initial?: Payload | null): {
   snapshots: Map<string, GaugeSnapshot>;
   histories: Map<string, DailyReading[]>;
 } {
-  const [data, setData] = useState<Payload | null>(null);
+  const [data, setData] = useState<Payload | null>(initial ?? null);
   useEffect(() => {
     let cancelled = false;
     loadFlagshipGauges().then((payload) => {
@@ -42,19 +48,27 @@ function useFlagshipGauges(): {
   };
 }
 
-export function LiveConditionsRail({ rivers }: { rivers: FlagshipRiver[] }) {
-  const { snapshots } = useFlagshipGauges();
+export function LiveConditionsRail({
+  rivers,
+  initial,
+}: {
+  rivers: FlagshipRiver[];
+  initial?: Payload | null;
+}) {
+  const { snapshots } = useFlagshipGauges(initial);
   return <ConditionsRail rivers={rivers} snapshots={snapshots} />;
 }
 
 export function LiveHomeHero({
   headline,
   madisonId,
+  initial,
 }: {
   headline: string;
   madisonId?: string;
+  initial?: Payload | null;
 }) {
-  const { snapshots } = useFlagshipGauges();
+  const { snapshots } = useFlagshipGauges(initial);
   const cfs = madisonId ? snapshots.get(madisonId)?.cfs ?? null : null;
   return <HomeHero cfs={cfs} headline={headline} />;
 }
@@ -62,11 +76,13 @@ export function LiveHomeHero({
 export function LiveOnTheWaterNow({
   rivers,
   month,
+  initial,
 }: {
   rivers: FlagshipRiver[];
   month: string;
+  initial?: Payload | null;
 }) {
-  const { snapshots, histories } = useFlagshipGauges();
+  const { snapshots, histories } = useFlagshipGauges(initial);
   return (
     <OnTheWaterNow
       rivers={rivers}
