@@ -82,7 +82,7 @@ export default function JournalMapView({ sessions, compact = false }: JournalMap
             <div style="font-weight: 600; color: #171C19; margin-bottom: 4px;">
               ${session.river_name || session.location || "Session"}
             </div>
-            <div style="font-size: 12px; color: #6E746F; margin-bottom: 6px;">
+            <div style="font-size: 12px; color: #616863; margin-bottom: 6px;">
               ${formattedDate}
             </div>
             ${

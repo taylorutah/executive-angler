@@ -30,7 +30,7 @@ Canonical implementation: `src/app/globals.css` (tokens, base, components) + `sr
 | `--border-strong` | `#CFC9BB` | emphasized hairline |
 | `--text-1` | `#171C19` | primary text |
 | `--text-2` | `#525B55` | body/secondary text, labels |
-| `--text-3` | `#6E746F` | overlines/metadata — amended 2026-08-28 (client-approved): `#969E97` measured 2.61:1 on `--paper`; this is the lightest same-hue value passing WCAG AA at 4.54:1 |
+| `--text-3` | `#616863` | overlines/metadata — amended 2026-08-31: `#6E746F` was 4.54:1 on `--paper` but 4.17:1 on `--paper-deep`; this is the lightest same-hue value passing AA on both grounds |
 | `--accent` | `#1E4D3B` | deep river green — primary actions, links, active states |
 | `--accent-hover` | `#16382B` | accent hover/active |
 | `--accent-soft` | `#EAF1ED` | active nav, selected rows |
@@ -151,7 +151,7 @@ All five open conflicts are ruled. These are permanent law.
 
 1. **Dusk register — REMOVED.** Light theme only; theme variants are banned machinery. `src/lib/register.ts`, `RegisterBinder`, `ThemeProvider`/`ThemeToggle`, the `data-register` attribute, the dusk token block, and the dusk palette hexes in `palette.ts` are deleted. Chrome accents use `--accent` directly; `--signal-live`/`--action` survive only as migration aliases for un-migrated content surfaces — never for new work.
 2. **Hero scrims — REMOVED.** Gradients are banned, including photo-legibility scrims. Heroes follow §6: graded photography in its own band, text on paper. `--scrim-*` tokens and `.hero-overlay*` classes are deleted.
-3. **`--text-3` amended.** `#969E97` → `#6E746F`, the lightest value in the same hue family passing WCAG AA on `--paper` (4.54:1; one step lighter, `#6F7570`, fails at 4.48:1). Client-approved token amendment; the §2 table is the canonical record.
+3. **`--text-3` amended.** `#969E97` → `#6E746F` (2026-08-28, AA on `--paper`) → `#616863` (2026-08-31, AA on `--paper` and `--paper-deep`). The §2 table is the canonical record.
 4. **Nav collapse at 768px.** The primary bar expands at `md` (768px); the mobile sheet and tab bar engage below it. See §7 for the 768–1024 density rules.
 5. **Icon stroke 1.75.** `src/icons/Icon.tsx` draws at stroke-width 1.75; the dead `strokeWidth` prop is removed from `IconProps` and every call site.
 

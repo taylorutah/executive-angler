@@ -16,7 +16,7 @@
   --border-strong: #CFC9BB;
   --text-1: #171C19;
   --text-2: #525B55;
-  --text-3: #6E746F;       /* amended 2026-08-28 (client ruling): #969E97 was 2.61:1 on --paper; this is the lightest same-hue value passing AA — 4.54:1 */
+  --text-3: #616863;       /* amended 2026-08-31: #6E746F was 4.54:1 on --paper but 4.17:1 on --paper-deep; this is the lightest same-hue value passing AA on both (5.43 / 4.98) */
   --accent: #1E4D3B;       /* deep river green — actions, links, active */
   --accent-hover: #16382B;
   --accent-soft: #EAF1ED;  /* active nav, selected rows */

@@ -45,12 +45,10 @@ const DAYLIGHT_GROUNDS: Array<{ name: string; hex: string }> = [
 ];
 
 /**
- * Slate was tuned to the lightest same-hue 4.5:1 on paper (451c20d /
- * globals.css --text-3). On vellum that is 4.17:1. Rise-700 on vellum is
- * 4.39:1. Both stay out of this gate so we do not restyle captions or
- * the rise token. They remain legal on paper and card.
+ * Rise-700 on vellum is 4.39:1. It stays out of this gate so we do not
+ * restyle the success token. Slate now clears 4.5:1 on vellum.
  */
-const SKIP_PAIRS = new Set(["slate on vellum", "rise-700 on vellum"]);
+const SKIP_PAIRS = new Set(["rise-700 on vellum"]);
 
 function expand(
   fgs: Array<{ name: string; hex: string; role: string }>,
