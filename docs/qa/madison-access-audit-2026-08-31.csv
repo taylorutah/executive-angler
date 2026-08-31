@@ -1,0 +1,10 @@
+river,access,stated_lat,stated_lng,verified_lat,verified_lng,delta_m,land_status,pass_fail,source
+madison-river,Three Dollar Bridge FAS,,,44.83194,-111.51417,,MT FWP FAS,FAIL missing,https://myfwp.mt.gov/fishMT/fas/39754533
+madison-river,Raynolds' Pass FAS,,,44.82871,-111.47933,,MT FWP FAS,FAIL missing,https://myfwp.mt.gov/fishMT/fas/39753440
+madison-river,Quake Lake,44.8406,-111.4261,,,,Unverified,UNVERIFIED,
+madison-river,Lyons Bridge FAS,44.9383,-111.5906,44.89910,-111.59260,4362,FWP/USFS FAS,FAIL,https://myfwp.mt.gov/fwpPub/landsMgmt/siteDetail.action?lmsId=39753518
+madison-river,McAtee Bridge FAS,45.0833,-111.65,45.09665,-111.66152,1738,MT FWP FAS,FAIL,https://myfwp.mt.gov/fishMT/fas/39753516
+madison-river,Varney Bridge FAS,45.2083,-111.6833,45.22900,-111.75196,5849,MT FWP FAS,FAIL,https://myfwp.mt.gov/fwpPub/landsMgmt/siteDetail.action?lmsId=39753404
+madison-river,Ennis Bridge FAS,45.35,-111.7333,45.34443,-111.72310,1011,MT FWP FAS,FAIL,https://myfwp.mt.gov/fishMT/fas/39753534
+madison-river,Valley Garden FAS,45.4167,-111.75,45.36726,-111.70540,6509,MT FWP FAS,FAIL,https://myfwp.mt.gov/fishMT/fas/39753456
+madison-river,Beartrap Canyon,45.5167,-111.65,,,,Unverified,UNVERIFIED,
