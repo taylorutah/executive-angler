@@ -163,7 +163,7 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
       const liveChip =
         flow && Number.isFinite(flow.cfs)
           ? {
-              label: "Now",
+              label: "Flow",
               value: `${Math.round(flow.cfs).toLocaleString("en-US")} cfs`,
             }
           : null;
@@ -245,7 +245,7 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
             type="button"
             onClick={handleNearMe}
             disabled={locating}
-            className="rounded-[var(--radius-md)] border border-[var(--accent)] px-3 py-1.5 text-sm font-medium text-[var(--accent)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--on-action)] disabled:opacity-50"
+            className="ea-btn ea-btn-sm ea-btn-primary disabled:opacity-50"
           >
             {locating ? "Locating…" : "Use location"}
           </button>
@@ -258,13 +258,13 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
             placeholder="ZIP"
             maxLength={5}
             aria-label="ZIP code"
-            className="w-24 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:outline-none focus:shadow-[var(--signal-ring)]"
+            className="h-8 w-24 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:outline-none focus:shadow-[var(--signal-ring)]"
           />
           <button
             type="button"
             onClick={handleZipSearch}
             disabled={zipLoading || !zipInput.trim()}
-            className="rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-1.5 text-sm text-[var(--text-2)] transition-colors hover:border-[var(--border-strong)] hover:text-[var(--text-1)] disabled:opacity-40"
+            className="ea-btn ea-btn-sm ea-btn-secondary disabled:opacity-40"
           >
             {zipLoading ? "…" : "Go"}
           </button>
@@ -272,10 +272,8 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
             type="button"
             aria-pressed={showMap}
             onClick={() => setShowMap((v) => !v)}
-            className={`rounded-[var(--radius-md)] border px-3 py-1.5 text-sm font-medium transition-colors ${
-              showMap
-                ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--on-action)]"
-                : "border-[var(--border)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
+            className={`ea-btn ea-btn-sm ${
+              showMap ? "ea-btn-primary" : "ea-btn-secondary"
             }`}
           >
             Map

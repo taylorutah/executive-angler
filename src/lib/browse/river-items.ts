@@ -121,7 +121,9 @@ export function toRiverBrowseItem(
     hoverPanel: {
       chips: hoverChips(river),
       brief: excerptBrief(river.description ?? ""),
-      footer: best ? `Best: ${best}` : undefined,
+      footer: [hatch ? `Hatch: ${hatch}` : "", best ? `Best: ${best}` : ""]
+        .filter(Boolean)
+        .join(" · ") || undefined,
     },
     tags: undefined,
     latitude: Number(river.latitude) || 0,

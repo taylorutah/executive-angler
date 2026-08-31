@@ -96,7 +96,12 @@ describe("toRiverBrowseItem", () => {
         latitude: 45,
         longitude: -111,
         featured: true,
-        hatchChart: [],
+        hatchChart: [
+          {
+            month: "August",
+            hatches: [{ insect: "Pale Morning Dun (Ephemerella)", size: "#16", pattern: "Sparkle Dun" }],
+          },
+        ],
       },
       "August",
     );
@@ -105,7 +110,7 @@ describe("toRiverBrowseItem", () => {
       { label: "Access", value: "Wade / boat" },
       { label: "Difficulty", value: "Intermediate" },
     ]);
-    assert.equal(item.hoverPanel?.footer, "Best: Jun–Oct");
+    assert.equal(item.hoverPanel?.footer, "Hatch: Pale Morning Dun · Best: Jun–Oct");
     assert.match(item.hoverPanel?.brief ?? "", /crown jewel/);
     assert.equal((item.hoverPanel?.brief ?? "").includes("salmonfly"), true);
   });
