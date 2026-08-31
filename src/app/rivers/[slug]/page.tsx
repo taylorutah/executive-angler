@@ -132,11 +132,14 @@ export default async function RiverPage({ params }: Props) {
   const difficulty = difficultyLabel(river.difficulty);
   const access = accessLabel(river.wadingType);
   const speciesNames = river.primarySpecies ?? [];
+  const destState = dest ? dest.state : undefined;
+  const destCountry = dest ? dest.country : undefined;
+  const destSlug = dest ? dest.slug : undefined;
   const regsSource = regulationSource({
     riverSlug: river.slug,
-    destinationSlug: dest?.slug,
-    destinationState: dest?.state,
-    destinationCountry: dest?.country,
+    destinationSlug: destSlug,
+    destinationState: destState,
+    destinationCountry: destCountry,
   });
 
   return (
