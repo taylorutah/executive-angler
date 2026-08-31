@@ -65,9 +65,13 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
                     {snapshot.cfs!.toLocaleString("en-US")}
                     <span className="ml-0.5 text-[var(--text-3)]">cfs</span>
                   </span>
-                  {delta && <span className="num text-[var(--text-3)]">{delta}</span>}
+                  {delta && (
+                    <span className="num text-[var(--text-3)]" data-live>
+                      {delta}
+                    </span>
+                  )}
                   {observed && (
-                    <span className="ea-overline hidden xl:inline">
+                    <span className="ea-overline hidden xl:inline" data-live>
                       {observed} USGS
                     </span>
                   )}

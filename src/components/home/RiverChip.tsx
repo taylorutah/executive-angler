@@ -73,6 +73,7 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
           )}
           {trend ? (
             <span
+              data-live
               className={`block text-xs font-medium uppercase tracking-[0.06em] ${
                 trend === "rising"
                   ? "text-[var(--success)]"
@@ -86,7 +87,9 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
             </span>
           ) : null}
         </span>
-        <Sparkline values={values} />
+        <span data-live className="inline-flex shrink-0">
+          <Sparkline values={values} />
+        </span>
       </span>
 
       <span className="flex flex-wrap items-center gap-1">
