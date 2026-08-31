@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
-  getPublicDestinations,
-  getPublicRivers,
+  getAllDestinations,
+  getAllRivers,
   getAllLodges,
   getAllArticles,
   getAllGuides,
@@ -24,8 +24,8 @@ function loc(path: string): string {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [destinations, rivers, species, lodges, articles, guides, flyShops, canonicalFlies] =
     await Promise.all([
-      getPublicDestinations(),
-      getPublicRivers(),
+      getAllDestinations(),
+      getAllRivers(),
       getAllSpecies(),
       getAllLodges(),
       getAllArticles(),

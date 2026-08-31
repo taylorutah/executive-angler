@@ -36,9 +36,7 @@ import {
   getAllCanonicalFlies,
   getApprovedPhotosByEntity,
   getRiversByDestination,
-  isCatalogRiver,
 } from "@/lib/db";
-import { PRIVATE_ROBOTS } from "@/lib/robots-disallow";
 import { hostedStillUrl } from "@/lib/media/image-url";
 import { regulationSource } from "@/lib/rivers/regulations";
 import { groupAccessPoints } from "@/lib/rivers/access-groups";
@@ -73,7 +71,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `${SITE_URL}/rivers/${slug}`,
     },
-    ...(!isCatalogRiver(river) ? { robots: PRIVATE_ROBOTS } : {}),
   };
 }
 
@@ -453,7 +450,7 @@ export default async function RiverPage({ params }: Props) {
                       Verify with{" "}
                       <a
                         href={regsSource.url}
-                        className="text-[var(--accent)] underline-offset-4 hover:underline"
+                        className="text-[var(--accent)] underline underline-offset-4 hover:decoration-2"
                         rel="noopener noreferrer"
                       >
                         {regsSource.label}

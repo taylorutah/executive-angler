@@ -191,7 +191,7 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
         Swipe to see In box and Add
       </p>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" tabIndex={0} aria-label="Variant sizes">
         <table className="ea-table min-w-[32rem] text-left">
           <thead>
             <tr>

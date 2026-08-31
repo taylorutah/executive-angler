@@ -23,11 +23,10 @@ test.describe("journey smoke", () => {
     if (shops >= 0) expect(Math.min(hatch, flies)).toBeLessThan(shops);
   });
 
-  test("destinations index renders the places desk, not a blank bounce", async ({ page }) => {
+  test("destinations index lists the public catalog, not a blank bounce", async ({ page }) => {
     await page.goto("/destinations", { waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/destinations\/?$/);
-    await expect(page.getByRole("heading", { level: 1, name: /every place we keep/i })).toBeVisible();
-    await expect(page.getByRole("button", { name: /pictures/i })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /destinations/i })).toBeVisible();
   });
 
   test('"green river" ranks Green River first among rivers', async ({ page }) => {

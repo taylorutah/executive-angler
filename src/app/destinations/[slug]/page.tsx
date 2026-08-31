@@ -30,9 +30,7 @@ import {
   getGuidesByDestination,
   getFlyShopsByDestination,
   getApprovedPhotosByEntity,
-  isCatalogDestination,
 } from "@/lib/db";
-import { PRIVATE_ROBOTS } from "@/lib/robots-disallow";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -64,7 +62,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `${SITE_URL}/destinations/${slug}`,
     },
-    ...(!isCatalogDestination(dest) ? { robots: PRIVATE_ROBOTS } : {}),
   };
 }
 

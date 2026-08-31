@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAllDestinations, getPublicRivers } from "@/lib/db";
+import { getAllDestinations, getAllRivers } from "@/lib/db";
 import {
   getFlagshipHistories,
   getGaugeSnapshots,
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const [rivers, destinations] = await Promise.all([
-    getPublicRivers().catch(() => []),
+    getAllRivers().catch(() => []),
     getAllDestinations().catch(() => []),
   ]);
   const destById = new Map(destinations.map((d) => [d.id, d]));

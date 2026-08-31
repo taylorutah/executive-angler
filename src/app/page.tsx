@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import {
   getAllArticles,
   getAllCanonicalFlies,
-  getPublicDestinations,
-  getPublicRivers,
+  getAllDestinations,
+  getAllRivers,
   getFeaturedFlies,
 } from "@/lib/db";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
@@ -26,7 +26,7 @@ import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images
 
 export async function generateMetadata(): Promise<Metadata> {
   const [rivers, allFlies] = await Promise.all([
-    getPublicRivers().catch(() => []),
+    getAllRivers().catch(() => []),
     getAllCanonicalFlies().catch(() => []),
   ]);
   const titlePart = `${rivers.length} Rivers, ${allFlies.length} Flies, and Hatches`;
@@ -123,10 +123,10 @@ function pickPlaces(
 
 export default async function HomePage() {
   const [rivers, allFlies, featuredFlies, destinations, articles] = await Promise.all([
-    getPublicRivers().catch(() => []),
+    getAllRivers().catch(() => []),
     getAllCanonicalFlies().catch(() => []),
     getFeaturedFlies().catch(() => []),
-    getPublicDestinations().catch(() => []),
+    getAllDestinations().catch(() => []),
     getAllArticles().catch(() => []),
   ]);
 

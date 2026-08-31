@@ -1,12 +1,14 @@
 # Executive Angler QA Report — 2026-08-31
 
+**Correction (2026-08-31, Taylor):** The live river catalog is **187**. That is not an inventory lie. The 49 rivers added 2026-08-30 (including Asay Creek) stay in listings, sitemap, advertised counts, homepage, `/about`, and `llms.txt` even when they have no usable hero. Do not noindex them for a missing photograph. Matching destination count is the live destinations table (**53** at the time of this correction). The original sitemap/`llms.txt` 138/52 gap was stale ISR, not a reason to hide rivers.
+
 Checked against live `https://www.executiveangler.com` (Vercel, `cle1`), production Supabase `qlasxtfbodyxbcuchvxz`, USGS Water Services IV at ~19:00 America/Denver on 2026-08-30, and Montana FWP FAS GIS (`fwp-gis.mt.gov` layer `fwplnd/fwpLands/MapServer/1`). Repo HEAD at review: `28d9801`.
 
 Do not treat this as a vibe check. Inventory, ticker CFS, and Madison/Montana pins were measured. Pins outside Montana were not all walked against every state GIS layer; those rows are marked **Unverified**.
 
 ## Executive verdict
 
-Do not promote until the P0s are closed. The live catalog is 187 rivers and the public sitemap is 138; homepage, `/rivers`, and `/about` advertise the larger number while `sitemap.xml` and `llms.txt` still publish yesterday’s build. On the flagship Madison page the hero photograph is Three Dollar Bridge and the live CFS is the Hebgen gauge, but Three Dollar Bridge is missing from the access list and four named FAS pins sit 1.0–6.5 km off the official FWP coordinates. The same class of error repeats on Bitterroot, Blackfoot, Bighorn, Missouri, Yellowstone, Big Hole, and Beaverhead. A site whose brand promise is accuracy cannot ship “Lyons Bridge FAS” 4.4 km from Lyons Bridge.
+Do not promote until the remaining P0s are closed. The live catalog is **187 rivers / 53 destinations**. Homepage, `/rivers`, and `/about` already advertise that catalog; sitemap and `llms.txt` were a day behind because of ISR, not because 187 was wrong. On the flagship Madison page the hero photograph is Three Dollar Bridge and the live CFS is the Hebgen gauge, but Three Dollar Bridge is missing from the access list and four named FAS pins sit 1.0–6.5 km off the official FWP coordinates. On the flagship Madison page the hero photograph is Three Dollar Bridge and the live CFS is the Hebgen gauge, but Three Dollar Bridge is missing from the access list and four named FAS pins sit 1.0–6.5 km off the official FWP coordinates. The same class of error repeats on Bitterroot, Blackfoot, Bighorn, Missouri, Yellowstone, Big Hole, and Beaverhead. A site whose brand promise is accuracy cannot ship “Lyons Bridge FAS” 4.4 km from Lyons Bridge.
 
 ## Scorecard
 Inventory integrity:  3/10
@@ -23,7 +25,7 @@ Overall:              49/100
 
 ## P0 — fix before anything else
 
-- [`/`](https://www.executiveangler.com/) / [`/rivers`](https://www.executiveangler.com/rivers) / [`/about`](https://www.executiveangler.com/about) vs [`/sitemap.xml`](https://www.executiveangler.com/sitemap.xml) / [`/llms.txt`](https://www.executiveangler.com/llms.txt) — **inventory count lie**. Live HTML titles: “187 Rivers, 162 Flies, and Hatches”; `/rivers` H1 “187 rivers, documented”; `/about` “187 rivers” and “53 destinations”. Sitemap crawl 2026-08-31: **138** `/rivers/`, **52** `/destinations/`. `llms.txt` catalog (generated 2026-08-30): Rivers 138, Destinations 52. Production DB: `rivers=187`, `destinations=53`, `flies` approved=162. The 49 rivers created 2026-08-30 17:46–23:52 UTC (after sitemap `lastmod` 16:29:12Z) are in the listing UI (HTTP 200) and **absent from the sitemap**. Same query (`getAllRivers()`) with different ISR windows (`/` is `noStore`; `/rivers` `revalidate=3600`; sitemap/llms `86400`). Fix: one published-catalog query; align sitemap `revalidate` with listing; stop claiming a number the sitemap cannot support.
+- [`/`](https://www.executiveangler.com/) / [`/rivers`](https://www.executiveangler.com/rivers) / [`/about`](https://www.executiveangler.com/about) vs [`/sitemap.xml`](https://www.executiveangler.com/sitemap.xml) / [`/llms.txt`](https://www.executiveangler.com/llms.txt) — **stale sitemap/llms ISR, not a 187 lie**. Live HTML titles: “187 Rivers, 162 Flies, and Hatches”; `/rivers` H1 “187 rivers, documented”; `/about` “187 rivers” and “53 destinations”. Production DB: `rivers=187`, `destinations=53`. Sitemap/`llms.txt` still showed 138/52 because those routes were on a longer revalidate window. **Correction:** keep all 187 rivers (and 53 destinations) in listings, sitemap, counts, and `llms.txt`. Do not hold hero-less rivers out of the catalog. Fix: align sitemap/`llms.txt` `revalidate` with listing so crawlers see the same 187/53 as the HTML.
 - [`/rivers/madison-river`](https://www.executiveangler.com/rivers/madison-river) — **Three Dollar Bridge missing from access**. Homepage copy: “The photograph is Three Dollar Bridge. The number in the eyebrow is the gauge, not a guess.” FWP Three Dollar Bridge FAS is 44.83193, −111.51416 ([FishMT 39754533](https://myfwp.mt.gov/fishMT/fas/39754533)). The Madison access list is Quake Lake, Lyons, McAtee, Varney, Ennis, Valley Garden, Beartrap. Raynolds’ Pass FAS (44.82871, −111.47932) is also absent. Fix: add the official FAS rows; do not invent extra holes.
 - [`/rivers/madison-river`](https://www.executiveangler.com/rivers/madison-river) — **named FAS pins are not on the ramps**. Measured against FWP GIS:
 
@@ -52,7 +54,7 @@ Overall:              49/100
   | Yellowstone | Loch Leven FAS | **5.3 km** | GIS 45.45722, −110.62424 vs EA 45.4833, −110.5667 |
 
   Afterbay Dam Launch (EA 45.3025, −107.528) vs Yellowtail Afterbay (~45.318, −107.924) is ~31 km east of the dam — **Unverified against NPS river-launch GIS**, but it is not on the Afterbay lot. Fix: rebuild Montana access from FWP/NPS/USFS GIS, not rounded seed coords.
-- 49 new river pages (e.g. [`/rivers/asay-creek`](https://www.executiveangler.com/rivers/asay-creek), [`/rivers/smith-river-montana`](https://www.executiveangler.com/rivers/smith-river-montana)) — **no hero photograph, still `index, follow`**. DB `hero_image_url` is null on all 49. Live Asay HTML alts show “Big Cottonwood Creek” and “Green River” (nearby cards), not Asay. All 49 return HTTP 200 and are in the 187 count. Fix: noindex or hold from listing until a real photograph exists; do not let a neighbor’s hero stand in.
+- 49 new river pages (e.g. [`/rivers/asay-creek`](https://www.executiveangler.com/rivers/asay-creek), [`/rivers/smith-river-montana`](https://www.executiveangler.com/rivers/smith-river-montana)) — **no hero photograph**. DB `hero_image_url` is null on all 49. Live Asay HTML alts show “Big Cottonwood Creek” and “Green River” (nearby cards), not Asay. **Correction:** these 49 stay in the public catalog (listings, sitemap, counts, `index, follow`). Do not noindex or hold them out for a missing hero. Fix the neighbor-hero stand-in in the photo UI; do not shrink the catalog.
 - [`robots.txt`](https://www.executiveangler.com/robots.txt) — **AI crawlers are not bound by the private-path Disallows**. `User-Agent: *` disallows `/journal/`, `/account/`, `/api/`, `/admin/`, `/search`, etc. Separate groups for GPTBot, ClaudeBot, PerplexityBot, ChatGPT-User, Anthropic-AI, Google-Extended, Applebot-Extended, CCBot list only `Allow: /`. A more specific group **replaces** `*` (robots.txt spec). Those bots may fetch journal and account URLs. `/journal` and `/account` also inherit root `robots: index, follow` (no metadata noindex on the index pages). Footer and logged-out nav still link Journal. Fix: copy the `*` disallow list into every bot group; set `noindex` on `/journal`, `/account`, `/feed`.
 
 ## P1
@@ -68,7 +70,7 @@ Overall:              49/100
 - Regulations are a static paragraph (“Check Montana FWP…”) with **no retrieved-on date** and no agency URL. Stale-regs class. Same pattern on other rivers.
 - `/plan/[river]` is prerendered for every river and **not in the sitemap** (frozen `sitemap.ts` note in project docs). Soft-404s and thin new rivers are indexable; trip briefs are invisible. Invert that.
 - No CSP (`next.config.ts` CSP is SVG-only). USGS proxies (`/api/river-conditions/[riverId]`, `/api/rivers/flow-states`) are public with no rate limit. Auth login has no brute-force limit (`track-login` is a geo stamp). EXIF strip is canvas-only on some clients; `api/photos/session` and `api/user/avatar` store raw bytes.
-- Welcome email still says “138 rivers” (`src/lib/email/senders.ts`). `scripts/check-river-integrity.ts` still gates on 138.
+- `scripts/check-river-integrity.ts` still uses 138 as a **minimum** floor (187 passes). Do not treat that floor as the advertised catalog size.
 - `constants.ts` `NAV_LINKS` still has Gear → `/account/gear` and Feed → `/feed`. Live chrome uses `PUBLIC_NOUNS` (Rivers / Flies / Places / Field Notes / Learn) — leftover public pointers at private routes if anything still imports `NAV_LINKS`.
 - Search `?q=henrys` SSR HTML does not contain “Henry” / “fork” (client index). Keyboard/typo tolerance **Unverified** in this pass without a hydrated browser run.
 - Duplicate / near-duplicate slugs that are *correctly* split (keep): `au-sable-river` vs `ausable-river-new-york`; `bighorn-river-montana` vs `bighorn-river-wyoming`; `truckee-river` vs `truckee-river-nevada`. `green-river` has no Wyoming-only sibling. No exact slug duplicates in DB.
@@ -258,7 +260,7 @@ INP/CLS: **Unverified** (no Lighthouse). CLS risk: hero `fill` + reserved `60svh
 
 ## Suggested fix order (7-day)
 
-Day 1: Stop the count lie. Publish-state or hold the 49 hero-less rivers out of `getAllRivers()` / listing / homepage math **or** regenerate sitemap+llms the same hour. Add `noindex` to those stubs. Copy `*` Disallows into every AI bot group; `noindex` journal/account/feed.
+Day 1: Align sitemap/`llms.txt` ISR with the live catalog (**187 rivers / 53 destinations**). Do not hold hero-less rivers out of `getAllRivers()` / listing / homepage math. Do not noindex those stubs for a missing photograph. Copy `*` Disallows into every AI bot group; `noindex` journal/account/feed.
 
 Day 2: Madison access rebuild from FWP GIS — add Three Dollar Bridge + Raynolds’ Pass; move Lyons/McAtee/Varney/Valley Garden/Ennis onto the official lots; add Kirby Ranch `06038800`; specific hero alt.
 

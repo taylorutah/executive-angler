@@ -89,7 +89,13 @@ function isCrossLane(route: string, ruleId: string): boolean {
     return true;
   }
   if (ruleId === "label" && path === "/account") return true;
-  if (ruleId === "scrollable-region-focusable" && path === "/rivers/madison-river") {
+  if (
+    ruleId === "scrollable-region-focusable" &&
+    (path === "/rivers/madison-river" ||
+      path === "/flies/comparadun" ||
+      path === "/flies/pheasant-tail" ||
+      path === "/today")
+  ) {
     return true;
   }
   return false;

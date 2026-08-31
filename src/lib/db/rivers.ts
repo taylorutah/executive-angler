@@ -1,12 +1,7 @@
 import type { River } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
-import { isUsableImageUrl, normalizeImageUrl } from "@/lib/media/image-url";
-
-/** Public listing, sitemap, and count claims. No hero = not ready to promote. */
-export function isCatalogRiver(river: Pick<River, "heroImageUrl">): boolean {
-  return isUsableImageUrl(river.heroImageUrl);
-}
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(row: Record<string, unknown>): River {
   return {
@@ -59,11 +54,6 @@ export async function getAllRivers(): Promise<River[]> {
   }, "getAllRivers");
 }
 
-export async function getPublicRivers(): Promise<River[]> {
-  const rivers = await getAllRivers();
-  return rivers.filter(isCatalogRiver);
-}
-
 export async function getRiverBySlug(slug: string): Promise<River | undefined> {
   return withRetry(async () => {
     const supabase = createStaticClient();
@@ -112,7 +102,7 @@ export async function getRiversByDestination(destinationId: string): Promise<Riv
     console.error("[getRiversByDestination] Supabase error:", error);
     return [];
   }
-  return (data ?? []).map(mapRow).filter(isCatalogRiver);
+  return (data ?? []).map(mapRow);
 }
 
 export async function getRiversByIds(ids: string[]): Promise<River[]> {

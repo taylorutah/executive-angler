@@ -1,13 +1,7 @@
 import type { Destination } from "@/types/entities";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withRetry } from "./retry";
-import { isUsableImageUrl, normalizeImageUrl } from "@/lib/media/image-url";
-
-export function isCatalogDestination(
-  dest: Pick<Destination, "heroImageUrl">,
-): boolean {
-  return isUsableImageUrl(dest.heroImageUrl);
-}
+import { normalizeImageUrl } from "@/lib/media/image-url";
 
 function mapRow(r: Record<string, unknown>): Destination {
   return {
@@ -54,11 +48,6 @@ export async function getAllDestinations(): Promise<Destination[]> {
     }
     return (data ?? []).map(mapRow);
   }, "getAllDestinations");
-}
-
-export async function getPublicDestinations(): Promise<Destination[]> {
-  const destinations = await getAllDestinations();
-  return destinations.filter(isCatalogDestination);
 }
 
 export async function getDestinationBySlug(slug: string): Promise<Destination | undefined> {
