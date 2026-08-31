@@ -5,6 +5,7 @@
  * is no Dusk switch. Editorial header, filter bar, results, load-more.
  */
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { getAllRivers } from "@/lib/db";
 import RiversPageClient from "./RiversPageClient";
@@ -31,6 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RiversPage() {
   const rivers = await getAllRivers();
   const items = rivers.map((river) => toRiverBrowseItem(river));
+  const featured = rivers.filter((river) => river.featured);
   const stateOptions = [...new Set(rivers.flatMap((r) => statesForRiver(r)))]
     .sort((a, b) => a.localeCompare(b))
     .map((name) => ({ value: name, label: name }));
@@ -49,6 +51,23 @@ export default async function RiversPage() {
             Access points, hatch charts, and live flow when a gauge exists.
             Filter by state, water, species, difficulty, and flow.
           </p>
+          {featured.length > 0 && (
+            <div className="mt-8">
+              <p className="ea-overline">Start here</p>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {featured.map((river) => (
+                  <li key={river.id}>
+                    <Link
+                      href={`/rivers/${river.slug}`}
+                      className="ea-chip transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                    >
+                      {river.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
 

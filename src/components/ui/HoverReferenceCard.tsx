@@ -6,14 +6,25 @@ import { MOTION_SAFE } from "@/components/layout/nav/links";
 /**
  * Listing card with a desktop-only hover/focus reference panel.
  * Default face matches EntityCard (photo, name, one key line).
- * The panel crossfades the whole card to paper-deep: stat chips,
- * a sans brief, a footer line. Mobile never shows the panel.
+ * The panel crossfades the whole card to paper-deep: the name stays
+ * visible, one live measure can lead, then labeled facts, a sans brief,
+ * and a footer. Mobile never shows the panel.
  */
+
+const FEATURED_LABELS = new Set(["Now", "Flow"]);
+
+function splitMeasure(value: string): { amount: string; unit: string } {
+  const match = value.trim().match(/^(.+?)\s+([A-Za-zµ%\/°]+)$/);
+  if (!match) return { amount: value, unit: "" };
+  return { amount: match[1], unit: match[2] };
+}
+
 export default function HoverReferenceCard({
   href,
   imageUrl,
   imageAlt,
   title,
+  kicker,
   subtitle,
   meta,
   badges,
@@ -24,6 +35,15 @@ export default function HoverReferenceCard({
   const brief = hoverPanel?.brief?.trim() ?? "";
   const footer = hoverPanel?.footer?.trim() ?? "";
   const showPanel = chips.length > 0 || brief || footer;
+  const featured = chips.find((chip) => FEATURED_LABELS.has(chip.label));
+  const factChips = featured ? chips.filter((chip) => chip !== featured) : chips;
+  const measure = featured ? splitMeasure(featured.value) : null;
+  const factCols =
+    factChips.length === 2 || factChips.length > 3
+      ? "grid-cols-2"
+      : factChips.length <= 1
+        ? "grid-cols-1"
+        : "grid-cols-3";
 
   return (
     <Link
@@ -65,14 +85,35 @@ export default function HoverReferenceCard({
       {showPanel && (
         <div
           aria-hidden="true"
-          className={`absolute inset-0 hidden flex-col bg-[var(--paper-deep)] p-5 opacity-0 transition-opacity duration-200 ease-standard md:flex group-hover:opacity-100 group-focus-visible:opacity-100 [@media(hover:none)]:group-hover:opacity-0 ${MOTION_SAFE}`}
+          className={`absolute inset-0 hidden flex-col bg-[var(--paper-deep)] p-6 opacity-0 transition-opacity duration-200 ease-standard md:flex group-hover:opacity-100 group-focus-visible:opacity-100 [@media(hover:none)]:group-hover:opacity-0 ${MOTION_SAFE}`}
         >
-          {chips.length > 0 && (
-            <dl className={`grid gap-x-3 gap-y-2 shrink-0 ${chips.length === 2 || chips.length > 3 ? "grid-cols-2" : chips.length <= 1 ? "grid-cols-1" : "grid-cols-3"}`}>
-              {chips.map((chip, i) => (
+          <div
+            data-excerpt-rule
+            className="mb-[var(--space-3)] h-[2px] w-[var(--space-6)] bg-[var(--accent)]"
+          />
+          {kicker && <p className="ea-overline">{kicker}</p>}
+          <p className={`font-heading [font-size:var(--text-18)] font-semibold leading-[1.2] text-[var(--text-1)] line-clamp-2 ${kicker ? "mt-1" : ""}`}>
+            {title}
+          </p>
+          {featured && measure && (
+            <div className="mt-3">
+              <p className="ea-stat-label">{featured.label}</p>
+              <p className="mt-1 flex items-baseline gap-2">
+                <span className="num font-heading [font-size:var(--text-18)] font-semibold leading-none text-[var(--text-1)]">
+                  {measure.amount}
+                </span>
+                {measure.unit ? (
+                  <span className="ea-overline">{measure.unit}</span>
+                ) : null}
+              </p>
+            </div>
+          )}
+          {factChips.length > 0 && (
+            <dl className={`mt-3 grid shrink-0 gap-x-3 gap-y-2 ${factCols}`}>
+              {factChips.map((chip, i) => (
                 <div key={`${chip.label}:${chip.value}:${i}`} className="min-w-0">
                   <dt className="ea-stat-label truncate">{chip.label}</dt>
-                  <dd className="mt-0.5 num [font-size:var(--text-14)] leading-tight text-[var(--text-1)] truncate">
+                  <dd className="mt-0.5 font-medium [font-size:var(--text-14)] leading-tight text-[var(--text-1)] truncate">
                     {chip.value}
                   </dd>
                 </div>
@@ -80,15 +121,18 @@ export default function HoverReferenceCard({
             </dl>
           )}
           {brief && (
-            <p className="mt-3 min-h-0 flex-1 font-sans [font-size:var(--text-14)] leading-[1.45] text-[var(--text-1)] line-clamp-3">
+            <p className={`min-h-0 flex-1 font-sans [font-size:var(--text-14)] leading-[1.45] text-[var(--text-2)] ${featured ? "mt-3 line-clamp-2" : "mt-3 line-clamp-3"}`}>
               {brief}
             </p>
           )}
-          {footer && (
-            <p className="mt-auto pt-3 shrink-0 font-sans [font-size:var(--text-13)] text-[var(--text-2)] line-clamp-2">
-              {footer}
-            </p>
-          )}
+          <div className="mt-auto flex items-end justify-between gap-3 pt-3">
+            {footer ? (
+              <p className="ea-overline min-w-0 line-clamp-2">{footer}</p>
+            ) : (
+              <span />
+            )}
+            <p className="ea-overline shrink-0 text-[var(--accent)]">Open</p>
+          </div>
         </div>
       )}
     </Link>
