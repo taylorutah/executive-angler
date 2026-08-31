@@ -71,13 +71,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const planPages = rivers.map((r) => ({
-    url: loc(`/plan/${r.slug}`),
-    lastModified: riverStamp(r),
-    changeFrequency: "monthly" as const,
-    priority: 0.5,
-  }));
-
   const speciesPages = species.map((s) => ({
     url: loc(`/species/${s.slug}`),
     lastModified: now,
@@ -158,7 +151,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...destinationPages,
     ...riverPages,
-    ...planPages,
     ...speciesPages,
     ...lodgePages,
     ...articlePages,
