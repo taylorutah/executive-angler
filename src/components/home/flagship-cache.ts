@@ -6,6 +6,7 @@ import {
   type FlagshipRiver,
   type GaugeSnapshot,
 } from "./conditions";
+import { usgsFixtureEnabled } from "@/lib/usgs/client";
 
 export type FlagshipGaugePayload = {
   snapshots: Record<string, GaugeSnapshot>;
@@ -27,7 +28,7 @@ export async function loadFlagshipGaugePayload(
         histories: Object.fromEntries(histories),
       };
     },
-    ["flagship-gauges", key],
+    ["flagship-gauges", key, usgsFixtureEnabled() ? "fixture" : "live"],
     { revalidate: 300 },
   )();
 }

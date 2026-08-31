@@ -8,6 +8,7 @@ import {
   PARAM_WATER_TEMP,
   fetchLatest,
   latestBySiteParam,
+  usgsFixtureEnabled,
 } from "@/lib/usgs/client";
 
 // ── In-memory cache (per-instance, survives across requests until redeploy) ──
@@ -85,7 +86,7 @@ async function fetchMultipleFromUSGS(
 
     reading.timestamp = latestTimestamp || new Date().toISOString();
     const readingAge = Date.now() - new Date(reading.timestamp).getTime();
-    reading.stale = readingAge > 2 * 60 * 60 * 1000;
+    reading.stale = !usgsFixtureEnabled() && readingAge > 2 * 60 * 60 * 1000;
 
     if (reading.discharge || reading.gageHeight || reading.waterTemp) {
       readings.push(reading);

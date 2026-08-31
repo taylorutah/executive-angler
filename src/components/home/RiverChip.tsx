@@ -59,7 +59,6 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
           {cfs != null ? (
             <span
               className={`num block text-base font-semibold ${live ? "text-[var(--accent)]" : "text-[var(--text-1)]"}`}
-              data-live
             >
               {cfs.toLocaleString("en-US")}
               <span className="ea-overline ml-1">
@@ -73,7 +72,6 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
           )}
           {trend ? (
             <span
-              data-live
               className={`block text-xs font-medium uppercase tracking-[0.06em] ${
                 trend === "rising"
                   ? "text-[var(--success)]"
@@ -87,9 +85,7 @@ export default function RiverChip({ river, snapshot, history, month }: Props) {
             </span>
           ) : null}
         </span>
-        <span data-live className="inline-flex shrink-0">
-          <Sparkline values={values} />
-        </span>
+        <Sparkline values={values} />
       </span>
 
       <span className="flex flex-wrap items-center gap-1">

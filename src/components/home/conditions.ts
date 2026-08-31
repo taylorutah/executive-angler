@@ -6,6 +6,7 @@ import {
   fetchDaily,
   fetchLatest,
   latestBySiteParam,
+  usgsFixtureEnabled,
   type UsgsDailyPoint,
   type UsgsObservation,
 } from "@/lib/usgs/client";
@@ -156,7 +157,8 @@ export function applyIvSeries(
         if (points.length > 1) {
           snapshot.deltaCfs = Math.round(latestValue - parseFloat(points[0].value));
         }
-        snapshot.stale = Number.isFinite(age) && age > STALE_AFTER_MS;
+        snapshot.stale =
+          !usgsFixtureEnabled() && Number.isFinite(age) && age > STALE_AFTER_MS;
       } else if (paramCode === PARAM_WATER_TEMP) {
         snapshot.waterTempF = Math.round((latestValue * 9) / 5 + 32);
       }
@@ -220,7 +222,8 @@ export function applyLatestObservations(
       if (discharge) {
         snapshot.cfs = Math.round(discharge.value);
         const age = Date.now() - new Date(discharge.dateTime).getTime();
-        snapshot.stale = Number.isFinite(age) && age > STALE_AFTER_MS;
+        snapshot.stale =
+          !usgsFixtureEnabled() && Number.isFinite(age) && age > STALE_AFTER_MS;
         snapshot.observedAt = discharge.dateTime;
       }
       if (temp) {

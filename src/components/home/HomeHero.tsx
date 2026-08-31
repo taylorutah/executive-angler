@@ -49,7 +49,7 @@ export default function HomeHero({ cfs, headline }: Props) {
 
       <div className="border-b border-[var(--border)]">
         <div className="mx-auto w-full max-w-[var(--container)] px-4 py-12 sm:px-6 sm:py-16">
-          <p className="ea-overline mb-5" data-live>
+          <p className="ea-overline mb-5">
             {eyebrow}
           </p>
 
