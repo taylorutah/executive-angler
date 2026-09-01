@@ -60,28 +60,17 @@ function LoginForm() {
           <p className="ea-dek mt-2">Keep a journal. The water will not keep it for you.</p>
         </div>
 
-        <div className="ea-card space-y-5">
-          {/* OAuth error from callback */}
+        <div className="space-y-5">
           {authErrorMessage && (
-            <p className="text-sm text-[var(--danger)] bg-[var(--danger)]/10 px-4 py-3 rounded-[var(--radius-md)] border border-[var(--danger)]/30 text-center">
-              {authErrorMessage}
-            </p>
+            <p className="text-sm text-[var(--danger)]">{authErrorMessage}</p>
           )}
 
-          {/* OAuth */}
           <OAuthButtons redirectTo={redirect} />
 
-          {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[var(--border)]" />
-            </div>
-            <div className="relative flex justify-center">
-              <span className="ea-overline bg-[var(--surface)] px-3">or</span>
-            </div>
-          </div>
+          <p className="font-ui text-[11px] uppercase tracking-[0.14em] text-[var(--text-3)]">
+            or
+          </p>
 
-          {/* Email/password */}
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label htmlFor="email" className="ea-label">Email</label>
@@ -112,17 +101,14 @@ function LoginForm() {
                 if (!available) setCaptchaToken("");
               }}
             />
-            {error && <p className="text-sm text-[var(--danger)] bg-[var(--danger)]/10 px-4 py-3 rounded-[var(--radius-md)] border border-[var(--danger)]/30">{error}</p>}
+            {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
             <Button
               type="submit"
               disabled={loading || !captchaResolved}
               variant="pill"
-              size="lg"
-              fullWidth
               loading={loading}
-
             >
-              {loading ? "Signing in…" : "Sign In with Email"}
+              {loading ? "Signing in…" : "Sign in with email"}
             </Button>
           </form>
 

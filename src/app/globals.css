@@ -1756,13 +1756,18 @@ input.ea-focus-ring:focus-visible,
   flex-wrap: nowrap;
   align-items: center;
   height: var(--ticker-h);
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: hidden;
   white-space: nowrap;
-  scrollbar-width: none;
 }
-.ea-ticker-row::-webkit-scrollbar {
-  display: none;
+.ea-ticker-copy {
+  display: block;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.ea-ticker-row a {
+  display: inline;
+  min-height: 0;
+  white-space: nowrap;
 }
 
 @media (max-width: 767px) {

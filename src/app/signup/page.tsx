@@ -206,20 +206,12 @@ function SignupForm() {
           </p>
         </div>
 
-        <div className="ea-card space-y-5">
-          {/* OAuth — fastest path for new users */}
+        <div className="space-y-5">
           <OAuthButtons redirectTo={postSignupRedirect} />
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[var(--border)]" />
-            </div>
-            <div className="relative flex justify-center">
-              <span className="ea-overline bg-[var(--surface)] px-3">
-                or sign up with email
-              </span>
-            </div>
-          </div>
+          <p className="font-ui text-[11px] uppercase tracking-[0.14em] text-[var(--text-3)]">
+            or sign up with email
+          </p>
 
           <form onSubmit={handleSignup} className="space-y-4">
             {/* Full name — primary identity */}
@@ -350,12 +342,9 @@ function SignupForm() {
               type="submit"
               disabled={!canSubmit}
               variant="pill"
-              size="lg"
-              fullWidth
               loading={loading}
-
             >
-              {loading ? "Creating account…" : "Create Account"}
+              {loading ? "Creating account…" : "Create account"}
             </Button>
           </form>
 

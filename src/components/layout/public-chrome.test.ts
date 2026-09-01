@@ -54,8 +54,11 @@ describe("gazette chrome locks", () => {
     assert.match(rail, /TICKER_LIMIT = 3/);
     assert.match(rail, /On the water/);
     assert.match(rail, /ea-ticker-row/);
-    assert.equal(rail.includes("flex-wrap"), false, "390 ticker must stay one row");
+    assert.match(rail, /ea-ticker-copy/);
+    assert.equal(rail.includes("flex-nowrap"), false, "390 ticker is one inline row");
     assert.equal(rail.includes("LiveDot"), false);
+    const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
+    assert.match(css, /\.ea-ticker-row a \{\n  display: inline;\n  min-height: 0;/);
   });
 
   it("keeps the public nouns as Rivers · Flies · Places · Field Notes · Journal", () => {
@@ -117,8 +120,12 @@ describe("gazette chrome locks", () => {
     assert.equal(signup.includes("HeronMark"), false, "signup must not repeat the masthead");
     assert.match(login, /variant="pill"/, "email action is willow, not a filled slab");
     assert.match(signup, /variant="pill"/);
+    assert.equal(login.includes("ea-card"), false, "login is type on paper, not a boxed card");
+    assert.equal(login.includes("fullWidth"), false, "email action is not a wide slab");
+    assert.equal(signup.includes("fullWidth"), false);
     const oauth = readFileSync(join(root, "src/components/ui/OAuthButtons.tsx"), "utf8");
     assert.equal(oauth.includes("bg-black"), false, "Apple is not an app slab");
+    assert.equal(oauth.includes("w-full"), false, "OAuth is willow type, not a slab");
     assert.match(oauth, /accent-soft/);
     assert.equal(login.includes("min-h-screen"), false);
     assert.equal(signup.includes("min-h-screen"), false);
