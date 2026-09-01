@@ -27,6 +27,8 @@ describe("search result tiles", () => {
   it("keeps type, live flow, and a 44px tap target on every row", () => {
     assert.match(row, /SearchResultCopy\.overline/);
     assert.match(row, /min-h-11/);
+    assert.match(row, /line-clamp-2/);
+    assert.match(row, /self-end sm:self-auto/);
     assert.match(row, /--signal-live/);
     assert.match(row, /Gauge offline/);
     assert.equal(row.includes("hidden sm:inline"), false);

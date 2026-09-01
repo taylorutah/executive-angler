@@ -134,6 +134,8 @@ class SearchResultTrail {
 }
 
 export default function SearchResultRow({ item, cfs, exactFly, active }: Props) {
+  const trail = SearchResultTrail.node(item, cfs);
+
   return (
     <div
       className={`group transition-colors duration-150 ease-standard ${
@@ -144,23 +146,25 @@ export default function SearchResultRow({ item, cfs, exactFly, active }: Props) 
     >
       <Link
         href={item.href}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} flex min-h-11 min-w-0 items-center gap-4 px-2 py-2`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} flex min-h-11 min-w-0 flex-col gap-2 px-2 py-2 sm:flex-row sm:items-center sm:gap-4`}
       >
-        {SearchResultTile.media(item)}
-        <div className="min-w-0 flex-1">
-          <p className="ea-overline">{SearchResultCopy.overline(item)}</p>
-          <p
-            className={`truncate font-display text-[18px] font-semibold leading-snug text-[var(--text-1)] ${
-              exactFly ? "underline decoration-[var(--accent)] decoration-1 underline-offset-4" : ""
-            }`}
-          >
-            {item.title}
-          </p>
-          <p className="mt-0.5 truncate text-[13px] text-[var(--text-2)]">
-            {SearchResultCopy.subtitle(item)}
-          </p>
+        <div className="flex min-w-0 flex-1 items-center gap-4">
+          {SearchResultTile.media(item)}
+          <div className="min-w-0 flex-1">
+            <p className="ea-overline">{SearchResultCopy.overline(item)}</p>
+            <p
+              className={`line-clamp-2 font-display text-[18px] font-semibold leading-snug text-[var(--text-1)] ${
+                exactFly ? "underline decoration-[var(--accent)] decoration-1 underline-offset-4" : ""
+              }`}
+            >
+              {item.title}
+            </p>
+            <p className="mt-0.5 truncate text-[13px] text-[var(--text-2)]">
+              {SearchResultCopy.subtitle(item)}
+            </p>
+          </div>
         </div>
-        {SearchResultTrail.node(item, cfs)}
+        {trail ? <div className="shrink-0 self-end sm:self-auto">{trail}</div> : null}
       </Link>
     </div>
   );
