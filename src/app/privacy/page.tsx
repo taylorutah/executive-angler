@@ -8,30 +8,31 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="pt-8 pb-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-2">
+    <div className="py-14 sm:py-16">
+      <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
+        <p className="ea-overline">Company</p>
+        <h1 className="mt-3 font-display text-4xl font-semibold text-[var(--text-1)]">
           Privacy Policy
         </h1>
-        <p className="text-sm text-[var(--text-body)] mb-10">
+        <p className="mt-3 text-[var(--text-14)] text-[var(--text-3)]">
           Last updated: March 31, 2026
         </p>
 
-        <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
+        <div className="prose mt-8 max-w-none space-y-6 text-[var(--text-2)]">
           <p>
             {SITE_NAME} (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;)
             operates the website at{" "}
-            <a href={SITE_URL} className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href={SITE_URL} className="text-[var(--accent)] hover:text-[var(--accent-hover)]">
               {SITE_URL}
             </a>
             . This Privacy Policy explains how we collect, use, and protect your
             information when you use our website, iOS app, and Android app.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Information We Collect
           </h2>
-          <h3 className="font-heading text-xl font-semibold text-[var(--action)] mt-6">
+          <h3 className="mt-6 font-display text-xl font-semibold text-[var(--text-1)]">
             Account Information
           </h3>
           <p>
@@ -42,7 +43,7 @@ export default function PrivacyPage() {
             personalized features.
           </p>
 
-          <h3 className="font-heading text-xl font-semibold text-[var(--action)] mt-6">
+          <h3 className="mt-6 font-display text-xl font-semibold text-[var(--text-1)]">
             Fishing Session Data
           </h3>
           <p>
@@ -53,7 +54,7 @@ export default function PrivacyPage() {
             unless you explicitly set a session to &quot;public.&quot;
           </p>
 
-          <h3 className="font-heading text-xl font-semibold text-[var(--action)] mt-6">
+          <h3 className="mt-6 font-display text-xl font-semibold text-[var(--text-1)]">
             Location Data
           </h3>
           <p>
@@ -66,7 +67,7 @@ export default function PrivacyPage() {
             your route or exact locations.
           </p>
 
-          <h3 className="font-heading text-xl font-semibold text-[var(--action)] mt-6">
+          <h3 className="mt-6 font-display text-xl font-semibold text-[var(--text-1)]">
             Photo Submissions
           </h3>
           <p>
@@ -75,7 +76,7 @@ export default function PrivacyPage() {
             moderators may be displayed publicly on the site.
           </p>
 
-          <h3 className="font-heading text-xl font-semibold text-[var(--action)] mt-6">
+          <h3 className="mt-6 font-display text-xl font-semibold text-[var(--text-1)]">
             Analytics
           </h3>
           <p>
@@ -85,7 +86,7 @@ export default function PrivacyPage() {
             No personally identifiable information is collected by our analytics tools.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             How We Use Your Information
           </h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -97,7 +98,7 @@ export default function PrivacyPage() {
             <li>To send administrative communications about your account</li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Pricing
           </h2>
           <p>
@@ -106,7 +107,7 @@ export default function PrivacyPage() {
             subscription, and we never collect or store payment information.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Data Storage and Security
           </h2>
           <p>
@@ -117,7 +118,7 @@ export default function PrivacyPage() {
             transit.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Third-Party Services
           </h2>
           <p>We use the following third-party services:</p>
@@ -152,7 +153,7 @@ export default function PrivacyPage() {
             Each service has its own privacy policy governing how they handle data.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Cookies
           </h2>
           <p>
@@ -160,7 +161,7 @@ export default function PrivacyPage() {
             use advertising cookies or third-party tracking cookies.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Your Rights
           </h2>
           <p>You have the right to:</p>
@@ -172,13 +173,13 @@ export default function PrivacyPage() {
           </ul>
           <p>
             To exercise any of these rights, please contact us through our{" "}
-            <a href="/contact" className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href="/contact" className="text-[var(--accent)] hover:text-[var(--accent-hover)]">
               contact form
             </a>
             .
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Children&apos;s Privacy
           </h2>
           <p>
@@ -188,7 +189,7 @@ export default function PrivacyPage() {
             immediately.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Changes to This Policy
           </h2>
           <p>
@@ -198,13 +199,13 @@ export default function PrivacyPage() {
             revised.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             Contact
           </h2>
           <p>
             If you have questions about this Privacy Policy, please reach out
             through our{" "}
-            <a href="/contact" className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href="/contact" className="text-[var(--accent)] hover:text-[var(--accent-hover)]">
               contact form
             </a>
             .

@@ -10,6 +10,7 @@ import { getAllFlyShops, getAllDestinations } from "@/lib/db";
 import { flyShopListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
+import EntityListHeader from "@/components/ui/EntityListHeader";
 
 export const revalidate = 3600;
 
@@ -94,20 +95,11 @@ export default async function FlyShopsPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <p className="ea-overline">
-            Outfitted for the Water
-          </p>
-          <h1 className="mt-3 text-[var(--text-1)]">
-            Gear Up at the Source
-          </h1>
-          <p className="mt-5 max-w-[var(--prose)] text-lg text-[var(--text-2)] leading-relaxed">
-            Local knowledge, expert staff, and the right fly for the right river — curated
-            shops near the best waters on earth.
-          </p>
-        </div>
-      </section>
+      <EntityListHeader
+        overline="Directory"
+        title={`${flyShops.length} fly shops`}
+        dek="Local knowledge and the right fly for the river. Hours, services, and shops near the water."
+      />
 
       {/* ── Spotlight Shops ───────────────────────────────────────────────── */}
       <section className="bg-[var(--paper)] pt-2 pb-10 sm:pb-12">

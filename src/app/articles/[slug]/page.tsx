@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import EntityChrome from "@/components/ui/EntityChrome";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import PullQuote from "@/components/article/PullQuote";
@@ -242,21 +242,22 @@ export default async function ArticlePage({ params }: Props) {
           )}
         </figure>
 
-        <EntityChrome
-          items={[
-            { label: "Field Notes", href: "/articles" },
-            { label: article.title },
-          ]}
-          actions={<FavoriteButton entityType="article" entityId={article.id} />}
-        />
-
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-          <article className="pb-24">
-            <header className="mx-auto max-w-[var(--prose)] pt-8 sm:pt-12">
+        <div className="border-b border-[var(--border)] bg-[var(--paper)]">
+          <div className="mx-auto max-w-[var(--container)] px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+            <div className="flex items-center justify-between gap-3">
+              <Breadcrumbs
+                items={[
+                  { label: "Field Notes", href: "/articles" },
+                  { label: article.title },
+                ]}
+              />
+              <FavoriteButton entityType="article" entityId={article.id} />
+            </div>
+            <header className="mx-auto mt-3 max-w-[var(--prose)]">
               <p className="ea-overline">
                 {categoryLabel}
               </p>
-              <h1 className="mt-3 text-[var(--text-1)]">
+              <h1 className="mt-2 text-[var(--text-1)]">
                 {article.title}
               </h1>
               {article.subtitle && (
@@ -283,7 +284,11 @@ export default async function ArticlePage({ params }: Props) {
                 </time>
               </div>
             </header>
+          </div>
+        </div>
 
+        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
+          <article className="pb-24">
             {/* Body — .article-body keeps text-flow on --prose.
                 Figures may open to --article-media (~960).
                 Interruptions use .article-interrupt (same prose column)

@@ -12,6 +12,7 @@ import RiversPageClient from "./RiversPageClient";
 import { toRiverBrowseItem, statesForRiver } from "@/lib/browse/river-items";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
+import EntityListHeader from "@/components/ui/EntityListHeader";
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -39,39 +40,31 @@ export default async function RiversPage() {
 
   return (
     <>
-      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <p className="ea-overline">
-            The reference
-          </p>
-          <h1 className="mt-3 text-[var(--text-1)]">
-            {rivers.length} rivers, documented
-          </h1>
-          <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
-            Access points, hatch charts, and live flow when a gauge exists.
-            Filter by state, water, species, difficulty, and flow.
-          </p>
-          {featured.length > 0 && (
-            <div className="mt-8">
-              <p className="ea-overline">Start here</p>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {featured.map((river) => (
-                  <li key={river.id}>
-                    <Link
-                      href={`/rivers/${river.slug}`}
-                      className="ea-chip border border-[var(--border)] bg-[var(--surface)] transition-colors hover:border-[var(--border-strong)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-                    >
-                      {river.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </section>
+      <EntityListHeader
+        overline="The reference"
+        title={`${rivers.length} rivers, documented`}
+        dek="Access points, hatch charts, and live flow when a gauge exists. Filter by state, water, species, difficulty, and flow."
+      >
+        {featured.length > 0 && (
+          <div className="mt-6">
+            <p className="ea-overline">Start here</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {featured.map((river) => (
+                <li key={river.id}>
+                  <Link
+                    href={`/rivers/${river.slug}`}
+                    className="ea-chip border border-[var(--border)] bg-[var(--surface)] transition-colors hover:border-[var(--border-strong)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                  >
+                    {river.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </EntityListHeader>
 
-      <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
+      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <Suspense>
             <RiversPageClient items={items} stateOptions={stateOptions} />

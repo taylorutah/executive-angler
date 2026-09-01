@@ -14,6 +14,7 @@ import type { CardData } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 import { plateImageUrl } from "@/lib/media/image-url";
 import { brandedTitle } from "@/lib/seo";
+import EntityListHeader from "@/components/ui/EntityListHeader";
 export const revalidate = 3600;
 
 const FLY_CATEGORY_LABELS: Record<string, string> = {
@@ -84,24 +85,15 @@ export default async function FliesPage() {
 
   return (
     <>
-      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <p className="ea-overline">
-            Fly library
-          </p>
-          <h1 className="mt-3 text-[var(--text-1)]">
-            {allFlies.length} trout fly patterns
-          </h1>
-          <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
-            {allFlies.length} patterns on the bench. Twelve on the plate, the rest in
-            columns. Filters stay behind the toggle. Signed in, you can also filter
-            by what you can tie from your materials.
-          </p>
-          <LibraryNotebookLinks />
-        </div>
-      </section>
+      <EntityListHeader
+        overline="Fly library"
+        title={`${allFlies.length} trout fly patterns`}
+        dek="Patterns on the bench. Twelve on the plate, the rest in columns. Filters stay behind the toggle. Signed in, you can also filter by what you can tie from your materials."
+      >
+        <LibraryNotebookLinks />
+      </EntityListHeader>
 
-      <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
+      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <Suspense>
             <FlyLibraryClient items={items} />
