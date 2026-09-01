@@ -35,7 +35,7 @@ export default function GazetteFliesIndex({ items, liveValues }: Props) {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const words = q.split(/\s+/).filter(Boolean);
-    const active = category === "all" ? {} : { category };
+    const active: Record<string, string> = category === "all" ? {} : { category };
     return items.filter((item) => {
       if (words.length > 0) {
         const hay = `${item.title} ${item.subtitle ?? ""} ${item.meta ?? ""}`.toLowerCase();
