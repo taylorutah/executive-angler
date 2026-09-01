@@ -50,9 +50,11 @@ test.describe("journey smoke", () => {
 
   test('"green river" ranks Green River first among rivers', async ({ page }) => {
     await page.goto("/search?q=green+river", { waitUntil: "domcontentloaded" });
-    const rivers = page.locator('a[href*="/rivers/"]').filter({ hasText: /green river/i });
+    const results = page.locator("#main-content");
+    const rivers = results.locator('a[href*="/rivers/"]').filter({ hasText: /green river/i });
     await expect(rivers.first()).toBeVisible({ timeout: 15_000 });
-    const firstRiverLink = page.locator("main").locator('a[href*="/rivers/"]').first();
+    // First river hit in the results column — not the ON THE WATER ticker.
+    const firstRiverLink = results.locator('a[href*="/rivers/"]').first();
     await expect(firstRiverLink).toContainText(/green river/i);
   });
 

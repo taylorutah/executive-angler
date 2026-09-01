@@ -20,6 +20,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
+import { CARD, PAPER, VELLUM } from "../src/lib/palette";
 
 const ROOT = process.cwd();
 const MIN_BASELINES = 20;
@@ -27,11 +28,19 @@ const MAX_DOMINANT_SHARE = 0.6;
 const MAX_MASK_SHARE = 0.02;
 const MIN_DISTINCT = 500;
 
-/** Declared page fills from globals.css. Anti-aliasing may land 1 off. */
+function hexRgb(hex: string): string {
+  const h = hex.replace("#", "");
+  return `${parseInt(h.slice(0, 2), 16)},${parseInt(h.slice(2, 4), 16)},${parseInt(h.slice(4, 6), 16)}`;
+}
+
+/** Declared page fills from globals.css / palette.ts. Anti-aliasing may land 1 off. */
 const PAGE_FILLS = new Set([
-  "250,249,245", // --paper #FAF9F5
-  "242,239,232", // --paper-deep / --vellum #F2EFE8
-  "250,246,240", // retired paper (kept so old dusk-era baselines still classify)
+  hexRgb(PAPER), // gazette paper #F4EFE6
+  hexRgb(VELLUM), // gazette paper-deep #EFE8DC
+  hexRgb(CARD), // gazette plate #E7DCC8
+  "250,249,245", // retired paper #FAF9F5
+  "242,239,232", // retired vellum #F2EFE8
+  "250,246,240", // retired paper (dusk-era baselines)
   "242,237,228", // retired vellum
   "11,17,18", // --riverbed (retired dusk)
   "19,27,29", // --pool (retired dusk)
