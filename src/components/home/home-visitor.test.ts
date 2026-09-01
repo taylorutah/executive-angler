@@ -34,6 +34,7 @@ describe("home visitor QA locks", () => {
     assert.match(gazette, /<figcaption/);
     assert.equal(gazette.includes("absolute bottom-0"), false, "caption sits under the photo");
     assert.match(gazette, /facing="right"/, "journal heron faces right, as the still");
+    assert.match(gazette, /montana: "MT"/, "hanging index uses USPS, not MO for Montana");
   });
 
   it("keeps the journal invitation on paper with a double-rule box", () => {

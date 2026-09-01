@@ -45,6 +45,38 @@ function sizeLabel(sizes: string[]): string | null {
   return `Sizes ${values.join(" · ")}`;
 }
 
+const USPS: Record<string, string> = {
+  alabama: "AL",
+  alaska: "AK",
+  arizona: "AZ",
+  arkansas: "AR",
+  california: "CA",
+  colorado: "CO",
+  florida: "FL",
+  georgia: "GA",
+  idaho: "ID",
+  maine: "ME",
+  michigan: "MI",
+  montana: "MT",
+  "new jersey": "NJ",
+  "new mexico": "NM",
+  "north carolina": "NC",
+  oregon: "OR",
+  pennsylvania: "PA",
+  tennessee: "TN",
+  utah: "UT",
+  virginia: "VA",
+  "west virginia": "WV",
+  wyoming: "WY",
+};
+
+function stateAbbrev(state?: string): string {
+  const raw = (state ?? "").replace(/\s+/g, " ").trim();
+  if (!raw) return "·";
+  if (raw.length <= 2) return raw.toUpperCase();
+  return USPS[raw.toLowerCase()] ?? raw.slice(0, 2).toUpperCase();
+}
+
 function hatchLine(river: FlagshipRiver, month: string): string {
   const hatches = hatchesForMonth(river.hatchChart, month)
     .map(shortInsect)
@@ -105,8 +137,7 @@ export default function GazetteHome({
             {rivers.map((river) => {
               const snapshot = snapshots.get(river.id);
               const live = snapshot?.cfs != null && !snapshot.stale;
-              const st = (river.state ?? "").replace(/\s+/g, " ").trim();
-              const stShort = st.length <= 4 ? st.toUpperCase() : st.slice(0, 2).toUpperCase();
+              const stShort = stateAbbrev(river.state);
               return (
                 <tr key={river.id} className="relative border-b border-[var(--border)]">
                   <td className="py-2.5 pr-4">
