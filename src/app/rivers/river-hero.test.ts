@@ -24,7 +24,13 @@ describe("river station report", () => {
     assert.match(gauge, /Live gauge/);
     assert.match(gauge, /Flow/);
     assert.match(gauge, /Water temp/);
+    assert.match(gauge, /formatTwentyFourHourLine/);
+    assert.match(gauge, /formatSeriesTrendLine/);
+    assert.equal(gauge.includes("24H"), false);
     assert.match(report, /GazetteLiveGauge/);
+    assert.match(report, /primarySpecies/);
+    assert.match(report, /join\(", "\)/);
+    assert.match(report, />\s*Fish\s*</);
     assert.match(report, /Fish this now/);
     assert.match(report, /Keep a journal on this river/);
     assert.match(report, /formatLonLat/);

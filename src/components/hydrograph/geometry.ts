@@ -11,9 +11,9 @@ export const HYDRO = {
   PAD: { top: 14, right: 52, bottom: 40, left: 88 },
 } as const;
 
-/** CSS frame — fills the well width; tall enough to read on a phone. */
+/** CSS frame — full well width; desktop tall enough to read as a USGS chart. */
 export const HYDRO_FRAME =
-  "relative h-[13.5rem] w-full min-w-0 sm:h-[14rem] lg:h-[16rem]";
+  "relative h-[16rem] w-full min-w-0 sm:h-[18rem] lg:h-[24rem]";
 
 export function withLiveReading(
   readings: HydroReading[],

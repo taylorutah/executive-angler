@@ -32,8 +32,16 @@ describe("hydrograph well fill", () => {
 
   it("shares one frame class so the home stub matches the instrument", () => {
     assert.match(geometry, /export const HYDRO_FRAME/);
+    assert.match(geometry, /lg:h-\[24rem\]/);
     assert.match(home, /HYDRO_FRAME/);
     assert.equal(home.includes('h-[9.5rem]'), false);
+    const gazette = readFileSync(
+      join(process.cwd(), "src/components/gazette/GazetteHydrograph.tsx"),
+      "utf8",
+    );
+    assert.match(gazette, /linearGradient/);
+    assert.match(gazette, /preserveAspectRatio="none"/);
+    assert.equal(gazette.includes("24H"), false);
   });
 
   it("names the band in plain English and marks a mid date", () => {

@@ -67,6 +67,7 @@ export default function GazetteRiverReport({
   initialSnapshot = null,
   initialHistory,
 }: Props) {
+  const species = (river.primarySpecies ?? []).map((name) => name.trim()).filter(Boolean);
   return (
     <article className="bg-[var(--paper)]">
       <div className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8">
@@ -95,59 +96,68 @@ export default function GazetteRiverReport({
         <div className="mt-5 h-px bg-[var(--border)]" aria-hidden />
       </div>
 
-      <div className="mx-auto grid max-w-[72rem] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
-        <GazetteLiveGauge
-          riverId={river.id}
-          siteId={siteId}
-          siteName={siteName}
-          place={place}
-          initialSnapshot={initialSnapshot}
-          initialHistory={initialHistory}
-        />
+      <GazetteLiveGauge
+        riverId={river.id}
+        siteId={siteId}
+        siteName={siteName}
+        place={place}
+        initialSnapshot={initialSnapshot}
+        initialHistory={initialHistory}
+      />
 
-        <div className="px-4 py-8 sm:px-8">
-          {plates.length > 0 ? (
-            <section>
-              <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-                Fish this now
-              </h2>
-              <ul className="mt-4 grid grid-cols-3 gap-3">
-                {plates.slice(0, 3).map((plate) => (
-                  <li key={plate.key}>
-                    <GazettePlate
-                      name={[plate.name, plate.size].filter(Boolean).join(" ")}
-                      href={plate.href}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
+      {species.length > 0 ? (
+        <section className="mx-auto max-w-[72rem] px-4 pb-2 sm:px-8">
+          <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+            Fish
+          </h2>
+          <p className="mt-3 font-body text-[18px] leading-snug text-[var(--ink)]">
+            {species.join(", ")}
+          </p>
+        </section>
+      ) : null}
 
-          {regulations ? (
-            <section className="mt-10">
-              <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-                Regulations ({regsSource.label})
-              </h2>
-              <ul className="ea-diamond-list mt-4 font-body text-[15px] leading-relaxed text-[var(--text-2)]">
-                {regulationLines(regulations).map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ul>
-              <p className="mt-3 font-body text-[15px] italic text-[var(--text-3)]">
-                Regulations change. Verify before you fish.{" "}
-                <a
-                  href={regsSource.url}
-                  className="text-[var(--ink)] underline underline-offset-4"
-                  rel="noopener noreferrer"
-                >
-                  {regsSource.label}
-                </a>
-                . Retrieved {regsSource.retrievedOn}.
-              </p>
-            </section>
-          ) : null}
-        </div>
+      <div className="mx-auto max-w-[72rem] px-4 py-8 sm:px-8">
+        {plates.length > 0 ? (
+          <section>
+            <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+              Fish this now
+            </h2>
+            <ul className="mt-4 grid grid-cols-3 gap-3">
+              {plates.slice(0, 3).map((plate) => (
+                <li key={plate.key}>
+                  <GazettePlate
+                    name={[plate.name, plate.size].filter(Boolean).join(" ")}
+                    href={plate.href}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {regulations ? (
+          <section className={plates.length > 0 ? "mt-10" : undefined}>
+            <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+              Regulations ({regsSource.label})
+            </h2>
+            <ul className="ea-diamond-list mt-4 font-body text-[15px] leading-relaxed text-[var(--text-2)]">
+              {regulationLines(regulations).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+            <p className="mt-3 font-body text-[15px] italic text-[var(--text-3)]">
+              Regulations change. Verify before you fish.{" "}
+              <a
+                href={regsSource.url}
+                className="text-[var(--ink)] underline underline-offset-4"
+                rel="noopener noreferrer"
+              >
+                {regsSource.label}
+              </a>
+              . Retrieved {regsSource.retrievedOn}.
+            </p>
+          </section>
+        ) : null}
       </div>
 
       <section className="mx-auto max-w-[72rem] px-4 py-6 sm:px-8">

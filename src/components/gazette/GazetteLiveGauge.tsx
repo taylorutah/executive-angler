@@ -7,6 +7,7 @@ import {
   deltaCfsFromHistory,
   formatObservedAt,
   formatSeriesTrendLine,
+  formatTwentyFourHourLine,
   preferMeasuredDelta,
 } from "@/components/home/conditions";
 import type { HydroReading } from "@/components/hydrograph/geometry";
@@ -40,11 +41,10 @@ type FlagshipJson = {
   histories?: Record<string, HydroReading[]>;
 };
 
-function stillTrend(deltaCfs: number | null, liveCfs: number | null): string | null {
-  if (liveCfs == null || deltaCfs == null || deltaCfs === 0) return null;
-  const sign = deltaCfs < 0 ? "−" : "+";
-  const arrow = deltaCfs < 0 ? "▼" : "▲";
-  return `TREND: ${sign}${Math.abs(Math.round(deltaCfs))} CFS ${arrow} 24H`;
+function measuredTwentyFourHour(snapshot: GaugeSnapshot | null): number | null {
+  const delta = snapshot?.deltaCfs;
+  if (delta == null || delta === 0) return null;
+  return delta;
 }
 
 export default function GazetteLiveGauge({
@@ -118,15 +118,13 @@ export default function GazetteLiveGauge({
 
   const cfs = snapshot?.cfs ?? null;
   const live = cfs != null && !snapshot?.stale;
-  const deltaCfs = preferMeasuredDelta(
-    snapshot?.deltaCfs,
-    deltaCfsFromHistory(cfs, history),
+  const twentyFour = formatTwentyFourHourLine(
+    measuredTwentyFourHour(snapshot) ?? deltaCfsFromHistory(cfs, history),
+    cfs,
   );
-  const trend =
-    stillTrend(deltaCfs, cfs) ??
-    formatSeriesTrendLine(cfs, history)?.text ??
-    null;
-  const dropping = deltaCfs != null && deltaCfs < 0;
+  const series = formatSeriesTrendLine(cfs, history);
+  const trend = twentyFour ?? series;
+  const dropping = Boolean(trend?.dropping);
   const updated = formatObservedAt(snapshot?.observedAt ?? null);
   const temp = snapshot?.waterTempF ?? null;
   const station = [siteId ? `USGS STATION ${siteId}` : null, siteName]
@@ -156,7 +154,7 @@ export default function GazetteLiveGauge({
                 dropping ? "text-[var(--danger)]" : "text-[var(--copper)]"
               }`}
             >
-              {trend}
+              {trend.text}
             </p>
           ) : null}
         </div>

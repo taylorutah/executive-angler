@@ -155,15 +155,13 @@ export default function TurnstileWidget({
     };
   }, []);
 
+  const hideWidget = failedOpen && !hasToken;
+
   return (
-    <>
-      <div ref={containerRef} className="mt-2" />
-      {failedOpen && !hasToken && (
-        <p className="mt-2 text-xs text-[var(--text-3)]">
-          Having trouble with verification? You can still submit — we&apos;ll
-          verify on the server.
-        </p>
-      )}
-    </>
+    <div
+      ref={containerRef}
+      className={hideWidget ? "hidden" : "mt-2"}
+      aria-hidden={hideWidget || undefined}
+    />
   );
 }

@@ -141,7 +141,7 @@ export default function GazetteHeader() {
             ) : (
               <Link
                 href="/signup"
-                className="hidden bg-[var(--accent)] px-3.5 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--on-action)] md:inline-flex"
+                className="hidden bg-[var(--accent-soft)] px-3.5 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--accent)] md:inline-flex"
               >
                 Create account
               </Link>

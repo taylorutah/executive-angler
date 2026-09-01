@@ -4,12 +4,10 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { SITE_NAME } from "@/lib/constants";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
 import { POST_LOGIN_PATH, safeInternalPath } from "@/lib/auth-paths";
-import HeronMark from "@/components/brand/HeronMark";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -55,18 +53,10 @@ function LoginForm() {
   }
 
   return (
-    <div className="desk-sheet min-h-[70vh] bg-[var(--paper)] flex items-center justify-center px-4 py-16">
-      <div className="w-full max-w-md">
+    <div className="desk-sheet bg-[var(--paper)] px-4 pb-16 pt-6">
+      <div className="mx-auto w-full max-w-md">
         <div className="mb-8">
-          <Link href="/" className="inline-flex items-center gap-2.5" aria-label={SITE_NAME}>
-            <HeronMark className="h-[30px] w-[22px] text-[var(--copper)]" />
-            <span className="ea-wordmark">
-              Executive
-              <br />
-              Angler
-            </span>
-          </Link>
-          <h1 className="mt-6 font-display text-3xl font-semibold text-[var(--ink)]">Sign in</h1>
+          <h1 className="font-display text-3xl font-semibold text-[var(--ink)]">Sign in</h1>
           <p className="ea-dek mt-2">Keep a journal. The water will not keep it for you.</p>
         </div>
 

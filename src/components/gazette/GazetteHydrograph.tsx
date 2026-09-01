@@ -18,7 +18,7 @@ interface Props {
 }
 
 /**
- * Quiet hairline discharge plot. No gradient fill, no glass.
+ * USGS-style discharge plot: ink line + paper wash. No 24h invention.
  */
 export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: initial }: Props) {
   const [readings, setReadings] = useState<HydroReading[] | null>(
@@ -71,11 +71,14 @@ export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: 
   const line = series
     .map((r, i) => `${i === 0 ? "M" : "L"} ${xAt(i).toFixed(1)} ${yAt(r.discharge).toFixed(1)}`)
     .join(" ");
+  const baseline = HYDRO.PAD.top + geo.innerH;
+  const area = `${line} L ${xAt(lastIndex).toFixed(1)} ${baseline} L ${xAt(0).toFixed(1)} ${baseline} Z`;
   const first = series[0];
   const midIndex = Math.floor(lastIndex / 2);
   const leftGutter = `${(HYDRO.PAD.left / HYDRO.W) * 100}%`;
   const rightGutter = `${(HYDRO.PAD.right / HYDRO.W) * 100}%`;
-  const axis = "pointer-events-none absolute font-ui text-[11px] tabular-nums text-[var(--text-3)]";
+  const axis = "pointer-events-none absolute font-ui text-[12px] tabular-nums text-[var(--text-3)]";
+  const fillId = `gazette-hydro-${riverId}`;
 
   return (
     <div>
@@ -91,6 +94,12 @@ export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: 
           role="img"
           aria-label="Thirty-day discharge for this gauge"
         >
+          <defs>
+            <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--ink)" stopOpacity="0.16" />
+              <stop offset="100%" stopColor="var(--ink)" stopOpacity="0.02" />
+            </linearGradient>
+          </defs>
           {yLabels.map((tick) => (
             <line
               key={`g-${tick}`}
@@ -103,11 +112,12 @@ export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: 
               vectorEffect="nonScalingStroke"
             />
           ))}
+          <path d={area} fill={`url(#${fillId})`} />
           <path
             d={line}
             fill="none"
             stroke="var(--ink)"
-            strokeWidth="1.25"
+            strokeWidth="1.75"
             strokeLinejoin="round"
             strokeLinecap="round"
             vectorEffect="nonScalingStroke"

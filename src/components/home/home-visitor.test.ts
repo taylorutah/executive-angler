@@ -19,6 +19,8 @@ describe("home visitor QA locks", () => {
     assert.match(gazette, /Report/);
     assert.match(gazette, /02 The plate/);
     assert.match(gazette, /GazettePlate/);
+    const plate = readFileSync(join(root, "src/components/gazette/GazettePlate.tsx"), "utf8");
+    assert.equal(plate.includes("ea-plate-well"), false, "empty photo wells must be omitted");
     assert.match(gazette, /Field note/);
     assert.match(gazette, /Keep the record the water can/);
     assert.equal(gazette.includes("h-[50vh]"), false);

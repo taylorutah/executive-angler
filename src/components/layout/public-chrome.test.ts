@@ -21,6 +21,8 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("ExploreMenu"), false);
     assert.match(header, /Create account/);
     assert.match(header, /hidden[^\n]*md:inline-flex/);
+    assert.match(header, /bg-\[var\(--accent-soft\)\]/);
+    assert.match(header, /text-\[var\(--accent\)\][^\n]*md:inline-flex/);
     assert.equal(header.includes("isLoading"), false);
     assert.equal(header.includes("h-8 w-28"), false);
   });
@@ -92,6 +94,18 @@ describe("gazette chrome locks", () => {
         `${rel} paints h1 copper`,
       );
     }
+    const login = readFileSync(join(root, "src/app/login/page.tsx"), "utf8");
+    const signup = readFileSync(join(root, "src/app/signup/page.tsx"), "utf8");
+    const turnstile = readFileSync(
+      join(root, "src/components/ui/TurnstileWidget.tsx"),
+      "utf8",
+    );
+    assert.equal(login.includes("HeronMark"), false, "login must not repeat the masthead");
+    assert.equal(signup.includes("HeronMark"), false, "signup must not repeat the masthead");
+    assert.equal(login.includes("min-h-[70vh]"), false);
+    assert.equal(signup.includes("min-h-[70vh]"), false);
+    assert.equal(turnstile.includes("Having trouble"), false);
+    assert.equal(turnstile.includes("Troubleshoot"), false);
     const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
     assert.match(css, /\.house-measure \{\n  max-width: 65ch;/);
     assert.match(css, /\.house-measure \.prose,\n\.house-measure \.desk-dek-ui \{\n  max-width: none;/);
