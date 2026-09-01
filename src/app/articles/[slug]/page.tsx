@@ -16,7 +16,13 @@ import {
   getAllRivers,
   getAllCanonicalFlies,
 } from "@/lib/db";
-import { isHouseByline, resolveAuthorByline } from "@/lib/authors";
+import {
+  HOUSE_BYLINE,
+  isHouseAuthor,
+  isHouseByline,
+  publicImageCredit,
+  resolveAuthorByline,
+} from "@/lib/authors";
 import { deriveSubjectRivers, deriveSubjectFlies } from "@/lib/articles/subject";
 import { splitBodyAtHeadings } from "@/lib/articles/segments";
 import { extractFaqsFromHtml, faqPageJsonLd } from "@/lib/seo";
@@ -32,6 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await getArticleBySlug(slug);
   if (!article) return { title: "Article Not Found" };
   const author = resolveAuthorByline(article.author);
+  const house = isHouseByline(article.author) || isHouseAuthor(author);
   const categoryLabel = article.category ? article.category.charAt(0).toUpperCase() + article.category.slice(1) : "Guide";
   const readTime = article.readingTimeMinutes ? `${article.readingTimeMinutes} min read. ` : "";
   const fallbackTitle = `${article.title} | Expert Fly Fishing ${categoryLabel} | Executive Angler`;
@@ -50,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [ogImage],
       type: "article",
       publishedTime: article.publishedAt,
-      authors: [`${SITE_URL}/authors/${author.slug}`],
+      authors: house ? [HOUSE_BYLINE] : [`${SITE_URL}/authors/${author.slug}`],
       section: categoryLabel,
       tags: article.tags,
     },
@@ -103,11 +110,13 @@ export default async function ArticlePage({ params }: Props) {
   const author = resolveAuthorByline(article.author);
   const categoryLabel = article.category ? article.category.charAt(0).toUpperCase() + article.category.slice(1) : "Guide";
   const faqs = extractFaqsFromHtml(article.content);
+  const house = isHouseByline(article.author) || isHouseAuthor(author);
+  const imageCredit = publicImageCredit(article.heroImageCredit);
 
   // The house byline carries no visible attribution — it's assumed (client
-  // ruling 2026-08-28). Real named authors keep theirs. JSON-LD and
-  // metadata keep the resolved author either way.
-  const showByline = !isHouseByline(article.author);
+  // ruling 2026-08-28). Real named authors keep theirs. House JSON-LD is
+  // the organization, never a Person named after the editor.
+  const showByline = !house;
 
   const [rivers, flies] = await Promise.all([getAllRivers(), getAllCanonicalFlies()]);
   const subjectRivers = deriveSubjectRivers(article, rivers);
@@ -143,22 +152,28 @@ export default async function ArticlePage({ params }: Props) {
         description: article.excerpt,
         articleSection: categoryLabel,
         keywords: article.tags?.join(", "),
-        author: {
-          "@type": "Person",
-          name: author.name,
-          url: `${SITE_URL}/authors/${author.slug}`,
-          ...(author.imageUrl
-            ? {
-                image: author.imageUrl.startsWith("/")
-                  ? `${SITE_URL}${author.imageUrl}`
-                  : author.imageUrl,
-              }
-            : {}),
-          ...(author.role ? { jobTitle: author.role } : {}),
-          ...(author.profile
-            ? { sameAs: Object.values(author.profile.socialLinks).filter(Boolean) }
-            : {}),
-        },
+        author: house
+          ? {
+              "@type": "Organization",
+              name: HOUSE_BYLINE,
+              url: SITE_URL,
+            }
+          : {
+              "@type": "Person",
+              name: author.name,
+              url: `${SITE_URL}/authors/${author.slug}`,
+              ...(author.imageUrl
+                ? {
+                    image: author.imageUrl.startsWith("/")
+                      ? `${SITE_URL}${author.imageUrl}`
+                      : author.imageUrl,
+                  }
+                : {}),
+              ...(author.role ? { jobTitle: author.role } : {}),
+              ...(author.profile
+                ? { sameAs: Object.values(author.profile.socialLinks).filter(Boolean) }
+                : {}),
+            },
         datePublished: article.publishedAt,
         dateModified: article.publishedAt,
         image: article.heroImageUrl,
@@ -224,7 +239,7 @@ export default async function ArticlePage({ params }: Props) {
               sizes="100vw"
             />
           </div>
-          {article.heroImageCredit && (
+          {imageCredit && (
             <figcaption className="mx-auto max-w-[var(--container)] px-4 pt-2 text-[var(--text-13)] text-[var(--text-3)] sm:px-6">
               {article.heroImageCreditUrl ? (
                 <a
@@ -233,10 +248,10 @@ export default async function ArticlePage({ params }: Props) {
                   rel="noopener noreferrer"
                   className="hover:text-[var(--accent)] transition-colors"
                 >
-                  {article.heroImageCredit}
+                  {imageCredit}
                 </a>
               ) : (
-                article.heroImageCredit
+                imageCredit
               )}
             </figcaption>
           )}

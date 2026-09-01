@@ -21,14 +21,12 @@ export interface Author {
 export const authors: Author[] = [
   {
     slug: "taylor-warnick",
-    name: "Taylor Warnick",
+    name: "Executive Angler Staff",
     articleAuthorName: "Executive Angler Staff",
-    role: "Founder & Editor-in-Chief",
-    bio: `Taylor Warnick is the founder of Executive Angler — rivers, flies and hatches, documented, plus a private journal that remembers what you learned. He designed and built the product himself — web, iOS, and the data systems behind it — out of a simple idea: the things anglers actually care about (flows, hatches, sessions, flies) deserve to be treated as data worth keeping.
-
-He lives in Sandy, Utah, and spends most of his time on the water euro nymphing the region's rivers. Executive Angler is the tool he wished existed.`,
+    role: "Editorial",
+    bio: `Field notes from Executive Angler — rivers, flies and hatches, documented, plus a private journal that remembers what you learned. The product exists so the things anglers actually care about (flows, hatches, sessions, flies) are treated as data worth keeping.`,
     shortBio:
-      "Founder of Executive Angler. Based in Sandy, Utah — mostly on regional rivers, mostly euro nymphing.",
+      "Editorial staff. Rivers, flies, and hatches.",
     // imageUrl intentionally unset — AuthorAvatar renders initials fallback until a real photo is uploaded
     imageUrl: undefined,
     expertise: [

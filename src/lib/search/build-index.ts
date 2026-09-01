@@ -133,7 +133,7 @@ export function assembleSearchDocuments(input: {
     subtitle: `${a.category} — ${a.readingTimeMinutes} min`,
     href: `/articles/${a.slug}`,
     imageUrl: a.heroImageUrl,
-    keywords: [...(a.tags ?? []), a.excerpt, a.author].filter(Boolean).join(" "),
+    keywords: [...(a.tags ?? []), a.excerpt].filter(Boolean).join(" "),
     featured: a.featured,
     readingTimeMinutes: a.readingTimeMinutes,
     category: a.category,

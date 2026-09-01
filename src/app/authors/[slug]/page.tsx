@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import AuthorAvatar from "@/components/ui/AuthorAvatar";
@@ -8,6 +8,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { getAllArticles } from "@/lib/db";
 import {
   articlesByAuthorSlug,
+  isHouseAuthor,
   listAuthors,
   resolveAuthorSlug,
 } from "@/lib/authors";
@@ -22,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const author = resolveAuthorSlug(slug, await getAllArticles());
   if (!author) return { title: "Author Not Found" };
+  if (isHouseAuthor(author)) redirect("/articles");
   const description =
     author.shortBio ?? `Field notes by ${author.name} on ${SITE_NAME}.`;
   return {
@@ -49,6 +51,7 @@ export default async function AuthorPage({ params }: Props) {
   const articles = await getAllArticles();
   const author = resolveAuthorSlug(slug, articles);
   if (!author) notFound();
+  if (isHouseAuthor(author)) redirect("/articles");
 
   const authorArticles = articlesByAuthorSlug(author.slug, articles).sort(
     (a, b) => b.publishedAt.localeCompare(a.publishedAt),

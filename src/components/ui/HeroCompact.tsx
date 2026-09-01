@@ -6,6 +6,7 @@ import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { isUsableImageUrl } from "@/lib/media/image-url";
+import { publicImageCredit } from "@/lib/authors";
 
 interface HeroCompactProps {
   heroImageUrl?: string;
@@ -38,7 +39,7 @@ export default function HeroCompact({
         id: "hero",
         photoUrl: heroImageUrl,
         caption: title,
-        submitterName: heroImageCredit || "Executive Angler",
+        submitterName: publicImageCredit(heroImageCredit) || "Executive Angler",
         submittedAt: new Date().toISOString(),
       }
     : null;

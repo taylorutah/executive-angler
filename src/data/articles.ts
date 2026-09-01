@@ -4423,7 +4423,7 @@ export const articles: Article[] = [
     slug: "fly-box-tier-system",
     title: "The Fly Box Tier System: How I Actually Organize My Boxes",
     subtitle: "A 3-tier setup built around probability of use, not pattern type",
-    author: "Taylor Warnick",
+    author: "Executive Angler Staff",
     category: "gear",
     heroImageUrl: "/images/articles/essential-fly-box-20-patterns-hero.jpg",
     thumbnailUrl: "/images/articles/essential-fly-box-20-patterns-hero.jpg",

@@ -3,6 +3,7 @@ import { Camera } from "@/icons";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import EntityIdentityBand from "@/components/ui/EntityIdentityBand";
 import { isUsableImageUrl } from "@/lib/media/image-url";
+import { publicImageCredit } from "@/lib/authors";
 
 interface HeroSectionProps {
   imageUrl?: string;
@@ -39,7 +40,8 @@ export default function HeroSection({
   spec,
   children,
 }: HeroSectionProps) {
-  const showCredit = Boolean(imageCredit) && isUsableImageUrl(imageUrl);
+  const safeCredit = publicImageCredit(imageCredit);
+  const showCredit = Boolean(safeCredit) && isUsableImageUrl(imageUrl);
 
   const credit =
     showCredit && creditStyle === "chip" ? (
@@ -52,12 +54,12 @@ export default function HeroSection({
             className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[length:var(--text-12)] font-medium text-[color:var(--paper)] hover:opacity-90 transition-opacity"
           >
             <Camera className="h-3.5 w-3.5" />
-            {imageCredit}
+            {safeCredit}
           </a>
         ) : (
           <span className="inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[length:var(--text-12)] font-medium text-[color:var(--paper)]">
             <Camera className="h-3.5 w-3.5" />
-            {imageCredit}
+            {safeCredit}
           </span>
         )}
       </div>
@@ -70,10 +72,10 @@ export default function HeroSection({
             rel="noopener noreferrer"
             className="underline underline-offset-4 hover:text-[var(--text-1)]"
           >
-            {imageCredit}
+            {safeCredit}
           </a>
         ) : (
-          imageCredit
+          safeCredit
         )}
       </p>
     ) : null;

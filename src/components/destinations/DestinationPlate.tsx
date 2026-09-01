@@ -3,6 +3,7 @@ import SafeEntityImage from "@/components/media/SafeEntityImage";
 import EntityIdentityBand from "@/components/ui/EntityIdentityBand";
 import FactList from "@/components/ui/FactList";
 import { formatBestMonthsLabel } from "@/lib/destinations/season";
+import { publicImageCredit } from "@/lib/authors";
 
 interface Props {
   name: string;
@@ -36,6 +37,7 @@ export default function DestinationPlate({
 }: Props) {
   const monthsLabel = formatBestMonthsLabel(bestMonths);
   const species = (primarySpecies ?? []).filter(Boolean);
+  const credit = publicImageCredit(heroImageCredit);
 
   return (
     <header className="bg-[var(--paper)]">
@@ -51,7 +53,7 @@ export default function DestinationPlate({
             sizes="100vw"
           />
         </div>
-        {heroImageCredit && (
+        {credit && (
           <figcaption className="mx-auto max-w-[var(--container)] px-4 pt-2 text-[13px] text-[var(--text-3)] sm:px-6 lg:px-8">
             {heroImageCreditUrl ? (
               <a
@@ -60,10 +62,10 @@ export default function DestinationPlate({
                 rel="noopener noreferrer"
                 className="hover:text-[var(--accent)]"
               >
-                {heroImageCredit}
+                {credit}
               </a>
             ) : (
-              heroImageCredit
+              credit
             )}
           </figcaption>
         )}

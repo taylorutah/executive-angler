@@ -29,8 +29,31 @@ export interface ResolvedAuthor {
  */
 export const HOUSE_BYLINE = "Executive Angler Staff";
 
+/** Legal name of the house editor. Never render on a public page. */
+const PRIVATE_PERSON_NAMES = ["Taylor Warnick"] as const;
+
+function normalizePersonName(name: string): string {
+  return name.trim().toLowerCase();
+}
+
 export function isHouseByline(name: string): boolean {
-  return name.trim() === HOUSE_BYLINE;
+  const trimmed = name.trim();
+  if (trimmed === HOUSE_BYLINE) return true;
+  return PRIVATE_PERSON_NAMES.some((n) => normalizePersonName(n) === normalizePersonName(trimmed));
+}
+
+/** True when a public string would name the house person. */
+export function namesPrivatePerson(text: string | null | undefined): boolean {
+  if (!text) return false;
+  const lower = text.toLowerCase();
+  return PRIVATE_PERSON_NAMES.some((n) => lower.includes(n.toLowerCase()));
+}
+
+/** Photo credits that would name the house person stay off the page. */
+export function publicImageCredit(credit?: string | null): string | undefined {
+  if (!credit?.trim()) return undefined;
+  if (isHouseByline(credit) || namesPrivatePerson(credit)) return undefined;
+  return credit;
 }
 
 /**

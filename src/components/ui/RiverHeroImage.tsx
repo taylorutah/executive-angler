@@ -9,6 +9,7 @@ import PlateFallback from "@/components/media/PlateFallback";
 import EntityIdentityBand from "@/components/ui/EntityIdentityBand";
 import { isUsableImageUrl, normalizeImageUrl } from "@/lib/media/image-url";
 import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
+import { publicImageCredit } from "@/lib/authors";
 
 interface RiverHeroImageProps {
   heroImageUrl?: string;
@@ -54,13 +55,14 @@ export default function RiverHeroImage({
   const [failed, setFailed] = useState(false);
   const heroSrc = normalizeImageUrl(heroImageUrl);
   const showPhoto = isUsableImageUrl(heroSrc) && !failed;
+  const credit = publicImageCredit(heroImageCredit);
 
   const heroAsPhoto: ApprovedPhoto | null = showPhoto
     ? {
         id: "hero",
         photoUrl: heroSrc,
         caption: heroImageAlt,
-        submitterName: heroImageCredit || "Executive Angler",
+        submitterName: credit || "Executive Angler",
         submittedAt: new Date().toISOString(),
       }
     : null;
@@ -112,7 +114,7 @@ export default function RiverHeroImage({
           meta={meta}
           spec={spec}
           credit={
-            showPhoto && heroImageCredit ? (
+            showPhoto && credit ? (
               <p className="mt-1.5 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
                 {heroImageCreditUrl ? (
                   <a
@@ -121,10 +123,10 @@ export default function RiverHeroImage({
                     rel="noopener noreferrer"
                     className="underline underline-offset-4 hover:text-[var(--text-1)]"
                   >
-                    {heroImageCredit}
+                    {credit}
                   </a>
                 ) : (
-                  heroImageCredit
+                  credit
                 )}
               </p>
             ) : null
