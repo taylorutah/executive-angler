@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Hydrograph from "@/components/hydrograph/Hydrograph";
-import type { HydroReading } from "@/components/hydrograph/geometry";
+import { HYDRO_FRAME, type HydroReading } from "@/components/hydrograph/geometry";
 
 interface Props {
   riverId: string;
@@ -33,7 +33,7 @@ export default function HomeHydrograph({ riverId, siteId, liveCfs, readings: ini
   }, [riverId, siteId, initial]);
 
   if (readings == null) {
-    return <div className="h-[9.5rem] w-full bg-[var(--surface-raised)]" aria-hidden />;
+    return <div className={`${HYDRO_FRAME} bg-[var(--surface-raised)]`} aria-hidden />;
   }
 
   return (
