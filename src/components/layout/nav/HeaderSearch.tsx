@@ -21,9 +21,6 @@ export default function HeaderSearch() {
 
   const pathname = useRouteChangeReset(() => setOverlayOpen(false));
 
-  // /search owns the canonical #search-q field on its own route.
-  const ownsSearchId = pathname !== "/search";
-
   useModalChrome({
     open: overlayOpen,
     containerRef: overlayRef,
@@ -33,6 +30,11 @@ export default function HeaderSearch() {
 
   function submit(value: string) {
     router.push(searchHref(value));
+  }
+
+  // /search owns the canonical #search-q field. A second bar here stacks.
+  if (pathname === "/search") {
+    return null;
   }
 
   return (
@@ -46,7 +48,7 @@ export default function HeaderSearch() {
           submit(query);
         }}
       >
-        <label htmlFor={ownsSearchId ? "search-q" : undefined} className="sr-only">
+        <label htmlFor="search-q" className="sr-only">
           Search Executive Angler
         </label>
         <div className="relative">
@@ -55,7 +57,7 @@ export default function HeaderSearch() {
             aria-hidden
           />
           <input
-            {...(ownsSearchId ? { id: "search-q" } : {})}
+            id="search-q"
             type="search"
             name="q"
             value={query}

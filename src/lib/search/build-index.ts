@@ -8,9 +8,69 @@ import type {
   River,
   Species,
 } from "@/types/entities";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 import type { SearchDocument } from "./types";
 import { buildHatchDocuments } from "./hatches";
 import { firstUsgsSiteId } from "./usgs";
+
+type RiverStill = Pick<River, "id" | "slug" | "heroImageUrl" | "thumbnailUrl">;
+
+/** First usable still on the entity — never invent a photograph. */
+export class SearchDocumentImage {
+  static url(...candidates: Array<string | null | undefined>): string | undefined {
+    for (const value of candidates) {
+      const href = normalizeImageUrl(value);
+      if (href) return href;
+    }
+    return undefined;
+  }
+
+  /**
+   * Guide portrait first. If none, inherit the first linked river still.
+   * Guide `river_ids` often use aliases (`river-provo`) that are not the
+   * river row's `id` (`provo-river`) — index both.
+   */
+  static forGuide(
+    photoUrl: string | null | undefined,
+    riverIds: readonly string[] | undefined,
+    rivers: readonly RiverStill[],
+  ): string | undefined {
+    const own = SearchDocumentImage.url(photoUrl);
+    if (own) return own;
+    const stills = SearchDocumentImage.riverStillByAlias(rivers);
+    for (const id of riverIds ?? []) {
+      const inherited = stills.get(SearchDocumentImage.aliasKey(id));
+      if (inherited) return inherited;
+    }
+    return undefined;
+  }
+
+  static aliasKey(value: string): string {
+    return value.trim().toLowerCase();
+  }
+
+  static riverStillByAlias(rivers: readonly RiverStill[]): Map<string, string> {
+    const map = new Map<string, string>();
+    const put = (key: string, href: string) => {
+      const k = SearchDocumentImage.aliasKey(key);
+      if (k && !map.has(k)) map.set(k, href);
+    };
+    for (const river of rivers) {
+      const still = SearchDocumentImage.url(river.heroImageUrl, river.thumbnailUrl);
+      if (!still) continue;
+      put(river.id, still);
+      put(river.slug, still);
+      put(`river-${river.slug}`, still);
+      put(river.id.replace(/-[a-z]{2}$/, ""), still);
+      const stem = river.slug.replace(/-river.*$/, "");
+      if (stem) {
+        put(stem, still);
+        put(`river-${stem}`, still);
+      }
+    }
+    return map;
+  }
+}
 
 export function assembleSearchDocuments(input: {
   rivers: River[];
@@ -35,7 +95,7 @@ export function assembleSearchDocuments(input: {
     title: d.name,
     subtitle: `${d.region}, ${d.country}`,
     href: `/destinations/${d.slug}`,
-    imageUrl: d.heroImageUrl,
+    imageUrl: SearchDocumentImage.url(d.heroImageUrl, d.thumbnailUrl),
     keywords: [d.state, d.tagline, ...(d.primarySpecies ?? [])].filter(Boolean).join(" "),
     featured: d.featured,
   }));
@@ -54,7 +114,7 @@ export function assembleSearchDocuments(input: {
       title: r.name,
       subtitle: `${states.join(" / ") || names.join(" / ")} — ${r.flowType}`,
       href: `/rivers/${r.slug}`,
-      imageUrl: r.heroImageUrl,
+      imageUrl: SearchDocumentImage.url(r.heroImageUrl, r.thumbnailUrl),
       keywords: [
         ...names,
         ...states,
@@ -78,7 +138,7 @@ export function assembleSearchDocuments(input: {
     title: s.commonName,
     subtitle: s.scientificName ?? s.family ?? "",
     href: `/species/${s.slug}`,
-    imageUrl: s.imageUrl,
+    imageUrl: SearchDocumentImage.url(s.imageUrl),
     keywords: [s.family, s.preferredHabitat, ...(s.preferredFlies ?? [])]
       .filter(Boolean)
       .join(" "),
@@ -92,7 +152,7 @@ export function assembleSearchDocuments(input: {
     title: l.name,
     subtitle: destName(l.destinationId),
     href: `/lodges/${l.slug}`,
-    imageUrl: l.heroImageUrl,
+    imageUrl: SearchDocumentImage.url(l.heroImageUrl, l.thumbnailUrl),
     keywords: [
       ...(l.amenities ?? []),
       destName(l.destinationId),
@@ -110,7 +170,7 @@ export function assembleSearchDocuments(input: {
     title: g.name,
     subtitle: `${destName(g.destinationId)} — ${(g.specialties ?? []).slice(0, 2).join(", ")}`,
     href: `/guides/${g.slug}`,
-    imageUrl: g.photoUrl,
+    imageUrl: SearchDocumentImage.forGuide(g.photoUrl, g.riverIds, input.rivers),
     keywords: (g.specialties ?? []).join(" "),
   }));
 
@@ -121,7 +181,7 @@ export function assembleSearchDocuments(input: {
     title: f.name,
     subtitle: destName(f.destinationId),
     href: `/fly-shops/${f.slug}`,
-    imageUrl: f.heroImageUrl,
+    imageUrl: SearchDocumentImage.url(f.heroImageUrl),
     keywords: [...(f.services ?? []), ...(f.brandsCarried ?? [])].join(" "),
   }));
 
@@ -132,7 +192,7 @@ export function assembleSearchDocuments(input: {
     title: a.title,
     subtitle: `${a.category} — ${a.readingTimeMinutes} min`,
     href: `/articles/${a.slug}`,
-    imageUrl: a.heroImageUrl,
+    imageUrl: SearchDocumentImage.url(a.heroImageUrl, a.thumbnailUrl),
     keywords: [...(a.tags ?? []), a.excerpt].filter(Boolean).join(" "),
     featured: a.featured,
     readingTimeMinutes: a.readingTimeMinutes,
@@ -146,7 +206,7 @@ export function assembleSearchDocuments(input: {
     title: f.name,
     subtitle: `${f.category} — Sizes ${f.sizes[0] || ""}–${f.sizes[f.sizes.length - 1] || ""}`,
     href: `/flies/${f.slug}`,
-    imageUrl: f.heroImageUrl,
+    imageUrl: SearchDocumentImage.url(f.heroImageUrl),
     keywords: [f.category, ...(f.imitates ?? []), ...(f.colors ?? []), f.description?.slice(0, 200)]
       .filter(Boolean)
       .join(" "),
