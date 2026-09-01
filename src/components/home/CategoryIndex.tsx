@@ -73,16 +73,13 @@ export default function CategoryIndex(counts: CategoryCounts) {
                   <h3 className="font-display text-2xl font-semibold leading-tight text-[var(--text-1)] transition-colors group-hover:text-[var(--action)] group-focus-visible:text-[var(--action)] sm:text-3xl">
                     {entry.label}
                   </h3>
-                  <span className="shrink-0 font-ui text-[14px] font-medium text-[var(--action)]">
+                  <span className="shrink-0 font-ui text-[14px] font-medium text-[var(--action)] underline decoration-[var(--action)] underline-offset-4">
                     Open <span aria-hidden>&rarr;</span>
                   </span>
                 </span>
                 <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm leading-relaxed text-[var(--text-2)]">
                   <span className="num text-[var(--text-3)]">
                     {ReferenceIndex.figure(entry.count)}
-                  </span>
-                  <span aria-hidden className="text-[var(--border-strong)]">
-                    ·
                   </span>
                   <span>{entry.line}</span>
                 </span>
