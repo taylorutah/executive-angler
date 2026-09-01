@@ -218,7 +218,7 @@ export default async function RiverPage({ params }: Props) {
         spec={
           difficulty || access || season || speciesNames.length > 0 ? (
             <FactList
-              className="grid grid-cols-3 gap-x-4 gap-y-2.5 sm:grid-cols-4 sm:gap-x-8"
+              className="grid grid-cols-3 gap-x-4 gap-y-3 sm:gap-x-8"
               facts={[
                 ...(difficulty ? [{ label: "Difficulty", value: difficulty }] : []),
                 ...(access ? [{ label: "Access", value: access }] : []),
@@ -227,15 +227,16 @@ export default async function RiverPage({ params }: Props) {
                   ? [
                       {
                         label: "Fish",
-                        className: "col-span-3 sm:col-span-1",
+                        className: "col-span-3",
                         value: (
                           <TokenRow>
                             {speciesNames.map((speciesName, i) => {
                               const matched = riverSpecies.find(
                                 (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
                               );
+                              const comma = i < speciesNames.length - 1 ? "," : "";
                               return (
-                                <Token key={speciesName} lead={i > 0}>
+                                <Token key={speciesName}>
                                   {matched ? (
                                     <Link
                                       href={`/species/${matched.slug}`}
@@ -246,6 +247,7 @@ export default async function RiverPage({ params }: Props) {
                                   ) : (
                                     speciesName
                                   )}
+                                  {comma}
                                 </Token>
                               );
                             })}

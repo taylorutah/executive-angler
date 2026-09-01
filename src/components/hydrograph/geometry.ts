@@ -7,9 +7,13 @@ export interface HydroReading {
 
 export const HYDRO = {
   W: 800,
-  H: 156,
-  PAD: { top: 10, right: 78, bottom: 24, left: 54 },
+  H: 220,
+  PAD: { top: 14, right: 52, bottom: 40, left: 88 },
 } as const;
+
+/** CSS frame — fills the well width; tall enough to read on a phone. */
+export const HYDRO_FRAME =
+  "relative h-[13.5rem] w-full min-w-0 sm:h-[14rem] lg:h-[16rem]";
 
 export function withLiveReading(
   readings: HydroReading[],

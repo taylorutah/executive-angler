@@ -261,25 +261,15 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
 
   return (
     <div className="mt-6 border-t border-[var(--border)] pt-5">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-        <div className="min-w-0">
-          <h3 className="ea-overline">30-day daily means</h3>
-          {siteName ? (
-            <p className="mt-1 font-ui text-sm text-[var(--text-2)]">{siteName}</p>
-          ) : null}
-        </div>
-        <div className="sm:text-right">
-          <p className="flex items-baseline gap-2 sm:justify-end">
-            <span className="num text-[2rem] font-semibold leading-none text-[var(--text-1)]">
-              {currentFlow.value.toLocaleString("en-US")}
-            </span>
-            <span className="font-ui text-sm text-[var(--text-2)]">cfs</span>
-          </p>
-          <p className="mt-1 font-ui text-xs text-[var(--text-3)]">
-            Daily mean
-            {trend ? ` · ${trend}` : ""}
-          </p>
-        </div>
+      <div className="mb-3 min-w-0">
+        <h3 className="ea-overline">30-day daily means</h3>
+        {siteName ? (
+          <p className="mt-1 font-ui text-sm text-[var(--text-2)]">{siteName}</p>
+        ) : null}
+        <p className="mt-1 font-ui text-sm text-[var(--text-2)]">
+          Daily mean
+          {trend ? ` · ${trend}` : ""}
+        </p>
       </div>
 
       <div className="relative">
@@ -343,7 +333,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
         {sessionMarkers.length > 0
           ? `${sessionMarkers.length} session${sessionMarkers.length !== 1 ? "s" : ""} overlaid · `
           : ""}
-        Daily means · band is this gauge&apos;s 30-day median ± IQR · USGS NWIS
+        Daily means · shaded band is the typical range · USGS NWIS
       </p>
     </div>
   );
