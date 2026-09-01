@@ -44,12 +44,13 @@ function ContactPageInner() {
     const email = formData.get("email") as string;
     const subject = formData.get("subject") as string;
     const message = formData.get("message") as string;
+    const website = (formData.get("website") as string) ?? "";
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message }),
+        body: JSON.stringify({ name, email, subject, message, website }),
       });
 
       const data = await res.json();
@@ -90,7 +91,7 @@ function ContactPageInner() {
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="mt-10 space-y-6">
+            <form onSubmit={handleSubmit} className="relative mt-10 space-y-6">
               <div>
                 <label htmlFor="name" className="ea-label">
                   Name
@@ -100,6 +101,7 @@ function ContactPageInner() {
                   id="name"
                   name="name"
                   required
+                  maxLength={120}
                   className="ea-input"
                   placeholder="Your name"
                 />
@@ -114,6 +116,7 @@ function ContactPageInner() {
                   id="email"
                   name="email"
                   required
+                  maxLength={254}
                   className="ea-input"
                   placeholder="you@example.com"
                 />
@@ -148,8 +151,20 @@ function ContactPageInner() {
                   name="message"
                   required
                   rows={6}
+                  maxLength={8000}
                   className="ea-input resize-y"
                   placeholder="How can we help?"
+                />
+              </div>
+
+              <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
                 />
               </div>
 

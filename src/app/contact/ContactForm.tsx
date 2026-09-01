@@ -27,12 +27,13 @@ export default function ContactForm({ initialSubject }: Props) {
     const email = formData.get("email") as string;
     const subject = formData.get("subject") as string;
     const message = formData.get("message") as string;
+    const website = (formData.get("website") as string) ?? "";
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message }),
+        body: JSON.stringify({ name, email, subject, message, website }),
       });
 
       const data = await res.json();
@@ -65,7 +66,7 @@ export default function ContactForm({ initialSubject }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="relative space-y-6">
       <div>
         <label htmlFor="name" className="mb-1.5 block font-ui text-sm text-[var(--text-primary)]">
           Name
@@ -75,6 +76,7 @@ export default function ContactForm({ initialSubject }: Props) {
           id="name"
           name="name"
           required
+          maxLength={120}
           className={fieldClass}
           placeholder="Your name"
         />
@@ -89,6 +91,7 @@ export default function ContactForm({ initialSubject }: Props) {
           id="email"
           name="email"
           required
+          maxLength={254}
           className={fieldClass}
           placeholder="you@example.com"
         />
@@ -123,8 +126,20 @@ export default function ContactForm({ initialSubject }: Props) {
           name="message"
           required
           rows={6}
+          maxLength={8000}
           className={`${fieldClass} resize-y`}
           placeholder="How can we help?"
+        />
+      </div>
+
+      <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+        <label htmlFor="website">Website</label>
+        <input
+          type="text"
+          id="website"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
         />
       </div>
 

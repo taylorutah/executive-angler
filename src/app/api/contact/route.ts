@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { escapeHtml } from "@/lib/html-escape";
+import { allowRequest, clientKey, tooManyRequests } from "@/lib/api/rate-limit";
+
+const NAME_MAX = 120;
+const EMAIL_MAX = 254;
+const SUBJECT_MAX = 80;
+const MESSAGE_MAX = 8_000;
+const BODY_MAX_BYTES = 20_000;
+const CONTACT_LIMIT = 5;
+const CONTACT_WINDOW_MS = 10 * 60_000;
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) return null;
@@ -27,11 +36,34 @@ async function verifyTurnstile(token: string, ip: string | null): Promise<boolea
   return data.success === true;
 }
 
+function asField(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, subject, message, token } = await request.json();
+    if (!allowRequest(clientKey(request, "contact"), CONTACT_LIMIT, CONTACT_WINDOW_MS)) {
+      return tooManyRequests();
+    }
 
-    // Validate required fields
+    const rawLen = Number(request.headers.get("content-length") ?? 0);
+    if (rawLen > BODY_MAX_BYTES) {
+      return NextResponse.json({ error: "Message is too long." }, { status: 400 });
+    }
+
+    const body = await request.json();
+    const name = asField(body.name);
+    const email = asField(body.email);
+    const subject = asField(body.subject);
+    const message = asField(body.message);
+    const token = asField(body.token);
+    const honeypot = asField(body.website);
+
+    // Bots that fill the hidden field get a fake success — no email sent.
+    if (honeypot) {
+      return NextResponse.json({ success: true });
+    }
+
     if (!name || !email || !subject || !message) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -39,8 +71,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Contact does not paint Turnstile. A token is optional: verify only when
-    // one is present so leftover clients still get a real check.
+    if (
+      name.length > NAME_MAX ||
+      email.length > EMAIL_MAX ||
+      subject.length > SUBJECT_MAX ||
+      message.length > MESSAGE_MAX
+    ) {
+      return NextResponse.json({ error: "Message is too long." }, { status: 400 });
+    }
+
+    // Optional leftover token: verify when present. Contact does not paint
+    // Turnstile, so most submissions have no token.
     if (process.env.TURNSTILE_SECRET_KEY && token) {
       const ip =
         request.headers.get("cf-connecting-ip") ??
