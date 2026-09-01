@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import {
+  deltaCfsFromHistory,
   getFlagshipHistories,
   getGaugeSnapshots,
   type DailyReading,
@@ -23,9 +24,16 @@ export async function loadFlagshipGaugePayload(
         getGaugeSnapshots(rivers),
         getFlagshipHistories(rivers).catch(() => new Map<string, DailyReading[]>()),
       ]);
+      const snapObj = Object.fromEntries(snapshots);
+      const histObj = Object.fromEntries(histories);
+      for (const [id, snap] of Object.entries(snapObj)) {
+        if (snap.deltaCfs == null) {
+          snap.deltaCfs = deltaCfsFromHistory(snap.cfs, histObj[id] ?? null);
+        }
+      }
       return {
-        snapshots: Object.fromEntries(snapshots),
-        histories: Object.fromEntries(histories),
+        snapshots: snapObj,
+        histories: histObj,
       };
     },
     ["flagship-gauges", key, usgsFixtureEnabled() ? "fixture" : "live"],

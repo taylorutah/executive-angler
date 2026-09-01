@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import GazetteHydrograph from "./GazetteHydrograph";
 import type { GaugeSnapshot } from "@/components/home/conditions";
-import { formatObservedAt } from "@/components/home/conditions";
+import {
+  deltaCfsFromHistory,
+  formatObservedAt,
+  formatTwentyFourHourLine,
+  preferMeasuredDelta,
+} from "@/components/home/conditions";
 import type { HydroReading } from "@/components/hydrograph/geometry";
 
 interface Props {
@@ -14,21 +19,14 @@ interface Props {
   initialHistory?: HydroReading[];
 }
 
-function deltaLine(snapshot: GaugeSnapshot | null): { text: string; dropping: boolean } | null {
-  if (!snapshot?.cfs || snapshot.deltaCfs == null) return null;
-  const d = snapshot.deltaCfs;
-  if (d === 0) return null;
-  const prev = snapshot.cfs - d;
-  const pct = prev !== 0 ? Math.round((d / prev) * 100) : 0;
-  const sign = d > 0 ? "+" : "−";
-  return {
-    text: `${sign}${Math.abs(d).toLocaleString("en-US")} CFS (${sign}${Math.abs(pct)}%) past 24 hrs`,
-    dropping: d < 0,
-  };
-}
-
 type ConditionsJson = {
   readings?: Array<{
+    timestamp?: string;
+    stale?: boolean;
+    discharge?: { value: number };
+    waterTemp?: { valueFahrenheit: number };
+  }>;
+  gauges?: Array<{
     timestamp?: string;
     stale?: boolean;
     discharge?: { value: number };
@@ -58,8 +56,8 @@ export default function GazetteLiveGauge({
     fetch(`/api/river-conditions/${encodeURIComponent(riverId)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((json: ConditionsJson | null) => {
-        if (cancelled || !json?.readings?.[0]) return;
-        const row = json.readings[0];
+        const row = json?.readings?.[0] ?? json?.gauges?.[0];
+        if (cancelled || !row) return;
         setSnapshot((prev) => ({
           cfs: row.discharge?.value ?? prev?.cfs ?? null,
           deltaCfs: prev?.deltaCfs ?? null,
@@ -76,12 +74,13 @@ export default function GazetteLiveGauge({
       .then((r) => (r.ok ? r.json() : null))
       .then((json: FlagshipJson | null) => {
         if (cancelled || !json?.snapshots?.[riverId]) return;
+        const next = json.snapshots[riverId];
         setSnapshot((prev) => ({
-          cfs: json.snapshots![riverId].cfs ?? prev?.cfs ?? null,
-          deltaCfs: json.snapshots![riverId].deltaCfs ?? prev?.deltaCfs ?? null,
-          waterTempF: json.snapshots![riverId].waterTempF ?? prev?.waterTempF ?? null,
-          observedAt: json.snapshots![riverId].observedAt ?? prev?.observedAt ?? null,
-          stale: json.snapshots![riverId].stale ?? prev?.stale ?? false,
+          cfs: next.cfs ?? prev?.cfs ?? null,
+          deltaCfs: preferMeasuredDelta(next.deltaCfs, prev?.deltaCfs),
+          waterTempF: next.waterTempF ?? prev?.waterTempF ?? null,
+          observedAt: next.observedAt ?? prev?.observedAt ?? null,
+          stale: next.stale ?? prev?.stale ?? false,
         }));
         if (json.histories?.[riverId]?.length) setHistory(json.histories[riverId]);
       })
@@ -89,24 +88,32 @@ export default function GazetteLiveGauge({
         /* flagship payload is optional */
       });
 
+    if (!(initialHistory && initialHistory.length >= 2) && siteId) {
+      fetch(
+        `/api/river-history/${encodeURIComponent(riverId)}?siteId=${encodeURIComponent(siteId)}`,
+      )
+        .then((r) => (r.ok ? r.json() : null))
+        .then((json: { readings?: HydroReading[] } | null) => {
+          if (cancelled || !json?.readings?.length) return;
+          setHistory((prev) => prev ?? json.readings!.slice(-30));
+        })
+        .catch(() => {
+          /* hydrograph fetch is the fallback */
+        });
+    }
+
     return () => {
       cancelled = true;
     };
-  }, [riverId]);
+  }, [riverId, siteId, initialHistory]);
 
   const cfs = snapshot?.cfs ?? null;
   const live = cfs != null && !snapshot?.stale;
-  const prior = history && history.length >= 2 ? history[history.length - 2]?.discharge : null;
-  const trend = deltaLine(
-    snapshot
-      ? {
-          ...snapshot,
-          deltaCfs:
-            snapshot.deltaCfs ??
-            (cfs != null && prior != null ? Math.round(cfs - prior) : null),
-        }
-      : null,
+  const deltaCfs = preferMeasuredDelta(
+    snapshot?.deltaCfs,
+    deltaCfsFromHistory(cfs, history),
   );
+  const trend = formatTwentyFourHourLine(deltaCfs, cfs);
   const updated = formatObservedAt(snapshot?.observedAt ?? null);
   const temp = snapshot?.waterTempF ?? null;
 
@@ -131,7 +138,7 @@ export default function GazetteLiveGauge({
         {trend ? (
           <p
             className={`mt-3 font-ui text-[13px] uppercase tracking-[0.08em] ${
-              trend.dropping ? "text-[var(--danger)]" : "text-[var(--text-3)]"
+              trend.dropping ? "text-[var(--danger)]" : "text-[var(--water-live)]"
             }`}
           >
             {trend.dropping ? "↓ " : "↑ "}

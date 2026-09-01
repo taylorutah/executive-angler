@@ -6,7 +6,11 @@ import {
   applyDvSeries,
   applyIvSeries,
   applyLatestObservations,
+  applyTwentyFourHourDelta,
+  deltaCfsFromHistory,
+  formatTwentyFourHourLine,
   instantaneousUrl,
+  preferMeasuredDelta,
   primaryGauge,
   type DailyReading,
   type GaugeSnapshot,
@@ -128,6 +132,80 @@ describe("applyLatestObservations", () => {
       if (prev === undefined) delete process.env.EA_USGS_FIXTURE;
       else process.env.EA_USGS_FIXTURE = prev;
     }
+  });
+});
+
+describe("applyTwentyFourHourDelta", () => {
+  it("sets last minus first on a live snapshot", () => {
+    const bySite = new Map([["06038500", ["river-madison"]]]);
+    const into = new Map<string, GaugeSnapshot>([
+      [
+        "river-madison",
+        { cfs: 760, deltaCfs: null, waterTempF: 63, observedAt: "now", stale: false },
+      ],
+    ]);
+    applyTwentyFourHourDelta(
+      [
+        { siteId: "06038500", parameterCode: "00060", value: 825, dateTime: "2026-08-31T18:00:00Z" },
+        { siteId: "06038500", parameterCode: "00060", value: 760, dateTime: "2026-09-01T18:00:00Z" },
+      ],
+      bySite,
+      into,
+    );
+    assert.equal(into.get("river-madison")?.deltaCfs, -65);
+  });
+
+  it("does not invent a delta from a single point", () => {
+    const into = new Map<string, GaugeSnapshot>([
+      [
+        "river-madison",
+        { cfs: 760, deltaCfs: null, waterTempF: null, observedAt: "now", stale: false },
+      ],
+    ]);
+    applyTwentyFourHourDelta(
+      [{ siteId: "06038500", parameterCode: "00060", value: 760, dateTime: "2026-09-01T18:00:00Z" }],
+      new Map([["06038500", ["river-madison"]]]),
+      into,
+    );
+    assert.equal(into.get("river-madison")?.deltaCfs, null);
+  });
+});
+
+describe("deltaCfsFromHistory", () => {
+  it("uses the daily mean nearest to 24 hours ago, not a 30-day first point", () => {
+    const now = Date.parse("2026-09-01T18:00:00Z");
+    const delta = deltaCfsFromHistory(
+      760,
+      [
+        { date: "2026-08-02", discharge: 1227 },
+        { date: "2026-08-31", discharge: 825 },
+        { date: "2026-09-01", discharge: 760 },
+      ],
+      now,
+    );
+    assert.equal(delta, -65);
+  });
+});
+
+describe("preferMeasuredDelta", () => {
+  it("does not let a later zero wipe a live 24h change", () => {
+    assert.equal(preferMeasuredDelta(0, -65), -65);
+    assert.equal(preferMeasuredDelta(null, -40), -40);
+    assert.equal(preferMeasuredDelta(-12, -40), -12);
+    assert.equal(preferMeasuredDelta(0, 0), 0);
+    assert.equal(preferMeasuredDelta(null, null), null);
+  });
+});
+
+describe("formatTwentyFourHourLine", () => {
+  it("hides a flat reading and colors a drop as dropping", () => {
+    assert.equal(formatTwentyFourHourLine(0, 760), null);
+    const drop = formatTwentyFourHourLine(-65, 760);
+    assert.equal(drop?.dropping, true);
+    assert.equal(drop?.text, "−65 CFS (−8%) past 24 hrs");
+    const rise = formatTwentyFourHourLine(40, 760);
+    assert.equal(rise?.dropping, false);
+    assert.match(rise?.text ?? "", /^\+40 CFS \(\+6%\) past 24 hrs$/);
   });
 });
 

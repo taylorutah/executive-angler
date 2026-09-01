@@ -14,25 +14,32 @@ interface Props {
   flows: Record<string, StationFlow>;
 }
 
-function trendWord(flow: StationFlow | undefined): string {
-  if (!flow) return "·";
-  if (flow.deltaCfs == null) return FLOW_STATE_LABEL[flow.state] ?? "·";
+/** Ungauged CFS / trend — never a guessed number and never a string of periods. */
+export const UNGAUGED = "—";
+
+export function isGauged(flow: StationFlow | undefined): boolean {
+  return Boolean(flow && Number.isFinite(flow.cfs));
+}
+
+export function trendWord(flow: StationFlow | undefined): string {
+  if (!isGauged(flow) || !flow) return UNGAUGED;
+  if (flow.deltaCfs == null) return FLOW_STATE_LABEL[flow.state] ?? UNGAUGED;
   if (flow.deltaCfs > 15) return "rising";
   if (flow.deltaCfs < -15) return "dropping";
   return "steady";
 }
 
-function cfsCell(flow: StationFlow | undefined): string {
-  if (!flow || !Number.isFinite(flow.cfs)) return "·";
+export function cfsCell(flow: StationFlow | undefined): string {
+  if (!isGauged(flow) || !flow) return UNGAUGED;
   return `${Math.round(flow.cfs).toLocaleString("en-US")} CFS`;
 }
 
 function waterLabel(item: RiverBrowseItem): string {
-  return waterTypeLabel(String(item._filterValues?.waterType ?? "")) ?? "·";
+  return waterTypeLabel(String(item._filterValues?.waterType ?? "")) ?? UNGAUGED;
 }
 
 function CfsText({ flow }: { flow: StationFlow | undefined }) {
-  const live = flow && Number.isFinite(flow.cfs);
+  const live = isGauged(flow);
   return (
     <span className={`num ${live ? "text-[var(--water-live)]" : "text-[var(--text-3)]"}`}>
       {cfsCell(flow)}
@@ -68,6 +75,7 @@ export default function RiversStationTable({ items, flows }: Props) {
       <ul className="border-t border-[var(--border)] md:hidden">
         {items.map((item) => {
           const flow = flows[item.riverId];
+          const gauged = isGauged(flow);
           return (
             <li key={item.riverId} className="border-b border-[var(--border)] py-3">
               <Link
@@ -77,14 +85,20 @@ export default function RiversStationTable({ items, flows }: Props) {
                 {item.title}
               </Link>
               <p className="mt-0.5 font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
-                {item.kicker ?? "·"}
+                {item.kicker ?? UNGAUGED}
               </p>
               <p className="mt-1.5 font-ui text-[13px] text-[var(--text-2)]">
-                <CfsText flow={flow} />
+                {gauged ? (
+                  <>
+                    <CfsText flow={flow} />
+                    <span className="text-[var(--text-3)]"> · </span>
+                    <TrendText flow={flow} />
+                  </>
+                ) : (
+                  <span className="text-[var(--text-3)]">{UNGAUGED}</span>
+                )}
                 <span className="text-[var(--text-3)]"> · </span>
-                <TrendText flow={flow} />
-                <span className="text-[var(--text-3)]"> · </span>
-                <span>{item.whatsOn || "·"}</span>
+                <span>{item.whatsOn || UNGAUGED}</span>
                 <span className="text-[var(--text-3)]"> · </span>
                 <span className="uppercase tracking-[0.08em] text-[var(--text-3)]">
                   {waterLabel(item)}
@@ -121,7 +135,7 @@ export default function RiversStationTable({ items, flows }: Props) {
                     </Link>
                   </td>
                   <td className="py-3 pr-4 font-ui text-[13px] uppercase tracking-[0.08em] text-[var(--text-3)]">
-                    {item.kicker ?? "·"}
+                    {item.kicker ?? UNGAUGED}
                   </td>
                   <td className="py-3 pr-4 text-[14px]">
                     <CfsText flow={flow} />
@@ -130,7 +144,7 @@ export default function RiversStationTable({ items, flows }: Props) {
                     <TrendText flow={flow} />
                   </td>
                   <td className="py-3 pr-4 font-ui text-[13px] text-[var(--text-2)]">
-                    {item.whatsOn || "·"}
+                    {item.whatsOn || UNGAUGED}
                   </td>
                   <td className="py-3 font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
                     {waterLabel(item)}

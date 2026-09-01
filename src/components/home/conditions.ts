@@ -3,6 +3,7 @@ import { parseRiverGauges } from "@/lib/usgs/gauges";
 import {
   PARAM_DISCHARGE,
   PARAM_WATER_TEMP,
+  fetchContinuous,
   fetchDaily,
   fetchLatest,
   latestBySiteParam,
@@ -237,6 +238,86 @@ export function applyLatestObservations(
   }
 }
 
+/**
+ * Live 24h change from an IV window: last reading minus first.
+ * Does not invent a number when the series is a single point.
+ */
+export function applyTwentyFourHourDelta(
+  observations: UsgsObservation[],
+  bySite: Map<string, string[]>,
+  into: Map<string, GaugeSnapshot>,
+): void {
+  const byGauge = new Map<string, UsgsObservation[]>();
+  for (const observation of observations) {
+    if (observation.parameterCode && observation.parameterCode !== PARAM_DISCHARGE) continue;
+    const list = byGauge.get(observation.siteId) ?? [];
+    list.push(observation);
+    byGauge.set(observation.siteId, list);
+  }
+  for (const [siteId, riverIds] of bySite) {
+    const series = (byGauge.get(siteId) ?? [])
+      .slice()
+      .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+    if (series.length < 2) continue;
+    const delta = Math.round(series[series.length - 1].value - series[0].value);
+    for (const riverId of riverIds) {
+      const snapshot = into.get(riverId);
+      if (!snapshot || snapshot.cfs == null) continue;
+      snapshot.deltaCfs = delta;
+    }
+  }
+}
+
+/** Live CFS minus the daily mean nearest to 24 hours ago. Null when we have no such reading. */
+export function deltaCfsFromHistory(
+  liveCfs: number | null | undefined,
+  history: Array<{ date: string; discharge: number }> | null | undefined,
+  nowMs: number = Date.now(),
+): number | null {
+  if (liveCfs == null || !Number.isFinite(liveCfs) || !history || history.length < 2) return null;
+  const target = nowMs - 86_400_000;
+  let best: { discharge: number; dist: number } | null = null;
+  for (const row of history) {
+    const stamp = row.date.includes("T") ? row.date : `${row.date}T12:00:00Z`;
+    const t = Date.parse(stamp);
+    if (!Number.isFinite(t) || !Number.isFinite(row.discharge)) continue;
+    const dist = Math.abs(t - target);
+    if (!best || dist < best.dist) best = { discharge: row.discharge, dist };
+  }
+  if (!best || best.dist > 36 * 60 * 60 * 1000) return null;
+  return Math.round(liveCfs - best.discharge);
+}
+
+/**
+ * Prefer a measured non-zero delta. A later `0` must not wipe an earlier
+ * live 24h change (`0 ?? fallback` does not fall through).
+ */
+export function preferMeasuredDelta(
+  incoming: number | null | undefined,
+  previous: number | null | undefined,
+): number | null {
+  if (incoming != null && incoming !== 0) return incoming;
+  if (previous != null && previous !== 0) return previous;
+  if (incoming === 0 || previous === 0) return 0;
+  return null;
+}
+
+export function formatTwentyFourHourLine(
+  deltaCfs: number | null | undefined,
+  liveCfs: number | null | undefined,
+): { text: string; dropping: boolean } | null {
+  if (liveCfs == null || !Number.isFinite(liveCfs) || deltaCfs == null || deltaCfs === 0) {
+    return null;
+  }
+  const prev = liveCfs - deltaCfs;
+  const pct = prev !== 0 ? Math.round((deltaCfs / prev) * 100) : 0;
+  const sign = deltaCfs > 0 ? "+" : "−";
+  return {
+    text: `${sign}${Math.abs(deltaCfs).toLocaleString("en-US")} CFS (${sign}${Math.abs(pct)}%) past 24 hrs`,
+    dropping: deltaCfs < 0,
+  };
+}
+
 export function applyDailyPoints(
   points: UsgsDailyPoint[],
   bySite: Map<string, string[]>,
@@ -354,6 +435,21 @@ export async function getGaugeSnapshots(
     );
   } catch {
     // IV failed closed — last-seen daily mean is the honest fallback.
+  }
+
+  // True 24h IV for a single river page only. A six-site P1D dump truncates.
+  if (rivers.length === 1 && siteIds.length === 1) {
+    try {
+      const end = new Date();
+      const start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+      applyTwentyFourHourDelta(
+        await fetchContinuous(siteIds, start.toISOString(), end.toISOString(), [PARAM_DISCHARGE]),
+        bySite,
+        snapshots,
+      );
+    } catch {
+      // Daily-history fallback in loadFlagshipGaugePayload / the live gauge.
+    }
   }
 
   const missing = siteIds.filter((id) =>
