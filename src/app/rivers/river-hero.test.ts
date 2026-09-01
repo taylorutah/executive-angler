@@ -25,6 +25,8 @@ describe("river hero paper band", () => {
     assert.match(page, /accessLabel\(river\.wadingType\)/);
     assert.match(page, /label: "Difficulty"/);
     assert.match(page, /label: "Access"/);
+    assert.match(page, /label: "Season"/);
+    assert.match(page, /formatBestMonthsLine/);
     assert.match(page, /spec=/);
     assert.match(page, /toolbar=/);
     assert.equal(

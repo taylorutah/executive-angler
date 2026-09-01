@@ -132,7 +132,7 @@ export default function RiverHeroImage({
               ) : null}
             </div>
             {spec ? (
-              <div className="mt-4 border-t border-[var(--border)] pt-4">
+              <div className="mt-3 border-t border-[var(--border)] pt-3">
                 {spec}
               </div>
             ) : null}

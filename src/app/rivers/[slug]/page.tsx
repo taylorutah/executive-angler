@@ -24,7 +24,7 @@ import HatchSeasonGrid from "@/components/rivers/HatchSeasonGrid";
 import YourRecordHere from "@/components/rivers/YourRecordHere";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
 import ContributeStrip from "@/components/desk/ContributeStrip";
-import { accessLabel, difficultyLabel, waterTypeLabel } from "@/lib/browse/river-items";
+import { accessLabel, difficultyLabel, formatBestMonthsLine, waterTypeLabel } from "@/lib/browse/river-items";
 import { SITE_URL } from "@/lib/constants";
 import {
   getAllRivers,
@@ -131,6 +131,7 @@ export default async function RiverPage({ params }: Props) {
     .join(" · ");
   const difficulty = difficultyLabel(river.difficulty);
   const access = accessLabel(river.wadingType);
+  const season = formatBestMonthsLine(river.bestMonths || []);
   const speciesNames = river.primarySpecies ?? [];
   const destState = dest ? dest.state : undefined;
   const destCountry = dest ? dest.country : undefined;
@@ -215,12 +216,13 @@ export default async function RiverPage({ params }: Props) {
           </div>
         }
         spec={
-          difficulty || access || speciesNames.length > 0 ? (
+          difficulty || access || season || speciesNames.length > 0 ? (
             <FactList
-              className="grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-3 lg:grid-cols-3"
+              className="grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-4"
               facts={[
                 ...(difficulty ? [{ label: "Difficulty", value: difficulty }] : []),
                 ...(access ? [{ label: "Access", value: access }] : []),
+                ...(season ? [{ label: "Season", value: season }] : []),
                 ...(speciesNames.length > 0
                   ? [
                       {
@@ -268,7 +270,7 @@ export default async function RiverPage({ params }: Props) {
       </RiverHeroImage>
 
       <section className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 pb-8 pt-5 sm:px-6 lg:px-8">
           <YourRecordHere riverId={river.id} riverName={river.name} />
           <SignedOutRiverInsights riverName={river.name} />
           <PersonalFlowOverlay riverId={river.id} />
