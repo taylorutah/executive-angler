@@ -47,6 +47,13 @@ function measuredTwentyFourHour(snapshot: GaugeSnapshot | null): number | null {
   return delta;
 }
 
+function stillTrend(deltaCfs: number | null, liveCfs: number | null, window = "24H"): string | null {
+  if (liveCfs == null || deltaCfs == null || deltaCfs === 0) return null;
+  const sign = deltaCfs < 0 ? "−" : "+";
+  const arrow = deltaCfs < 0 ? "▼" : "▲";
+  return `TREND: ${sign}${Math.abs(Math.round(deltaCfs))} CFS ${arrow}${window ? ` ${window}` : ""}`;
+}
+
 export default function GazetteLiveGauge({
   riverId,
   siteId,
@@ -118,13 +125,9 @@ export default function GazetteLiveGauge({
 
   const cfs = snapshot?.cfs ?? null;
   const live = cfs != null && !snapshot?.stale;
-  const twentyFour = formatTwentyFourHourLine(
-    measuredTwentyFourHour(snapshot) ?? deltaCfsFromHistory(cfs, history),
-    cfs,
-  );
-  const series = formatSeriesTrendLine(cfs, history);
-  const trend = twentyFour ?? series;
-  const dropping = Boolean(trend?.dropping);
+  const twentyFour = measuredTwentyFourHour(snapshot) ?? deltaCfsFromHistory(cfs, history);
+  const trend = stillTrend(twentyFour, cfs);
+  const dropping = twentyFour != null && twentyFour < 0;
   const updated = formatObservedAt(snapshot?.observedAt ?? null);
   const temp = snapshot?.waterTempF ?? null;
   const station = [siteId ? `USGS STATION ${siteId}` : null, siteName]
@@ -154,7 +157,7 @@ export default function GazetteLiveGauge({
                 dropping ? "text-[var(--danger)]" : "text-[var(--copper)]"
               }`}
             >
-              {trend.text}
+              {trend}
             </p>
           ) : null}
         </div>

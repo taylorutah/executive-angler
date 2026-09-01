@@ -23,6 +23,8 @@ describe("gazette chrome locks", () => {
     assert.match(header, /hidden[^\n]*md:inline-flex/);
     assert.match(header, /bg-\[var\(--accent-soft\)\]/);
     assert.match(header, /text-\[var\(--accent\)\][^\n]*md:inline-flex/);
+    assert.match(header, /md:h-\[4\.75rem\]/);
+    assert.equal(header.includes("h-[30px] w-[22px]"), false);
     assert.equal(header.includes("isLoading"), false);
     assert.equal(header.includes("h-8 w-28"), false);
   });

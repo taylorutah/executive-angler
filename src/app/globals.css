@@ -72,7 +72,7 @@
   --prose: 66ch;
   --article-media: 960px;
   --gutter: 16px;
-  --header-h: 72px;
+  --header-h: 80px;
   --ticker-h: 36px;
 
   /* ── Imagery: the one consistent photo grade ─────────────────── */
@@ -1436,20 +1436,44 @@ select:focus {
 }
 
 /* Notched cream plates — still 4 THE PLATE. Never a white ecomm cutout. */
+.ea-plate-ink {
+  display: block;
+  background: var(--ink);
+  clip-path: polygon(
+    10px 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0 calc(100% - 10px),
+    0 10px
+  );
+  padding: 1px;
+}
 .ea-plate {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   padding: 12px 8px 14px;
-  background:
-    linear-gradient(135deg, transparent 7px, var(--paper) 7px) top left,
-    linear-gradient(-135deg, transparent 7px, var(--paper) 7px) top right,
-    linear-gradient(45deg, transparent 7px, var(--paper) 7px) bottom left,
-    linear-gradient(-45deg, transparent 7px, var(--paper) 7px) bottom right;
-  background-size: 51% 51%;
-  background-repeat: no-repeat;
-  box-shadow: inset 0 0 0 1px rgba(28, 25, 21, 0.28);
+  background: var(--paper);
+  clip-path: polygon(
+    10px 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0 calc(100% - 10px),
+    0 10px
+  );
+}
+
+.ea-plate-well {
+  width: 100%;
+  aspect-ratio: 1;
+  background: transparent;
 }
 
 .ea-plate-name {

@@ -6,6 +6,7 @@ import {
   type FlagshipRiver,
   type GaugeSnapshot,
 } from "@/components/home/conditions";
+import { shortInsect } from "@/lib/browse/river-items";
 import type { Article, CanonicalFly } from "@/types/entities";
 
 export type GazetteHomeCounts = {
@@ -43,7 +44,10 @@ function sizeLabel(sizes: string[]): string | null {
 }
 
 function hatchLine(river: FlagshipRiver, month: string): string {
-  const hatches = hatchesForMonth(river.hatchChart, month).slice(0, 3);
+  const hatches = hatchesForMonth(river.hatchChart, month)
+    .map(shortInsect)
+    .filter(Boolean)
+    .slice(0, 2);
   return hatches.length > 0 ? hatches.join(" · ") : "—";
 }
 
