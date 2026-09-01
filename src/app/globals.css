@@ -622,6 +622,11 @@
     color: var(--text-3);
     border-bottom: 1px solid var(--border);
   }
+  /* Beat `.ea-table th { color: var(--text-3) }` — Tailwind text-* loses. */
+  .ea-table th.ea-month-on {
+    background: var(--ink);
+    color: var(--hero-type);
+  }
   .ea-table td {
     padding: var(--space-3);
     border-bottom: 1px solid var(--border);
@@ -1428,9 +1433,9 @@ select:focus {
 
 /* ── Footer photo band: the site's ONE graded-photo ink band ─────────
    Client ruling 2026-08-28 (DESIGN.md, Phase 4C rulings). One existing
-   site photograph under a flat --ink scrim at a uniform 72% alpha — a
-   grade, never a gradient. The scrim is heavy so paper text stays AA
-   over the photograph's brightest water. No other band may do this. */
+   site photograph under a flat --ink scrim — a grade, never a gradient.
+   iPhone QA on the autumn still needed 88% ink (photo at 0.45) so paper
+   type stays AA over the brightest water. No other band may do this. */
 .ea-band-photo {
   position: relative;
   overflow: hidden;
@@ -1440,14 +1445,15 @@ select:focus {
   position: absolute;
   inset: 0;
   z-index: 0;
+  opacity: 0.45;
 }
 .ea-band-photo-scrim {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: #1c1917;
-  background: color-mix(in srgb, var(--ink) 80%, transparent);
+  background: var(--ink);
+  background: color-mix(in srgb, var(--ink) 88%, transparent);
 }
 
 /* Every chrome control gets the same ring. !important beats Button's

@@ -632,7 +632,7 @@ function Metric({
   badgeClass?: string;
 }) {
   return (
-    <div className="flex h-full min-w-0 flex-col overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-3 sm:px-4">
+    <div className="flex h-full min-h-[7.5rem] min-w-0 flex-col overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-3 sm:px-4">
       <div className="flex min-w-0 items-center gap-2 text-[var(--text-3)]">
         <span className="shrink-0">{icon}</span>
         <p className="min-w-0 font-ui text-xs font-medium uppercase tracking-[0.06em]">{label}</p>
