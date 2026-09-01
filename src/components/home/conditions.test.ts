@@ -8,6 +8,7 @@ import {
   applyLatestObservations,
   applyTwentyFourHourDelta,
   deltaCfsFromHistory,
+  formatSeriesTrendLine,
   formatTwentyFourHourLine,
   instantaneousUrl,
   preferMeasuredDelta,
@@ -206,6 +207,15 @@ describe("formatTwentyFourHourLine", () => {
     const rise = formatTwentyFourHourLine(40, 760);
     assert.equal(rise?.dropping, false);
     assert.match(rise?.text ?? "", /^\+40 CFS \(\+6%\) past 24 hrs$/);
+  });
+
+  it("names a longer series drop instead of inventing a 24h number", () => {
+    const line = formatSeriesTrendLine(760, [
+      { date: "2026-08-02", discharge: 1180 },
+      { date: "2026-08-31", discharge: 760 },
+    ]);
+    assert.equal(line?.dropping, true);
+    assert.match(line?.text ?? "", /−420 CFS \(−36%\) since Aug 2/);
   });
 });
 

@@ -302,6 +302,20 @@ export function preferMeasuredDelta(
   return null;
 }
 
+function trendCopy(
+  deltaCfs: number,
+  liveCfs: number,
+  window: string,
+): { text: string; dropping: boolean } {
+  const prev = liveCfs - deltaCfs;
+  const pct = prev !== 0 ? Math.round((deltaCfs / prev) * 100) : 0;
+  const sign = deltaCfs > 0 ? "+" : "−";
+  return {
+    text: `${sign}${Math.abs(deltaCfs).toLocaleString("en-US")} CFS (${sign}${Math.abs(pct)}%) ${window}`,
+    dropping: deltaCfs < 0,
+  };
+}
+
 export function formatTwentyFourHourLine(
   deltaCfs: number | null | undefined,
   liveCfs: number | null | undefined,
@@ -309,13 +323,24 @@ export function formatTwentyFourHourLine(
   if (liveCfs == null || !Number.isFinite(liveCfs) || deltaCfs == null || deltaCfs === 0) {
     return null;
   }
-  const prev = liveCfs - deltaCfs;
-  const pct = prev !== 0 ? Math.round((deltaCfs / prev) * 100) : 0;
-  const sign = deltaCfs > 0 ? "+" : "−";
-  return {
-    text: `${sign}${Math.abs(deltaCfs).toLocaleString("en-US")} CFS (${sign}${Math.abs(pct)}%) past 24 hrs`,
-    dropping: deltaCfs < 0,
-  };
+  return trendCopy(deltaCfs, liveCfs, "past 24 hrs");
+}
+
+/** When 24h is flat, name the plotted series change — do not relabel it as 24h. */
+export function formatSeriesTrendLine(
+  liveCfs: number | null | undefined,
+  history: Array<{ date: string; discharge: number }> | null | undefined,
+): { text: string; dropping: boolean } | null {
+  if (liveCfs == null || !Number.isFinite(liveCfs) || !history || history.length < 2) return null;
+  const first = history[0];
+  if (!Number.isFinite(first.discharge)) return null;
+  const delta = Math.round(liveCfs - first.discharge);
+  if (delta === 0) return null;
+  const d = new Date(first.date.includes("T") ? first.date : `${first.date}T12:00:00`);
+  const when = Number.isNaN(d.getTime())
+    ? first.date
+    : d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return trendCopy(delta, liveCfs, `since ${when}`);
 }
 
 export function applyDailyPoints(

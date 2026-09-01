@@ -6,6 +6,7 @@ import type { GaugeSnapshot } from "@/components/home/conditions";
 import {
   deltaCfsFromHistory,
   formatObservedAt,
+  formatSeriesTrendLine,
   formatTwentyFourHourLine,
   preferMeasuredDelta,
 } from "@/components/home/conditions";
@@ -113,7 +114,8 @@ export default function GazetteLiveGauge({
     snapshot?.deltaCfs,
     deltaCfsFromHistory(cfs, history),
   );
-  const trend = formatTwentyFourHourLine(deltaCfs, cfs);
+  const trend =
+    formatTwentyFourHourLine(deltaCfs, cfs) ?? formatSeriesTrendLine(cfs, history);
   const updated = formatObservedAt(snapshot?.observedAt ?? null);
   const temp = snapshot?.waterTempF ?? null;
 
