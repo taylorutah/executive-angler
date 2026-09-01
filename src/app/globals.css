@@ -1439,15 +1439,24 @@ select:focus {
   text-transform: uppercase;
   color: color-mix(in srgb, var(--paper) 55%, transparent);
 }
-.ea-band-ink a {
+/* Unlayered, so it beats @layer .ea-btn-on-ink. Exclude buttons or
+   the paper CTA on this band inherits the paper-on-paper link color. */
+.ea-band-ink a:not(.ea-btn) {
   color: color-mix(in srgb, var(--paper) 80%, transparent);
   transition: color var(--duration-fast) var(--ease-standard);
 }
-.ea-band-ink a:hover {
+.ea-band-ink a:not(.ea-btn):hover {
   color: var(--paper);
 }
-.ea-band-ink a:focus-visible {
+.ea-band-ink a:not(.ea-btn):focus-visible {
   outline-color: var(--paper);
+}
+.ea-band-ink a.ea-btn-on-ink {
+  color: var(--ink);
+}
+.ea-band-ink a.ea-btn-on-ink:hover {
+  color: var(--ink);
+  background: var(--paper-deep);
 }
 .ea-band-ink .ea-band-rule {
   background: rgba(255, 255, 255, 0.12);

@@ -2,7 +2,6 @@ import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import type { Destination } from "@/types/entities";
 import { photoAlt } from "./homepage-images";
-import SectionMark from "./SectionMark";
 
 interface Props {
   destinations: Destination[];
@@ -25,7 +24,7 @@ export default function WhereToGo({ destinations, month }: Props) {
     <section data-lane="resource" className="bg-[var(--paper)] py-14 sm:py-24">
       <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
         <div className="mb-8 flex items-baseline justify-between gap-4">
-          <SectionMark n="03" label="Where to go" />
+          <p className="ea-overline">Where to go</p>
           <Link
             href="/destinations"
             className="shrink-0 text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
