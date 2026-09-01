@@ -16,7 +16,10 @@ describe("home visitor QA locks", () => {
     assert.equal(home.includes("LiveConditionsRail"), false);
     assert.match(gazette, /lg:grid-cols-\[minmax\(0,1.62fr\)_minmax\(0,1fr\)\]/);
     assert.match(gazette, /and Hatches/);
-    assert.match(gazette, /whitespace-nowrap/);
+    assert.match(
+      gazette,
+      /<span className="whitespace-nowrap">\s*\{counts\.rivers\} Rivers, \{counts\.flies\} Flies,/,
+    );
     assert.match(gazette, /bg-\[var\(--copper\)\]/);
     assert.match(gazette, /formatHeroCaption/);
     assert.match(gazette, /text-center/);

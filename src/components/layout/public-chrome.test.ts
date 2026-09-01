@@ -25,6 +25,23 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("h-8 w-28"), false);
   });
 
+  it("wraps /rivers filters so East is a type line, not a clip", () => {
+    const rivers = readFileSync(
+      join(root, "src/components/gazette/GazetteRiversIndex.tsx"),
+      "utf8",
+    );
+    assert.match(rivers, /label: "East"/);
+    assert.match(
+      rivers,
+      /className="mt-5 flex flex-wrap gap-x-3 gap-y-2/,
+    );
+    assert.equal(
+      /mt-5 flex flex-nowrap/.test(rivers),
+      false,
+      "filter row must wrap, not scroll-clip East",
+    );
+  });
+
   it("limits the public ticker to three flagship waters", () => {
     const rail = readFileSync(join(root, "src/components/home/ConditionsRail.tsx"), "utf8");
     assert.match(rail, /TICKER_LIMIT = 3/);

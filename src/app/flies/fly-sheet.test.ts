@@ -55,9 +55,16 @@ describe("fly desk sheet", () => {
     assert.match(flyPage, /History is not on file for this pattern/);
   });
 
-  it("wires the library to DeskFlyIndex and deletes the competing desk page", () => {
-    assert.match(library, /DeskFlyIndex/);
+  it("wires the public library to GazetteFliesIndex and deletes the competing desk page", () => {
+    assert.match(library, /GazetteFliesIndex/);
+    assert.equal(library.includes("EntityListView"), false);
     assert.equal(existsSync(join(root, "src/app/flies/FliesDeskPage.tsx")), false);
+    const gazetteFlies = readFileSync(
+      join(root, "src/components/gazette/GazetteFliesIndex.tsx"),
+      "utf8",
+    );
+    assert.match(gazetteFlies, /DeskFlyIndex/);
+    assert.match(gazetteFlies, /ea-search-underline/);
     assert.match(flyIndex, /On the plate/);
     assert.match(flyIndex, /The rest of the bench/);
   });
