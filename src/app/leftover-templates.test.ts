@@ -85,6 +85,7 @@ describe("leftover public templates inherit Water Desk", () => {
     assert.match(hatch, /Swipe months to stay on the year/);
     assert.match(hatch, /bg-\[var\(--ink\)\] text-\[var\(--hero-type\)\]/);
     assert.match(hatch, /desk-table-wrap/);
+    assert.match(hatch, /hatch-year-clip/);
     assert.equal(/best[\s\S]*copper/.test(hatch), false);
     assert.equal(hatch.includes("text-[var(--action)]"), false);
   });

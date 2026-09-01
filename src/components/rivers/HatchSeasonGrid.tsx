@@ -105,9 +105,9 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
         Swipe months to stay on the year
       </p>
 
-      <div className="relative">
-        <div className="category-bar-fade overflow-x-auto" tabIndex={0} aria-label="Hatch calendar">
-          <table className="ea-table min-w-[720px] text-left">
+      <div className="hatch-year-clip">
+        <div className="overflow-x-auto" tabIndex={0} aria-label="Hatch calendar">
+          <table className="ea-table min-w-[720px] pe-16 text-left">
           <thead>
             <tr>
               <th className="sticky left-0 z-10 bg-[var(--vellum)] shadow-[2px_0_0_var(--border)]">
@@ -171,10 +171,6 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
           </tbody>
           </table>
         </div>
-        <div
-          className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[var(--vellum)] to-transparent md:hidden"
-          aria-hidden="true"
-        />
       </div>
     </div>
   );

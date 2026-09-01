@@ -829,6 +829,30 @@
   }
 }
 
+/* Hatch year: fade the VISIBLE clip, not the 720px scroll width.
+   mask-image on overflow-x-auto paints at the end of the table, off-screen. */
+.hatch-year-clip {
+  position: relative;
+}
+@media (max-width: 767px) {
+  .hatch-year-clip::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 4.5rem;
+    pointer-events: none;
+    z-index: 20;
+    background: linear-gradient(
+      to left,
+      var(--vellum) 0%,
+      var(--vellum) 28%,
+      transparent 100%
+    );
+  }
+}
+
 /* =================================================================
    ARTICLE / DESTINATION / RIVER BODIES
    Stored HTML must not depend on Tailwind utilities.
