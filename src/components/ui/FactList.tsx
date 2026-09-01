@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 export interface FactItem {
   label: string;
   value: ReactNode;
+  className?: string;
 }
 
 /**
@@ -21,7 +22,7 @@ export default function FactList({
   return (
     <dl className={className}>
       {facts.map((fact) => (
-        <div key={fact.label} className="min-w-0">
+        <div key={fact.label} className={`min-w-0 ${fact.className ?? ""}`.trim()}>
           <dt className="ea-overline">{fact.label}</dt>
           <dd className="mt-1 font-ui text-sm leading-5 text-[var(--text-1)]">
             {fact.value}

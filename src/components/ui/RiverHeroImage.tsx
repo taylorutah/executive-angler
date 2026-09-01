@@ -104,9 +104,9 @@ export default function RiverHeroImage({
         </div>
 
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto w-full max-w-[var(--container)] px-4 py-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-[var(--container)] px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
             {toolbar}
-            <div className={toolbar ? "mt-3" : undefined}>
+            <div className={toolbar ? "mt-2 sm:mt-3" : undefined}>
               {subtitle ? <p className="ea-overline">{subtitle}</p> : null}
               <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <h1 className="text-[var(--text-1)]">{title}</h1>
@@ -132,7 +132,7 @@ export default function RiverHeroImage({
               ) : null}
             </div>
             {spec ? (
-              <div className="mt-3 border-t border-[var(--border)] pt-3">
+              <div className="mt-2.5 border-t border-[var(--border)] pt-2.5 sm:mt-3 sm:pt-3">
                 {spec}
               </div>
             ) : null}

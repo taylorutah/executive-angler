@@ -29,6 +29,7 @@ describe("river hero paper band", () => {
     assert.match(page, /formatBestMonthsLine/);
     assert.match(page, /spec=/);
     assert.match(page, /toolbar=/);
+    assert.match(page, /col-span-3 sm:col-span-1/);
     assert.equal(
       page.includes("lg:grid-cols-[minmax(0,1fr)_minmax(18rem,36rem)]"),
       false,

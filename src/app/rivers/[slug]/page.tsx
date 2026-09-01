@@ -190,7 +190,7 @@ export default async function RiverPage({ params }: Props) {
         subtitle={heroSubtitle || undefined}
         meta={river.lengthMiles ? `${river.lengthMiles} miles` : undefined}
         toolbar={
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <div className="flex items-center justify-between gap-3">
             <Breadcrumbs
               items={[
                 { label: "Rivers", href: "/rivers" },
@@ -203,7 +203,7 @@ export default async function RiverPage({ params }: Props) {
                 { label: river.name },
               ]}
             />
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:shrink-0 sm:justify-end">
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-x-3 gap-y-1">
               <Link
                 href={`/plan/${river.slug}`}
                 className="font-ui text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
@@ -218,7 +218,7 @@ export default async function RiverPage({ params }: Props) {
         spec={
           difficulty || access || season || speciesNames.length > 0 ? (
             <FactList
-              className="grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-4"
+              className="grid grid-cols-3 gap-x-4 gap-y-2.5 sm:grid-cols-4 sm:gap-x-8"
               facts={[
                 ...(difficulty ? [{ label: "Difficulty", value: difficulty }] : []),
                 ...(access ? [{ label: "Access", value: access }] : []),
@@ -227,6 +227,7 @@ export default async function RiverPage({ params }: Props) {
                   ? [
                       {
                         label: "Fish",
+                        className: "col-span-3 sm:col-span-1",
                         value: (
                           <TokenRow>
                             {speciesNames.map((speciesName, i) => {
@@ -270,7 +271,7 @@ export default async function RiverPage({ params }: Props) {
       </RiverHeroImage>
 
       <section className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 pb-8 pt-5 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 pb-8 pt-3 sm:px-6 sm:pt-5 lg:px-8">
           <YourRecordHere riverId={river.id} riverName={river.name} />
           <SignedOutRiverInsights riverName={river.name} />
           <PersonalFlowOverlay riverId={river.id} />
