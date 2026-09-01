@@ -94,6 +94,16 @@ export default function GazetteRiverReport({
           </p>
         ) : null}
         <div className="mt-5 h-px bg-[var(--border)]" aria-hidden />
+        {species.length > 0 ? (
+          <section className="py-5">
+            <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+              Fish
+            </h2>
+            <p className="mt-2 font-body text-[18px] leading-snug text-[var(--ink)]">
+              {species.join(", ")}
+            </p>
+          </section>
+        ) : null}
       </div>
 
       <GazetteLiveGauge
@@ -104,17 +114,6 @@ export default function GazetteRiverReport({
         initialSnapshot={initialSnapshot}
         initialHistory={initialHistory}
       />
-
-      {species.length > 0 ? (
-        <section className="mx-auto max-w-[72rem] px-4 pb-2 sm:px-8">
-          <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-            Fish
-          </h2>
-          <p className="mt-3 font-body text-[18px] leading-snug text-[var(--ink)]">
-            {species.join(", ")}
-          </p>
-        </section>
-      ) : null}
 
       <div className="mx-auto max-w-[72rem] px-4 py-8 sm:px-8">
         {plates.length > 0 ? (

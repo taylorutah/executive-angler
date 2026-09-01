@@ -40,6 +40,7 @@ declare global {
           "error-callback"?: () => void;
           theme?: "dark" | "light" | "auto";
           size?: "normal" | "compact" | "flexible";
+          appearance?: "always" | "execute" | "interaction-only";
         }
       ) => string;
       reset: (widgetId: string) => void;
@@ -56,7 +57,7 @@ export default function TurnstileWidget({
   onToken,
   onExpire,
   onAvailabilityChange,
-  failOpenAfterMs = 6000,
+  failOpenAfterMs = 2000,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
@@ -117,9 +118,12 @@ export default function TurnstileWidget({
         "error-callback": () => {
           setHasToken(false);
           onToken("");
+          setFailedOpen(true);
+          onAvailabilityChange?.(false);
         },
         theme: "light",
         size: "flexible",
+        appearance: "interaction-only",
       });
     } catch (err) {
       console.warn("[TurnstileWidget] render failed:", err);
