@@ -278,24 +278,24 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
     const cfs = active.discharge?.value;
     return (
       <div>
-        <div className="register-dusk bg-[var(--riverbed)] px-5 pb-4 pt-4">
-          <div className="flex items-center justify-between gap-3">
+        <div className="register-dusk min-w-0 bg-[var(--riverbed)] px-5 pb-4 pt-4">
+          <div className="flex min-w-0 items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className="inline-block h-1.5 w-1.5 bg-[var(--signal-live)]" aria-hidden />
               <p className="font-ui text-[11px] font-medium uppercase tracking-[1.4px] text-[var(--signal-live)]">
                 Live
               </p>
             </div>
-            <p className="font-ui text-[12px] text-[var(--hero-type)]">
+            <p className="min-w-0 break-words text-right font-ui text-[12px] text-[var(--hero-type)]">
               {active.section || active.siteName}
             </p>
           </div>
-          <p className="mt-3 font-ui text-[11px] font-medium uppercase tracking-[1.2px] text-[var(--hero-type)]">
+          <p className="mt-3 break-words font-ui text-[11px] font-medium uppercase tracking-[1.2px] text-[var(--hero-type)]">
             {active.siteName || active.section || riverName}
           </p>
-          <div className="mt-1 flex items-end gap-2 text-[var(--signal-live)]">
+          <div className="mt-1 flex min-w-0 flex-wrap items-end gap-2 text-[var(--signal-live)]">
             <p
-              className="num font-heading text-[52px] font-semibold leading-[48px]"
+              className="num min-w-0 break-words font-heading text-[52px] font-semibold leading-[48px]"
               style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}
             >
               {cfs != null ? cfs.toLocaleString() : "—"}
@@ -309,7 +309,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
         </div>
         {hasMultipleSections ? (
           <div
-            className="flex gap-5 overflow-x-auto border-t border-[var(--border-strong)] px-5 py-3"
+            className="flex min-w-0 max-w-full flex-wrap gap-x-5 gap-y-1 border-t border-[var(--border-strong)] px-5 py-3"
             role="tablist"
             aria-label="River section"
           >
@@ -320,7 +320,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
                 role="tab"
                 aria-selected={idx === selectedIdx}
                 onClick={() => setSection(g.siteId)}
-                className={`shrink-0 font-ui text-[12px] ${
+                className={`min-h-11 font-ui text-[12px] ${
                   idx === selectedIdx
                     ? "font-medium text-[var(--ink)]"
                     : "font-normal text-[var(--slate)]"
@@ -350,7 +350,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
 
         {hasMultipleSections && (
           <div
-            className="mb-4 flex gap-1.5 overflow-x-auto pb-1"
+            className="mb-4 flex min-w-0 max-w-full flex-wrap gap-1.5"
             role="tablist"
             aria-label="River section"
           >
@@ -361,7 +361,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
                 role="tab"
                 aria-selected={idx === selectedIdx}
                 onClick={() => setSection(g.siteId)}
-                className={`shrink-0 rounded-[var(--radius-md)] border px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`min-h-11 rounded-[var(--radius-md)] border px-3 py-1.5 text-xs font-medium transition-colors ${
                   idx === selectedIdx
                     ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--on-action)]"
                     : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
@@ -380,7 +380,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="grid min-w-0 grid-cols-2 gap-3 lg:grid-cols-4">
           {active.discharge && (
             <Metric
               icon={<Waves className="h-4 w-4 text-[var(--accent)]" />}
@@ -445,12 +445,12 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
 
       {/* Shared section tabs — one click updates BOTH flows and weather */}
       {hasMultipleSections && (
-        <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+        <div className="mb-4 flex min-w-0 max-w-full flex-wrap gap-1.5">
           {gauges.map((g, idx) => (
             <button
               key={g.siteId}
               onClick={() => setSection(g.siteId)}
-              className={`whitespace-nowrap px-3 py-1.5 rounded-[var(--radius-md)] text-xs font-medium transition-colors shrink-0 ${
+              className={`min-h-11 rounded-[var(--radius-md)] px-3 py-1.5 text-xs font-medium transition-colors ${
                 idx === selectedIdx
                   ? "bg-[var(--accent)] text-[var(--on-action)]"
                   : "bg-[var(--paper-deep)] text-[var(--text-2)] hover:text-[var(--text-1)]"
@@ -632,17 +632,17 @@ function Metric({
   badgeClass?: string;
 }) {
   return (
-    <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-[var(--text-3)]">
+    <div className="min-w-0 overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-3 sm:px-4">
+      <div className="mb-2 flex min-w-0 items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2 text-[var(--text-3)]">
           {icon}
-          <p className="text-xs font-medium uppercase tracking-[0.06em]">{label}</p>
+          <p className="min-w-0 break-words text-xs font-medium uppercase tracking-[0.06em]">{label}</p>
         </div>
         {badge ? (
           <span className={`text-xs font-semibold ${badgeClass ?? ""}`}>{badge}</span>
         ) : null}
       </div>
-      <p className="num text-2xl font-semibold leading-none text-[var(--text-1)]">
+      <p className="num break-words text-2xl font-semibold leading-none text-[var(--text-1)]">
         {value}
         {unit ? (
           <span className="ml-1.5 text-xs font-normal text-[var(--text-3)]">{unit}</span>

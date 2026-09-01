@@ -25,6 +25,8 @@ interface EntityCardProps {
   description?: string;
   /** Optional inline action overlay (e.g., AddToFlyBoxButton) */
   actionSlot?: CardData["actionSlot"];
+  /** Quiet = "No photograph" plate; named reprints the title in the frame. */
+  imageFallback?: "quiet" | "named";
 }
 
 export default function EntityCard({
@@ -41,6 +43,7 @@ export default function EntityCard({
   accent,
   description,
   actionSlot,
+  imageFallback = "named",
 }: EntityCardProps) {
   // Guides / shops that opt into icon-only keep that treatment.
   if (iconOnly) {
@@ -107,7 +110,7 @@ export default function EntityCard({
   return (
     <Link
       href={href}
-      className="group relative block card-hover overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]"
+      className="group relative block min-w-0 card-hover overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]"
     >
       {actionSlot?.kind === "add-to-fly-box" && (
         <CardActionSlot
@@ -122,6 +125,7 @@ export default function EntityCard({
           title={title}
           meta={[meta, subtitle].filter(Boolean).join(" · ") || undefined}
           contain={imageContain}
+          fallback={imageFallback}
           loading="eager"
           className={imageContain ? "object-contain p-3" : "ea-photo"}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"

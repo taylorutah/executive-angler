@@ -1,10 +1,17 @@
+/** Retired public paths that still appear in seed / DB rows. */
+const RETIRED_STILLS: Record<string, string> = {
+  "/images/madison-river-three-dollar-bridge.jpg":
+    "/images/home/madison-three-dollar-bridge.jpg",
+};
+
 /** Treat null, blank, and whitespace-only as missing. */
 export function normalizeImageUrl(
   value: string | null | undefined,
 ): string | undefined {
   if (typeof value !== "string") return undefined;
   const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : undefined;
+  if (trimmed.length === 0) return undefined;
+  return RETIRED_STILLS[trimmed] ?? trimmed;
 }
 
 export function isUsableImageUrl(

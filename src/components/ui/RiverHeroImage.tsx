@@ -6,7 +6,8 @@ import { Images } from "@/icons";
 import PhotoLightbox from "./PhotoLightbox";
 import type { ApprovedPhoto } from "@/lib/db/photos";
 import PlateFallback from "@/components/media/PlateFallback";
-import { isUsableImageUrl } from "@/lib/media/image-url";
+import EntityIdentityBand from "@/components/ui/EntityIdentityBand";
+import { isUsableImageUrl, normalizeImageUrl } from "@/lib/media/image-url";
 import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
 
 interface RiverHeroImageProps {
@@ -51,12 +52,13 @@ export default function RiverHeroImage({
 }: RiverHeroImageProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [failed, setFailed] = useState(false);
-  const showPhoto = isUsableImageUrl(heroImageUrl) && !failed;
+  const heroSrc = normalizeImageUrl(heroImageUrl);
+  const showPhoto = isUsableImageUrl(heroSrc) && !failed;
 
   const heroAsPhoto: ApprovedPhoto | null = showPhoto
     ? {
         id: "hero",
-        photoUrl: heroImageUrl,
+        photoUrl: heroSrc,
         caption: heroImageAlt,
         submitterName: heroImageCredit || "Executive Angler",
         submittedAt: new Date().toISOString(),
@@ -72,7 +74,7 @@ export default function RiverHeroImage({
         <div className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
           {showPhoto ? (
             <Image
-              src={heroImageUrl}
+              src={heroSrc}
               alt={heroImageAlt}
               fill
               className="object-cover [filter:var(--photo-grade)]"
@@ -103,41 +105,31 @@ export default function RiverHeroImage({
           )}
         </div>
 
-        <div className="border-b border-[var(--border)]">
-          <div className="mx-auto w-full max-w-[var(--container)] px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
-            {toolbar}
-            <div className={toolbar ? "mt-2 sm:mt-3" : undefined}>
-              {subtitle ? <p className="ea-overline">{subtitle}</p> : null}
-              <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h1 className="text-[var(--text-1)]">{title}</h1>
-                {meta ? (
-                  <p className="text-[var(--text-14)] text-[var(--text-2)]">{meta}</p>
-                ) : null}
-              </div>
-              {showPhoto && heroImageCredit ? (
-                <p className="mt-1.5 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
-                  {heroImageCreditUrl ? (
-                    <a
-                      href={heroImageCreditUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline underline-offset-4 hover:text-[var(--text-1)]"
-                    >
-                      {heroImageCredit}
-                    </a>
-                  ) : (
-                    heroImageCredit
-                  )}
-                </p>
-              ) : null}
-            </div>
-            {spec ? (
-              <div className="mt-2.5 border-t border-[var(--border)] pt-2.5 sm:mt-3 sm:pt-3">
-                {spec}
-              </div>
-            ) : null}
-          </div>
-        </div>
+        <EntityIdentityBand
+          toolbar={toolbar}
+          overline={subtitle}
+          title={title}
+          meta={meta}
+          spec={spec}
+          credit={
+            showPhoto && heroImageCredit ? (
+              <p className="mt-1.5 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
+                {heroImageCreditUrl ? (
+                  <a
+                    href={heroImageCreditUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4 hover:text-[var(--text-1)]"
+                  >
+                    {heroImageCredit}
+                  </a>
+                ) : (
+                  heroImageCredit
+                )}
+              </p>
+            ) : null
+          }
+        />
       </section>
 
       {lightboxOpen && allPhotos.length > 0 && (

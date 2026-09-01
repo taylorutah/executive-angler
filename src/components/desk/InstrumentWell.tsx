@@ -22,7 +22,7 @@ export default function InstrumentWell({ children, className, label }: Props) {
       role="region"
       aria-label={label}
       className={cn(
-        "rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--paper)] text-[var(--text-1)]",
+        "min-w-0 max-w-full overflow-x-clip rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--paper)] text-[var(--text-1)]",
         className,
       )}
     >
@@ -42,7 +42,7 @@ export function InstrumentWellFrame({
   return (
     <section className={cn("bg-[var(--paper)]", className)}>
       <div
-        className="mx-auto max-w-[var(--container)]"
+        className="mx-auto min-w-0 max-w-[var(--container)] overflow-x-clip"
         style={{
           paddingInline: "var(--gutter)",
           paddingBlock: "max(1.5rem, var(--gutter))",

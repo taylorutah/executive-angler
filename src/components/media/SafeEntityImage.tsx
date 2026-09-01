@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import PlateFallback from "./PlateFallback";
-import { isUsableImageUrl } from "@/lib/media/image-url";
+import { normalizeImageUrl } from "@/lib/media/image-url";
 import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
 
 interface SafeEntityImageProps {
@@ -41,15 +41,16 @@ export default function SafeEntityImage({
   fallback = "named",
 }: SafeEntityImageProps) {
   const [failed, setFailed] = useState(false);
+  const href = normalizeImageUrl(src);
 
-  if (!isUsableImageUrl(src) || failed) {
+  if (!href || failed) {
     return <PlateFallback title={title} meta={meta} quiet={fallback === "quiet"} />;
   }
 
   return (
     <>
       <Image
-        src={src}
+        src={href}
         alt={alt}
         fill
         unoptimized={unoptimized}

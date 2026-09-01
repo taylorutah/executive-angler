@@ -190,7 +190,7 @@ export default async function RiverPage({ params }: Props) {
         subtitle={heroSubtitle || undefined}
         meta={river.lengthMiles ? `${river.lengthMiles} miles` : undefined}
         toolbar={
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
             <Breadcrumbs
               items={[
                 { label: "Rivers", href: "/rivers" },
@@ -203,7 +203,7 @@ export default async function RiverPage({ params }: Props) {
                 { label: river.name },
               ]}
             />
-            <div className="flex shrink-0 flex-wrap items-center justify-end gap-x-3 gap-y-1">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 sm:justify-end">
               <Link
                 href={`/plan/${river.slug}`}
                 className="font-ui text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
@@ -270,8 +270,8 @@ export default async function RiverPage({ params }: Props) {
         />
       </RiverHeroImage>
 
-      <section className="bg-[var(--paper)]">
-        <div className="mx-auto max-w-[var(--container)] space-y-6 px-4 pb-8 pt-3 sm:px-6 sm:pt-5 lg:px-8">
+      <section className="overflow-x-clip bg-[var(--paper)]">
+        <div className="mx-auto min-w-0 max-w-[var(--container)] space-y-6 px-4 pb-8 pt-3 sm:px-6 sm:pt-5 lg:px-8">
           <YourRecordHere riverId={river.id} riverName={river.name} />
           <SignedOutRiverInsights riverName={river.name} />
           <PersonalFlowOverlay riverId={river.id} />
@@ -307,8 +307,8 @@ export default async function RiverPage({ params }: Props) {
         </RiverLiveInset>
       </Suspense>
 
-      <section className="bg-[var(--paper)] pb-24">
-        <div className="mx-auto max-w-[var(--container)] space-y-12 px-4 sm:px-6 lg:px-8">
+      <section className="overflow-x-clip bg-[var(--paper)] pb-24">
+        <div className="mx-auto min-w-0 max-w-[var(--container)] space-y-12 px-4 sm:px-6 lg:px-8">
           {fishingNow.length > 0 && (
             <ScrollAnimation>
               <div>
@@ -497,6 +497,7 @@ export default async function RiverPage({ params }: Props) {
                             title={lodge.name}
                             subtitle={lodge.priceRange}
                             meta={lodge.seasonStart && lodge.seasonEnd ? `${lodge.seasonStart}–${lodge.seasonEnd}` : undefined}
+                            imageFallback="quiet"
                           />
                         ))}
                       </div>
@@ -684,11 +685,12 @@ export default async function RiverPage({ params }: Props) {
                     <EntityCard
                       key={near.id}
                       href={`/rivers/${near.slug}`}
-                      imageUrl={near.heroImageUrl ?? near.thumbnailUrl}
+                      imageUrl={hostedStillUrl(near.heroImageUrl ?? near.thumbnailUrl)}
                       imageAlt={near.name}
                       title={near.name}
                       subtitle={waterTypeLabel(near.flowType)}
                       meta={(near.primarySpecies || []).slice(0, 3).join(" · ") || undefined}
+                      imageFallback="quiet"
                     />
                   ))}
                 </div>
