@@ -84,4 +84,12 @@ test.describe("journey smoke", () => {
     await logo.click();
     await expect(page).toHaveURL(LOGGED_IN_HOME);
   });
+
+  test("contact page does not paint Turnstile", async ({ page }) => {
+    await page.goto("/contact", { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { level: 1, name: /^contact$/i })).toBeVisible();
+    await expect(page.locator('iframe[src*="challenges.cloudflare.com"]')).toHaveCount(0);
+    await expect(page.locator('iframe[src*="turnstile"]')).toHaveCount(0);
+    await expect(page.getByText(/verification failed/i)).toHaveCount(0);
+  });
 });

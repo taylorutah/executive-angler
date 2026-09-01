@@ -4,7 +4,6 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SITE_NAME } from "@/lib/constants";
 import { Send, AlertCircle } from "@/icons";
-import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const SUBJECT_OPTIONS = [
   "General inquiry",
@@ -14,8 +13,6 @@ const SUBJECT_OPTIONS = [
   "Advertising",
   "Technical issue",
 ] as const;
-
-const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 export default function ContactPage() {
   return (
@@ -35,8 +32,6 @@ function ContactPageInner() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [captchaToken, setCaptchaToken] = useState("");
-  const [captchaResolved, setCaptchaResolved] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,12 +44,13 @@ function ContactPageInner() {
     const email = formData.get("email") as string;
     const subject = formData.get("subject") as string;
     const message = formData.get("message") as string;
+    const website = (formData.get("website") as string) ?? "";
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message, token: captchaToken }),
+        body: JSON.stringify({ name, email, subject, message, website }),
       });
 
       const data = await res.json();
@@ -95,7 +91,7 @@ function ContactPageInner() {
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="mt-10 space-y-6">
+            <form onSubmit={handleSubmit} className="relative mt-10 space-y-6">
               <div>
                 <label htmlFor="name" className="ea-label">
                   Name
@@ -105,6 +101,7 @@ function ContactPageInner() {
                   id="name"
                   name="name"
                   required
+                  maxLength={120}
                   className="ea-input"
                   placeholder="Your name"
                 />
@@ -119,6 +116,7 @@ function ContactPageInner() {
                   id="email"
                   name="email"
                   required
+                  maxLength={254}
                   className="ea-input"
                   placeholder="you@example.com"
                 />
@@ -153,21 +151,23 @@ function ContactPageInner() {
                   name="message"
                   required
                   rows={6}
+                  maxLength={8000}
                   className="ea-input resize-y"
                   placeholder="How can we help?"
                 />
               </div>
 
-              <TurnstileWidget
-                siteKey={TURNSTILE_SITE_KEY}
-                onToken={(t) => {
-                  setCaptchaToken(t);
-                  setCaptchaResolved(t !== "" || captchaResolved);
-                }}
-                onAvailabilityChange={setCaptchaResolved}
-              />
+              <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
 
-              {/* Error message */}
               {error && (
                 <div className="flex items-start gap-3 rounded-surface border border-[var(--danger)] bg-[var(--surface)] px-4 py-3">
                   <AlertCircle size={20} className="mt-0.5 shrink-0 text-[var(--danger)]" />
@@ -178,7 +178,7 @@ function ContactPageInner() {
               <div>
                 <button
                   type="submit"
-                  disabled={sending || !captchaResolved}
+                  disabled={sending}
                   className="ea-btn ea-btn-primary ea-btn-lg"
                 >
                   <Send size={16} />
