@@ -42,6 +42,7 @@ import {
 } from "@/lib/db";
 import { regulationSource } from "@/lib/rivers/regulations";
 import { groupAccessPoints } from "@/lib/rivers/access-groups";
+import { matchHatchPlate } from "@/lib/rivers/week-flies";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -99,8 +100,6 @@ export default async function RiverPage({ params }: Props) {
     river.destinationId ? getRiversByDestination(river.destinationId) : Promise.resolve([]),
   ]);
 
-  const flyByName = new Map(allFlies.map((f) => [f.name.toLowerCase(), f]));
-
   const nearbyLodges = riverLodges.length > 0 ? riverLodges : destLodges.slice(0, 4);
   const nearbyRivers = destRivers.filter((r) => r.id !== river.id).slice(0, 6);
 
@@ -120,6 +119,13 @@ export default async function RiverPage({ params }: Props) {
   const fishingNow = (river.hatchChart ?? []).find(
     (m) => m.month.toLowerCase() === monthNow.toLowerCase(),
   )?.hatches ?? [];
+  const nowPlates = fishingNow.map((hatch, i) => ({
+    key: `${hatch.insect}-${hatch.pattern}-${i}`,
+    hatch,
+    plate: matchHatchPlate(hatch, allFlies),
+  }));
+  const photoPlates = nowPlates.filter((row) => row.plate.imageUrl);
+  const typePlates = nowPlates.filter((row) => !row.plate.imageUrl);
 
   const destState = dest ? dest.state : undefined;
   const destCountry = dest ? dest.country : undefined;
@@ -329,43 +335,58 @@ export default async function RiverPage({ params }: Props) {
                 <p className="mb-5 text-sm text-[var(--text-2)]">
                   {monthNow} on the hatch chart — tied plates, not a catch report.
                 </p>
-                <ul className="grid grid-cols-2 border-t border-l border-[var(--border)] sm:grid-cols-3">
-                  {fishingNow.map((hatch, i) => {
-                    const matchedFly = flyByName.get(hatch.pattern?.toLowerCase() ?? "");
-                    const href = matchedFly ? `/flies/${matchedFly.slug}` : undefined;
-                    const inner = (
-                      <>
-                        <div className="relative flex aspect-square w-full items-center justify-center bg-[var(--plate)]">
-                          {matchedFly?.heroImageUrl ? (
+                {photoPlates.length > 0 ? (
+                  <ul className="grid grid-cols-2 border-t border-l border-[var(--border)] sm:grid-cols-3">
+                    {photoPlates.map(({ key, hatch, plate }) => {
+                      const inner = (
+                        <>
+                          <div className="relative aspect-square w-full bg-[var(--plate)]">
                             <SafeEntityImage
-                              src={matchedFly.heroImageUrl}
-                              alt={hatch.pattern || hatch.insect}
-                              title={hatch.pattern || hatch.insect}
+                              src={plate.imageUrl!}
+                              alt={plate.name}
+                              title={plate.name}
                               contain
                               className="object-contain"
                               sizes="33vw"
                             />
-                          ) : (
-                            <span className="px-2 text-center font-ui text-[11px] uppercase tracking-[0.1em] text-[var(--text-3)]">
-                              {hatch.pattern || hatch.insect}
-                            </span>
-                          )}
-                        </div>
-                        <p className="mt-2 font-display text-sm font-semibold text-[var(--ink)]">
-                          {hatch.pattern || hatch.insect}
-                        </p>
-                        <p className="mt-0.5 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
-                          {[hatch.insect, hatch.size].filter(Boolean).join(" · ")}
-                        </p>
-                      </>
-                    );
-                    return (
-                      <li key={`${hatch.insect}-${hatch.pattern}-${i}`} className="border-b border-r border-[var(--border)] p-3">
-                        {href ? <Link href={href} className="block">{inner}</Link> : inner}
-                      </li>
-                    );
-                  })}
-                </ul>
+                          </div>
+                          <p className="mt-2 font-display text-sm font-semibold text-[var(--ink)]">
+                            {plate.name}
+                          </p>
+                          <p className="mt-0.5 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                            {[hatch.insect, hatch.size].filter(Boolean).join(" · ")}
+                          </p>
+                        </>
+                      );
+                      return (
+                        <li key={key} className="border-b border-r border-[var(--border)] p-3">
+                          {plate.href ? <Link href={plate.href} className="block">{inner}</Link> : inner}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+                {typePlates.length > 0 ? (
+                  <ul className={`${photoPlates.length > 0 ? "mt-2" : ""} border-t border-[var(--border)]`}>
+                    {typePlates.map(({ key, hatch, plate }) => {
+                      const row = (
+                        <>
+                          <p className="font-display text-sm font-semibold text-[var(--ink)]">
+                            {plate.name}
+                          </p>
+                          <p className="mt-0.5 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                            {[hatch.insect, hatch.size].filter(Boolean).join(" · ")}
+                          </p>
+                        </>
+                      );
+                      return (
+                        <li key={key} className="border-b border-[var(--border)] py-3">
+                          {plate.href ? <Link href={plate.href} className="block">{row}</Link> : row}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
               </div>
             </ScrollAnimation>
           )}

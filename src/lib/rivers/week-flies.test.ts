@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { hatchRailFromChart, weekFliesFromChart } from "./week-flies";
+import { hatchRailFromChart, matchHatchPlate, weekFliesFromChart } from "./week-flies";
 import type { CanonicalFly, HatchEntry } from "@/types/entities";
 
 function fly(name: string, slug: string): CanonicalFly {
@@ -57,6 +57,35 @@ describe("weekFliesFromChart", () => {
     );
     assert.equal(chips[0].name, "Salmonfly");
     assert.equal(chips[0].href, undefined);
+  });
+});
+
+describe("matchHatchPlate", () => {
+  it("picks the first comma-separated pattern that has a photograph", () => {
+    const plate = matchHatchPlate(
+      {
+        insect: "Mahogany Dun",
+        size: "#14-16",
+        pattern: "Mahogany Dun, Mahogany Sparkle Dun, Pheasant Tail",
+      },
+      [
+        { ...fly("Mahogany Dun", "mahogany-dun"), heroImageUrl: undefined },
+        fly("Pheasant Tail", "pheasant-tail"),
+      ],
+    );
+    assert.equal(plate.name, "Pheasant Tail");
+    assert.equal(plate.imageUrl, "/images/flies/pheasant-tail.jpg");
+    assert.equal(plate.href, "/flies/pheasant-tail");
+    assert.equal(plate.insect, "Mahogany Dun");
+  });
+
+  it("omits imageUrl when the library has a name but no still", () => {
+    const plate = matchHatchPlate(
+      { insect: "Mahogany Dun", pattern: "Sofa Pillow" },
+      [{ ...fly("Sofa Pillow", "sofa-pillow"), heroImageUrl: undefined }],
+    );
+    assert.equal(plate.name, "Sofa Pillow");
+    assert.equal(plate.imageUrl, undefined);
   });
 });
 

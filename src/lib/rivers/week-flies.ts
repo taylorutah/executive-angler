@@ -11,18 +11,65 @@ export type WeekFlyChip = {
   imageUrl?: string;
 };
 
+function patternParts(pattern?: string): string[] {
+  return (pattern ?? "")
+    .split(/[,;/]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 function bestFlyForHatch(hatch: HatchEntry, flies: CanonicalFly[]): CanonicalFly | undefined {
   let best: { fly: CanonicalFly; score: number } | undefined;
-  const needle = hatch.pattern || hatch.insect;
+  const needles = [...patternParts(hatch.pattern), hatch.pattern || hatch.insect].filter(Boolean);
   for (const fly of flies) {
-    const score = Math.max(
-      scorePatternOnHatch(fly.name, needle),
-      hatch.pattern ? 0 : scorePatternOnHatch(fly.name, hatch.insect),
-    );
+    let score = 0;
+    for (const needle of needles) {
+      score = Math.max(score, scorePatternOnHatch(fly.name, needle ?? ""));
+    }
+    if (!hatch.pattern) {
+      score = Math.max(score, scorePatternOnHatch(fly.name, hatch.insect));
+    }
     if (score < 4) continue;
     if (!best || score > best.score) best = { fly, score };
   }
   return best?.fly;
+}
+
+export type HatchPlate = {
+  name: string;
+  href?: string;
+  imageUrl?: string;
+  insect: string;
+  size?: string;
+};
+
+/**
+ * Catalog fly for a hatch-chart row. Prefers a named pattern that has a
+ * tied-fly photograph. Never invents a plate when the library has no still.
+ */
+export function matchHatchPlate(hatch: HatchEntry, flies: CanonicalFly[]): HatchPlate {
+  const withPhoto = flies.filter((f) => Boolean(f.heroImageUrl));
+  for (const part of patternParts(hatch.pattern)) {
+    const hit = withPhoto.find((f) => scorePatternOnHatch(f.name, part) >= 6);
+    if (hit) {
+      return {
+        name: hit.name,
+        href: `/flies/${hit.slug}`,
+        imageUrl: hit.heroImageUrl,
+        insect: hatch.insect,
+        size: hatch.size || undefined,
+      };
+    }
+  }
+  const fly = bestFlyForHatch(hatch, withPhoto) ?? bestFlyForHatch(hatch, flies);
+  const fallback = patternParts(hatch.pattern)[0] || shortInsect(hatch.insect) || hatch.pattern;
+  return {
+    name: fly?.name || fallback,
+    href: fly ? `/flies/${fly.slug}` : undefined,
+    imageUrl: fly?.heroImageUrl || undefined,
+    insect: hatch.insect,
+    size: hatch.size || undefined,
+  };
 }
 
 /** This month's chart rows as week chips. Library match only — no invented names. */

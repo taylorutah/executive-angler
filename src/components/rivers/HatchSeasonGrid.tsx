@@ -40,6 +40,21 @@ function intensityClass(intensity?: Intensity): string {
   return "bg-[var(--accent)]/50";
 }
 
+function intensityWord(intensity?: Intensity): string {
+  if (intensity === "heavy") return "Heavy";
+  if (intensity === "moderate") return "Moderate";
+  if (intensity === "sparse") return "Sparse";
+  return "On";
+}
+
+function currentMonthKey(): (typeof MONTHS)[number] {
+  const label = new Date().toLocaleString("en-US", {
+    month: "long",
+    timeZone: "America/Denver",
+  });
+  return monthKey(label) ?? "January";
+}
+
 interface Props {
   hatchChart: HatchMonth[];
   bestMonths: string[];
@@ -53,6 +68,8 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
   const best = new Set(
     bestMonths.map(monthKey).filter((m): m is (typeof MONTHS)[number] => m != null),
   );
+  const now = currentMonthKey();
+  const nowShort = SHORT[MONTHS.indexOf(now)];
 
   const insects: string[] = [];
   const cells = new Map<string, Partial<Record<(typeof MONTHS)[number], HatchCell>>>();
@@ -101,74 +118,135 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
         </ul>
       </div>
 
-      <p className="mb-3 text-[13px] text-[var(--text-3)] md:hidden">
+      <p className="mb-3 hidden text-[13px] text-[var(--text-3)]">
         Swipe months to stay on the year
       </p>
 
-      <div className="hatch-year-clip">
+      <ol className="border-t border-[var(--border)] lg:hidden">
+        {insects.map((insect) => {
+          const row = cells.get(insect) ?? {};
+          const here = row[now];
+          return (
+            <li key={insect} className="border-b border-[var(--border)] py-3">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="min-w-0 font-display text-[15px] font-semibold leading-tight text-[var(--ink)]">
+                  {insect}
+                </h3>
+                <p className="shrink-0 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                  {here
+                    ? `${nowShort} · ${intensityWord(here.intensity)}`
+                    : `${nowShort} · off`}
+                </p>
+              </div>
+              <div
+                className="mt-2 grid grid-cols-12 gap-px"
+                aria-label={`${insect} through the year`}
+              >
+                {MONTHS.map((month, i) => {
+                  const cell = row[month];
+                  const current = month === now;
+                  const on = best.has(month);
+                  return (
+                    <div
+                      key={month}
+                      className={`flex flex-col items-center gap-1 py-1 ${
+                        on ? "bg-[var(--accent-soft)]" : ""
+                      } ${current ? "outline outline-1 outline-[var(--ink)] outline-offset-[-1px]" : ""}`}
+                    >
+                      <span
+                        className={`font-ui text-[9px] uppercase tracking-[0.04em] ${
+                          current ? "text-[var(--ink)]" : "text-[var(--text-3)]"
+                        }`}
+                      >
+                        {SHORT[i][0]}
+                      </span>
+                      <span
+                        className={`block h-2.5 w-2.5 rounded-sm ${
+                          cell ? intensityClass(cell.intensity) : "bg-[var(--paper-deep)]"
+                        }`}
+                        title={[
+                          insect,
+                          month,
+                          cell?.intensity,
+                          cell?.size,
+                          cell?.pattern,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+
+      <div className="hatch-year-clip hidden lg:block">
         <div className="overflow-x-auto" tabIndex={0} aria-label="Hatch calendar">
           <table className="ea-table min-w-[720px] pe-16 text-left">
-          <thead>
-            <tr>
-              <th className="sticky left-0 z-10 bg-[var(--vellum)] shadow-[2px_0_0_var(--border)]">
-                Insect
-              </th>
-              {MONTHS.map((month, i) => {
-                const on = best.has(month);
+            <thead>
+              <tr>
+                <th className="sticky left-0 z-10 bg-[var(--vellum)] shadow-[2px_0_0_var(--border)]">
+                  Insect
+                </th>
+                {MONTHS.map((month, i) => {
+                  const on = best.has(month);
+                  return (
+                    <th
+                      key={month}
+                      className={`text-center ${
+                        on
+                          ? "ea-month-on bg-[var(--ink)] text-[var(--hero-type)]"
+                          : ""
+                      }`}
+                    >
+                      {SHORT[i]}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {insects.map((insect) => {
+                const row = cells.get(insect) ?? {};
                 return (
-                  <th
-                    key={month}
-                    className={`text-center ${
-                      on
-                        ? "ea-month-on bg-[var(--ink)] text-[var(--hero-type)]"
-                        : ""
-                    }`}
-                  >
-                    {SHORT[i]}
-                  </th>
+                  <tr key={insect}>
+                    <th className="sticky left-0 z-10 bg-[var(--vellum)] text-left font-medium text-[var(--text-1)] shadow-[2px_0_0_var(--border)]">
+                      {insect}
+                    </th>
+                    {MONTHS.map((month) => {
+                      const cell = row[month];
+                      const on = best.has(month);
+                      return (
+                        <td
+                          key={month}
+                          className={`text-center ${on ? "bg-[var(--accent-soft)]" : ""}`}
+                        >
+                          {cell ? (
+                            <span
+                              className={`mx-auto block h-3 w-3 rounded-sm ${intensityClass(cell.intensity)}`}
+                              title={[
+                                insect,
+                                month,
+                                cell.intensity,
+                                cell.size,
+                                cell.pattern,
+                              ]
+                                .filter(Boolean)
+                                .join(" · ")}
+                            />
+                          ) : (
+                            <span className="mx-auto block h-3 w-3 rounded-sm bg-[var(--paper-deep)]" />
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
                 );
               })}
-            </tr>
-          </thead>
-          <tbody>
-            {insects.map((insect) => {
-              const row = cells.get(insect) ?? {};
-              return (
-                <tr key={insect}>
-                  <th className="sticky left-0 z-10 bg-[var(--vellum)] text-left font-medium text-[var(--text-1)] shadow-[2px_0_0_var(--border)]">
-                    {insect}
-                  </th>
-                  {MONTHS.map((month) => {
-                    const cell = row[month];
-                    const on = best.has(month);
-                    return (
-                      <td
-                        key={month}
-                        className={`text-center ${on ? "bg-[var(--accent-soft)]" : ""}`}
-                      >
-                        {cell ? (
-                          <span
-                            className={`mx-auto block h-3 w-3 rounded-sm ${intensityClass(cell.intensity)}`}
-                            title={[
-                              insect,
-                              month,
-                              cell.intensity,
-                              cell.size,
-                              cell.pattern,
-                            ]
-                              .filter(Boolean)
-                              .join(" · ")}
-                          />
-                        ) : (
-                          <span className="mx-auto block h-3 w-3 rounded-sm bg-[var(--paper-deep)]" />
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
+            </tbody>
           </table>
         </div>
       </div>
