@@ -52,7 +52,7 @@ export default function GazetteHeader() {
             aria-label="Executive Angler — home"
           >
             <HeronMark className="h-[30px] w-[22px] text-[var(--copper)]" aria-hidden />
-            <span className="ea-wordmark">
+            <span className="ea-wordmark text-[11px] sm:text-[13px]">
               Executive
               <br />
               Angler

@@ -17,7 +17,7 @@ interface Props {
 function deltaLine(snapshot: GaugeSnapshot | null): { text: string; dropping: boolean } | null {
   if (!snapshot?.cfs || snapshot.deltaCfs == null) return null;
   const d = snapshot.deltaCfs;
-  if (d === 0) return { text: "steady past 24 hrs", dropping: false };
+  if (d === 0) return null;
   const prev = snapshot.cfs - d;
   const pct = prev !== 0 ? Math.round((d / prev) * 100) : 0;
   const sign = d > 0 ? "+" : "−";

@@ -107,7 +107,7 @@ export default function GazetteHome({
       <section className="mx-auto grid max-w-[72rem] gap-10 px-4 py-10 sm:px-8 sm:py-14 lg:grid-cols-[minmax(0,1.62fr)_minmax(0,1fr)] lg:gap-16 lg:items-start">
         <div>
           <h1 className="font-display text-[clamp(44px,5.8vw,70px)] font-semibold leading-[0.95] tracking-[-0.02em] text-[var(--ink)]">
-            <span className="whitespace-nowrap">
+            <span className="lg:whitespace-nowrap">
               {counts.rivers} Rivers, {counts.flies} Flies,
             </span>
             <br />
