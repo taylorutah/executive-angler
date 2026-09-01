@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import HeronMark from "@/components/brand/HeronMark";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
+import GazetteFlyWell from "./GazetteFlyWell";
 import {
   HERO_HEADLINE_CLOSE,
   HERO_HEADLINE_LEAD,
@@ -215,7 +216,7 @@ export default function GazetteHome({
             return (
               <li key={fly.id} className="border-b border-r border-[var(--border)]">
                 <Link href={`/flies/${fly.slug}`} className="block">
-                  <div className="relative flex aspect-square w-full items-end bg-[var(--paper)] p-3">
+                  <GazetteFlyWell emptyLabel={fly.heroImageUrl ? undefined : fly.name}>
                     {fly.heroImageUrl ? (
                       <SafeEntityImage
                         src={fly.heroImageUrl}
@@ -223,15 +224,11 @@ export default function GazetteHome({
                         title={fly.name}
                         contain
                         fallback="none"
-                        className="ea-fly-cutout object-contain p-3"
+                        className="object-contain p-3"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                       />
-                    ) : (
-                      <p className="font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]">
-                        {fly.name}
-                      </p>
-                    )}
-                  </div>
+                    ) : null}
+                  </GazetteFlyWell>
                   <div className="p-3 pt-2">
                     <h3 className="font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]">
                       {fly.name}

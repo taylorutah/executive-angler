@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
+import GazetteFlyWell from "./GazetteFlyWell";
 import GazetteLiveGauge from "./GazetteLiveGauge";
 import type { GaugeSnapshot } from "@/components/home/conditions";
 import type { HydroReading } from "@/components/hydrograph/geometry";
@@ -73,23 +74,19 @@ export default function GazetteRiverReport({
               const inner = (
                 <>
                     {plate.imageUrl ? (
-                    <div className="relative aspect-square w-full bg-[var(--paper)]">
+                    <GazetteFlyWell>
                       <SafeEntityImage
                         src={plate.imageUrl}
                         alt={plate.name}
                         title={plate.name}
                         contain
                         fallback="none"
-                        className="ea-fly-cutout object-contain p-3"
+                        className="object-contain p-3"
                         sizes="33vw"
                       />
-                    </div>
+                    </GazetteFlyWell>
                   ) : (
-                    <div className="flex aspect-square items-end bg-[var(--paper)] p-3">
-                      <p className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--ink)]">
-                        {plate.name}
-                      </p>
-                    </div>
+                    <GazetteFlyWell emptyLabel={plate.name} />
                   )}
                   <p className="mt-2 font-display text-sm font-semibold text-[var(--ink)]">
                     {plate.name}
