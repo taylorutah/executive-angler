@@ -24,7 +24,7 @@ export const FOCUS_VISIBLE =
 export const MOTION_SAFE =
   "motion-reduce:transition-none motion-reduce:transform-none";
 
-/** Logged-out primary row. Gazette: Rivers · Flies · Places · Field Notes · Journal */
+/** Logged-out primary row. Still 3 masthead nouns, mapped to working routes. */
 export const PUBLIC_NOUNS: NavItem[] = [
   {
     label: "Rivers",
@@ -33,28 +33,40 @@ export const PUBLIC_NOUNS: NavItem[] = [
     descriptor: "Access, hatches, and live flow",
   },
   {
-    label: "Flies",
+    label: "Hatches",
     href: "/flies",
     section: "/flies",
     descriptor: "Patterns, recipes, and materials",
   },
   {
-    label: "Places",
+    label: "Gauges",
+    href: "/rivers?f=gauge",
+    section: "/rivers?f=gauge",
+    descriptor: "Live flow when a station exists",
+  },
+  {
+    label: "Maps",
     href: "/destinations",
     section: "/destinations",
     descriptor: "Where to go, month by month",
   },
   {
-    label: "Field Notes",
-    href: "/articles",
-    section: "/articles",
-    descriptor: "Reading water, gear, and craft",
+    label: "Gear",
+    href: "/gear",
+    section: "/gear",
+    descriptor: "Rods, reels, and lines",
   },
   {
     label: "Journal",
     href: "/journal",
     section: "/journal",
     descriptor: "Sessions, flies, and the days you fished",
+  },
+  {
+    label: "About",
+    href: "/about",
+    section: "/about",
+    descriptor: "The gazette",
   },
 ];
 

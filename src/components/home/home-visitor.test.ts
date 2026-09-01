@@ -6,7 +6,7 @@ import { join } from "node:path";
 const root = process.cwd();
 
 describe("home visitor QA locks", () => {
-  it("composes T7O4R in GazetteHome, not HomeHero + CategoryIndex", () => {
+  it("composes still 4 in GazetteHome — rivers report, not a brochure hero", () => {
     const home = readFileSync(join(root, "src/app/page.tsx"), "utf8");
     const gazette = readFileSync(join(root, "src/components/gazette/GazetteHome.tsx"), "utf8");
     assert.match(home, /GazetteLiveHome/);
@@ -14,23 +14,22 @@ describe("home visitor QA locks", () => {
     assert.equal(home.includes("CategoryIndex"), false);
     assert.equal(home.includes("WhereToGo"), false);
     assert.equal(home.includes("LiveConditionsRail"), false);
-    assert.match(gazette, /lg:grid-cols-\[minmax\(0,1.62fr\)_minmax\(0,1fr\)\]/);
-    assert.match(gazette, /and Hatches/);
-    assert.match(
-      gazette,
-      /<span className="whitespace-nowrap">\s*\{counts\.rivers\} Rivers, \{counts\.flies\} Flies,/,
-    );
-    assert.match(gazette, /bg-\[var\(--copper\)\]/);
-    assert.match(gazette, /formatHeroCaption/);
-    assert.match(gazette, /text-center/);
-    assert.match(gazette, /h-\[50vh\]/);
-    assert.equal(gazette.includes("absolute bottom-0"), false);
+    assert.match(gazette, /On the water now/);
+    assert.match(gazette, /Rivers/);
+    assert.match(gazette, /Report/);
+    assert.match(gazette, /02 The plate/);
+    assert.match(gazette, /GazettePlate/);
+    assert.match(gazette, /Field note/);
+    assert.match(gazette, /Keep the record the water can/);
+    assert.equal(gazette.includes("h-[50vh]"), false);
+    assert.equal(gazette.includes("and Hatches"), false);
+    assert.equal(gazette.includes("HERO_IMAGE"), false);
   });
 
-  it("keeps the journal invitation on paper with a hairline ghost", () => {
+  it("keeps the journal invitation on paper with a double-rule box", () => {
     const gazette = readFileSync(join(root, "src/components/gazette/GazetteHome.tsx"), "utf8");
     assert.match(gazette, /Keep a journal/);
-    assert.match(gazette, /border-\[var\(--ink\)\]/);
+    assert.match(gazette, /ea-journal-box/);
     assert.equal(gazette.includes("ea-band-ink"), false);
   });
 

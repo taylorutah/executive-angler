@@ -1,21 +1,19 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import RiversStationTable, { type StationFlow } from "@/components/rivers/RiversStationTable";
 import type { FlowState } from "@/lib/browse/flow-state";
 import type { RiverBrowseItem } from "@/lib/browse/river-items";
+import GazetteColophon from "./GazetteColophon";
 
-type StationFilter = "all" | "gauge" | "freestone" | "tailwater" | "west" | "east";
+type Dimension = "state" | "water" | "hatch" | "gauge";
 
-const FILTERS: { key: StationFilter; label: string }[] = [
-  { key: "all", label: "All" },
+const DIMENSIONS: { key: Dimension; label: string }[] = [
+  { key: "state", label: "State" },
+  { key: "water", label: "Water" },
+  { key: "hatch", label: "Hatch" },
   { key: "gauge", label: "Gauge" },
-  { key: "freestone", label: "Freestone" },
-  { key: "tailwater", label: "Tailwater" },
-  { key: "west", label: "West" },
-  { key: "east", label: "East" },
 ];
 
 interface FlowStateRow {
@@ -31,15 +29,15 @@ interface Props {
   riverCount: number;
 }
 
-/** Station table at the scale of ON THE WATER NOW. Photo grid is a secondary toggle. */
+/** Still 3 — THE REFERENCE station table. Search is type, not a boxed pill. */
 export default function GazetteRiversIndex({ items, riverCount }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const [view, setView] = useState<"table" | "photos">("table");
   const [flows, setFlows] = useState<Record<string, FlowStateRow>>({});
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const filter = (searchParams.get("f") as StationFilter) || "all";
+  const dimension = (searchParams.get("f") as Dimension | "all") || "all";
+  const value = searchParams.get("v") ?? "";
 
   useEffect(() => {
     let cancelled = false;
@@ -56,12 +54,38 @@ export default function GazetteRiversIndex({ items, riverCount }: Props) {
     };
   }, []);
 
-  const setFilter = (next: StationFilter) => {
+  const setDimension = (next: Dimension) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (next === "all") params.delete("f");
-    else params.set("f", next);
+    if (dimension === next && !value) {
+      params.delete("f");
+      params.delete("v");
+    } else {
+      params.set("f", next);
+      if (next === "gauge") {
+        params.set("v", "live");
+      } else if (next === "hatch") {
+        params.set("v", "on");
+      } else {
+        params.delete("v");
+      }
+    }
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
+
+  const setValue = (next: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (!next) params.delete("v");
+    else params.set("v", next);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const states = useMemo(() => {
+    return [...new Set(items.map((item) => item.kicker).filter(Boolean))] as string[];
+  }, [items]);
+
+  const waters = useMemo(() => {
+    return [...new Set(items.map((item) => String(item._filterValues?.waterType ?? "")).filter(Boolean))];
+  }, [items]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -70,16 +94,14 @@ export default function GazetteRiversIndex({ items, riverCount }: Props) {
         return false;
       }
       const water = String(item._filterValues?.waterType ?? "");
-      const region = String(item._filterValues?.region ?? "");
       const gauged = String(item._filterValues?.gauge ?? "0") === "1";
-      if (filter === "gauge") return gauged;
-      if (filter === "freestone") return water === "freestone";
-      if (filter === "tailwater") return water === "tailwater";
-      if (filter === "west") return region === "west";
-      if (filter === "east") return region === "east";
+      if (dimension === "gauge") return gauged;
+      if (dimension === "hatch") return Boolean(item.whatsOn);
+      if (dimension === "water" && value) return water === value;
+      if (dimension === "state" && value) return (item.kicker ?? "") === value;
       return true;
     });
-  }, [items, query, filter]);
+  }, [items, query, dimension, value]);
 
   const stationFlows: Record<string, StationFlow> = useMemo(() => {
     const out: Record<string, StationFlow> = {};
@@ -95,29 +117,33 @@ export default function GazetteRiversIndex({ items, riverCount }: Props) {
         <p className="font-ui text-[11px] uppercase tracking-[0.18em] text-[var(--copper)]">
           The reference
         </p>
-        <h1 className="mt-2 font-display text-[clamp(36px,4.5vw,56px)] font-semibold leading-[0.95] text-[var(--ink)]">
+        <h1 className="mt-2 font-display text-[clamp(36px,5vw,56px)] font-semibold leading-[0.95] text-[var(--ink)]">
           {riverCount} rivers, documented.
         </h1>
+        <p className="mt-3 font-body text-[17px] italic text-[var(--text-2)]">
+          Access, hatches, and live flow when a gauge exists.
+        </p>
         <label className="mt-8 block max-w-xl">
-          <span className="sr-only">Search a river</span>
+          <span className="sr-only">Search rivers</span>
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search a river"
+            placeholder="Search rivers…"
             className="ea-search-underline"
           />
         </label>
-        <div className="mt-5 flex flex-wrap gap-x-3 gap-y-2 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">
-          {FILTERS.map((f, i) => (
+        <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">
+          <span>Filters:</span>
+          {DIMENSIONS.map((f, i) => (
             <span key={f.key} className="inline-flex items-center gap-x-3">
-              {i > 0 ? <span aria-hidden>·</span> : null}
+              {i > 0 ? <span aria-hidden>•</span> : null}
               <button
                 type="button"
-                onClick={() => setFilter(f.key)}
+                onClick={() => setDimension(f.key)}
                 className={
-                  filter === f.key
-                    ? "text-[var(--ink)] underline decoration-[var(--ink)] underline-offset-4"
+                  dimension === f.key
+                    ? "text-[var(--ink)] underline decoration-[var(--copper)] underline-offset-4"
                     : "hover:text-[var(--ink)]"
                 }
               >
@@ -126,42 +152,39 @@ export default function GazetteRiversIndex({ items, riverCount }: Props) {
             </span>
           ))}
         </div>
-        <div className="mt-4 flex flex-wrap gap-x-4 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">
-          <button
-            type="button"
-            onClick={() => setView("table")}
-            className={view === "table" ? "text-[var(--ink)] underline underline-offset-4" : "hover:text-[var(--ink)]"}
-          >
-            Table
-          </button>
-          <button
-            type="button"
-            onClick={() => setView("photos")}
-            className={view === "photos" ? "text-[var(--ink)] underline underline-offset-4" : "hover:text-[var(--ink)]"}
-          >
-            Pictures
-          </button>
-          <span className="num ml-auto">{filtered.length}</span>
-        </div>
+        {dimension === "state" ? (
+          <div className="mt-3 flex flex-wrap gap-x-3 gap-y-2 font-ui text-[12px] uppercase tracking-[0.1em] text-[var(--text-3)]">
+            {states.map((state) => (
+              <button
+                key={state}
+                type="button"
+                onClick={() => setValue(value === state ? "" : state)}
+                className={value === state ? "text-[var(--ink)] underline underline-offset-4" : "hover:text-[var(--ink)]"}
+              >
+                {state}
+              </button>
+            ))}
+          </div>
+        ) : null}
+        {dimension === "water" ? (
+          <div className="mt-3 flex flex-wrap gap-x-3 gap-y-2 font-ui text-[12px] uppercase tracking-[0.1em] text-[var(--text-3)]">
+            {waters.map((water) => (
+              <button
+                key={water}
+                type="button"
+                onClick={() => setValue(value === water ? "" : water)}
+                className={value === water ? "text-[var(--ink)] underline underline-offset-4" : "hover:text-[var(--ink)]"}
+              >
+                {water}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </header>
 
       <div className="mx-auto max-w-[72rem] px-4 py-6 sm:px-8">
-        {view === "table" ? (
-          <RiversStationTable items={filtered} flows={stationFlows} />
-        ) : (
-          <ul className="border-t border-[var(--border)]">
-            {filtered.map((item) => (
-              <li key={item.riverId} className="border-b border-[var(--border)] py-3">
-                <Link href={item.href} className="font-display text-[17px] font-semibold text-[var(--ink)]">
-                  {item.title}
-                </Link>
-                <p className="font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
-                  {item.kicker ?? "—"}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
+        <RiversStationTable items={filtered} flows={stationFlows} />
+        <GazetteColophon />
       </div>
     </div>
   );

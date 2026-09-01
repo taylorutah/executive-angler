@@ -15,9 +15,9 @@ import { useRouteChangeReset } from "@/components/layout/nav/useRouteChangeReset
 import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 
 /**
- * T7O4R chrome. Logged-out: heron, wordmark, five nouns, one willow button.
- * No search field, Explore, Sign in, bell, or plus. Logged-in utilities
- * sit on the right without changing that composition.
+ * Identity lockup: etched heron + two-line EXECUTIVE / ANGLER.
+ * Logged-out: no search field. At 390, wordmark + MENU only — Create account
+ * stays desktop so it cannot collide with the mark.
  */
 export default function GazetteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,22 +44,22 @@ export default function GazetteHeader() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--border)] bg-[var(--paper)]">
-        <div className="mx-auto grid h-[var(--header-h)] max-w-[72rem] grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-8">
+      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--paper)]">
+        <div className="grid h-[var(--header-h)] grid-cols-[minmax(0,1fr)_auto] items-center px-3 sm:px-6 md:grid-cols-[auto_minmax(0,1fr)_auto]">
           <Link
             href={user ? POST_LOGIN_PATH : "/"}
-            className="ea-focus-ring flex flex-shrink-0 cursor-pointer select-none items-center gap-2.5 justify-self-start"
+            className="ea-focus-ring flex min-w-0 flex-shrink-0 cursor-pointer select-none items-center gap-2"
             aria-label="Executive Angler — home"
           >
-            <HeronMark className="h-[30px] w-[22px] text-[var(--copper)]" aria-hidden />
-            <span className="ea-wordmark text-[11px] sm:text-[13px]">
+            <HeronMark className="h-9 w-[20px] md:h-12 md:w-7" aria-hidden />
+            <span className="ea-wordmark">
               Executive
               <br />
               Angler
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="hidden h-[var(--header-h)] items-stretch md:flex">
+          <nav aria-label="Primary" className="hidden h-[var(--header-h)] items-stretch justify-center md:flex">
             {nouns.map((item) => {
               const active = isSectionActive(pathname, item.section);
               return (
@@ -75,7 +75,7 @@ export default function GazetteHeader() {
             })}
           </nav>
 
-          <div className="flex items-center justify-self-end gap-2">
+          <div className="flex items-center justify-self-end gap-1">
             {user ? (
               <div className="hidden items-center gap-1 md:flex">
                 <NotificationBell />
@@ -141,7 +141,7 @@ export default function GazetteHeader() {
             ) : (
               <Link
                 href="/signup"
-                className="hidden rounded-none bg-[var(--accent)] px-3.5 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--on-action)] md:inline-flex"
+                className="hidden bg-[var(--accent)] px-3.5 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--on-action)] md:inline-flex"
               >
                 Create account
               </Link>
@@ -152,7 +152,7 @@ export default function GazetteHeader() {
               onClick={() => setMobileOpen(true)}
               aria-expanded={mobileOpen}
               aria-haspopup="dialog"
-              className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-11 items-center gap-2 px-2 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-2)] md:hidden`}
+              className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-11 items-center px-2 font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--copper)] md:hidden`}
             >
               Menu
             </button>

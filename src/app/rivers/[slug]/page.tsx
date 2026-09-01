@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import JsonLd from "@/components/seo/JsonLd";
 import GazetteRiverReport, { platesFromHatches } from "@/components/gazette/GazetteRiverReport";
 import {
+  getAllArticles,
   getAllCanonicalFlies,
   getAllRivers,
   getDestinationById,
@@ -57,9 +58,10 @@ export default async function RiverPage({ params }: Props) {
   const river = await getRiverBySlug(slug);
   if (!river) notFound();
 
-  const [dest, allFlies] = await Promise.all([
+  const [dest, allFlies, articles] = await Promise.all([
     river.destinationId ? getDestinationById(river.destinationId) : Promise.resolve(undefined),
     getAllCanonicalFlies(),
+    getAllArticles().catch(() => []),
   ]);
 
   const monthNow = new Date().toLocaleString("en-US", {
@@ -75,12 +77,38 @@ export default async function RiverPage({ params }: Props) {
   const destCountry = dest?.country;
   const destSlug = dest?.slug;
   const place = destState || dest?.name || destCountry || "";
-  const overline =
-    river.slug === "madison-river"
-      ? "MONTANA  ·  MISSOURI HEADWATERS"
-      : [place, (river.flowType ?? "").replace(/-/g, " ")].filter(Boolean).join("  ·  ").toUpperCase();
+  const meta = [
+    place,
+    (river.flowType ?? "").replace(/-/g, " "),
+    river.lengthMiles ? `${river.lengthMiles} miles` : "",
+  ]
+    .filter(Boolean)
+    .join("  ·  ")
+    .toUpperCase();
+  const crumbs = [
+    { label: "Rivers", href: "/rivers" },
+    ...(dest
+      ? [{ label: dest.name, href: `/destinations/${dest.slug}` }]
+      : place
+        ? [{ label: place }]
+        : []),
+    { label: river.name },
+  ];
 
   const gauge = primaryGauge(river.usgsGaugeId, river.name);
+  const preferredAccess = ["Three Dollar Bridge FAS", "Lyons Bridge FAS", "Varney Bridge FAS"];
+  const accessPoints = [...(river.accessPoints ?? [])].sort((a, b) => {
+    const ai = preferredAccess.findIndex((name) => a.name.startsWith(name.replace(" FAS", "")));
+    const bi = preferredAccess.findIndex((name) => b.name.startsWith(name.replace(" FAS", "")));
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  }).slice(0, 3);
+
+  const fieldNote =
+    articles.find(
+      (article) =>
+        article.relatedRiverIds?.includes(river.id) ||
+        article.title.toLowerCase().includes(river.name.toLowerCase().replace(/ river$/, "")),
+    ) ?? null;
   const flagship = FLAGSHIP_RIVERS.some((row) => row.slug === river.slug)
     ? selectFlagshipRivers([river])[0]
     : undefined;
@@ -142,14 +170,17 @@ export default async function RiverPage({ params }: Props) {
       />
       <GazetteRiverReport
         river={river}
-        overline={overline}
+        crumbs={crumbs}
+        meta={meta}
         place={place}
         siteId={gauge?.siteId ?? null}
+        siteName={gauge?.name ?? null}
         plates={plates}
-        accessPoints={river.accessPoints ?? []}
+        accessPoints={accessPoints}
         regulations={river.regulations}
         regsSource={regsSource}
         evidencePhoto={evidencePhoto}
+        fieldNote={fieldNote}
         initialSnapshot={gauges?.snapshots[river.id] ?? null}
         initialHistory={gauges?.histories[river.id]}
       />

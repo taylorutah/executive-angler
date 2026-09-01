@@ -7,7 +7,6 @@ import {
   deltaCfsFromHistory,
   formatObservedAt,
   formatSeriesTrendLine,
-  formatTwentyFourHourLine,
   preferMeasuredDelta,
 } from "@/components/home/conditions";
 import type { HydroReading } from "@/components/hydrograph/geometry";
@@ -15,6 +14,7 @@ import type { HydroReading } from "@/components/hydrograph/geometry";
 interface Props {
   riverId: string;
   siteId: string | null;
+  siteName?: string | null;
   place: string;
   initialSnapshot?: GaugeSnapshot | null;
   initialHistory?: HydroReading[];
@@ -40,9 +40,17 @@ type FlagshipJson = {
   histories?: Record<string, HydroReading[]>;
 };
 
+function stillTrend(deltaCfs: number | null, liveCfs: number | null): string | null {
+  if (liveCfs == null || deltaCfs == null || deltaCfs === 0) return null;
+  const sign = deltaCfs < 0 ? "−" : "+";
+  const arrow = deltaCfs < 0 ? "▼" : "▲";
+  return `TREND: ${sign}${Math.abs(Math.round(deltaCfs))} CFS ${arrow} 24H`;
+}
+
 export default function GazetteLiveGauge({
   riverId,
   siteId,
+  siteName,
   place: _place,
   initialSnapshot = null,
   initialHistory,
@@ -115,55 +123,71 @@ export default function GazetteLiveGauge({
     deltaCfsFromHistory(cfs, history),
   );
   const trend =
-    formatTwentyFourHourLine(deltaCfs, cfs) ?? formatSeriesTrendLine(cfs, history);
+    stillTrend(deltaCfs, cfs) ??
+    formatSeriesTrendLine(cfs, history)?.text ??
+    null;
+  const dropping = deltaCfs != null && deltaCfs < 0;
   const updated = formatObservedAt(snapshot?.observedAt ?? null);
   const temp = snapshot?.waterTempF ?? null;
+  const station = [siteId ? `USGS STATION ${siteId}` : null, siteName]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <section className="mx-auto grid max-w-[72rem] gap-10 px-4 py-10 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
-      <div>
-        <p className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
-          Live gauge
-        </p>
-        <p className="mt-3 flex items-baseline gap-3">
-          <span
-            className={`font-display text-[clamp(64px,10vw,112px)] font-semibold leading-none tabular-nums ${
+    <section className="mx-auto max-w-[72rem] px-4 py-8 sm:px-8">
+      <p className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
+        Live gauge{station ? ` · ${station}` : ""}
+      </p>
+      <dl className="mt-5 grid grid-cols-1 gap-6 border-t border-[var(--border)] pt-5 sm:grid-cols-3 sm:gap-0">
+        <div className="sm:border-r sm:border-[var(--border)] sm:pr-6">
+          <dt className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
+            Flow
+          </dt>
+          <dd
+            className={`mt-2 font-display text-[clamp(36px,5vw,52px)] font-semibold leading-none tabular-nums ${
               live ? "text-[var(--ink)]" : "text-[var(--text-3)]"
             }`}
           >
-            {cfs != null ? cfs.toLocaleString("en-US") : "—"}
-          </span>
-          <span className="font-ui text-[14px] uppercase tracking-[0.16em] text-[var(--text-3)]">
-            CFS
-          </span>
-        </p>
-        {trend ? (
-          <p
-            className={`mt-3 font-ui text-[13px] uppercase tracking-[0.08em] ${
-              trend.dropping ? "text-[var(--danger)]" : "text-[var(--water-live)]"
-            }`}
-          >
-            {trend.dropping ? "↓ " : "↑ "}
-            {trend.text}
+            {cfs != null ? `${cfs.toLocaleString("en-US")} CFS` : "—"}
+          </dd>
+          {trend ? (
+            <p
+              className={`mt-2 font-ui text-[12px] uppercase tracking-[0.08em] ${
+                dropping ? "text-[var(--danger)]" : "text-[var(--copper)]"
+              }`}
+            >
+              {trend}
+            </p>
+          ) : null}
+        </div>
+        <div className="sm:border-r sm:border-[var(--border)] sm:px-6">
+          <dt className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
+            Water temp
+          </dt>
+          <dd className="mt-2 font-display text-[clamp(36px,5vw,52px)] font-semibold leading-none tabular-nums text-[var(--ink)]">
+            {temp != null ? `${temp} °F` : "—"}
+          </dd>
+        </div>
+        <div className="sm:pl-6">
+          <dt className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
+            Updated
+          </dt>
+          <dd className="mt-2 font-display text-[clamp(36px,5vw,52px)] font-semibold leading-none text-[var(--ink)]">
+            {updated ?? "—"}
+          </dd>
+          <p className="mt-2 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">
+            USGS
           </p>
-        ) : null}
-        <dl className="mt-8 space-y-2 font-ui text-[12px] uppercase tracking-[0.12em]">
-          <div className="flex gap-6">
-            <dt className="w-28 text-[var(--text-3)]">Water temp</dt>
-            <dd className="num text-[var(--ink)]">{temp != null ? `${temp}°F` : "—"}</dd>
-          </div>
-          <div className="flex gap-6">
-            <dt className="w-28 text-[var(--text-3)]">Updated</dt>
-            <dd className="text-[var(--ink)]">{updated ? `${updated} USGS` : "—"}</dd>
-          </div>
-        </dl>
+        </div>
+      </dl>
+      <div className="mt-8">
+        <GazetteHydrograph
+          riverId={riverId}
+          siteId={siteId}
+          liveCfs={cfs}
+          readings={history ?? undefined}
+        />
       </div>
-      <GazetteHydrograph
-        riverId={riverId}
-        siteId={siteId}
-        liveCfs={cfs}
-        readings={history ?? undefined}
-      />
     </section>
   );
 }

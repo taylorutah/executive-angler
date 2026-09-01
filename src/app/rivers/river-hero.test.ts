@@ -14,7 +14,7 @@ const gauge = readFileSync(
 );
 
 describe("river station report", () => {
-  it("opens with giant CFS + hydrograph, not a magazine hero", () => {
+  it("opens as a station report, not a magazine hero", () => {
     assert.match(page, /GazetteRiverReport/);
     assert.equal(page.includes("RiverHeroImage"), false);
     assert.equal(page.includes("Trip brief"), false);
@@ -22,13 +22,17 @@ describe("river station report", () => {
     assert.equal(page.includes("ReportButton"), false);
     assert.equal(page.includes("FavoriteButton"), false);
     assert.match(gauge, /Live gauge/);
+    assert.match(gauge, /Flow/);
+    assert.match(gauge, /Water temp/);
     assert.match(report, /GazetteLiveGauge/);
-    assert.match(report, /Current hatches/);
+    assert.match(report, /Fish this now/);
     assert.match(report, /Keep a journal on this river/);
+    assert.match(report, /formatLonLat/);
   });
 
-  it("uses Missouri Headwaters overline on Madison", () => {
-    assert.match(page, /MISSOURI HEADWATERS/);
+  it("prints place · water · miles as type, not a brochure overline", () => {
+    assert.match(page, /lengthMiles/);
+    assert.match(page, /crumbs/);
     assert.match(page, /madison-river/);
   });
 });

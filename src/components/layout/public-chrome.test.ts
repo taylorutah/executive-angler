@@ -25,21 +25,19 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("h-8 w-28"), false);
   });
 
-  it("wraps /rivers filters so East is a type line, not a clip", () => {
+  it("types /rivers filters as State · Water · Hatch · Gauge", () => {
     const rivers = readFileSync(
       join(root, "src/components/gazette/GazetteRiversIndex.tsx"),
       "utf8",
     );
-    assert.match(rivers, /label: "East"/);
-    assert.match(
-      rivers,
-      /className="mt-5 flex flex-wrap gap-x-3 gap-y-2/,
-    );
-    assert.equal(
-      /mt-5 flex flex-nowrap/.test(rivers),
-      false,
-      "filter row must wrap, not scroll-clip East",
-    );
+    assert.match(rivers, /label: "State"/);
+    assert.match(rivers, /label: "Water"/);
+    assert.match(rivers, /label: "Hatch"/);
+    assert.match(rivers, /label: "Gauge"/);
+    assert.match(rivers, /ea-search-underline/);
+    assert.match(rivers, /flex flex-wrap/);
+    assert.equal(rivers.includes("rounded-full"), false, "search must be type, not a boxed pill");
+    assert.equal(rivers.includes("ea-search-pill"), false);
   });
 
   it("limits the public ticker to three flagship waters", () => {
@@ -50,13 +48,15 @@ describe("gazette chrome locks", () => {
     assert.equal(rail.includes("LiveDot"), false);
   });
 
-  it("keeps the public nouns as Rivers Flies Places Field Notes Journal", () => {
+  it("keeps the public nouns as the still-3 masthead", () => {
     const links = readFileSync(join(root, "src/components/layout/nav/links.ts"), "utf8");
     assert.match(links, /label: "Rivers"/);
-    assert.match(links, /label: "Flies"/);
-    assert.match(links, /label: "Places"/);
-    assert.match(links, /label: "Field Notes"/);
+    assert.match(links, /label: "Hatches"/);
+    assert.match(links, /label: "Gauges"/);
+    assert.match(links, /label: "Maps"/);
+    assert.match(links, /label: "Gear"/);
     assert.match(links, /label: "Journal"/);
+    assert.match(links, /label: "About"/);
   });
 
   it("treats sb-*-auth-token as a chrome hint only", () => {
@@ -66,15 +66,15 @@ describe("gazette chrome locks", () => {
     assert.equal(hasSessionHint("other=1; sb-proj-auth-token=e30"), true);
   });
 
-  it("ships Privacy and Terms in the House footer column", () => {
-    const house = footer.slice(footer.indexOf('title: "House"'));
-    assert.match(house, /label: "Privacy", href: "\/privacy"/);
-    assert.match(house, /label: "Terms", href: "\/terms"/);
-    assert.match(footer, /a river gazette/);
-    assert.match(footer, /No spots\. No counts\. No noise\./);
+  it("ships Privacy and Terms and the still-4 footer line", () => {
+    assert.match(footer, /label: "Privacy", href: "\/privacy"/);
+    assert.match(footer, /label: "Terms", href: "\/terms"/);
+    assert.match(footer, /a fly-fishing gazette/);
+    assert.match(footer, /No spots\. No counts\. No leaderboard\./);
     const layout = readFileSync(join(root, "src/app/layout.tsx"), "utf8");
     assert.match(layout, /<Footer \/>/);
     assert.match(layout, /SiteTicker/);
+    assert.match(layout, /gazette-sheet/);
   });
 
   it("keeps house and login headings ink Fraunces, not copper fills", () => {

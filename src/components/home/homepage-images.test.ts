@@ -11,6 +11,7 @@ import {
 } from "./homepage-images";
 
 const homeHero = readFileSync(join(process.cwd(), "src/components/gazette/GazetteHome.tsx"), "utf8");
+const homePage = readFileSync(join(process.cwd(), "src/app/page.tsx"), "utf8");
 
 describe("canonicalImgSrc", () => {
   it("decodes a next/image optimizer URL", () => {
@@ -83,10 +84,10 @@ describe("photoAlt", () => {
 });
 
 describe("HomeHero photograph", () => {
-  it("serves the public JPEG, not the optimizer", () => {
-    assert.match(homeHero, /\bunoptimized\b/);
-    assert.equal(/quality\s*=/.test(homeHero), false);
-    assert.match(homeHero, /src=\{HERO_IMAGE\.src\}/);
+  it("does not put a brochure hero on the gazette home", () => {
+    assert.equal(homeHero.includes("HERO_IMAGE"), false);
+    assert.equal(homeHero.includes("h-[50vh]"), false);
+    assert.match(homePage, /GazetteLiveHome/);
   });
 });
 

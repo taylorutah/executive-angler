@@ -12,7 +12,6 @@ import type { Article, CanonicalFly } from "@/types/entities";
 import { selectFlagshipRivers } from "@/components/home/conditions";
 import { loadFlagshipGaugePayload } from "@/components/home/flagship-cache";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
-import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
 import GazetteLiveHome from "@/components/gazette/GazetteLiveHome";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -50,36 +49,42 @@ function currentMonth(): string {
 const BANNED_EXCERPT =
   /river intelligence|intelligence platform|fly fishing intelligence|upgrade to|founders|premium tier/i;
 
+const PLATE_SLUGS = [
+  "parachute-adams",
+  "elk-hair-caddis",
+  "pheasant-tail",
+  "hares-ear",
+  "parachute-hopper",
+  "woolly-bugger",
+];
+
 function isPublicRead(article: Article): boolean {
   return !BANNED_EXCERPT.test(article.excerpt ?? "");
 }
 
-function pickRead(articles: Article[], used: Set<string>): Article | null {
+function pickRead(articles: Article[]): Article | null {
   const sorted = [...articles].sort(
     (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
   );
   const eligible = sorted.filter(isPublicRead);
   const featured = eligible.filter((a) => a.featured);
-  const ordered = [...featured, ...eligible.filter((a) => !a.featured)];
-  const lead = ordered.find((article) => imageAvailable(article.heroImageUrl, used) || !article.heroImageUrl);
-  if (!lead) return null;
-  if (lead.heroImageUrl) claimImageUrl(lead.heroImageUrl, used);
-  return lead;
+  return [...featured, ...eligible.filter((a) => !a.featured)][0] ?? null;
 }
 
-function pickPlate(
-  featured: CanonicalFly[],
-  all: CanonicalFly[],
-  used: Set<string>,
-): CanonicalFly[] {
+function pickPlate(featured: CanonicalFly[], all: CanonicalFly[]): CanonicalFly[] {
+  const bySlug = new Map(all.map((fly) => [fly.slug, fly]));
   const seen = new Set<string>();
   const plate: CanonicalFly[] = [];
+  for (const slug of PLATE_SLUGS) {
+    const fly = bySlug.get(slug);
+    if (!fly || seen.has(fly.id)) continue;
+    seen.add(fly.id);
+    plate.push(fly);
+  }
   for (const fly of [...featured, ...all]) {
     if (plate.length === 6) break;
     if (seen.has(fly.id)) continue;
-    if (fly.heroImageUrl && !imageAvailable(fly.heroImageUrl, used)) continue;
     seen.add(fly.id);
-    if (fly.heroImageUrl) claimImageUrl(fly.heroImageUrl, used);
     plate.push(fly);
   }
   return plate;
@@ -106,11 +111,8 @@ export default async function HomePage() {
     histories: {},
   }));
 
-  const usedImages = new Set<string>();
-  claimImageUrl(HERO_IMAGE.src, usedImages);
-
-  const plate = pickPlate(featuredFlies, allFlies, usedImages);
-  const fieldNote = pickRead(articles, usedImages);
+  const plate = pickPlate(featuredFlies, allFlies);
+  const fieldNote = pickRead(articles);
 
   return (
     <GazetteLiveHome

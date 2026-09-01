@@ -35,27 +35,18 @@ export function cfsCell(flow: StationFlow | undefined): string {
 }
 
 function waterLabel(item: RiverBrowseItem): string {
-  return waterTypeLabel(String(item._filterValues?.waterType ?? "")) ?? UNGAUGED;
+  return (waterTypeLabel(String(item._filterValues?.waterType ?? "")) ?? UNGAUGED).toLowerCase();
 }
 
-function CfsText({ flow }: { flow: StationFlow | undefined }) {
-  const live = isGauged(flow);
+function TrendMark({ flow }: { flow: StationFlow | undefined }) {
+  if (!isGauged(flow) || !flow) {
+    return <span className="text-[var(--text-3)]">{UNGAUGED}</span>;
+  }
+  const rising = flow.deltaCfs != null && flow.deltaCfs > 15;
+  const dropping = flow.deltaCfs != null && flow.deltaCfs < -15;
   return (
-    <span className={`num ${live ? "text-[var(--water-live)]" : "text-[var(--text-3)]"}`}>
-      {cfsCell(flow)}
-    </span>
-  );
-}
-
-function TrendText({ flow }: { flow: StationFlow | undefined }) {
-  const word = trendWord(flow);
-  return (
-    <span
-      className={
-        word === "dropping" ? "text-[var(--danger)]" : "text-[var(--text-3)]"
-      }
-    >
-      {word}
+    <span className="text-[var(--copper)]" aria-label={trendWord(flow)}>
+      {rising ? "↑" : dropping ? "↓" : UNGAUGED}
     </span>
   );
 }
@@ -80,7 +71,7 @@ export default function RiversStationTable({ items, flows }: Props) {
             <li key={item.riverId} className="border-b border-[var(--border)] py-3">
               <Link
                 href={item.href}
-                className="font-display text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--accent)]"
+                className="font-body text-[17px] italic text-[var(--ink)] hover:text-[var(--copper)]"
               >
                 {item.title}
               </Link>
@@ -90,9 +81,10 @@ export default function RiversStationTable({ items, flows }: Props) {
               <p className="mt-1.5 font-ui text-[13px] text-[var(--text-2)]">
                 {gauged ? (
                   <>
-                    <CfsText flow={flow} />
+                    <span className="num text-[var(--ink)]">{cfsCell(flow)}</span>
+                    <span className="ea-live-dot" aria-hidden />
                     <span className="text-[var(--text-3)]"> · </span>
-                    <TrendText flow={flow} />
+                    <TrendMark flow={flow} />
                   </>
                 ) : (
                   <span className="text-[var(--text-3)]">{UNGAUGED}</span>
@@ -100,9 +92,7 @@ export default function RiversStationTable({ items, flows }: Props) {
                 <span className="text-[var(--text-3)]"> · </span>
                 <span>{item.whatsOn || UNGAUGED}</span>
                 <span className="text-[var(--text-3)]"> · </span>
-                <span className="uppercase tracking-[0.08em] text-[var(--text-3)]">
-                  {waterLabel(item)}
-                </span>
+                <span className="text-[var(--text-3)]">{waterLabel(item)}</span>
               </p>
             </li>
           );
@@ -110,43 +100,51 @@ export default function RiversStationTable({ items, flows }: Props) {
       </ul>
 
       <div className="hidden overflow-x-auto md:block">
-        <table className="w-full min-w-[44rem] border-t border-[var(--border)] text-left">
+        <table className="w-full min-w-[44rem] text-left">
           <thead>
-            <tr className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--text-3)]">
+            <tr className="border-b border-[var(--ink)] font-ui text-[11px] uppercase tracking-[0.14em] text-[var(--ink)]">
               <th className="py-3 pr-4 font-medium">River</th>
               <th className="py-3 pr-4 font-medium">Place</th>
               <th className="py-3 pr-4 font-medium">CFS live</th>
               <th className="py-3 pr-4 font-medium">Trend</th>
-              <th className="py-3 pr-4 font-medium">What’s on</th>
+              <th className="py-3 pr-4 font-medium">What&apos;s on</th>
               <th className="py-3 font-medium">Water</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => {
               const flow = flows[item.riverId];
+              const live = isGauged(flow);
               return (
-                <tr key={item.riverId} className="border-t border-[var(--border)]">
-                  <td className="py-3 pr-4">
+                <tr key={item.riverId} className="border-b border-[var(--border)]">
+                  <td className="py-2.5 pr-4">
                     <Link
                       href={item.href}
-                      className="font-display text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--accent)]"
+                      className="font-body text-[17px] italic text-[var(--ink)] hover:text-[var(--copper)]"
                     >
                       {item.title}
                     </Link>
                   </td>
-                  <td className="py-3 pr-4 font-ui text-[13px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                  <td className="py-2.5 pr-4 font-body text-[14px] text-[var(--ink)]">
                     {item.kicker ?? UNGAUGED}
                   </td>
-                  <td className="py-3 pr-4 text-[14px]">
-                    <CfsText flow={flow} />
+                  <td className="py-2.5 pr-4 text-[14px]">
+                    {live ? (
+                      <span className="num text-[var(--ink)]">
+                        {Math.round(flow.cfs).toLocaleString("en-US")}
+                        <span className="ea-live-dot" aria-hidden />
+                      </span>
+                    ) : (
+                      <span className="text-[var(--text-3)]">{UNGAUGED}</span>
+                    )}
                   </td>
-                  <td className="py-3 pr-4 font-ui text-[12px] uppercase tracking-[0.08em]">
-                    <TrendText flow={flow} />
+                  <td className="py-2.5 pr-4 font-ui text-[14px]">
+                    <TrendMark flow={flow} />
                   </td>
-                  <td className="py-3 pr-4 font-ui text-[13px] text-[var(--text-2)]">
+                  <td className="py-2.5 pr-4 font-body text-[14px] text-[var(--text-2)]">
                     {item.whatsOn || UNGAUGED}
                   </td>
-                  <td className="py-3 font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                  <td className="py-2.5 font-body text-[14px] lowercase text-[var(--text-2)]">
                     {waterLabel(item)}
                   </td>
                 </tr>

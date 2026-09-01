@@ -146,19 +146,21 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="page-ground antialiased min-h-screen flex flex-col text-[var(--text-primary)]">
+      <body className="page-ground antialiased text-[var(--text-primary)]">
         <SkipLink />
         <AuthProvider>
-          <Header />
-          <SiteTicker />
-          <main
-            id={MAIN_CONTENT_ID}
-            tabIndex={-1}
-            className="flex-1 pt-[calc(var(--header-h)+var(--ticker-h))] pb-14 lg:pb-0"
-          >
-            {children}
-          </main>
-          <Footer />
+          <div className="gazette-sheet">
+            <Header />
+            <SiteTicker />
+            <main
+              id={MAIN_CONTENT_ID}
+              tabIndex={-1}
+              className="flex-1 pb-14 lg:pb-0"
+            >
+              {children}
+            </main>
+            <Footer />
+          </div>
           <MobileTabBar />
           <CommandPalette />
         </AuthProvider>

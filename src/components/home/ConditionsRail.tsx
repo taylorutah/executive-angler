@@ -60,7 +60,7 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
   return (
     <div
       data-home-rail
-      className="fixed top-[var(--header-h)] left-0 right-0 z-40 min-h-[var(--ticker-h)] border-b border-[var(--border)] bg-[var(--paper)]"
+      className="sticky top-[var(--header-h)] z-40 min-h-[var(--ticker-h)] border-b border-[var(--border)] bg-[var(--paper)]"
     >
       <p className="mx-auto hidden h-[var(--ticker-h)] max-w-[72rem] items-center px-8 font-ui text-[12px] uppercase tracking-[0.14em] text-[var(--ink)] md:flex">
         <span className="shrink-0">On the water</span>

@@ -80,7 +80,7 @@ export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: 
   return (
     <div>
       <p className="mb-2 font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
-        Discharge (CFS)
+        Last 30 days · Discharge (CFS)
       </p>
       <div className={HYDRO_FRAME}>
         <svg
@@ -91,6 +91,18 @@ export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: 
           role="img"
           aria-label="Thirty-day discharge for this gauge"
         >
+          {yLabels.map((tick) => (
+            <line
+              key={`g-${tick}`}
+              x1={HYDRO.PAD.left}
+              x2={HYDRO.W - HYDRO.PAD.right}
+              y1={yAt(tick)}
+              y2={yAt(tick)}
+              stroke="rgba(28, 25, 21, 0.12)"
+              strokeWidth="1"
+              vectorEffect="nonScalingStroke"
+            />
+          ))}
           <path
             d={line}
             fill="none"
