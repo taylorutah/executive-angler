@@ -1552,8 +1552,10 @@ input.ea-focus-ring:focus-visible,
   animation: ea-ticker-scroll 22s linear infinite;
 }
 
-.ea-fly-cutout {
+.ea-fly-well img,
+.ea-fly-well span {
   mix-blend-mode: multiply;
+  background-color: transparent !important;
 }
 
 .ea-wordmark {

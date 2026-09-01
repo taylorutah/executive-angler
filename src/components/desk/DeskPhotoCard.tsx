@@ -32,11 +32,11 @@ export default function DeskPhotoCard({
     <Link href={href} className="card-hover group block">
       {showWell ? (
       <div
-        className={`relative isolate w-full bg-[var(--paper)] ${
-          plate ? "aspect-square" : featured ? "aspect-[832/480]" : "aspect-[416/240]"
+        className={`relative w-full bg-[var(--paper)] ${
+          plate ? "ea-fly-well aspect-square" : featured ? "aspect-[832/480]" : "aspect-[416/240]"
         }`}
       >
-        <div className={plate ? "absolute inset-0 mix-blend-multiply" : "contents"}>
+        <div className={plate ? "absolute inset-0" : "contents"}>
         <SafeEntityImage
           src={imageUrl}
           alt={imageAlt}

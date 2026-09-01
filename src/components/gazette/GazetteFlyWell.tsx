@@ -9,9 +9,9 @@ export default function GazetteFlyWell({
   emptyLabel?: string;
 }) {
   return (
-    <div className="relative isolate aspect-square w-full bg-[var(--paper)]">
+    <div className="ea-fly-well relative aspect-square w-full bg-[var(--paper)]">
       {children ? (
-        <div className="absolute inset-0 mix-blend-multiply">{children}</div>
+        <div className="absolute inset-0">{children}</div>
       ) : emptyLabel ? (
         <p className="absolute inset-x-0 bottom-0 p-3 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]">
           {emptyLabel}

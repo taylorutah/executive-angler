@@ -58,8 +58,8 @@ export default function SafeEntityImage({
         priority={priority}
         loading={loading}
         sizes={sizes}
-        placeholder="blur"
-        blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
+        placeholder={contain ? undefined : "blur"}
+        blurDataURL={contain ? undefined : SURFACE_RAISED_BLUR_DATA_URL}
         className={
           className ??
           (contain ? "object-contain p-3" : "object-cover")
