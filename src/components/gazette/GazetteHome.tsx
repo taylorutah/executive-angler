@@ -165,28 +165,30 @@ export default function GazetteHome({
           )}
         </div>
 
-        <div className="relative pr-0 lg:pr-28">
-          <p className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-            Journal
-          </p>
-          <h2 className="mt-4 font-display text-[26px] font-semibold leading-tight text-[var(--ink)]">
-            Keep the record the water can&apos;t keep for you.
-          </h2>
-          <p className="mt-3 font-body text-[16px] italic leading-relaxed text-[var(--text-2)]">
-            Sessions, flies, and the days you actually fished — yours, and no one else&apos;s.
-          </p>
-          <p className="mt-6 font-ui text-[18px] tracking-[0.2em] text-[var(--ink)]" aria-hidden>
-            →
-          </p>
-          <Link
-            href="/journal"
-            className="ea-journal-box mt-6"
-          >
-            Keep a journal
-          </Link>
+        <div className="grid items-end gap-6 md:grid-cols-[minmax(0,1fr)_auto]">
+          <div>
+            <p className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+              Journal
+            </p>
+            <h2 className="mt-4 font-display text-[26px] font-semibold leading-tight text-[var(--ink)]">
+              Keep the record the water can&apos;t keep for you.
+            </h2>
+            <p className="mt-3 font-body text-[16px] italic leading-relaxed text-[var(--text-2)]">
+              Sessions, flies, and the days you actually fished — yours, and no one else&apos;s.
+            </p>
+            <p className="mt-6 font-ui text-[18px] tracking-[0.2em] text-[var(--ink)]" aria-hidden>
+              →
+            </p>
+            <Link
+              href="/journal"
+              className="ea-journal-box mt-6"
+            >
+              Keep a journal
+            </Link>
+          </div>
           <HeronMark
             facing="left"
-            className="pointer-events-none absolute bottom-0 right-0 hidden h-48 w-[6.5rem] text-[var(--copper)] lg:block"
+            className="hidden h-52 w-[7.25rem] shrink-0 text-[var(--copper)] md:block"
             aria-hidden
           />
         </div>
