@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExternalLink, Phone, MapPin, Clock, Waves, User, Fish } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
-import EntityChrome from "@/components/ui/EntityChrome";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import FactList from "@/components/ui/FactList";
 import SpecList from "@/components/ui/SpecList";
 import QuickFacts from "@/components/ui/QuickFacts";
 import Badge from "@/components/ui/Badge";
@@ -141,16 +142,32 @@ export default async function FlyShopPage({ params }: Props) {
 
       <div className="relative">
         <HeroSection
-          imageUrl={
-            shop.heroImageUrl ||
-            "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=1920&q=80"
-          }
+          imageUrl={shop.heroImageUrl}
           imageAlt={shop.heroImageAlt || shop.name}
           title={shop.name}
           subtitle={shop.address}
+          overline={dest?.name}
           height="h-[50vh]"
           imageCredit={shop.heroImageCredit}
           imageCreditUrl={shop.heroImageCreditUrl}
+          toolbar={
+            <div className="flex items-center justify-between gap-3">
+              <Breadcrumbs
+                items={[
+                  { label: "Fly Shops", href: "/fly-shops" },
+                  ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+                  { label: shop.name },
+                ]}
+              />
+              <FavoriteButton entityType="fly_shop" entityId={shop.id} />
+            </div>
+          }
+          spec={
+            <FactList
+              className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3 sm:gap-x-8"
+              facts={quickFacts}
+            />
+          }
         />
         {true && (
           <div className="absolute top-4 right-4 z-20">
@@ -165,15 +182,6 @@ export default async function FlyShopPage({ params }: Props) {
           </div>
         )}
       </div>
-
-      <EntityChrome
-        items={[
-          { label: "Fly Shops", href: "/fly-shops" },
-          ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-          { label: shop.name },
-        ]}
-        actions={<FavoriteButton entityType="fly_shop" entityId={shop.id} />}
-      />
 
       <section className="bg-[var(--paper)] pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">

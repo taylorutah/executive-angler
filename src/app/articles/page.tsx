@@ -73,16 +73,15 @@ export default async function ArticlesPage() {
 
       {/* ── Editorial header — on paper, left-aligned ────────────────────── */}
       <section className="bg-[var(--paper)] border-b border-[var(--border)]">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <div className="mx-auto max-w-[var(--container)] px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
           <p className="ea-overline">
             Field Notes
           </p>
-          <h1 className="mt-3 text-[var(--text-1)]">
-            Stories from the Water
+          <h1 className="mt-2 text-[var(--text-1)]">
+            Stories from the water
           </h1>
-          <p className="mt-5 max-w-[var(--prose)] text-lg text-[var(--text-2)] leading-relaxed">
-            Expert instruction, destination dispatches, and stories from the world&apos;s greatest
-            fisheries — curated for the discerning fly fisher.
+          <p className="mt-3 max-w-[var(--prose)] text-[var(--text-16)] leading-relaxed text-[var(--text-2)]">
+            Instruction, destination notes, and reports from the water we cover.
           </p>
         </div>
       </section>

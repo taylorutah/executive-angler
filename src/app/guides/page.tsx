@@ -6,6 +6,7 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { getAllGuides, getAllDestinations } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
+import EntityListHeader from "@/components/ui/EntityListHeader";
 
 export const revalidate = 3600;
 
@@ -57,20 +58,11 @@ export default async function GuidesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <p className="ea-overline">
-            Expert Voices
-          </p>
-          <h1 className="mt-3 text-[var(--text-1)]">
-            Your Guide Makes the Trip
-          </h1>
-          <p className="mt-5 max-w-[var(--prose)] text-lg text-[var(--text-2)] leading-relaxed">
-            {guides.length} certified professionals with decades of experience on the
-            world&apos;s most storied waters.
-          </p>
-        </div>
-      </section>
+      <EntityListHeader
+        overline="Directory"
+        title={`${guides.length} guides`}
+        dek="Rates, specialties, and reviews. Book direct — we do not take a cut."
+      />
 
       {/* ── Spotlight Guides ──────────────────────────────────────────────── */}
       <section className="bg-[var(--paper)] pt-2 pb-10 sm:pb-12">

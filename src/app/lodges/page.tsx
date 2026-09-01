@@ -11,6 +11,7 @@ import { lodgeListConfig } from "@/lib/list-configs";
 import type { CardData, EntityListConfig } from "@/types/list-config";
 import { SITE_URL } from "@/lib/constants";
 import { hostedStillUrl } from "@/lib/media/image-url";
+import EntityListHeader from "@/components/ui/EntityListHeader";
 
 export const revalidate = 3600;
 
@@ -100,20 +101,11 @@ export default async function LodgesPage() {
   return (
     <>
       {/* ── Editorial Header ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <p className="ea-overline">
-            Premier Accommodations
-          </p>
-          <h1 className="mt-3 text-[var(--text-1)]">
-            Stay Where the Fishing Is Finest
-          </h1>
-          <p className="mt-5 max-w-[var(--prose)] text-lg text-[var(--text-2)] leading-relaxed">
-            World-class lodges at the world&apos;s greatest fisheries — from remote Alaskan
-            fly-outs to Scottish castle beats.
-          </p>
-        </div>
-      </section>
+      <EntityListHeader
+        overline="Directory"
+        title={`${lodges.length} lodges`}
+        dek="Reviews, price tiers, and amenities. Book with the lodge — we do not take a cut."
+      />
 
       {/* ── Spotlight Lodges ──────────────────────────────────────────────── */}
       <section className="bg-[var(--paper)] pt-2 pb-10 sm:pb-12">

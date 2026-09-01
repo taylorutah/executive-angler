@@ -3,18 +3,16 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SITE_NAME } from "@/lib/constants";
-import { Send, CheckCircle, AlertCircle } from "@/icons";
+import { Send, AlertCircle } from "@/icons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const SUBJECT_OPTIONS = [
-  "General Inquiry",
-  "Pro Refund Request",
-  "Guide Pro Claim",
-  "Content Correction",
-  "Lodge or Guide Listing",
+  "General inquiry",
+  "Content correction",
+  "Lodge or guide listing",
   "Partnership",
   "Advertising",
-  "Technical Issue",
+  "Technical issue",
 ] as const;
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
@@ -78,8 +76,9 @@ function ContactPageInner() {
     <>
       <div className="py-14 sm:py-24">
         <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
-          <h1 className="font-display text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
-            Contact Us
+          <p className="ea-overline">Company</p>
+          <h1 className="mt-3 font-display text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
+            Contact
           </h1>
           <p className="mt-4 text-lg text-[var(--text-2)]">
             Have a question, suggestion, or want to partner with {SITE_NAME}?
@@ -87,14 +86,12 @@ function ContactPageInner() {
           </p>
 
           {submitted ? (
-            <div className="ea-empty mt-10 rounded-card border border-[var(--border)] bg-[var(--surface)]">
-              <CheckCircle size={24} className="text-[var(--success)]" />
+            <div className="mt-10 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6">
               <h2 className="font-display text-xl font-semibold text-[var(--text-1)]">
-                Message Sent
+                Message sent
               </h2>
-              <p>
-                Thank you for reaching out. We&apos;ll get back to you as soon
-                as possible.
+              <p className="mt-2 text-[var(--text-2)]">
+                We&apos;ll get back to you as soon as we can.
               </p>
             </div>
           ) : (

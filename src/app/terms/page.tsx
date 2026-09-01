@@ -8,26 +8,27 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="pt-8 pb-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading text-4xl font-bold text-[var(--action)] mb-2">
+    <div className="py-14 sm:py-16">
+      <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
+        <p className="ea-overline">Company</p>
+        <h1 className="mt-3 font-display text-4xl font-semibold text-[var(--text-1)]">
           Terms of Service
         </h1>
-        <p className="text-sm text-[var(--text-body)] mb-10">
+        <p className="mt-3 text-[var(--text-14)] text-[var(--text-3)]">
           Last updated: May 25, 2026
         </p>
 
-        <div className="prose prose-lg max-w-none text-[var(--text-primary)] space-y-6">
+        <div className="prose mt-8 max-w-none space-y-6 text-[var(--text-2)]">
           <p>
             Welcome to {SITE_NAME}. By accessing or using our website at{" "}
-            <a href={SITE_URL} className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href={SITE_URL} className="text-[var(--accent)] hover:text-[var(--accent-hover)]">
               {SITE_URL}
             </a>
             , you agree to be bound by these Terms of Service. If you do not agree,
             please do not use the site.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             1. Use of the Website
           </h2>
           <p>
@@ -38,7 +39,7 @@ export default function TermsPage() {
             for personal, non-commercial purposes.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             2. User Accounts
           </h2>
           <p>
@@ -49,7 +50,7 @@ export default function TermsPage() {
             and keep it up to date.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             3. Photo Submissions
           </h2>
           <p>
@@ -61,7 +62,7 @@ export default function TermsPage() {
             the right to reject or remove any photo submission at our discretion.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             4. Content Accuracy
           </h2>
           <p>
@@ -74,7 +75,7 @@ export default function TermsPage() {
             availability directly with lodges and guides.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             4a. Free Access
           </h2>
           <p>
@@ -85,7 +86,7 @@ export default function TermsPage() {
             the app.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             5. Third-Party Links
           </h2>
           <p>
@@ -95,7 +96,7 @@ export default function TermsPage() {
             external sites. Linking to a third party does not imply endorsement.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             6. Intellectual Property
           </h2>
           <p>
@@ -107,7 +108,7 @@ export default function TermsPage() {
             trip planning.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             7. Prohibited Conduct
           </h2>
           <p>You agree not to:</p>
@@ -133,7 +134,7 @@ export default function TermsPage() {
             </li>
           </ul>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             8. Limitation of Liability
           </h2>
           <p>
@@ -146,7 +147,7 @@ export default function TermsPage() {
             judgment regarding safety on the water.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             9. Termination
           </h2>
           <p>
@@ -154,7 +155,7 @@ export default function TermsPage() {
             the site at any time, for any reason, including violation of these Terms.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             10. Changes to These Terms
           </h2>
           <p>
@@ -163,13 +164,13 @@ export default function TermsPage() {
             encourage you to review this page periodically.
           </p>
 
-          <h2 className="font-heading text-2xl font-bold text-[var(--action)] mt-10">
+          <h2 className="mt-10 font-display text-2xl font-semibold text-[var(--text-1)]">
             11. Contact
           </h2>
           <p>
             If you have questions about these Terms of Service, please reach out
             through our{" "}
-            <a href="/contact" className="text-[var(--action)] hover:text-[var(--action)]-light">
+            <a href="/contact" className="text-[var(--accent)] hover:text-[var(--accent-hover)]">
               contact form
             </a>
             .

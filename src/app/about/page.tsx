@@ -28,7 +28,8 @@ export default async function AboutPage() {
   return (
     <div className="py-14 sm:py-24">
       <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
-        <h1 className="font-display text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
+        <p className="ea-overline">Company</p>
+        <h1 className="mt-3 font-display text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
           About {SITE_NAME}
         </h1>
 

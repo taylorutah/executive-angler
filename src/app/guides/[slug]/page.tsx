@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ExternalLink, Phone, Mail, Home, MapPin, Fish } from "@/icons";
-import EntityChrome from "@/components/ui/EntityChrome";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import EntityIdentityBand from "@/components/ui/EntityIdentityBand";
 import FactList from "@/components/ui/FactList";
 import SpecList from "@/components/ui/SpecList";
 import RatingStars from "@/components/ui/RatingStars";
@@ -149,45 +150,47 @@ export default async function GuidePage({ params }: Props) {
         }}
       />
 
-      <EntityChrome
-        items={[
-          { label: "Guides", href: "/guides" },
-          ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-          { label: guide.name },
-        ]}
-        actions={<FavoriteButton entityType="guide" entityId={guide.id} />}
-      />
-
-      <section className="bg-[var(--paper)] pt-6 pb-10">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <h1 className="text-[var(--text-1)]">{guide.name}</h1>
-
-          <div className="mt-5">
-            <FactList
-              facts={[
-                ...(dest ? [{ label: "Location", value: dest.name }] : []),
-                ...(guide.yearsExperience
-                  ? [{ label: "Experience", value: `${guide.yearsExperience}+ years` }]
-                  : []),
-                ...(guide.dailyRate
-                  ? [{ label: "Daily rate", value: guide.dailyRate }]
-                  : []),
+      <EntityIdentityBand
+        toolbar={
+          <div className="flex items-center justify-between gap-3">
+            <Breadcrumbs
+              items={[
+                { label: "Guides", href: "/guides" },
+                ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+                { label: guide.name },
               ]}
             />
+            <FavoriteButton entityType="guide" entityId={guide.id} />
           </div>
-
-          {guide.googleRating ? (
-            <div className="mt-5">
-              <RatingStars
-                rating={guide.googleRating}
-                count={guide.googleReviewCount}
-                size="md"
-                suffix="on Google"
-              />
-            </div>
-          ) : null}
-        </div>
-      </section>
+        }
+        overline={dest?.name}
+        title={guide.name}
+        spec={
+          <FactList
+            className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4 sm:gap-x-8"
+            facts={[
+              ...(dest ? [{ label: "Location", value: dest.name }] : []),
+              ...(guide.yearsExperience
+                ? [{ label: "Experience", value: `${guide.yearsExperience}+ years` }]
+                : []),
+              ...(guide.dailyRate
+                ? [{ label: "Daily rate", value: guide.dailyRate }]
+                : []),
+            ]}
+          />
+        }
+      >
+        {guide.googleRating ? (
+          <div className="mt-3">
+            <RatingStars
+              rating={guide.googleRating}
+              count={guide.googleReviewCount}
+              size="md"
+              suffix="on Google"
+            />
+          </div>
+        ) : null}
+      </EntityIdentityBand>
 
       <section className="bg-[var(--paper)] pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Fish, MapPin, Droplets, Leaf, Bug, ChevronDown } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
 import HeroCompact from "@/components/ui/HeroCompact";
-import EntityChrome from "@/components/ui/EntityChrome";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import FactList from "@/components/ui/FactList";
 import QuickFacts from "@/components/ui/QuickFacts";
 import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
@@ -171,10 +172,28 @@ export default async function SpeciesDetailPage({ params }: Props) {
             imageAlt={sp.heroImageAlt || `${sp.commonName} fly fishing`}
             title={sp.commonName}
             subtitle={sp.scientificName || undefined}
+            overline={sp.family}
             height={heroHeight}
             imageContain={true}
             imageCredit={imageCredit}
             imageCreditUrl={imageCreditUrl}
+            toolbar={
+              <div className="flex items-center justify-between gap-3">
+                <Breadcrumbs
+                  items={[
+                    { label: "Species", href: "/species" },
+                    { label: sp.commonName },
+                  ]}
+                />
+                <FavoriteButton entityType="species" entityId={sp.id} />
+              </div>
+            }
+            spec={
+              <FactList
+                className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4 sm:gap-x-8"
+                facts={quickFacts.slice(0, 4)}
+              />
+            }
           />
           {true && (
             <div className="absolute top-4 right-4 z-20">
@@ -217,16 +236,19 @@ export default async function SpeciesDetailPage({ params }: Props) {
               )}
             </HeroCompact>
           </div>
+          <div className="mx-auto max-w-[var(--container)] px-4 py-3 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between gap-3">
+              <Breadcrumbs
+                items={[
+                  { label: "Species", href: "/species" },
+                  { label: sp.commonName },
+                ]}
+              />
+              <FavoriteButton entityType="species" entityId={sp.id} />
+            </div>
+          </div>
         </div>
       )}
-
-      <EntityChrome
-        items={[
-          { label: "Species", href: "/species" },
-          { label: sp.commonName },
-        ]}
-        actions={<FavoriteButton entityType="species" entityId={sp.id} />}
-      />
 
       <section className="bg-[var(--paper)] pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">

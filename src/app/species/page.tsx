@@ -6,6 +6,7 @@ import { speciesListConfig } from "@/lib/list-configs";
 import { toSpeciesBrowseItem } from "@/lib/browse/species-items";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
+import EntityListHeader from "@/components/ui/EntityListHeader";
 
 export const revalidate = 3600;
 
@@ -33,22 +34,13 @@ export default async function SpeciesListPage() {
 
   return (
     <>
-      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <p className="ea-overline">
-            The reference
-          </p>
-          <h1 className="mt-3 text-[var(--text-1)]">
-            {allSpecies.length} species, documented
-          </h1>
-          <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
-            Trout, salmon, char, bass, and saltwater game fish. Habitat, behavior,
-            fly patterns, and conservation status for each.
-          </p>
-        </div>
-      </section>
+      <EntityListHeader
+        overline="The reference"
+        title={`${allSpecies.length} species, documented`}
+        dek="Trout, salmon, char, bass, and saltwater game fish. Habitat, behavior, fly patterns, and conservation status for each."
+      />
 
-      <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
+      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <Suspense>
             <EntityListView

@@ -7,7 +7,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import EntityChrome from "@/components/ui/EntityChrome";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
 import LazyMapView from "@/components/maps/LazyMapView";
@@ -154,6 +154,17 @@ export default async function DestinationPage({ params }: Props) {
           bestMonths={dest.bestMonths || []}
           primarySpecies={dest.primarySpecies || []}
           region={regionLabel}
+          toolbar={
+            <div className="flex items-center justify-between gap-3">
+              <Breadcrumbs
+                items={[
+                  { label: "Places", href: "/destinations" },
+                  { label: dest.name },
+                ]}
+              />
+              <FavoriteButton entityType="destination" entityId={dest.id} />
+            </div>
+          }
         />
         <div className="absolute top-4 right-4 z-20">
           <AdminHeroEditor
@@ -166,14 +177,6 @@ export default async function DestinationPage({ params }: Props) {
           />
         </div>
       </div>
-
-      <EntityChrome
-        items={[
-          { label: "Places", href: "/destinations" },
-          { label: dest.name },
-        ]}
-        actions={<FavoriteButton entityType="destination" entityId={dest.id} />}
-      />
 
       {destRivers.length > 0 && (
         <section className="bg-[var(--paper)] pb-16">

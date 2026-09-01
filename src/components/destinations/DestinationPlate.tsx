@@ -1,4 +1,7 @@
+import type { ReactNode } from "react";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
+import EntityIdentityBand from "@/components/ui/EntityIdentityBand";
+import FactList from "@/components/ui/FactList";
 import { formatBestMonthsLabel } from "@/lib/destinations/season";
 
 interface Props {
@@ -11,6 +14,7 @@ interface Props {
   bestMonths: string[];
   primarySpecies: string[];
   region?: string;
+  toolbar?: ReactNode;
 }
 
 /**
@@ -28,6 +32,7 @@ export default function DestinationPlate({
   bestMonths,
   primarySpecies,
   region,
+  toolbar,
 }: Props) {
   const monthsLabel = formatBestMonthsLabel(bestMonths);
   const species = (primarySpecies ?? []).filter(Boolean);
@@ -47,7 +52,7 @@ export default function DestinationPlate({
           />
         </div>
         {heroImageCredit && (
-          <figcaption className="mx-auto max-w-[var(--container)] px-4 pt-2.5 text-[13px] text-[var(--text-3)] sm:px-6 lg:px-8">
+          <figcaption className="mx-auto max-w-[var(--container)] px-4 pt-2 text-[13px] text-[var(--text-3)] sm:px-6 lg:px-8">
             {heroImageCreditUrl ? (
               <a
                 href={heroImageCreditUrl}
@@ -64,40 +69,25 @@ export default function DestinationPlate({
         )}
       </figure>
 
-      <div className="mx-auto max-w-[var(--container)] px-4 pb-10 pt-8 sm:px-6 lg:px-8">
-        {region && (
-          <p className="ea-overline">
-            {region}
-          </p>
-        )}
-        <h1 className="mt-1 text-[var(--text-1)]">
-          {name}
-        </h1>
-        {tagline && (
-          <p className="mt-4 max-w-[var(--prose)] text-xl leading-snug text-[var(--text-2)] sm:text-2xl">
-            {tagline}
-          </p>
-        )}
-
-        <dl className="mt-8 grid gap-6 border-t border-[var(--border)] pt-6 sm:grid-cols-2">
-          <div>
-            <dt className="ea-overline">
-              Season
-            </dt>
-            <dd className="mt-1.5 text-base text-[var(--text-1)]">
-              {monthsLabel || "Best months not listed yet."}
-            </dd>
-          </div>
-          <div>
-            <dt className="ea-overline">
-              Species
-            </dt>
-            <dd className="mt-1.5 text-base text-[var(--text-1)]">
-              {species.length > 0 ? species.join(" · ") : "Species not listed yet."}
-            </dd>
-          </div>
-        </dl>
-      </div>
+      <EntityIdentityBand
+        toolbar={toolbar}
+        overline={region}
+        title={name}
+        meta={tagline}
+        spec={
+          <FactList
+            className="grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-4"
+            facts={[
+              { label: "Season", value: monthsLabel || "Best months not listed yet." },
+              {
+                label: "Species",
+                className: "col-span-2 sm:col-span-3",
+                value: species.length > 0 ? species.join(" · ") : "Species not listed yet.",
+              },
+            ]}
+          />
+        }
+      />
     </header>
   );
 }

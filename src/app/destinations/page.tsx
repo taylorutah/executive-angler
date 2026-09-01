@@ -11,6 +11,7 @@ import { destinationListConfig } from "@/lib/list-configs";
 import { toDestinationBrowseItem } from "@/lib/browse/destination-items";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
+import EntityListHeader from "@/components/ui/EntityListHeader";
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,22 +38,13 @@ export default async function DestinationsPage() {
 
   return (
     <>
-      <section className="bg-[var(--paper)] pt-6 pb-10 sm:pb-12">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
-          <p className="ea-overline">
-            Places
-          </p>
-          <h1 className="mt-3 text-[var(--text-1)]">
-            {destinations.length} destinations
-          </h1>
-          <p className="mt-5 max-w-[var(--prose)] text-lg leading-relaxed text-[var(--text-2)]">
-            {destinations.length} destinations. Filter by region, season, species, and
-            trip length.
-          </p>
-        </div>
-      </section>
+      <EntityListHeader
+        overline="Places"
+        title={`${destinations.length} destinations`}
+        dek="Filter by region, season, species, and trip length."
+      />
 
-      <section className="border-t border-[var(--border)] bg-[var(--paper)] pb-16 sm:pb-24">
+      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <Suspense>
             <EntityListView

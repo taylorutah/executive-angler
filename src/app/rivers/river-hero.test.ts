@@ -25,7 +25,16 @@ describe("river hero paper band", () => {
     assert.match(page, /accessLabel\(river\.wadingType\)/);
     assert.match(page, /label: "Difficulty"/);
     assert.match(page, /label: "Access"/);
-    assert.match(page, /EntityChrome/);
+    assert.match(page, /label: "Season"/);
+    assert.match(page, /formatBestMonthsLine/);
+    assert.match(page, /spec=/);
+    assert.match(page, /toolbar=/);
+    assert.match(page, /col-span-3 sm:col-span-1/);
+    assert.equal(
+      page.includes("lg:grid-cols-[minmax(0,1fr)_minmax(18rem,36rem)]"),
+      false,
+    );
+    assert.equal(page.includes("EntityChrome"), false);
     assert.equal(
       page.includes("[river.difficulty, river.wadingType, ...(river.primarySpecies ?? [])]"),
       false,
@@ -36,7 +45,7 @@ describe("river hero paper band", () => {
   it("keeps overview prose and does not repeat species as badges", () => {
     assert.match(page, /Read the river overview/);
     assert.match(page, /river\.description\.split/);
-    assert.match(page, /Fish/);
+    assert.match(page, /label: "Fish"/);
     assert.match(page, /TokenRow/);
     assert.equal(page.includes("entity-tags"), false);
     assert.equal(page.includes('variant="river"'), false);

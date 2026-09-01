@@ -113,11 +113,12 @@ export default async function GearCatalogPage({ searchParams }: Props) {
   return (
     <main className="min-h-screen bg-[var(--paper)]">
       <header className="border-b border-[var(--border)]">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="font-display text-2xl font-semibold text-[var(--text-1)] lg:text-3xl">
+        <div className="mx-auto max-w-[var(--container)] px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+          <p className="ea-overline">Catalog</p>
+          <h1 className="mt-2 text-[var(--text-1)]">
             Gear
           </h1>
-          <p className="mt-1 text-sm text-[var(--text-2)]">
+          <p className="mt-3 text-[var(--text-16)] text-[var(--text-2)]">
             {products.length} products · click <span className="text-[var(--text-1)]">Add</span> on any row to drop it into your{" "}
             <a href="/account/gear" className="text-[var(--accent)] hover:underline">locker</a>.
           </p>

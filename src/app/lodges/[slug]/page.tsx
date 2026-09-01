@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, Phone, Mail, Calendar, Users, DollarSign, Fish } from "@/icons";
 import HeroSection from "@/components/ui/HeroSection";
-import EntityChrome from "@/components/ui/EntityChrome";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import FactList from "@/components/ui/FactList";
 import SpecList from "@/components/ui/SpecList";
 import QuickFacts from "@/components/ui/QuickFacts";
 import RatingStars from "@/components/ui/RatingStars";
@@ -161,9 +162,28 @@ export default async function LodgePage({ params }: Props) {
           imageAlt={lodge.heroImageAlt || lodge.name}
           title={lodge.name}
           subtitle={lodge.priceRange}
+          overline={dest?.name}
           height="h-[60vh]"
           imageCredit={lodge.heroImageCredit}
           imageCreditUrl={lodge.heroImageCreditUrl}
+          toolbar={
+            <div className="flex items-center justify-between gap-3">
+              <Breadcrumbs
+                items={[
+                  { label: "Lodges", href: "/lodges" },
+                  ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
+                  { label: lodge.name },
+                ]}
+              />
+              <FavoriteButton entityType="lodge" entityId={lodge.id} />
+            </div>
+          }
+          spec={
+            <FactList
+              className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4 sm:gap-x-8"
+              facts={quickFacts}
+            />
+          }
         />
         {true && (
           <div className="absolute top-4 right-4 z-20">
@@ -178,15 +198,6 @@ export default async function LodgePage({ params }: Props) {
           </div>
         )}
       </div>
-
-      <EntityChrome
-        items={[
-          { label: "Lodges", href: "/lodges" },
-          ...(dest ? [{ label: dest.name, href: `/destinations/${dest.slug}` }] : []),
-          { label: lodge.name },
-        ]}
-        actions={<FavoriteButton entityType="lodge" entityId={lodge.id} />}
-      />
 
       <section className="bg-[var(--paper)] pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
