@@ -2,7 +2,6 @@ import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import type { CanonicalFly } from "@/types/entities";
 import { flyPlateAlt, specimenScale } from "./fly-plate";
-import SectionMark from "./SectionMark";
 
 interface Props {
   flies: CanonicalFly[];
@@ -24,7 +23,7 @@ export default function FlyPlate({ flies, flyCount }: Props) {
     <section data-lane="resource" className="bg-[var(--paper-deep)] py-14 sm:py-24">
       <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
         <div className="mb-8 flex items-baseline justify-between gap-4">
-          <SectionMark n="02" label="The plate" />
+          <p className="ea-overline">The plate</p>
           <Link
             href="/flies/library"
             className="shrink-0 text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
