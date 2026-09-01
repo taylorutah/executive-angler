@@ -182,7 +182,7 @@ export default function GazetteHome({
           </Link>
           <HeronMark
             facing="left"
-            className="pointer-events-none absolute bottom-0 right-0 hidden h-40 w-28 lg:block"
+            className="pointer-events-none absolute bottom-0 right-0 hidden h-48 w-[6.5rem] text-[var(--copper)] lg:block"
             aria-hidden
           />
         </div>

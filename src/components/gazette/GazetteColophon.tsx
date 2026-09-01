@@ -5,7 +5,7 @@ export default function GazetteColophon() {
   return (
     <div className="ea-colophon" aria-hidden>
       <span className="ea-colophon-rule" />
-      <HeronMark className="h-6 w-4 text-[var(--copper)]" />
+      <HeronMark className="h-8 w-[18px] text-[var(--copper)]" />
       <span className="ea-colophon-rule" />
     </div>
   );
