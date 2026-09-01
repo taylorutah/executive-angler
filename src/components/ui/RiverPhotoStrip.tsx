@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Camera, Plus } from "@/icons";
+import { Plus } from "@/icons";
 import type { RiverPhoto } from "@/app/api/photos/river/[riverId]/route";
 import { fetchOnce } from "@/components/rivers/fetch-once";
 import PhotoLightbox from "./PhotoLightbox";
@@ -30,7 +30,7 @@ export default function RiverPhotoStrip({
       .catch(() => setLoading(false));
   }, [riverId]);
 
-  if (!loading && photos.length === 0) {
+  if (loading || photos.length === 0) {
     return null;
   }
 
@@ -49,21 +49,13 @@ export default function RiverPhotoStrip({
     <>
       <div className="bg-[var(--paper)] border-b border-[var(--border)]">
         <div className="mx-auto max-w-[var(--container)] px-4 py-3">
-          <div className="flex items-center gap-2">
-            {/* Thumbnails */}
-            <div className="flex items-center gap-1 flex-1 overflow-hidden">
-              {loading
-                ? Array.from({ length: 8 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-16 h-16 rounded-md bg-[var(--paper-deep)] animate-pulse shrink-0"
-                    />
-                  ))
-                : displayPhotos.map((photo, index) => (
+          <div className="flex min-w-0 items-center gap-2">
+            <div className="category-bar-fade flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
+              {displayPhotos.map((photo, index) => (
                     <button
                       key={photo.id}
                       onClick={() => setLightboxIndex(index)}
-                      className="relative w-16 h-16 rounded-md overflow-hidden shrink-0 group ring-1 ring-[var(--border)] hover:ring-[var(--accent)] transition-shadow"
+                      className="relative h-16 w-16 min-h-11 shrink-0 overflow-hidden rounded-md ring-1 ring-[var(--border)] hover:ring-[var(--accent)]"
                     >
                       <Image
                         src={photo.photoUrl}

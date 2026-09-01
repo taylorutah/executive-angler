@@ -11,6 +11,7 @@ type MapProps = React.ComponentProps<typeof DynamicMapView>;
  * still put mapbox-gl on the river-page graph.
  */
 export default function LazyMapView(props: MapProps) {
+  const hasToken = Boolean(process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [Map, setMap] = useState<typeof DynamicMapView | null>(null);
@@ -42,16 +43,16 @@ export default function LazyMapView(props: MapProps) {
     };
   }, [visible]);
 
+  if (!hasToken) {
+    return <p className="font-ui text-sm text-[var(--text-3)]">Map unavailable.</p>;
+  }
+
   return (
-    <div ref={ref}>
+    <div ref={ref} className="min-w-0">
       {Map ? (
         <Map {...props} />
       ) : (
-        <div
-          className={props.className ?? "h-[400px] w-full"}
-          style={{ background: props.tone === "desk" ? "var(--vellum)" : "var(--surface-card)" }}
-          aria-hidden
-        />
+        <p className="font-ui text-sm text-[var(--text-3)]">Map loading…</p>
       )}
     </div>
   );

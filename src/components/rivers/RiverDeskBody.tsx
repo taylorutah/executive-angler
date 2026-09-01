@@ -71,10 +71,10 @@ export default function RiverDeskBody({
   const paragraphs = description.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
 
   return (
-    <section className="bg-[var(--paper)]">
+    <section className="overflow-x-clip bg-[var(--paper)]">
       <HomeGutter className="py-12">
-        <div className="flex flex-col items-start gap-12 xl:flex-row xl:gap-12">
-          <div className="flex w-full max-w-[794px] flex-col gap-7 xl:w-[794px] xl:shrink-0">
+        <div className="flex min-w-0 flex-col items-start gap-12 xl:flex-row xl:gap-12">
+          <div className="flex w-full min-w-0 max-w-[794px] flex-col gap-7 xl:w-[794px] xl:shrink-0">
             {paragraphs.length > 0 ? (
               <div className="flex flex-col gap-3.5">
                 <Eyebrow>How it fishes</Eyebrow>
@@ -104,8 +104,8 @@ export default function RiverDeskBody({
                             className="object-cover"
                           />
                         </div>
-                        <span className="flex flex-col gap-0.5">
-                          <span className="font-ui text-[13px] font-medium text-[var(--ink)]">
+                        <span className="flex min-w-0 flex-col gap-0.5">
+                          <span className="break-words font-ui text-[13px] font-medium text-[var(--ink)]">
                             {chip.name}
                           </span>
                           {meta ? (
@@ -119,12 +119,12 @@ export default function RiverDeskBody({
                         {chip.href ? (
                           <Link
                             href={chip.href}
-                            className="flex items-center gap-2.5 rounded-[4px] border border-[var(--border-strong)] bg-[var(--paper)] py-2 pr-2.5 pl-2 hover:border-[var(--copper)]"
+                            className="flex min-h-11 min-w-0 items-center gap-2.5 rounded-[4px] border border-[var(--border-strong)] bg-[var(--paper)] py-2 pr-2.5 pl-2 hover:border-[var(--copper)]"
                           >
                             {inner}
                           </Link>
                         ) : (
-                          <div className="flex items-center gap-2.5 rounded-[4px] border border-[var(--border-strong)] bg-[var(--paper)] py-2 pr-2.5 pl-2">
+                          <div className="flex min-h-11 min-w-0 items-center gap-2.5 rounded-[4px] border border-[var(--border-strong)] bg-[var(--paper)] py-2 pr-2.5 pl-2">
                             {inner}
                           </div>
                         )}
@@ -152,9 +152,9 @@ export default function RiverDeskBody({
             ) : null}
           </div>
 
-          <aside className="w-full max-w-[438px] xl:w-[438px] xl:shrink-0">
+          <aside className="w-full min-w-0 max-w-[438px] xl:w-[438px] xl:shrink-0">
             <div
-              className="overflow-hidden bg-white"
+              className="min-w-0 overflow-hidden bg-white"
               style={{
                 borderRadius: "var(--radius-instrument)",
                 border: "1px solid rgb(44 33 27 / 0.22)",

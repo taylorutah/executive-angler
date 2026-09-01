@@ -70,17 +70,14 @@ export default function MapView({
   const map = useRef<mapboxgl.Map | null>(null);
   // The pan hint is only true once a map actually exists to pan.
   const [live, setLive] = useState(false);
+  const [failed, setFailed] = useState(!process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
 
   useEffect(() => {
     if (!mapContainer.current) return;
 
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token) {
-      if (mapContainer.current) {
-        const bg = tone === "desk" ? "var(--vellum)" : "var(--surface-card)";
-        const fg = "var(--text-meta)";
-        mapContainer.current.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;background:${bg};color:${fg};font-size:0.875rem">Map unavailable</div>`;
-      }
+      setFailed(true);
       return;
     }
 
@@ -100,6 +97,7 @@ export default function MapView({
       });
 
       map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+      map.current.on("error", () => setFailed(true));
 
       // Resize after map loads — fixes 0-dimension init on mobile Safari
       map.current.on("load", () => {
@@ -191,15 +189,17 @@ export default function MapView({
       return cleanup;
     } catch (e) {
       console.error("Mapbox failed to initialize:", e);
-      if (mapContainer.current) {
-        mapContainer.current.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--vellum);color:var(--text-meta);font-size:0.875rem">Map unavailable</div>';
-      }
+      setFailed(true);
     }
 
     return () => {
       map.current?.remove();
     };
   }, [latitude, longitude, zoom, markers, bounds, tone, route]);
+
+  if (failed) {
+    return <p className="font-ui text-sm text-[var(--text-3)]">Map unavailable.</p>;
+  }
 
   return (
     <div className="relative">
