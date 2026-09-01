@@ -84,4 +84,11 @@ test.describe("journey smoke", () => {
     await logo.click();
     await expect(page).toHaveURL(LOGGED_IN_HOME);
   });
+
+  test("contact page and its chrome have no Troubleshoot link", async ({ page }) => {
+    await page.goto("/contact", { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { level: 1, name: /^contact$/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /troubleshoot/i })).toHaveCount(0);
+    await expect(page.locator("a[href*='troubleshoot']")).toHaveCount(0);
+  });
 });

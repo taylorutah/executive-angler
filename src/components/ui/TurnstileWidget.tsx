@@ -98,6 +98,7 @@ export default function TurnstileWidget({
   }, []);
 
   useEffect(() => {
+    if (failedOpen) return;
     if (!scriptReady || !containerRef.current) return;
     if (widgetIdRef.current) return;
     if (!window.turnstile) return;
@@ -117,6 +118,7 @@ export default function TurnstileWidget({
         "error-callback": () => {
           setHasToken(false);
           onToken("");
+          setFailedOpen(true);
         },
         theme: "light",
         size: "flexible",
@@ -124,7 +126,7 @@ export default function TurnstileWidget({
     } catch (err) {
       console.warn("[TurnstileWidget] render failed:", err);
     }
-  }, [scriptReady, siteKey, onToken, onExpire]);
+  }, [failedOpen, scriptReady, siteKey, onToken, onExpire]);
 
   // Notify parent when token state changes.
   useEffect(() => {
@@ -141,23 +143,33 @@ export default function TurnstileWidget({
     return () => clearTimeout(t);
   }, [hasToken, failedOpen, failOpenAfterMs, onAvailabilityChange]);
 
+  function teardownWidget() {
+    if (widgetIdRef.current && window.turnstile) {
+      try {
+        window.turnstile.remove(widgetIdRef.current);
+      } catch {
+        /* ignore */
+      }
+      widgetIdRef.current = null;
+    }
+  }
+
+  // Fail-open: drop Cloudflare's widget so its Troubleshoot link is not shown.
+  useEffect(() => {
+    if (failedOpen && !hasToken) teardownWidget();
+  }, [failedOpen, hasToken]);
+
   // Cleanup on unmount.
   useEffect(() => {
-    return () => {
-      if (widgetIdRef.current && window.turnstile) {
-        try {
-          window.turnstile.remove(widgetIdRef.current);
-        } catch {
-          /* ignore */
-        }
-        widgetIdRef.current = null;
-      }
-    };
+    return () => teardownWidget();
   }, []);
 
   return (
     <>
-      <div ref={containerRef} className="mt-2" />
+      <div
+        ref={containerRef}
+        className={failedOpen && !hasToken ? "hidden" : "mt-2"}
+      />
       {failedOpen && !hasToken && (
         <p className="mt-2 text-xs text-[var(--text-3)]">
           Having trouble with verification? You can still submit — we&apos;ll
