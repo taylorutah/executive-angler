@@ -24,13 +24,13 @@ export default function PlateFallback({
     return (
       <div
         className={cn(
-          "flex h-full w-full items-end bg-[var(--surface-raised)] px-2.5 py-2 ring-1 ring-inset ring-[var(--border-rule)]",
+          "flex h-full w-full items-center justify-center bg-[var(--paper-deep)] px-1.5 py-1 text-center ring-1 ring-inset ring-[var(--border)]",
           className,
         )}
         role="img"
-        aria-label={label}
+        aria-label={label ? `${label}, no photograph` : "No photograph"}
       >
-        <p className="font-ui text-[11px] text-[var(--text-meta)]">No photograph</p>
+        <p className="font-ui text-[11px] leading-tight text-[var(--text-3)]">No photograph</p>
       </div>
     );
   }

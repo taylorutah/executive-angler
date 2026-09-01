@@ -19,5 +19,5 @@ export {
   hatchSlugsFor,
   hatchMatchesSlug,
 } from "./hatches";
-export { assembleSearchDocuments } from "./build-index";
+export { assembleSearchDocuments, SearchDocumentImage } from "./build-index";
 export { firstUsgsSiteId } from "./usgs";
