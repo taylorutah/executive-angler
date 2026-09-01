@@ -72,7 +72,7 @@
   --prose: 66ch;
   --article-media: 960px;
   --gutter: 16px;
-  --header-h: 52px;
+  --header-h: 72px;
   --ticker-h: 36px;
 
   /* ── Imagery: the one consistent photo grade ─────────────────── */
@@ -1715,7 +1715,7 @@ input.ea-focus-ring:focus-visible,
    ================================================================= */
 @media (max-width: 767px) {
   :root {
-    --header-h: 64px;
+    --header-h: 68px;
     --ticker-h: 52px;
   }
 
