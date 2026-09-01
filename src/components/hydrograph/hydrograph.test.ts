@@ -41,7 +41,9 @@ describe("hydrograph well fill", () => {
     );
     assert.match(gazette, /linearGradient/);
     assert.match(gazette, /preserveAspectRatio="none"/);
+    assert.match(gazette, /typical range/);
     assert.equal(gazette.includes("24H"), false);
+    assert.equal(gazette.includes("IQR"), false);
   });
 
   it("names the band in plain English and marks a mid date", () => {
