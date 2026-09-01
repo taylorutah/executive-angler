@@ -6,6 +6,7 @@ import {
   isHouseAuthor,
   isHouseByline,
   listAuthors,
+  labeledPhotoCredit,
   namesPrivatePerson,
   publicImageCredit,
   resolveAuthorByline,
@@ -138,6 +139,14 @@ describe("publicImageCredit", () => {
     assert.equal(publicImageCredit("Submitted by Taylor Warnick"), undefined);
     assert.equal(publicImageCredit("Executive Angler Staff"), undefined);
     assert.equal(publicImageCredit("Jane Doe / Unsplash"), "Jane Doe / Unsplash");
+  });
+});
+
+describe("labeledPhotoCredit", () => {
+  it("omits the house person and labels a real photographer", () => {
+    assert.equal(labeledPhotoCredit("Taylor Warnick"), undefined);
+    assert.equal(labeledPhotoCredit("Jane Doe / Unsplash"), "Photo: Jane Doe / Unsplash");
+    assert.equal(labeledPhotoCredit("Photo: Pat Clayton"), "Photo: Pat Clayton");
   });
 });
 

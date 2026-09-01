@@ -3,7 +3,7 @@ import { Camera } from "@/icons";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import EntityIdentityBand from "@/components/ui/EntityIdentityBand";
 import { isUsableImageUrl } from "@/lib/media/image-url";
-import { publicImageCredit } from "@/lib/authors";
+import { labeledPhotoCredit } from "@/lib/authors";
 
 interface HeroSectionProps {
   imageUrl?: string;
@@ -40,7 +40,7 @@ export default function HeroSection({
   spec,
   children,
 }: HeroSectionProps) {
-  const safeCredit = publicImageCredit(imageCredit);
+  const safeCredit = labeledPhotoCredit(imageCredit);
   const showCredit = Boolean(safeCredit) && isUsableImageUrl(imageUrl);
 
   const credit =
@@ -100,13 +100,14 @@ export default function HeroSection({
         />
       </div>
 
+      {credit}
+
       <EntityIdentityBand
         toolbar={toolbar}
         overline={overline}
         title={title}
         meta={subtitle}
         spec={spec}
-        credit={credit}
       >
         {children}
       </EntityIdentityBand>

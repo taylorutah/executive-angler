@@ -57,6 +57,18 @@ export function publicImageCredit(credit?: string | null): string | undefined {
 }
 
 /**
+ * Entity pages (river / lodge / destination) never print a bare name
+ * under the title — that reads as a byline. Remaining photographer
+ * credits keep a Photo: label.
+ */
+export function labeledPhotoCredit(credit?: string | null): string | undefined {
+  const safe = publicImageCredit(credit);
+  if (!safe) return undefined;
+  if (/^photo\b/i.test(safe)) return safe;
+  return `Photo: ${safe}`;
+}
+
+/**
  * True when a resolved masthead entry stands in for the house byline —
  * either it IS the bare house name, or its curated profile claims the
  * house byline via `articleAuthorName`.

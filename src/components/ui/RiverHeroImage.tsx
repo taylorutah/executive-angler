@@ -9,7 +9,7 @@ import PlateFallback from "@/components/media/PlateFallback";
 import EntityIdentityBand from "@/components/ui/EntityIdentityBand";
 import { isUsableImageUrl, normalizeImageUrl } from "@/lib/media/image-url";
 import { SURFACE_RAISED_BLUR_DATA_URL } from "@/lib/media/blur";
-import { publicImageCredit } from "@/lib/authors";
+import { labeledPhotoCredit } from "@/lib/authors";
 
 interface RiverHeroImageProps {
   heroImageUrl?: string;
@@ -55,7 +55,7 @@ export default function RiverHeroImage({
   const [failed, setFailed] = useState(false);
   const heroSrc = normalizeImageUrl(heroImageUrl);
   const showPhoto = isUsableImageUrl(heroSrc) && !failed;
-  const credit = publicImageCredit(heroImageCredit);
+  const credit = labeledPhotoCredit(heroImageCredit);
 
   const heroAsPhoto: ApprovedPhoto | null = showPhoto
     ? {
@@ -107,30 +107,29 @@ export default function RiverHeroImage({
           )}
         </div>
 
+        {showPhoto && credit ? (
+          <p className="mx-auto max-w-[var(--container)] px-4 pt-2 text-[var(--text-13)] tracking-wide text-[var(--text-3)] sm:px-6 lg:px-8">
+            {heroImageCreditUrl ? (
+              <a
+                href={heroImageCreditUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-4 hover:text-[var(--text-1)]"
+              >
+                {credit}
+              </a>
+            ) : (
+              credit
+            )}
+          </p>
+        ) : null}
+
         <EntityIdentityBand
           toolbar={toolbar}
           overline={subtitle}
           title={title}
           meta={meta}
           spec={spec}
-          credit={
-            showPhoto && credit ? (
-              <p className="mt-1.5 text-[var(--text-13)] tracking-wide text-[var(--text-3)]">
-                {heroImageCreditUrl ? (
-                  <a
-                    href={heroImageCreditUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-4 hover:text-[var(--text-1)]"
-                  >
-                    {credit}
-                  </a>
-                ) : (
-                  credit
-                )}
-              </p>
-            ) : null
-          }
         />
       </section>
 
