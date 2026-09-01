@@ -1,48 +1,43 @@
-import type { SVGProps } from "react";
+import type { CSSProperties, SVGProps } from "react";
 
 type Props = SVGProps<SVGSVGElement> & {
   title?: string;
 };
 
+const MARK_MASK: CSSProperties = {
+  backgroundColor: "currentColor",
+  WebkitMaskImage: "url(/brand/heron-mark.svg)",
+  WebkitMaskRepeat: "no-repeat",
+  WebkitMaskPosition: "center",
+  WebkitMaskSize: "contain",
+  maskImage: "url(/brand/heron-mark.svg)",
+  maskRepeat: "no-repeat",
+  maskPosition: "center",
+  maskSize: "contain",
+};
+
 /**
- * Stroke heron. Color comes from currentColor — header sets oxidized copper.
+ * Copperplate heron etching from /brand/heron-mark.svg.
+ * Color comes from currentColor — header sets oxidized copper.
  * Do not invent a bird. Do not put this in a circle.
  */
 export default function HeronMark({
   title = "Executive Angler heron mark",
   className,
+  style,
   ...props
 }: Props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 120 160"
+      viewBox="0 0 1584 2882"
       role="img"
       aria-label={title}
       className={className}
+      style={{ ...MARK_MASK, ...style }}
       {...props}
     >
       <title>{title}</title>
-      <g
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M8 52 L42 48" />
-        <path d="M42 48 C48 46 54 48 56 54 C57 58 55 62 50 63" />
-        <path d="M50 50 C56 46 64 44 70 47" />
-        <circle cx="48" cy="53" r="1.4" fill="currentColor" stroke="none" />
-        <path d="M50 63 C46 72 40 82 44 92 C48 102 62 108 74 104" />
-        <path d="M56 96 C68 88 86 90 96 104 C100 112 98 124 88 132" />
-        <path d="M62 100 C72 98 84 106 88 118" />
-        <path d="M70 108 C76 114 80 124 78 132" />
-        <path d="M76 132 L72 154" />
-        <path d="M68 154 L78 154" />
-        <path d="M82 130 L86 148" />
-        <path d="M82 148 L90 148" />
-      </g>
     </svg>
   );
 }
