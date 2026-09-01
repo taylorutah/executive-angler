@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import GazetteLiveGauge from "./GazetteLiveGauge";
-import type { AccessPoint, CanonicalFly, River } from "@/types/entities";
+import type { AccessPoint, CanonicalFly, HatchEntry, River } from "@/types/entities";
 import { matchHatchPlate } from "@/lib/rivers/week-flies";
 import type { RegulationSource } from "@/lib/rivers/regulations";
 
@@ -178,7 +178,7 @@ export default function GazetteRiverReport({
 }
 
 export function platesFromHatches(
-  hatches: { insect: string; pattern?: string; size?: string }[],
+  hatches: HatchEntry[],
   flies: CanonicalFly[],
 ): Plate[] {
   return hatches.slice(0, 3).map((hatch, i) => {
