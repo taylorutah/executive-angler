@@ -47,11 +47,12 @@ function measuredTwentyFourHour(snapshot: GaugeSnapshot | null): number | null {
   return delta;
 }
 
-function stillTrend(deltaCfs: number | null, liveCfs: number | null, window = "24H"): string | null {
-  if (liveCfs == null || deltaCfs == null || deltaCfs === 0) return null;
-  const sign = deltaCfs < 0 ? "−" : "+";
-  const arrow = deltaCfs < 0 ? "▼" : "▲";
-  return `TREND: ${sign}${Math.abs(Math.round(deltaCfs))} CFS ${arrow}${window ? ` ${window}` : ""}`;
+function stillTrend(copy: { text: string; dropping: boolean } | null): string | null {
+  if (!copy) return null;
+  const num = copy.text.match(/[+\-−]?\d[\d,]*/);
+  const arrow = copy.dropping ? "▼" : "▲";
+  if (!num) return `TREND: ${copy.text}`;
+  return `TREND: ${num[0]} CFS ${arrow}`;
 }
 
 export default function GazetteLiveGauge({
@@ -125,9 +126,14 @@ export default function GazetteLiveGauge({
 
   const cfs = snapshot?.cfs ?? null;
   const live = cfs != null && !snapshot?.stale;
-  const twentyFour = measuredTwentyFourHour(snapshot) ?? deltaCfsFromHistory(cfs, history);
-  const trend = stillTrend(twentyFour, cfs);
-  const dropping = twentyFour != null && twentyFour < 0;
+  const twentyFour = formatTwentyFourHourLine(
+    measuredTwentyFourHour(snapshot) ?? deltaCfsFromHistory(cfs, history),
+    cfs,
+  );
+  const series = formatSeriesTrendLine(cfs, history);
+  const picked = twentyFour ?? series;
+  const trend = stillTrend(picked);
+  const dropping = Boolean(picked?.dropping);
   const updated = formatObservedAt(snapshot?.observedAt ?? null);
   const temp = snapshot?.waterTempF ?? null;
   const station = [siteId ? `USGS STATION ${siteId}` : null, siteName]

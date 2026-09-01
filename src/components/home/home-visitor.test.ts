@@ -20,7 +20,10 @@ describe("home visitor QA locks", () => {
     assert.match(gazette, /02 The plate/);
     assert.match(gazette, /GazettePlate/);
     const plate = readFileSync(join(root, "src/components/gazette/GazettePlate.tsx"), "utf8");
-    assert.equal(plate.includes("ea-plate-well"), false, "empty photo wells must be omitted");
+    assert.match(plate, /ea-plate-well/, "still 4 keeps a cream plate field");
+    assert.equal(plate.includes("<img"), false, "plates are type, not photos");
+    assert.equal(plate.includes("next/image"), false, "plates are type, not photos");
+    assert.equal(plate.includes("heroImage"), false, "plates are type, not photos");
     assert.match(gazette, /Field note/);
     assert.match(gazette, /Keep the record the water can/);
     assert.equal(gazette.includes("h-[50vh]"), false);
