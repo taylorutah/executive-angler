@@ -53,7 +53,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="desk-sheet bg-[var(--paper)] px-4 pb-16 pt-4">
+    <div className="desk-sheet bg-[var(--paper)] px-4 pb-6 pt-4">
       <div className="mx-auto w-full max-w-md">
         <div className="mb-8">
           <h1 className="font-display text-3xl font-semibold text-[var(--ink)]">Sign in</h1>
