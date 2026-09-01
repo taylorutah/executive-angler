@@ -3,6 +3,7 @@ import DeskMast from "@/components/desk/DeskMast";
 import HomeGutter from "@/components/home/HomeGutter";
 import EntityListView from "@/components/ui/EntityListView";
 import { getAllArticles } from "@/lib/db";
+import { isHouseByline } from "@/lib/authors";
 import { articleListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
 
@@ -28,7 +29,9 @@ export default async function ArticlesArchive() {
       title: article.title,
       subtitle: article.subtitle,
       group: article.category,
-      meta: [noteDate(article.publishedAt), article.author].filter(Boolean).join(" · "),
+      meta: [noteDate(article.publishedAt), isHouseByline(article.author) ? null : article.author]
+        .filter(Boolean)
+        .join(" · "),
       badges: [article.category],
       featured: article.featured,
       description: article.excerpt,

@@ -21,8 +21,8 @@ export const metadata: Metadata = {
 
 export default async function AuthorsPage() {
   const articles = await getAllArticles();
-  // The house byline's entry stays off the masthead (client ruling
-  // 2026-08-28); its /authors/[slug] route still resolves directly.
+  // The house byline stays off the masthead (client ruling 2026-08-28).
+  // Direct /authors/[slug] for that row redirects to /articles.
   const authors = listAuthors(articles).filter((a) => !isHouseAuthor(a));
 
   return (

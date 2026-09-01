@@ -4,6 +4,7 @@ import DeskSeeAll from "@/components/desk/DeskSeeAll";
 import HomeGutter from "@/components/home/HomeGutter";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { getAllArticles } from "@/lib/db";
+import { isHouseByline } from "@/lib/authors";
 import type { Article } from "@/types/entities";
 
 function noteDate(iso: string): string {
@@ -80,7 +81,7 @@ export default async function NotesDeskPage() {
                   {lead.title}
                 </h2>
                 <p className="font-ui text-[13px] leading-4 text-[var(--slate)]">
-                  {[noteDate(lead.publishedAt), lead.author].filter(Boolean).join(" · ")}
+                  {[noteDate(lead.publishedAt), isHouseByline(lead.author) ? null : lead.author].filter(Boolean).join(" · ")}
                 </p>
                 {lead.excerpt ? (
                   <p className="font-ui text-[16px] leading-6 text-[var(--graphite)]">

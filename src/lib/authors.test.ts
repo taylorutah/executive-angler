@@ -6,6 +6,9 @@ import {
   isHouseAuthor,
   isHouseByline,
   listAuthors,
+  labeledPhotoCredit,
+  namesPrivatePerson,
+  publicImageCredit,
   resolveAuthorByline,
   resolveAuthorSlug,
   slugifyAuthor,
@@ -58,10 +61,15 @@ describe("authorSlugForByline", () => {
 });
 
 describe("resolveAuthorByline", () => {
-  it("returns the curated profile when there is one", () => {
+  it("returns the house byline for the curated profile", () => {
     const got = resolveAuthorByline("Executive Angler Staff");
-    assert.equal(got.name, "Taylor Warnick");
+    assert.equal(got.name, "Executive Angler Staff");
     assert.ok(got.profile);
+  });
+
+  it("does not resolve the private person name as a public byline", () => {
+    const got = resolveAuthorByline("Taylor Warnick");
+    assert.equal(got.name, "Executive Angler Staff");
   });
 
   it("returns a bare identity when there is not", () => {
@@ -72,8 +80,8 @@ describe("resolveAuthorByline", () => {
 });
 
 describe("resolveAuthorSlug", () => {
-  it("resolves a curated slug", () => {
-    assert.equal(resolveAuthorSlug("taylor-warnick", CORPUS)?.name, "Taylor Warnick");
+  it("resolves a curated slug to the house byline", () => {
+    assert.equal(resolveAuthorSlug("taylor-warnick", CORPUS)?.name, "Executive Angler Staff");
   });
 
   it("resolves a byline-only slug", () => {
@@ -81,7 +89,7 @@ describe("resolveAuthorSlug", () => {
   });
 
   it("resolves a curated author with nothing published", () => {
-    assert.equal(resolveAuthorSlug("taylor-warnick", [])?.name, "Taylor Warnick");
+    assert.equal(resolveAuthorSlug("taylor-warnick", [])?.name, "Executive Angler Staff");
   });
 
   it("returns undefined for an unknown slug", () => {
@@ -105,7 +113,7 @@ describe("articlesByAuthorSlug", () => {
 describe("listAuthors", () => {
   it("includes curated authors and unclaimed bylines exactly once", () => {
     const slugs = listAuthors(CORPUS).map((a) => a.slug);
-    assert.deepEqual(slugs, ["jane-q-angler", "taylor-warnick"]);
+    assert.deepEqual(slugs, ["taylor-warnick", "jane-q-angler"]);
   });
 
   it("still lists the curated roster with no articles at all", () => {
@@ -117,10 +125,35 @@ describe("listAuthors", () => {
 });
 
 describe("isHouseByline", () => {
-  it("matches only the house byline, ignoring whitespace", () => {
+  it("matches the house byline and the private person name", () => {
     assert.equal(isHouseByline("Executive Angler Staff"), true);
     assert.equal(isHouseByline("  Executive Angler Staff  "), true);
-    assert.equal(isHouseByline("Taylor Warnick"), false);
+    assert.equal(isHouseByline("Taylor Warnick"), true);
+    assert.equal(isHouseByline("Jane Q. Angler"), false);
+  });
+});
+
+describe("publicImageCredit", () => {
+  it("drops the private person name and house byline", () => {
+    assert.equal(publicImageCredit("Taylor Warnick"), undefined);
+    assert.equal(publicImageCredit("Submitted by Taylor Warnick"), undefined);
+    assert.equal(publicImageCredit("Executive Angler Staff"), undefined);
+    assert.equal(publicImageCredit("Jane Doe / Unsplash"), "Jane Doe / Unsplash");
+  });
+});
+
+describe("labeledPhotoCredit", () => {
+  it("omits the house person and labels a real photographer", () => {
+    assert.equal(labeledPhotoCredit("Taylor Warnick"), undefined);
+    assert.equal(labeledPhotoCredit("Jane Doe / Unsplash"), "Photo: Jane Doe / Unsplash");
+    assert.equal(labeledPhotoCredit("Photo: Pat Clayton"), "Photo: Pat Clayton");
+  });
+});
+
+describe("namesPrivatePerson", () => {
+  it("matches the legal name inside a longer credit", () => {
+    assert.equal(namesPrivatePerson("Submitted by Taylor Warnick"), true);
+    assert.equal(namesPrivatePerson("Photo: Pat Clayton"), false);
   });
 });
 

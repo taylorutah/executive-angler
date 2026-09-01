@@ -125,7 +125,7 @@ async function main(): Promise<void> {
       sizes: row.size ? [row.size] : null,
       imitates: row.imitates,
       effectiveSpecies: row.effective_species,
-      originCredit: row.provenance_credit ?? "Submitted by Taylor Warnick",
+      originCredit: row.provenance_credit ?? "Executive Angler Staff",
       parentCanonicalId: row.parent_canonical_id,
     };
 

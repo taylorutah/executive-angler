@@ -13,6 +13,7 @@ import {
   lookupFlySlugRedirect,
 } from "@/lib/db/fly-model";
 import { SITE_URL } from "@/lib/constants";
+import { publicImageCredit } from "@/lib/authors";
 import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
@@ -106,6 +107,7 @@ export default async function FlyDetail({ params }: Props) {
   const variantRows = publicVariantRows(fly.option_envelope);
   const sizes = sizeSpec(fly.option_envelope?.sizes);
   const imitation = (fly.imitates ?? []).filter(Boolean).join(" · ");
+  const originCredit = publicImageCredit(fly.origin_credit);
   const pendingBanner =
     fly.status === "pending"
       ? "This fly is pending review — only you can see it."
@@ -123,8 +125,8 @@ export default async function FlyDetail({ params }: Props) {
           description: fly.description ?? undefined,
           image: fly.hero_image_url ?? undefined,
           url: `${SITE_URL}/flies/${fly.slug}`,
-          author: fly.origin_credit
-            ? { "@type": "Person", name: fly.origin_credit }
+          author: originCredit
+            ? { "@type": "Person", name: originCredit }
             : { "@type": "Organization", name: "Executive Angler" },
         }}
       />
@@ -179,10 +181,10 @@ export default async function FlyDetail({ params }: Props) {
                   <dd className="text-[var(--text-1)]">{imitation}</dd>
                 </div>
               )}
-              {fly.origin_credit && (
+              {originCredit && (
                 <div className="py-2">
                   <dt className="ea-overline">Origin</dt>
-                  <dd className="text-[var(--text-2)]">{fly.origin_credit}</dd>
+                  <dd className="text-[var(--text-2)]">{originCredit}</dd>
                 </div>
               )}
             </dl>

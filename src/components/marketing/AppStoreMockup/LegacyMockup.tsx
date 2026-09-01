@@ -71,7 +71,7 @@ export default function LegacyMockup() {
             className="font-heading"
             style={{ fontSize: 80, color: C.chalk, lineHeight: 1, marginTop: 28, letterSpacing: "-0.01em" }}
           >
-            Taylor Warnick
+            Executive Angler
           </h1>
           <div
             className="font-['IBM_Plex_Mono'] uppercase"

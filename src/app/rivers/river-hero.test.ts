@@ -67,3 +67,15 @@ describe("river hero paper band", () => {
     assert.equal(page.includes("hostedStillUrl(lodge.heroImageUrl)"), false);
   });
 });
+
+describe("river hero credit is not a byline", () => {
+  const hero = readFileSync(
+    join(process.cwd(), "src/components/ui/RiverHeroImage.tsx"),
+    "utf8",
+  );
+
+  it("keeps photographer credit off the identity band under the H1", () => {
+    assert.match(hero, /labeledPhotoCredit/);
+    assert.equal(hero.includes("credit={"), false);
+  });
+});
