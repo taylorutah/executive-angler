@@ -19,6 +19,7 @@ import SeasonalChart from "@/components/destinations/SeasonalChart";
 import PlaceEssay from "@/components/destinations/PlaceEssay";
 import PlaceRiverGrid from "@/components/destinations/PlaceRiverGrid";
 import PlaceRiverDirectories from "@/components/destinations/PlaceRiverDirectories";
+import MontanaComparison from "@/components/destinations/MontanaComparison";
 import { isUsableImageUrl } from "@/lib/media/image-url";
 import { claimImageUrl } from "@/components/home/homepage-images";
 import { SITE_URL } from "@/lib/constants";
@@ -199,6 +200,14 @@ export default async function DestinationPage({ params }: Props) {
                 wadingType: river.wadingType,
               }))}
             />
+          </div>
+        </section>
+      )}
+
+      {dest.slug === "montana" && (
+        <section className="bg-[var(--paper)] pb-16">
+          <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8">
+            <MontanaComparison />
           </div>
         </section>
       )}
