@@ -160,6 +160,7 @@ function ContactPageInner() {
 
               <TurnstileWidget
                 siteKey={TURNSTILE_SITE_KEY}
+                hideFailedWidget
                 onToken={(t) => {
                   setCaptchaToken(t);
                   setCaptchaResolved(t !== "" || captchaResolved);

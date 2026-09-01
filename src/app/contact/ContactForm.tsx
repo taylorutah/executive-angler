@@ -135,6 +135,7 @@ export default function ContactForm({ initialSubject }: Props) {
 
       <TurnstileWidget
         siteKey={TURNSTILE_SITE_KEY}
+        hideFailedWidget
         onToken={(t) => {
           setCaptchaToken(t);
           setCaptchaResolved(t !== "" || captchaResolved);
