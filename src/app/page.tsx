@@ -9,19 +9,11 @@ import {
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
 import type { Article, CanonicalFly } from "@/types/entities";
-import CategoryIndex from "@/components/home/CategoryIndex";
-import FlyPlate from "@/components/home/FlyPlate";
-import JournalBand from "@/components/home/JournalBand";
-import ThisWeeksRead from "@/components/home/ThisWeeksRead";
-import WhatWeDontDo from "@/components/home/WhatWeDontDo";
 import { selectFlagshipRivers } from "@/components/home/conditions";
 import { loadFlagshipGaugePayload } from "@/components/home/flagship-cache";
-import {
-  LiveHomeHero,
-  LiveOnTheWaterNow,
-} from "@/components/home/LiveHomeGauges";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 import { claimImageUrl, imageAvailable } from "@/components/home/homepage-images";
+import GazetteLiveHome from "@/components/gazette/GazetteLiveHome";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [rivers, allFlies] = await Promise.all([
@@ -51,7 +43,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const revalidate = 3600;
 
-/** The month the seasonal copy is written against, in the register's home time zone. */
 function currentMonth(): string {
   return new Date().toLocaleString("en-US", { month: "long", timeZone: "America/Denver" });
 }
@@ -63,23 +54,17 @@ function isPublicRead(article: Article): boolean {
   return !BANNED_EXCERPT.test(article.excerpt ?? "");
 }
 
-function pickRead(
-  articles: Article[],
-  used: Set<string>,
-): { lead: Article; rest: Article[] } | null {
+function pickRead(articles: Article[], used: Set<string>): Article | null {
   const sorted = [...articles].sort(
     (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
   );
   const eligible = sorted.filter(isPublicRead);
   const featured = eligible.filter((a) => a.featured);
   const ordered = [...featured, ...eligible.filter((a) => !a.featured)];
-  const lead = ordered.find((article) => imageAvailable(article.heroImageUrl, used));
+  const lead = ordered.find((article) => imageAvailable(article.heroImageUrl, used) || !article.heroImageUrl);
   if (!lead) return null;
-  claimImageUrl(lead.heroImageUrl, used);
-  return {
-    lead,
-    rest: ordered.filter((article) => article.id !== lead.id).slice(0, 3),
-  };
+  if (lead.heroImageUrl) claimImageUrl(lead.heroImageUrl, used);
+  return lead;
 }
 
 function pickPlate(
@@ -91,10 +76,10 @@ function pickPlate(
   const plate: CanonicalFly[] = [];
   for (const fly of [...featured, ...all]) {
     if (plate.length === 6) break;
-    if (!fly.heroImageUrl || seen.has(fly.id)) continue;
-    if (!imageAvailable(fly.heroImageUrl, used)) continue;
+    if (seen.has(fly.id)) continue;
+    if (fly.heroImageUrl && !imageAvailable(fly.heroImageUrl, used)) continue;
     seen.add(fly.id);
-    claimImageUrl(fly.heroImageUrl, used);
+    if (fly.heroImageUrl) claimImageUrl(fly.heroImageUrl, used);
     plate.push(fly);
   }
   return plate;
@@ -116,7 +101,6 @@ export default async function HomePage() {
     state: destById.get(river.destinationId)?.state ?? destById.get(river.destinationId)?.name,
   }));
   const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
-  const headline = `${rivers.length} Rivers, ${allFlies.length} Flies, and Hatches`;
   const gauges = await loadFlagshipGaugePayload(flagshipRivers).catch(() => ({
     snapshots: {},
     histories: {},
@@ -126,31 +110,23 @@ export default async function HomePage() {
   claimImageUrl(HERO_IMAGE.src, usedImages);
 
   const plate = pickPlate(featuredFlies, allFlies, usedImages);
-  const read = pickRead(articles, usedImages);
+  const fieldNote = pickRead(articles, usedImages);
 
   return (
-    <>
-      <LiveHomeHero headline={headline} madisonId={madison?.id} initial={gauges} />
-
-      <CategoryIndex
-        rivers={rivers.length}
-        flies={allFlies.length}
-        places={destinations.length}
-        notes={articles.length}
-      />
-
-      <LiveOnTheWaterNow rivers={flagshipRivers} month={month} initial={gauges} />
-
-      <FlyPlate flies={plate} flyCount={allFlies.length} />
-
-      <div className="border-b border-[var(--border)] bg-[var(--paper)]">
-        <div className="mx-auto grid max-w-[var(--container)] gap-0 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16">
-          {read ? <ThisWeeksRead lead={read.lead} rest={read.rest} /> : <div />}
-          <JournalBand />
-        </div>
-      </div>
-
-      <WhatWeDontDo />
-    </>
+    <GazetteLiveHome
+      madisonId={madison?.id}
+      initial={gauges}
+      counts={{
+        rivers: rivers.length,
+        flies: allFlies.length,
+        hatches: destinations.length,
+        days: articles.length,
+      }}
+      rivers={flagshipRivers}
+      month={month}
+      plate={plate}
+      flyCount={allFlies.length}
+      fieldNote={fieldNote}
+    />
   );
 }

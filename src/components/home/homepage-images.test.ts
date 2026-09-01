@@ -10,7 +10,7 @@ import {
   reportDuplicateImages,
 } from "./homepage-images";
 
-const homeHero = readFileSync(join(process.cwd(), "src/components/home/HomeHero.tsx"), "utf8");
+const homeHero = readFileSync(join(process.cwd(), "src/components/gazette/GazetteHome.tsx"), "utf8");
 
 describe("canonicalImgSrc", () => {
   it("decodes a next/image optimizer URL", () => {

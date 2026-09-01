@@ -1,17 +1,11 @@
-/**
- * /rivers — browse index (Lane L).
- *
- * Daylight throughout. This is a finding surface, not a workbench, so there
- * is no Dusk switch. Editorial header, filter bar, results, load-more.
- */
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getAllRivers } from "@/lib/db";
-import RiversPageClient from "./RiversPageClient";
-import { toRiverBrowseItem, statesForRiver } from "@/lib/browse/river-items";
+import GazetteRiversIndex from "@/components/gazette/GazetteRiversIndex";
+import { toRiverBrowseItem } from "@/lib/browse/river-items";
 import { SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
-import EntityListHeader from "@/components/ui/EntityListHeader";
+
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -32,25 +26,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RiversPage() {
   const rivers = await getAllRivers();
   const items = rivers.map((river) => toRiverBrowseItem(river));
-  const stateOptions = [...new Set(rivers.flatMap((r) => statesForRiver(r)))]
-    .sort((a, b) => a.localeCompare(b))
-    .map((name) => ({ value: name, label: name }));
 
   return (
-    <>
-      <EntityListHeader
-        overline="The reference"
-        title={`${rivers.length} rivers, documented`}
-        dek="Access, hatches, and live flow when a gauge exists. Ungauged water is an em dash — never a guessed number."
-      />
-
-      <section className="bg-[var(--paper)] pb-16 sm:pb-24">
-        <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <Suspense>
-            <RiversPageClient items={items} stateOptions={stateOptions} />
-          </Suspense>
-        </div>
-      </section>
-    </>
+    <Suspense>
+      <GazetteRiversIndex items={items} riverCount={rivers.length} />
+    </Suspense>
   );
 }

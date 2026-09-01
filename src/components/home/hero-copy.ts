@@ -10,7 +10,7 @@ export const HERO_HEADLINE_CLOSE = "the water is low and the hoppers are up.";
 export const HERO_HEADLINE = `${HERO_HEADLINE_LEAD} — ${HERO_HEADLINE_CLOSE}`;
 
 export const HERO_DEK =
-  "The photograph is Three Dollar Bridge. The number in the caption is the gauge, not a guess.";
+  "The photograph is Three Dollar Bridge. The number in the eyebrow is the gauge, not a guess.";
 
 export const HERO_DEK_QUIET =
   "The photograph is Three Dollar Bridge. The gauge is quiet; we are not guessing a number.";

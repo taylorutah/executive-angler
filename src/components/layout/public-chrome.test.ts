@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { hasSessionHint } from "./session-hint";
 
 const root = process.cwd();
-const header = readFileSync(join(root, "src/components/layout/Header.tsx"), "utf8");
+const header = readFileSync(join(root, "src/components/gazette/GazetteHeader.tsx"), "utf8");
 const footer = readFileSync(join(root, "src/components/layout/Footer.tsx"), "utf8");
 
 describe("gazette chrome locks", () => {
@@ -17,6 +17,8 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("logo-horizontal-forest"), false);
     assert.equal(header.includes("logo.svg"), false);
     assert.equal(header.includes("fly-mark"), false);
+    assert.equal(header.includes("HeaderSearch"), false);
+    assert.equal(header.includes("ExploreMenu"), false);
   });
 
   it("keeps the public nouns as Rivers Flies Places Field Notes Journal", () => {
