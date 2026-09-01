@@ -4,7 +4,6 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SITE_NAME } from "@/lib/constants";
 import { Send, AlertCircle } from "@/icons";
-import TurnstileWidget from "@/components/ui/TurnstileWidget";
 
 const SUBJECT_OPTIONS = [
   "General inquiry",
@@ -14,8 +13,6 @@ const SUBJECT_OPTIONS = [
   "Advertising",
   "Technical issue",
 ] as const;
-
-const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 export default function ContactPage() {
   return (
@@ -35,8 +32,6 @@ function ContactPageInner() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [captchaToken, setCaptchaToken] = useState("");
-  const [captchaResolved, setCaptchaResolved] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -54,7 +49,7 @@ function ContactPageInner() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message, token: captchaToken }),
+        body: JSON.stringify({ name, email, subject, message }),
       });
 
       const data = await res.json();
@@ -158,17 +153,6 @@ function ContactPageInner() {
                 />
               </div>
 
-              <TurnstileWidget
-                siteKey={TURNSTILE_SITE_KEY}
-                hideFailedWidget
-                onToken={(t) => {
-                  setCaptchaToken(t);
-                  setCaptchaResolved(t !== "" || captchaResolved);
-                }}
-                onAvailabilityChange={setCaptchaResolved}
-              />
-
-              {/* Error message */}
               {error && (
                 <div className="flex items-start gap-3 rounded-surface border border-[var(--danger)] bg-[var(--surface)] px-4 py-3">
                   <AlertCircle size={20} className="mt-0.5 shrink-0 text-[var(--danger)]" />
@@ -179,7 +163,7 @@ function ContactPageInner() {
               <div>
                 <button
                   type="submit"
-                  disabled={sending || !captchaResolved}
+                  disabled={sending}
                   className="ea-btn ea-btn-primary ea-btn-lg"
                 >
                   <Send size={16} />

@@ -26,11 +26,6 @@ interface Props {
   onAvailabilityChange?: (available: boolean) => void;
   /** ms to wait before declaring the widget broken. Default 6000. */
   failOpenAfterMs?: number;
-  /**
-   * Contact-only: drop the widget on fail-open so Cloudflare's Troubleshoot
-   * control is not shown. Login/signup keep the live widget (visual baselines).
-   */
-  hideFailedWidget?: boolean;
 }
 
 declare global {
@@ -62,7 +57,6 @@ export default function TurnstileWidget({
   onExpire,
   onAvailabilityChange,
   failOpenAfterMs = 6000,
-  hideFailedWidget = false,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
@@ -104,7 +98,6 @@ export default function TurnstileWidget({
   }, []);
 
   useEffect(() => {
-    if (hideFailedWidget && failedOpen) return;
     if (!scriptReady || !containerRef.current) return;
     if (widgetIdRef.current) return;
     if (!window.turnstile) return;
@@ -124,7 +117,6 @@ export default function TurnstileWidget({
         "error-callback": () => {
           setHasToken(false);
           onToken("");
-          if (hideFailedWidget) setFailedOpen(true);
         },
         theme: "light",
         size: "flexible",
@@ -132,7 +124,7 @@ export default function TurnstileWidget({
     } catch (err) {
       console.warn("[TurnstileWidget] render failed:", err);
     }
-  }, [hideFailedWidget, failedOpen, scriptReady, siteKey, onToken, onExpire]);
+  }, [scriptReady, siteKey, onToken, onExpire]);
 
   // Notify parent when token state changes.
   useEffect(() => {
@@ -149,35 +141,23 @@ export default function TurnstileWidget({
     return () => clearTimeout(t);
   }, [hasToken, failedOpen, failOpenAfterMs, onAvailabilityChange]);
 
-  function teardownWidget() {
-    if (widgetIdRef.current && window.turnstile) {
-      try {
-        window.turnstile.remove(widgetIdRef.current);
-      } catch {
-        /* ignore */
-      }
-      widgetIdRef.current = null;
-    }
-  }
-
-  // Contact: drop Cloudflare's widget so its Troubleshoot link is not shown.
-  useEffect(() => {
-    if (hideFailedWidget && failedOpen && !hasToken) teardownWidget();
-  }, [hideFailedWidget, failedOpen, hasToken]);
-
   // Cleanup on unmount.
   useEffect(() => {
-    return () => teardownWidget();
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        try {
+          window.turnstile.remove(widgetIdRef.current);
+        } catch {
+          /* ignore */
+        }
+        widgetIdRef.current = null;
+      }
+    };
   }, []);
-
-  const hideWidget = hideFailedWidget && failedOpen && !hasToken;
 
   return (
     <>
-      <div
-        ref={containerRef}
-        className={hideWidget ? "hidden" : "mt-2"}
-      />
+      <div ref={containerRef} className="mt-2" />
       {failedOpen && !hasToken && (
         <p className="mt-2 text-xs text-[var(--text-3)]">
           Having trouble with verification? You can still submit — we&apos;ll

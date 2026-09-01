@@ -39,17 +39,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify Turnstile token. If the secret is configured, a token is required
-    // and must validate. We deliberately do NOT fail open server-side — the
-    // widget already fail-opens on the client for users behind blockers, and
-    // those submissions will simply lack a token (rejected here).
-    if (process.env.TURNSTILE_SECRET_KEY) {
-      if (!token) {
-        return NextResponse.json(
-          { error: "Verification missing. Please complete the challenge and try again." },
-          { status: 400 }
-        );
-      }
+    // Contact does not paint Turnstile. A token is optional: verify only when
+    // one is present so leftover clients still get a real check.
+    if (process.env.TURNSTILE_SECRET_KEY && token) {
       const ip =
         request.headers.get("cf-connecting-ip") ??
         request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??

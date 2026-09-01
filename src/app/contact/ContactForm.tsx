@@ -1,11 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
 import { SUBJECT_OPTIONS } from "./subjects";
-
-const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
 const fieldClass =
   "w-full rounded-[2px] border border-[var(--border-rule)] bg-[var(--surface-card)] px-4 py-3 font-ui text-[15px] text-[var(--text-primary)] placeholder:text-[var(--text-meta)] outline-none focus:border-[var(--action)]";
@@ -18,8 +15,6 @@ export default function ContactForm({ initialSubject }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [captchaToken, setCaptchaToken] = useState("");
-  const [captchaResolved, setCaptchaResolved] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -37,7 +32,7 @@ export default function ContactForm({ initialSubject }: Props) {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message, token: captchaToken }),
+        body: JSON.stringify({ name, email, subject, message }),
       });
 
       const data = await res.json();
@@ -132,16 +127,6 @@ export default function ContactForm({ initialSubject }: Props) {
           placeholder="How can we help?"
         />
       </div>
-
-      <TurnstileWidget
-        siteKey={TURNSTILE_SITE_KEY}
-        hideFailedWidget
-        onToken={(t) => {
-          setCaptchaToken(t);
-          setCaptchaResolved(t !== "" || captchaResolved);
-        }}
-        onAvailabilityChange={setCaptchaResolved}
-      />
 
       {error && (
         <div className="rounded-[2px] border border-[var(--border-rule)] px-4 py-3">
