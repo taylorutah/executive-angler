@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import GazetteLiveGauge from "./GazetteLiveGauge";
+import type { GaugeSnapshot } from "@/components/home/conditions";
+import type { HydroReading } from "@/components/hydrograph/geometry";
 import type { AccessPoint, CanonicalFly, HatchEntry, River } from "@/types/entities";
 import { matchHatchPlate } from "@/lib/rivers/week-flies";
 import type { RegulationSource } from "@/lib/rivers/regulations";
@@ -25,6 +27,8 @@ interface Props {
   regulations?: string;
   regsSource: RegulationSource;
   evidencePhoto?: { src: string; alt: string; caption: string };
+  initialSnapshot?: GaugeSnapshot | null;
+  initialHistory?: HydroReading[];
 }
 
 export default function GazetteRiverReport({
@@ -37,6 +41,8 @@ export default function GazetteRiverReport({
   regulations,
   regsSource,
   evidencePhoto,
+  initialSnapshot = null,
+  initialHistory,
 }: Props) {
   return (
     <article className="bg-[var(--paper)]">
@@ -49,7 +55,13 @@ export default function GazetteRiverReport({
         </h1>
       </div>
 
-      <GazetteLiveGauge riverId={river.id} siteId={siteId} place={place} />
+      <GazetteLiveGauge
+        riverId={river.id}
+        siteId={siteId}
+        place={place}
+        initialSnapshot={initialSnapshot}
+        initialHistory={initialHistory}
+      />
 
       {plates.length > 0 ? (
         <section className="mx-auto max-w-[72rem] px-4 py-8 sm:px-8">
@@ -60,19 +72,20 @@ export default function GazetteRiverReport({
             {plates.slice(0, 3).map((plate) => {
               const inner = (
                 <>
-                  {plate.imageUrl ? (
+                    {plate.imageUrl ? (
                     <div className="relative aspect-square w-full bg-[var(--plate)]">
                       <SafeEntityImage
                         src={plate.imageUrl}
                         alt={plate.name}
                         title={plate.name}
                         contain
-                        className="object-contain"
+                        fallback="none"
+                        className="object-contain p-3"
                         sizes="33vw"
                       />
                     </div>
                   ) : (
-                    <div className="flex aspect-[4/3] items-end bg-[var(--plate)] p-3">
+                    <div className="flex aspect-square items-end bg-[var(--plate)] p-3">
                       <p className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--ink)]">
                         {plate.name}
                       </p>

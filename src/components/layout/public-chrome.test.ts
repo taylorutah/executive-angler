@@ -21,6 +21,13 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("ExploreMenu"), false);
   });
 
+  it("limits the public ticker to three flagship waters", () => {
+    const rail = readFileSync(join(root, "src/components/home/ConditionsRail.tsx"), "utf8");
+    assert.match(rail, /TICKER_LIMIT = 3/);
+    assert.match(rail, /On the water/);
+    assert.equal(rail.includes("LiveDot"), false);
+  });
+
   it("keeps the public nouns as Rivers Flies Places Field Notes Journal", () => {
     const links = readFileSync(join(root, "src/components/layout/nav/links.ts"), "utf8");
     assert.match(links, /label: "Rivers"/);

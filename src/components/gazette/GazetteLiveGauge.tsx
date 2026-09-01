@@ -10,6 +10,8 @@ interface Props {
   riverId: string;
   siteId: string | null;
   place: string;
+  initialSnapshot?: GaugeSnapshot | null;
+  initialHistory?: HydroReading[];
 }
 
 function deltaLine(snapshot: GaugeSnapshot | null): { text: string; dropping: boolean } | null {
@@ -39,9 +41,17 @@ type FlagshipJson = {
   histories?: Record<string, HydroReading[]>;
 };
 
-export default function GazetteLiveGauge({ riverId, siteId, place }: Props) {
-  const [snapshot, setSnapshot] = useState<GaugeSnapshot | null>(null);
-  const [history, setHistory] = useState<HydroReading[]>([]);
+export default function GazetteLiveGauge({
+  riverId,
+  siteId,
+  place: _place,
+  initialSnapshot = null,
+  initialHistory,
+}: Props) {
+  const [snapshot, setSnapshot] = useState<GaugeSnapshot | null>(initialSnapshot);
+  const [history, setHistory] = useState<HydroReading[] | null>(
+    initialHistory && initialHistory.length >= 2 ? initialHistory : null,
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -73,7 +83,7 @@ export default function GazetteLiveGauge({ riverId, siteId, place }: Props) {
           observedAt: json.snapshots![riverId].observedAt ?? prev?.observedAt ?? null,
           stale: json.snapshots![riverId].stale ?? prev?.stale ?? false,
         }));
-        if (json.histories?.[riverId]) setHistory(json.histories[riverId]);
+        if (json.histories?.[riverId]?.length) setHistory(json.histories[riverId]);
       })
       .catch(() => {
         /* flagship payload is optional */
@@ -86,7 +96,17 @@ export default function GazetteLiveGauge({ riverId, siteId, place }: Props) {
 
   const cfs = snapshot?.cfs ?? null;
   const live = cfs != null && !snapshot?.stale;
-  const trend = deltaLine(snapshot);
+  const prior = history && history.length >= 2 ? history[history.length - 2]?.discharge : null;
+  const trend = deltaLine(
+    snapshot
+      ? {
+          ...snapshot,
+          deltaCfs:
+            snapshot.deltaCfs ??
+            (cfs != null && prior != null ? Math.round(cfs - prior) : null),
+        }
+      : null,
+  );
   const updated = formatObservedAt(snapshot?.observedAt ?? null);
   const temp = snapshot?.waterTempF ?? null;
 
@@ -127,13 +147,14 @@ export default function GazetteLiveGauge({ riverId, siteId, place }: Props) {
             <dt className="w-28 text-[var(--text-3)]">Updated</dt>
             <dd className="text-[var(--ink)]">{updated ? `${updated} USGS` : "—"}</dd>
           </div>
-          <div className="flex gap-6">
-            <dt className="w-28 text-[var(--text-3)]">Place</dt>
-            <dd className="text-[var(--ink)]">{place || "—"}</dd>
-          </div>
         </dl>
       </div>
-      <GazetteHydrograph riverId={riverId} siteId={siteId} liveCfs={cfs} readings={history} />
+      <GazetteHydrograph
+        riverId={riverId}
+        siteId={siteId}
+        liveCfs={cfs}
+        readings={history ?? undefined}
+      />
     </section>
   );
 }

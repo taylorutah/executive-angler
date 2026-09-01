@@ -106,8 +106,10 @@ export default function GazetteHome({
 
       <section className="mx-auto grid max-w-[72rem] gap-10 px-4 py-10 sm:px-8 sm:py-14 lg:grid-cols-[minmax(0,1.62fr)_minmax(0,1fr)] lg:gap-16 lg:items-start">
         <div>
-          <h1 className="font-display text-[clamp(40px,5.2vw,70px)] font-semibold leading-[0.95] tracking-[-0.02em] text-[var(--ink)]">
-            {counts.rivers} Rivers, {counts.flies} Flies,
+          <h1 className="font-display text-[clamp(44px,5.8vw,70px)] font-semibold leading-[0.95] tracking-[-0.02em] text-[var(--ink)]">
+            <span className="whitespace-nowrap">
+              {counts.rivers} Rivers, {counts.flies} Flies,
+            </span>
             <br />
             and Hatches
           </h1>
@@ -123,11 +125,11 @@ export default function GazetteHome({
         <ol className="space-y-5">
           {INDEX_COPY.map((row) => (
             <li key={row.key}>
-              <Link href={row.href} className="group grid grid-cols-[4.5rem_auto_1fr] items-start gap-3">
-                <span className="font-display text-[34px] font-semibold leading-none tabular-nums text-[var(--ink)]">
+              <Link href={row.href} className="group grid grid-cols-[5rem_auto_1fr] items-start gap-3">
+                <span className="font-display text-[48px] font-semibold leading-none tabular-nums text-[var(--ink)]">
                   {figure(counts[row.key])}
                 </span>
-                <span className="mt-1 h-8 w-px bg-[var(--copper)]" aria-hidden />
+                <span className="mt-2 h-10 w-px bg-[var(--copper)]" aria-hidden />
                 <span>
                   <span className="block font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)] group-hover:text-[var(--copper)]">
                     {row.label}
@@ -195,7 +197,6 @@ export default function GazetteHome({
 
       <section className="mx-auto max-w-[72rem] px-4 py-12 sm:px-8">
         <div className="mb-6 flex items-baseline gap-x-6 border-t border-[var(--border)] pt-8">
-          <p className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">The plate</p>
           <h2 className="font-display text-[28px] font-semibold uppercase tracking-[0.06em] text-[var(--ink)] sm:text-[32px]">
             The plate
           </h2>
@@ -213,30 +214,37 @@ export default function GazetteHome({
             const line = categoryLine(fly);
             return (
               <li key={fly.id} className="border-b border-r border-[var(--border)]">
-                <Link href={`/flies/${fly.slug}`} className="block p-3">
-                  <div className="relative flex aspect-square w-full items-center justify-center bg-[var(--plate)]">
+                <Link href={`/flies/${fly.slug}`} className="block">
+                  <div className="relative flex aspect-square w-full items-end bg-[var(--plate)] p-3">
                     {fly.heroImageUrl ? (
                       <SafeEntityImage
                         src={fly.heroImageUrl}
                         alt={flyPlateAlt(fly.name, sizes, fly.imitates?.[0])}
                         title={fly.name}
                         contain
-                        className="object-contain"
+                        fallback="none"
+                        className="object-contain p-3"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                       />
+                    ) : (
+                      <p className="font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]">
+                        {fly.name}
+                      </p>
+                    )}
+                  </div>
+                  <div className="p-3 pt-2">
+                    <h3 className="font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]">
+                      {fly.name}
+                    </h3>
+                    <p className="mt-1 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                      {line}
+                    </p>
+                    {sizes ? (
+                      <p className="mt-0.5 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                        {sizes}
+                      </p>
                     ) : null}
                   </div>
-                  <h3 className="mt-3 font-ui text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]">
-                    {fly.name}
-                  </h3>
-                  <p className="mt-1 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
-                    {line}
-                  </p>
-                  {sizes ? (
-                    <p className="mt-0.5 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
-                      {sizes}
-                    </p>
-                  ) : null}
                 </Link>
               </li>
             );
@@ -254,7 +262,7 @@ export default function GazetteHome({
               <h2 className="font-display text-[26px] font-semibold leading-tight text-[var(--ink)] group-hover:text-[var(--copper)]">
                 {fieldNote.title}
               </h2>
-              <p className="mt-3 text-[16px] leading-relaxed text-[var(--text-2)]">
+              <p className="mt-3 line-clamp-2 text-[16px] leading-relaxed text-[var(--text-2)]">
                 {fieldNote.excerpt}
               </p>
               <span className="mt-4 inline-block font-ui text-[12px] uppercase tracking-[0.14em] text-[var(--ink)]">

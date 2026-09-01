@@ -21,10 +21,16 @@ interface Props {
  * Quiet hairline discharge plot. No gradient fill, no glass.
  */
 export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: initial }: Props) {
-  const [readings, setReadings] = useState<HydroReading[] | null>(initial ?? null);
+  const [readings, setReadings] = useState<HydroReading[] | null>(
+    initial && initial.length >= 2 ? initial : null,
+  );
 
   useEffect(() => {
-    if ((initial && initial.length >= 2) || !siteId) return;
+    if (initial && initial.length >= 2) {
+      setReadings(initial);
+      return;
+    }
+    if (!siteId) return;
     let cancelled = false;
     fetch(`/api/river-history/${encodeURIComponent(riverId)}?siteId=${encodeURIComponent(siteId)}`)
       .then((r) => (r.ok ? r.json() : null))

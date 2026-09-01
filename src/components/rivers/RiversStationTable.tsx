@@ -15,20 +15,20 @@ interface Props {
 }
 
 function trendWord(flow: StationFlow | undefined): string {
-  if (!flow) return "—";
-  if (flow.deltaCfs == null) return FLOW_STATE_LABEL[flow.state] ?? "—";
+  if (!flow) return "·";
+  if (flow.deltaCfs == null) return FLOW_STATE_LABEL[flow.state] ?? "·";
   if (flow.deltaCfs > 15) return "rising";
   if (flow.deltaCfs < -15) return "dropping";
   return "steady";
 }
 
 function cfsCell(flow: StationFlow | undefined): string {
-  if (!flow || !Number.isFinite(flow.cfs)) return "—";
+  if (!flow || !Number.isFinite(flow.cfs)) return "·";
   return `${Math.round(flow.cfs).toLocaleString("en-US")} CFS`;
 }
 
 function waterLabel(item: RiverBrowseItem): string {
-  return waterTypeLabel(String(item._filterValues?.waterType ?? "")) ?? "—";
+  return waterTypeLabel(String(item._filterValues?.waterType ?? "")) ?? "·";
 }
 
 function CfsText({ flow }: { flow: StationFlow | undefined }) {
@@ -77,14 +77,14 @@ export default function RiversStationTable({ items, flows }: Props) {
                 {item.title}
               </Link>
               <p className="mt-0.5 font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
-                {item.kicker ?? "—"}
+                {item.kicker ?? "·"}
               </p>
               <p className="mt-1.5 font-ui text-[13px] text-[var(--text-2)]">
                 <CfsText flow={flow} />
                 <span className="text-[var(--text-3)]"> · </span>
                 <TrendText flow={flow} />
                 <span className="text-[var(--text-3)]"> · </span>
-                <span>{item.whatsOn || "—"}</span>
+                <span>{item.whatsOn || "·"}</span>
                 <span className="text-[var(--text-3)]"> · </span>
                 <span className="uppercase tracking-[0.08em] text-[var(--text-3)]">
                   {waterLabel(item)}
@@ -121,7 +121,7 @@ export default function RiversStationTable({ items, flows }: Props) {
                     </Link>
                   </td>
                   <td className="py-3 pr-4 font-ui text-[13px] uppercase tracking-[0.08em] text-[var(--text-3)]">
-                    {item.kicker ?? "—"}
+                    {item.kicker ?? "·"}
                   </td>
                   <td className="py-3 pr-4 text-[14px]">
                     <CfsText flow={flow} />
@@ -130,7 +130,7 @@ export default function RiversStationTable({ items, flows }: Props) {
                     <TrendText flow={flow} />
                   </td>
                   <td className="py-3 pr-4 font-ui text-[13px] text-[var(--text-2)]">
-                    {item.whatsOn || "—"}
+                    {item.whatsOn || "·"}
                   </td>
                   <td className="py-3 font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
                     {waterLabel(item)}

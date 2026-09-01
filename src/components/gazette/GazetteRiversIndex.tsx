@@ -108,7 +108,7 @@ export default function GazetteRiversIndex({ items, riverCount }: Props) {
             className="ea-search-underline"
           />
         </label>
-        <div className="mt-5 flex flex-wrap gap-x-3 gap-y-2 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">
+        <div className="mt-5 flex flex-nowrap gap-x-3 overflow-x-auto font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {FILTERS.map((f, i) => (
             <span key={f.key} className="inline-flex items-center gap-x-3">
               {i > 0 ? <span aria-hidden>·</span> : null}

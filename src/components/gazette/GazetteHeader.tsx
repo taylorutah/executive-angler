@@ -52,7 +52,7 @@ export default function GazetteHeader() {
             aria-label="Executive Angler — home"
           >
             <HeronMark className="h-[30px] w-[22px] text-[var(--copper)]" aria-hidden />
-            <span className="ea-wordmark hidden sm:block">
+            <span className="ea-wordmark">
               Executive
               <br />
               Angler
@@ -143,7 +143,7 @@ export default function GazetteHeader() {
             ) : (
               <Link
                 href="/signup"
-                className="hidden bg-[var(--accent)] px-3.5 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--on-action)] md:inline-flex"
+                className="inline-flex bg-[var(--accent)] px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.1em] text-[var(--on-action)] sm:px-3.5 sm:text-[12px] sm:tracking-[0.12em]"
               >
                 Create account
               </Link>

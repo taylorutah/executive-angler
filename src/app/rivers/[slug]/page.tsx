@@ -10,7 +10,8 @@ import {
 } from "@/lib/db";
 import { SITE_URL } from "@/lib/constants";
 import { regulationSource } from "@/lib/rivers/regulations";
-import { primaryGauge } from "@/components/home/conditions";
+import { FLAGSHIP_RIVERS, primaryGauge, selectFlagshipRivers } from "@/components/home/conditions";
+import { loadFlagshipGaugePayload } from "@/components/home/flagship-cache";
 import { GazetteClock } from "@/lib/gazette/date";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 
@@ -80,6 +81,12 @@ export default async function RiverPage({ params }: Props) {
       : [place, (river.flowType ?? "").replace(/-/g, " ")].filter(Boolean).join("  ·  ").toUpperCase();
 
   const gauge = primaryGauge(river.usgsGaugeId, river.name);
+  const flagship = FLAGSHIP_RIVERS.some((row) => row.slug === river.slug)
+    ? selectFlagshipRivers([river])[0]
+    : undefined;
+  const gauges = flagship
+    ? await loadFlagshipGaugePayload([flagship]).catch(() => null)
+    : null;
 
   const regsSource = regulationSource({
     riverSlug: river.slug,
@@ -143,6 +150,8 @@ export default async function RiverPage({ params }: Props) {
         regulations={river.regulations}
         regsSource={regsSource}
         evidencePhoto={evidencePhoto}
+        initialSnapshot={gauges?.snapshots[river.id] ?? null}
+        initialHistory={gauges?.histories[river.id]}
       />
     </>
   );
