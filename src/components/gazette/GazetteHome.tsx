@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import HeronMark from "@/components/brand/HeronMark";
 import GazettePlate from "./GazettePlate";
@@ -7,7 +6,6 @@ import {
   type FlagshipRiver,
   type GaugeSnapshot,
 } from "@/components/home/conditions";
-import { HERO_IMAGE, formatHeroCaption } from "@/components/home/hero-copy";
 import { shortInsect } from "@/lib/browse/river-items";
 import type { Article, CanonicalFly } from "@/types/entities";
 
@@ -54,12 +52,11 @@ function hatchLine(river: FlagshipRiver, month: string): string {
 }
 
 /**
- * T7O4R + AWna3 — inset Three Dollar Bridge (caption under the photo),
- * then ON THE WATER NOW / RIVERS REPORT, THE PLATE, FIELD NOTE + JOURNAL.
- * No 50vh brochure bleed. No ecomm fly cutouts.
+ * Still 4 — ON THE WATER NOW / RIVERS REPORT, then 02 THE PLATE,
+ * then FIELD NOTE + JOURNAL + heron on the right. No photo hero.
+ * Empty cream plates. Never AI insects. Never a 50vh bleed.
  */
 export default function GazetteHome({
-  madisonCfs,
   rivers,
   snapshots,
   month,
@@ -69,30 +66,11 @@ export default function GazetteHome({
 }: Props) {
   return (
     <div className="bg-[var(--paper)]">
-      <figure className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8">
-        <div className="relative aspect-[16/7] w-full overflow-hidden bg-[var(--paper-deep)]">
-          <Image
-            src={HERO_IMAGE.src}
-            alt={HERO_IMAGE.alt}
-            fill
-            priority
-            fetchPriority="high"
-            unoptimized
-            sizes="(max-width: 1440px) 92vw, 1152px"
-            className="object-cover object-[center_68%] [filter:var(--photo-grade)]"
-          />
-        </div>
-        <figcaption className="mt-3 font-ui text-[11px] uppercase tracking-[0.14em] text-[var(--text-3)]">
-          {formatHeroCaption(madisonCfs)}
-        </figcaption>
-      </figure>
-
-      <section className="mx-auto grid max-w-[72rem] gap-10 px-4 pb-4 pt-8 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:pt-12">
+      <section className="mx-auto grid max-w-[72rem] gap-10 border-b border-[var(--border)] px-4 pb-10 pt-8 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:pt-12">
         <div>
           <p className="font-ui text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]">
             On the water now
           </p>
-          <div className="mt-2 h-px w-16 bg-[var(--ink)]" aria-hidden />
           <h1 className="mt-5 font-display text-[clamp(40px,7vw,72px)] font-semibold uppercase leading-[0.9] tracking-[-0.02em] text-[var(--ink)]">
             Rivers
             <br />
@@ -140,20 +118,12 @@ export default function GazetteHome({
         </table>
       </section>
 
-      <section className="mx-auto max-w-[72rem] px-4 py-10 sm:px-8">
-        <div className="mb-5 flex items-baseline gap-x-4">
-          <h2 className="font-ui text-[12px] uppercase tracking-[0.16em] text-[var(--ink)]">
-            02 The plate
-          </h2>
-          <Link
-            href="/flies"
-            className="ml-auto font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--ink)]"
-          >
-            {flyCount > 0 ? `→ All ${flyCount} patterns` : "→ All patterns"}
-          </Link>
-        </div>
+      <section className="mx-auto max-w-[72rem] border-b border-[var(--border)] px-4 py-10 sm:px-8">
+        <h2 className="font-ui text-[12px] uppercase tracking-[0.16em] text-[var(--ink)]">
+          02 The plate
+        </h2>
 
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {plate.map((fly) => (
             <li key={fly.id}>
               <GazettePlate
@@ -164,9 +134,14 @@ export default function GazetteHome({
             </li>
           ))}
         </ul>
+        <p className="mt-5 text-right">
+          <Link href="/flies" className="font-body text-[16px] italic text-[var(--ink)]">
+            {flyCount > 0 ? `→ All ${flyCount} patterns` : "→ All patterns"}
+          </Link>
+        </p>
       </section>
 
-      <section className="mx-auto grid max-w-[72rem] gap-10 border-t border-[var(--border)] px-4 py-10 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-end">
+      <section className="mx-auto grid max-w-[72rem] gap-10 px-4 py-10 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-end">
         <div>
           <p className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--copper)]">
             Field note
@@ -187,7 +162,7 @@ export default function GazetteHome({
           )}
         </div>
 
-        <div className="grid items-end gap-6 md:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="grid items-end gap-6 border-t border-[var(--border)] pt-8 md:grid-cols-[minmax(0,1fr)_auto] lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">
           <div>
             <p className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
               Journal
@@ -196,20 +171,18 @@ export default function GazetteHome({
               Keep the record the water can&apos;t keep for you.
             </h2>
             <p className="mt-3 font-body text-[16px] italic leading-relaxed text-[var(--text-2)]">
-              Sessions, flies, and the days you actually fished — yours, and no one else&apos;s.
+              Date. River. Conditions. Flies. What worked. What didn&apos;t. Build your own
+              encyclopedia.
             </p>
             <p className="mt-6 font-ui text-[18px] tracking-[0.2em] text-[var(--ink)]" aria-hidden>
               →
             </p>
-            <Link
-              href="/journal"
-              className="ea-journal-box mt-6"
-            >
+            <Link href="/journal" className="ea-journal-box mt-6">
               Keep a journal
             </Link>
           </div>
           <HeronMark
-            facing="left"
+            facing="right"
             className="hidden h-52 w-[7.25rem] shrink-0 text-[var(--copper)] md:block"
             aria-hidden
           />

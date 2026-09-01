@@ -1474,7 +1474,8 @@ select:focus {
   align-items: center;
   justify-content: flex-end;
   text-align: center;
-  min-height: 8.5rem;
+  aspect-ratio: 1;
+  min-height: 10.5rem;
   padding: 18px 10px 16px;
   background: var(--paper-deep);
   clip-path: polygon(

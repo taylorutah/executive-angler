@@ -34,6 +34,7 @@ describe("river station report", () => {
     assert.match(report, /Fish this now/);
     assert.match(report, /Keep a journal on this river/);
     assert.match(report, /formatLonLat/);
+    assert.match(report, /lg:grid-cols-2/, "access hangs left of regulations");
   });
 
   it("prints place · water · miles as type, not a brochure overline", () => {

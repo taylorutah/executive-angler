@@ -155,7 +155,16 @@ export default function GazetteLiveGauge({
               live ? "text-[var(--ink)]" : "text-[var(--text-3)]"
             }`}
           >
-            {cfs != null ? `${cfs.toLocaleString("en-US")} CFS` : "—"}
+            {cfs != null ? (
+              <>
+                {cfs.toLocaleString("en-US")}
+                <span className="ml-2 align-baseline font-ui text-[13px] font-medium tracking-[0.14em]">
+                  CFS
+                </span>
+              </>
+            ) : (
+              "—"
+            )}
             {trend ? (
               <span
                 className={`mt-2 block font-ui text-[12px] uppercase tracking-[0.08em] ${
@@ -172,7 +181,16 @@ export default function GazetteLiveGauge({
             Water temp
           </dt>
           <dd className="mt-2 font-display text-[clamp(36px,5vw,52px)] font-semibold leading-none tabular-nums text-[var(--ink)]">
-            {temp != null ? `${temp} °F` : "—"}
+            {temp != null ? (
+              <>
+                {temp}
+                <span className="ml-2 align-baseline font-ui text-[13px] font-medium tracking-[0.14em]">
+                  °F
+                </span>
+              </>
+            ) : (
+              "—"
+            )}
           </dd>
         </div>
         <div className="sm:pl-6">

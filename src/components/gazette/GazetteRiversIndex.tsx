@@ -118,7 +118,7 @@ export default function GazetteRiversIndex({ items, riverCount }: Props) {
           The reference
         </p>
         <h1 className="mt-2 font-display text-[clamp(36px,5vw,56px)] font-semibold leading-[0.95] text-[var(--ink)]">
-          {riverCount} rivers, documented.
+          {riverCount} rivers, <em className="italic">documented.</em>
         </h1>
         <p className="mt-3 font-body text-[17px] italic text-[var(--text-2)]">
           Access, hatches, and live flow when a gauge exists.

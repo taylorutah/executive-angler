@@ -134,55 +134,65 @@ export default function GazetteRiverReport({
           </section>
         ) : null}
 
-        {regulations ? (
-          <section className={plates.length > 0 ? "mt-10" : undefined}>
+        <div
+          className={`grid gap-10 lg:grid-cols-2 lg:items-start ${
+            plates.length > 0 ? "mt-10 border-t border-[var(--border)] pt-10" : ""
+          }`}
+        >
+          <section>
             <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-              Regulations ({regsSource.label})
+              Access
             </h2>
-            <ul className="ea-diamond-list mt-4 font-body text-[15px] leading-relaxed text-[var(--text-2)]">
-              {regulationLines(regulations).map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
-            <p className="mt-3 font-body text-[15px] italic text-[var(--text-3)]">
-              Regulations change. Verify before you fish.{" "}
-              <a
-                href={regsSource.url}
-                className="text-[var(--ink)] underline underline-offset-4"
-                rel="noopener noreferrer"
-              >
-                {regsSource.label}
-              </a>
-              . Retrieved {regsSource.retrievedOn}.
-            </p>
+            {accessPoints.length > 0 ? (
+              <ul className="ea-diamond-list mt-4">
+                {accessPoints.map((ap, i) => (
+                  <li key={`${ap.name}-${i}`} className="pb-3">
+                    <p className="font-body text-[16px] font-semibold text-[var(--ink)]">
+                      {ap.name}
+                      {Number.isFinite(ap.latitude) && Number.isFinite(ap.longitude)
+                        ? ` · ${formatLonLat(ap.latitude, ap.longitude)}`
+                        : ""}
+                    </p>
+                    {ap.description ? (
+                      <p className="mt-0.5 font-body text-[15px] text-[var(--text-2)]">
+                        {ap.description}
+                      </p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-[15px] text-[var(--text-3)]">
+                No access points are listed yet.
+              </p>
+            )}
           </section>
-        ) : null}
-      </div>
 
-      <section className="mx-auto max-w-[72rem] px-4 py-6 sm:px-8">
-        <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-          Access
-        </h2>
-        {accessPoints.length > 0 ? (
-          <ul className="ea-diamond-list mt-4">
-            {accessPoints.map((ap, i) => (
-              <li key={`${ap.name}-${i}`} className="pb-3">
-                <p className="font-body text-[16px] font-semibold text-[var(--ink)]">
-                  {ap.name}
-                  {Number.isFinite(ap.latitude) && Number.isFinite(ap.longitude)
-                    ? ` · ${formatLonLat(ap.latitude, ap.longitude)}`
-                    : ""}
-                </p>
-                {ap.description ? (
-                  <p className="mt-0.5 font-body text-[15px] text-[var(--text-2)]">{ap.description}</p>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 text-[15px] text-[var(--text-3)]">No access points are listed yet.</p>
-        )}
-      </section>
+          {regulations ? (
+            <section>
+              <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+                Regulations ({regsSource.label})
+              </h2>
+              <ul className="ea-diamond-list mt-4 font-body text-[15px] leading-relaxed text-[var(--text-2)]">
+                {regulationLines(regulations).map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+              <p className="mt-3 font-body text-[15px] italic text-[var(--text-3)]">
+                Regulations change. Verify before you fish.{" "}
+                <a
+                  href={regsSource.url}
+                  className="text-[var(--ink)] underline underline-offset-4"
+                  rel="noopener noreferrer"
+                >
+                  {regsSource.label}
+                </a>
+                . Retrieved {regsSource.retrievedOn}.
+              </p>
+            </section>
+          ) : null}
+        </div>
+      </div>
 
       {evidencePhoto ? (
         <figure className="mx-auto max-w-[72rem] px-4 py-6 sm:px-8">

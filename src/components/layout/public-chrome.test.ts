@@ -44,6 +44,7 @@ describe("gazette chrome locks", () => {
     assert.match(rivers, /label: "Gauge"/);
     assert.match(rivers, /ea-search-underline/);
     assert.match(rivers, /flex flex-wrap/);
+    assert.match(rivers, /<em className="italic">documented\.<\/em>/);
     assert.equal(rivers.includes("rounded-full"), false, "search must be type, not a boxed pill");
     assert.equal(rivers.includes("ea-search-pill"), false);
   });
@@ -57,7 +58,7 @@ describe("gazette chrome locks", () => {
     assert.equal(rail.includes("LiveDot"), false);
   });
 
-  it("keeps the public nouns as the T7O4R five", () => {
+  it("keeps the public nouns as Rivers · Flies · Places · Field Notes · Journal", () => {
     const links = readFileSync(join(root, "src/components/layout/nav/links.ts"), "utf8");
     const block = links.slice(
       links.indexOf("export const PUBLIC_NOUNS"),
