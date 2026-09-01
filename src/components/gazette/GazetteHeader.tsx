@@ -51,7 +51,7 @@ export default function GazetteHeader() {
             className="ea-focus-ring flex min-w-0 flex-shrink-0 cursor-pointer select-none items-center gap-2"
             aria-label="Executive Angler — home"
           >
-            <HeronMark className="h-14 w-8 text-[var(--copper)] md:h-[4.75rem] md:w-[2.625rem]" aria-hidden />
+            <HeronMark className="ea-lockup-heron h-14 w-8 md:h-[4.75rem] md:w-[2.625rem]" aria-hidden />
             <span className="ea-wordmark">
               Executive
               <br />

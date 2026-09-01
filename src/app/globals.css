@@ -1418,6 +1418,20 @@ select:focus {
   mask: url("/brand/heron-mark.svg") center / contain no-repeat;
 }
 
+/* Lockup mark — stills, not the leftover 22×30 cut. Height is the header. */
+.ea-lockup-heron {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 56px;
+  color: var(--copper);
+}
+@media (min-width: 768px) {
+  .ea-lockup-heron {
+    width: 42px;
+    height: 76px;
+  }
+}
+
 .ea-wordmark {
   font-family: var(--font-display);
   font-size: 12px;

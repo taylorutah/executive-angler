@@ -23,7 +23,11 @@ describe("gazette chrome locks", () => {
     assert.match(header, /hidden[^\n]*md:inline-flex/);
     assert.match(header, /bg-\[var\(--accent-soft\)\]/);
     assert.match(header, /text-\[var\(--accent\)\][^\n]*md:inline-flex/);
+    assert.match(header, /ea-lockup-heron/);
     assert.match(header, /md:h-\[4\.75rem\]/);
+    const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
+    assert.match(css, /\.ea-lockup-heron \{[\s\S]*height: 56px;/);
+    assert.match(css, /\.ea-lockup-heron \{[\s\S]*height: 76px;/);
     assert.equal(header.includes("h-[30px] w-[22px]"), false);
     assert.equal(header.includes("isLoading"), false);
     assert.equal(header.includes("h-8 w-28"), false);
