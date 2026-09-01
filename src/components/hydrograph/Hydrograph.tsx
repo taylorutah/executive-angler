@@ -136,7 +136,7 @@ export default function Hydrograph({ readings, liveCfs, label, children }: Props
         }}
       />
       <span
-        className={`${AXIS} text-[var(--signal-live)]`}
+        className="pointer-events-none absolute font-mono text-sm tabular-nums text-[var(--signal-live)]"
         style={{
           left: `${((xAt(lastIndex) + 10) / HYDRO.W) * 100}%`,
           top: `${(yAt(last.discharge) / HYDRO.H) * 100}%`,
