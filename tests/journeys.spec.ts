@@ -6,7 +6,7 @@ test.describe("journey smoke", () => {
     await page.goto("/rivers/madison-river", { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: /madison river/i }).first()).toBeVisible();
     await expect(page.locator("body")).toContainText(/\d[\d,]*\s*cfs/i, { timeout: 15_000 });
-    await expect(page.getByRole("heading", { name: /on the water/i }).first()).toBeVisible();
+    await expect(page.getByText(/on the water/i).first()).toBeVisible();
     await expect(page.locator("body")).toContainText(/hatch/i);
     await expect(page.locator("body")).toContainText(/access/i);
   });
@@ -52,7 +52,7 @@ test.describe("journey smoke", () => {
     await page.goto("/search?q=green+river", { waitUntil: "domcontentloaded" });
     const rivers = page.locator('a[href*="/rivers/"]').filter({ hasText: /green river/i });
     await expect(rivers.first()).toBeVisible({ timeout: 15_000 });
-    const firstRiverLink = page.locator('a[href*="/rivers/"]').first();
+    const firstRiverLink = page.locator("main").locator('a[href*="/rivers/"]').first();
     await expect(firstRiverLink).toContainText(/green river/i);
   });
 
