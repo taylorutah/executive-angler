@@ -76,7 +76,7 @@ export default function ReportButton({ entityType, entityId }: ReportButtonProps
         ref={triggerRef}
         type="button"
         onClick={() => setIsOpen(true)}
-        className={`ea-focus-ring ${FOCUS_VISIBLE} flex items-center gap-1.5 text-xs text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors`}
+        className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex min-h-11 items-center gap-1.5 text-xs text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors`}
         title="Report an issue"
       >
         <Flag className="h-3.5 w-3.5" aria-hidden />

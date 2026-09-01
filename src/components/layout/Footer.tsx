@@ -77,7 +77,7 @@ export default function Footer() {
       </div>
       <div className="ea-band-photo-scrim" aria-hidden="true" />
 
-      <div className="relative mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
+      <div className="relative z-[2] mx-auto max-w-[var(--container)] px-4 py-12 sm:px-6 lg:py-16">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Link href="/" className="ea-focus-ring inline-block" aria-label={SITE_NAME}>
             <Image

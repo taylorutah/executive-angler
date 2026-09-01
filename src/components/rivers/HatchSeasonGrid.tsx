@@ -105,11 +105,11 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
         Swipe months to stay on the year
       </p>
 
-      <div className="overflow-x-auto" tabIndex={0} aria-label="Hatch calendar">
+      <div className="category-bar-fade overflow-x-auto" tabIndex={0} aria-label="Hatch calendar">
         <table className="ea-table min-w-[720px] text-left">
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 bg-[var(--vellum)]">
+              <th className="sticky left-0 z-10 bg-[var(--vellum)] shadow-[2px_0_0_var(--border)]">
                 Insect
               </th>
               {MONTHS.map((month, i) => {
@@ -134,7 +134,7 @@ export default function HatchSeasonGrid({ hatchChart, bestMonths }: Props) {
               const row = cells.get(insect) ?? {};
               return (
                 <tr key={insect}>
-                  <th className="sticky left-0 z-10 bg-[var(--vellum)] text-left font-medium text-[var(--text-1)]">
+                  <th className="sticky left-0 z-10 bg-[var(--vellum)] text-left font-medium text-[var(--text-1)] shadow-[2px_0_0_var(--border)]">
                     {insect}
                   </th>
                   {MONTHS.map((month) => {

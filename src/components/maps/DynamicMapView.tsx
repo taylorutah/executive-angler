@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const MapView = dynamic(() => import("@/components/maps/MapView"), {
   ssr: false,
   loading: () => (
-    <div className="h-[400px] bg-[var(--vellum)]" />
+    <p className="font-ui text-sm text-[var(--text-3)]">Map loading…</p>
   ),
 });
 

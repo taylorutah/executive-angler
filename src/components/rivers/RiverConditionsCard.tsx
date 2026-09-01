@@ -380,7 +380,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
           </div>
         )}
 
-        <div className="grid min-w-0 grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="grid min-w-0 auto-rows-fr grid-cols-2 gap-3 lg:grid-cols-4">
           {active.discharge && (
             <Metric
               icon={<Waves className="h-4 w-4 text-[var(--accent)]" />}
@@ -632,22 +632,20 @@ function Metric({
   badgeClass?: string;
 }) {
   return (
-    <div className="min-w-0 overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-3 sm:px-4">
-      <div className="mb-2 flex min-w-0 items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-2 text-[var(--text-3)]">
-          {icon}
-          <p className="min-w-0 break-words text-xs font-medium uppercase tracking-[0.06em]">{label}</p>
-        </div>
-        {badge ? (
-          <span className={`text-xs font-semibold ${badgeClass ?? ""}`}>{badge}</span>
-        ) : null}
+    <div className="flex h-full min-w-0 flex-col overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 py-3 sm:px-4">
+      <div className="flex min-w-0 items-center gap-2 text-[var(--text-3)]">
+        <span className="shrink-0">{icon}</span>
+        <p className="min-w-0 font-ui text-xs font-medium uppercase tracking-[0.06em]">{label}</p>
       </div>
-      <p className="num break-words text-2xl font-semibold leading-none text-[var(--text-1)]">
+      <p className="num mt-2 min-w-0 break-words text-2xl font-semibold leading-none text-[var(--text-1)]">
         {value}
         {unit ? (
           <span className="ml-1.5 text-xs font-normal text-[var(--text-3)]">{unit}</span>
         ) : null}
       </p>
+      {badge ? (
+        <p className={`mt-auto pt-2 text-xs font-semibold ${badgeClass ?? ""}`}>{badge}</p>
+      ) : null}
     </div>
   );
 }

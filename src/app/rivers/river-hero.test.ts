@@ -57,8 +57,9 @@ describe("river hero paper band", () => {
     assert.equal(page.includes("subtitle={near.flowType}"), false);
   });
 
-  it("keeps leftover lodge stills hosted and quiet when empty", () => {
-    assert.match(page, /hostedStillUrl\(lodge\.heroImageUrl\)/);
+  it("paints lodge stills and stays quiet when the frame is empty", () => {
+    assert.match(page, /imageUrl=\{lodge\.heroImageUrl\}/);
     assert.match(page, /imageFallback="quiet"/);
+    assert.equal(page.includes("hostedStillUrl(lodge.heroImageUrl)"), false);
   });
 });

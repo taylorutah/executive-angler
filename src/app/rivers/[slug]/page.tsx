@@ -206,7 +206,7 @@ export default async function RiverPage({ params }: Props) {
             <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 sm:justify-end">
               <Link
                 href={`/plan/${river.slug}`}
-                className="font-ui text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
+                className="inline-flex min-h-11 items-center font-ui text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
               >
                 Trip brief →
               </Link>
@@ -492,7 +492,7 @@ export default async function RiverPage({ params }: Props) {
                           <EntityCard
                             key={lodge.id}
                             href={`/lodges/${lodge.slug}`}
-                            imageUrl={hostedStillUrl(lodge.heroImageUrl)}
+                            imageUrl={lodge.heroImageUrl}
                             imageAlt={lodge.name}
                             title={lodge.name}
                             subtitle={lodge.priceRange}

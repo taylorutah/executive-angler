@@ -43,15 +43,11 @@ export default function LazyMapView(props: MapProps) {
   }, [visible]);
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="min-w-0">
       {Map ? (
         <Map {...props} />
       ) : (
-        <div
-          className={props.className ?? "h-[400px] w-full"}
-          style={{ background: props.tone === "desk" ? "var(--vellum)" : "var(--surface-card)" }}
-          aria-hidden
-        />
+        <p className="font-ui text-sm text-[var(--text-3)]">Map loading…</p>
       )}
     </div>
   );

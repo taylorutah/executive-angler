@@ -26,7 +26,7 @@ export default function EntityIdentityBand({
 }: Props) {
   return (
     <div className="border-b border-[var(--border)] bg-[var(--paper)]">
-      <div className="mx-auto w-full min-w-0 max-w-[var(--container)] overflow-x-clip px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+      <div className="mx-auto w-full min-w-0 max-w-[var(--container)] px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
         {toolbar}
         <div className={toolbar ? "mt-2 sm:mt-3" : undefined}>
           {overline ? <p className="ea-overline">{overline}</p> : null}

@@ -123,7 +123,11 @@ export default function EntityCard({
           src={imageUrl}
           alt={imageAlt}
           title={title}
-          meta={[meta, subtitle].filter(Boolean).join(" · ") || undefined}
+          meta={
+            imageFallback === "quiet"
+              ? undefined
+              : [meta, subtitle].filter(Boolean).join(" · ") || undefined
+          }
           contain={imageContain}
           fallback={imageFallback}
           loading="eager"
