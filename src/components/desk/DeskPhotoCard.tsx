@@ -27,8 +27,10 @@ export default function DeskPhotoCard({
   density = "river",
 }: Props) {
   const plate = density === "plate";
+  const showWell = !plate || Boolean(imageUrl);
   return (
     <Link href={href} className="card-hover group block">
+      {showWell ? (
       <div
         className={`relative w-full bg-[var(--paper)] ${
           plate ? "aspect-square" : featured ? "aspect-[832/480]" : "aspect-[416/240]"
@@ -39,11 +41,12 @@ export default function DeskPhotoCard({
           alt={imageAlt}
           title={title}
           meta={meta}
-          fallback={plate ? "quiet" : "named"}
-          className={plate ? "object-contain" : "object-cover"}
+          fallback={plate ? "none" : "named"}
+          className={plate ? "ea-fly-cutout object-contain" : "object-cover"}
           sizes={featured ? "(max-width: 1024px) 100vw, 65vw" : "(max-width: 1024px) 100vw, 33vw"}
         />
       </div>
+      ) : null}
       {plate ? (
         <h3 className="mt-2 text-[12px] font-medium text-[var(--text-1)] group-hover:text-[var(--accent)]">
           {title}

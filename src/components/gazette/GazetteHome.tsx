@@ -87,7 +87,7 @@ export default function GazetteHome({
   return (
     <div className="bg-[var(--paper)]">
       <section className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8 sm:pt-8">
-        <div className="relative aspect-[21/8] min-h-[220px] w-full overflow-hidden bg-[var(--paper-deep)]">
+        <div className="relative h-[50vh] max-h-[28rem] min-h-[12rem] w-full overflow-hidden bg-[var(--paper-deep)]">
           <Image
             src={HERO_IMAGE.src}
             alt={HERO_IMAGE.alt}
@@ -215,7 +215,7 @@ export default function GazetteHome({
             return (
               <li key={fly.id} className="border-b border-r border-[var(--border)]">
                 <Link href={`/flies/${fly.slug}`} className="block">
-                  <div className="relative flex aspect-square w-full items-end bg-[var(--plate)] p-3">
+                  <div className="relative flex aspect-square w-full items-end bg-[var(--paper)] p-3">
                     {fly.heroImageUrl ? (
                       <SafeEntityImage
                         src={fly.heroImageUrl}
@@ -223,7 +223,7 @@ export default function GazetteHome({
                         title={fly.name}
                         contain
                         fallback="none"
-                        className="object-contain p-3"
+                        className="ea-fly-cutout object-contain p-3"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                       />
                     ) : (
@@ -292,7 +292,7 @@ export default function GazetteHome({
           <div className="mt-6">
             <Link
               href="/journal"
-              className="inline-flex bg-[var(--accent)] px-4 py-2.5 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--on-action)]"
+              className="inline-flex border border-[var(--ink)] bg-transparent px-4 py-2.5 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]"
             >
               Keep a journal
             </Link>

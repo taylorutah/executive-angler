@@ -20,6 +20,7 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("HeaderSearch"), false);
     assert.equal(header.includes("ExploreMenu"), false);
     assert.match(header, /Create account/);
+    assert.match(header, /hidden[^\n]*md:inline-flex/);
     assert.equal(header.includes("isLoading"), false);
     assert.equal(header.includes("h-8 w-28"), false);
   });
@@ -28,6 +29,7 @@ describe("gazette chrome locks", () => {
     const rail = readFileSync(join(root, "src/components/home/ConditionsRail.tsx"), "utf8");
     assert.match(rail, /TICKER_LIMIT = 3/);
     assert.match(rail, /On the water/);
+    assert.match(rail, /ea-ticker-track/);
     assert.equal(rail.includes("LiveDot"), false);
   });
 

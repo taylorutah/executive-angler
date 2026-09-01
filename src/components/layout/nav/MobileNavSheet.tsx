@@ -187,6 +187,13 @@ export default function MobileNavSheet({ open, onClose, user, triggerRef }: Prop
             <div className="mx-4 sm:mx-6 my-2 h-px bg-[var(--border-rule)]" />
             <div className="space-y-3 px-4 sm:px-6 py-3">
               <Link
+                href="/signup"
+                onClick={onClose}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} block font-ui text-[13px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]`}
+              >
+                Create account
+              </Link>
+              <Link
                 href="/login"
                 onClick={onClose}
                 className={`ea-focus-ring ${FOCUS_VISIBLE} block text-[16px] font-medium text-[var(--text-body)]`}

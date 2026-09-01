@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import DeskFlyIndex from "@/components/desk/DeskFlyIndex";
-import EntityListView from "@/components/ui/EntityListView";
+import GazetteFliesIndex from "@/components/gazette/GazetteFliesIndex";
 import { useAuth } from "@/lib/auth-context";
-import { flyListConfig } from "@/lib/list-configs";
 import type { CardData } from "@/types/list-config";
 
 interface FlyLibraryClientProps {
@@ -18,7 +15,7 @@ interface TieMatch {
 }
 
 export default function FlyLibraryClient({ items }: FlyLibraryClientProps) {
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
   const [tieableIds, setTieableIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -56,27 +53,5 @@ export default function FlyLibraryClient({ items }: FlyLibraryClientProps) {
     return out;
   }, [items, tieableIds]);
 
-  return (
-    <EntityListView
-      items={items}
-      config={flyListConfig}
-      storageKey="flies"
-      liveValues={liveValues}
-      showOptionalFilters={!isLoading && Boolean(user)}
-      resultsOverride={(sorted) => <DeskFlyIndex items={sorted} />}
-      toolbarExtra={
-        !user ? (
-          <p className="text-[13px] text-[var(--text-2)]">
-            <Link
-              href="/login?redirect=/flies/library"
-              className="text-[var(--accent)] underline-offset-4 hover:underline"
-            >
-              Sign in
-            </Link>{" "}
-            to filter by what you can tie from your materials.
-          </p>
-        ) : null
-      }
-    />
-  );
+  return <GazetteFliesIndex items={items} liveValues={liveValues} />;
 }

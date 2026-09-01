@@ -73,19 +73,19 @@ export default function GazetteRiverReport({
               const inner = (
                 <>
                     {plate.imageUrl ? (
-                    <div className="relative aspect-square w-full bg-[var(--plate)]">
+                    <div className="relative aspect-square w-full bg-[var(--paper)]">
                       <SafeEntityImage
                         src={plate.imageUrl}
                         alt={plate.name}
                         title={plate.name}
                         contain
                         fallback="none"
-                        className="object-contain p-3"
+                        className="ea-fly-cutout object-contain p-3"
                         sizes="33vw"
                       />
                     </div>
                   ) : (
-                    <div className="flex aspect-square items-end bg-[var(--plate)] p-3">
+                    <div className="flex aspect-square items-end bg-[var(--paper)] p-3">
                       <p className="font-ui text-[11px] uppercase tracking-[0.12em] text-[var(--ink)]">
                         {plate.name}
                       </p>
@@ -175,13 +175,13 @@ export default function GazetteRiverReport({
         </figure>
       ) : null}
 
-      <div className="mx-auto max-w-[72rem] border-t border-[var(--border)] px-4 py-12 sm:px-8">
-        <h2 className="font-display text-[28px] font-semibold text-[var(--ink)]">
+      <div className="mx-auto max-w-[72rem] border-t border-[var(--border)] px-4 py-10 sm:px-8">
+        <h2 className="font-display text-[22px] font-semibold text-[var(--ink)]">
           Keep a journal on this river
         </h2>
         <Link
           href={`/journal/new?river=${river.slug}`}
-          className="mt-5 inline-flex bg-[var(--accent)] px-4 py-2.5 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--on-action)]"
+          className="mt-4 inline-flex border border-[var(--ink)] bg-transparent px-4 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--ink)]"
         >
           Keep a journal
         </Link>

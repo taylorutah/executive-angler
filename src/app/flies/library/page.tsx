@@ -88,7 +88,7 @@ export default async function FliesPage() {
       <EntityListHeader
         overline="Fly library"
         title={`${allFlies.length} trout fly patterns`}
-        dek="Patterns on the bench. Twelve on the plate, the rest in columns. Filters stay behind the toggle. Signed in, you can also filter by what you can tie from your materials."
+        dek="Patterns on the bench. Twelve on the plate, the rest in columns."
       >
         <LibraryNotebookLinks />
       </EntityListHeader>

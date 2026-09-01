@@ -20,14 +20,14 @@ describe("home visitor QA locks", () => {
     assert.match(gazette, /bg-\[var\(--copper\)\]/);
     assert.match(gazette, /formatHeroCaption/);
     assert.match(gazette, /text-center/);
-    assert.equal(gazette.includes("h-[50vh]"), false);
+    assert.match(gazette, /h-\[50vh\]/);
     assert.equal(gazette.includes("absolute bottom-0"), false);
   });
 
-  it("keeps the journal invitation on paper with a willow button", () => {
+  it("keeps the journal invitation on paper with a hairline ghost", () => {
     const gazette = readFileSync(join(root, "src/components/gazette/GazetteHome.tsx"), "utf8");
     assert.match(gazette, /Keep a journal/);
-    assert.match(gazette, /bg-\[var\(--accent\)\]/);
+    assert.match(gazette, /border-\[var\(--ink\)\]/);
     assert.equal(gazette.includes("ea-band-ink"), false);
   });
 
