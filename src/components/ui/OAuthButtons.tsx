@@ -37,12 +37,12 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
   }
 
   const action =
-    "ea-focus-ring inline-flex items-center bg-[var(--accent-soft)] px-3.5 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--accent)] disabled:opacity-50";
+    "ea-focus-ring font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--accent)] disabled:opacity-50";
 
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+    <p className="font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--ink)]">
       {error && (
-        <p className="basis-full text-sm text-[var(--danger)]">{error}</p>
+        <span className="mb-2 block normal-case tracking-normal text-[var(--danger)]">{error}</span>
       )}
       <button
         type="button"
@@ -52,9 +52,7 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
       >
         {loading === "google" ? "Google…" : "Google"}
       </button>
-      <span aria-hidden className="font-ui text-[12px] text-[var(--text-3)]">
-        ·
-      </span>
+      <span aria-hidden> · </span>
       <button
         type="button"
         onClick={() => signInWith("apple")}
@@ -63,6 +61,6 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
       >
         {loading === "apple" ? "Apple…" : "Apple"}
       </button>
-    </div>
+    </p>
   );
 }

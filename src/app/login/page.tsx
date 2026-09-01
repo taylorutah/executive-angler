@@ -107,6 +107,7 @@ function LoginForm() {
               disabled={loading || !captchaResolved}
               variant="pill"
               loading={loading}
+              className="!h-auto px-3.5 py-2"
             >
               {loading ? "Signing in…" : "Sign in with email"}
             </Button>

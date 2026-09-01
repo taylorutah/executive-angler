@@ -343,6 +343,7 @@ function SignupForm() {
               disabled={!canSubmit}
               variant="pill"
               loading={loading}
+              className="!h-auto px-3.5 py-2"
             >
               {loading ? "Creating account…" : "Create account"}
             </Button>

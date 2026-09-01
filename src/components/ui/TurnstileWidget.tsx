@@ -122,7 +122,7 @@ export default function TurnstileWidget({
           onAvailabilityChange?.(false);
         },
         theme: "light",
-        size: "flexible",
+        size: "compact",
         appearance: "interaction-only",
       });
     } catch (err) {
@@ -164,7 +164,7 @@ export default function TurnstileWidget({
   return (
     <div
       ref={containerRef}
-      className={hideWidget ? "hidden" : "mt-2"}
+      className={hideWidget ? "hidden" : "mt-2 max-h-0 overflow-hidden"}
       aria-hidden={hideWidget || undefined}
     />
   );

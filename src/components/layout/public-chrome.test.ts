@@ -126,7 +126,8 @@ describe("gazette chrome locks", () => {
     const oauth = readFileSync(join(root, "src/components/ui/OAuthButtons.tsx"), "utf8");
     assert.equal(oauth.includes("bg-black"), false, "Apple is not an app slab");
     assert.equal(oauth.includes("w-full"), false, "OAuth is willow type, not a slab");
-    assert.match(oauth, /accent-soft/);
+    assert.equal(oauth.includes("bg-[var(--accent-soft)]"), false, "OAuth is type, not a filled chip");
+    assert.match(oauth, /text-\[var\(--accent\)\]/);
     assert.equal(login.includes("min-h-screen"), false);
     assert.equal(signup.includes("min-h-screen"), false);
     assert.equal(login.includes("min-h-[70vh]"), false);
