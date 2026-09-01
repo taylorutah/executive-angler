@@ -29,7 +29,7 @@ describe("gazette chrome locks", () => {
     const rail = readFileSync(join(root, "src/components/home/ConditionsRail.tsx"), "utf8");
     assert.match(rail, /TICKER_LIMIT = 3/);
     assert.match(rail, /On the water/);
-    assert.match(rail, /ea-ticker-track/);
+    assert.match(rail, /flex-wrap/);
     assert.equal(rail.includes("LiveDot"), false);
   });
 

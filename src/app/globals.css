@@ -1538,20 +1538,6 @@ input.ea-focus-ring:focus-visible,
   box-shadow: none;
 }
 
-@keyframes ea-ticker-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.ea-ticker-track {
-  width: max-content;
-  animation: ea-ticker-scroll 22s linear infinite;
-}
-
 .ea-fly-well img,
 .ea-fly-well span {
   mix-blend-mode: multiply;
@@ -1582,6 +1568,7 @@ input.ea-focus-ring:focus-visible,
 @media (max-width: 767px) {
   :root {
     --header-h: 64px;
+    --ticker-h: 52px;
   }
 
   a,
