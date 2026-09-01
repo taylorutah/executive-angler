@@ -22,7 +22,7 @@ import { POST_LOGIN_PATH } from "@/lib/auth-paths";
 export default function GazetteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [plusOpen, setPlusOpen] = useState(false);
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
   const pathname = usePathname();
   const plusRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -76,9 +76,7 @@ export default function GazetteHeader() {
           </nav>
 
           <div className="flex items-center justify-self-end gap-2">
-            {isLoading ? (
-              <div className="hidden h-8 w-28 bg-[var(--paper-deep)] md:block" />
-            ) : user ? (
+            {user ? (
               <div className="hidden items-center gap-1 md:flex">
                 <NotificationBell />
                 <MessageIcon />
@@ -143,7 +141,7 @@ export default function GazetteHeader() {
             ) : (
               <Link
                 href="/signup"
-                className="inline-flex bg-[var(--accent)] px-3 py-2 font-ui text-[11px] font-medium uppercase tracking-[0.1em] text-[var(--on-action)] sm:px-3.5 sm:text-[12px] sm:tracking-[0.12em]"
+                className="inline-flex rounded-none bg-[var(--accent)] px-3.5 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--on-action)]"
               >
                 Create account
               </Link>

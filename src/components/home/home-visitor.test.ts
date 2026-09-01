@@ -19,6 +19,7 @@ describe("home visitor QA locks", () => {
     assert.match(gazette, /lg:whitespace-nowrap/);
     assert.match(gazette, /bg-\[var\(--copper\)\]/);
     assert.match(gazette, /formatHeroCaption/);
+    assert.match(gazette, /text-center/);
     assert.equal(gazette.includes("h-[50vh]"), false);
     assert.equal(gazette.includes("absolute bottom-0"), false);
   });

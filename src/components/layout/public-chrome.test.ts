@@ -19,6 +19,9 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("fly-mark"), false);
     assert.equal(header.includes("HeaderSearch"), false);
     assert.equal(header.includes("ExploreMenu"), false);
+    assert.match(header, /Create account/);
+    assert.equal(header.includes("isLoading"), false);
+    assert.equal(header.includes("h-8 w-28"), false);
   });
 
   it("limits the public ticker to three flagship waters", () => {

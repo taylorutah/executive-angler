@@ -99,7 +99,7 @@ export default function GazetteHome({
             className="object-cover object-[center_68%]"
           />
         </div>
-        <p className="mt-3 text-center font-ui text-[11px] uppercase tracking-[0.2em] text-[var(--ink)]">
+        <p className="mx-auto mt-3 block w-full text-center font-ui text-[11px] uppercase tracking-[0.2em] text-[var(--ink)]">
           {caption}
         </p>
       </section>
