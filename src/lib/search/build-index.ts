@@ -13,6 +13,8 @@ import type { SearchDocument } from "./types";
 import { buildHatchDocuments } from "./hatches";
 import { firstUsgsSiteId } from "./usgs";
 
+type RiverStill = Pick<River, "id" | "slug" | "heroImageUrl" | "thumbnailUrl">;
+
 /** First usable still on the entity — never invent a photograph. */
 export class SearchDocumentImage {
   static url(...candidates: Array<string | null | undefined>): string | undefined {
@@ -21,6 +23,52 @@ export class SearchDocumentImage {
       if (href) return href;
     }
     return undefined;
+  }
+
+  /**
+   * Guide portrait first. If none, inherit the first linked river still.
+   * Guide `river_ids` often use aliases (`river-provo`) that are not the
+   * river row's `id` (`provo-river`) — index both.
+   */
+  static forGuide(
+    photoUrl: string | null | undefined,
+    riverIds: readonly string[] | undefined,
+    rivers: readonly RiverStill[],
+  ): string | undefined {
+    const own = SearchDocumentImage.url(photoUrl);
+    if (own) return own;
+    const stills = SearchDocumentImage.riverStillByAlias(rivers);
+    for (const id of riverIds ?? []) {
+      const inherited = stills.get(SearchDocumentImage.aliasKey(id));
+      if (inherited) return inherited;
+    }
+    return undefined;
+  }
+
+  static aliasKey(value: string): string {
+    return value.trim().toLowerCase();
+  }
+
+  static riverStillByAlias(rivers: readonly RiverStill[]): Map<string, string> {
+    const map = new Map<string, string>();
+    const put = (key: string, href: string) => {
+      const k = SearchDocumentImage.aliasKey(key);
+      if (k && !map.has(k)) map.set(k, href);
+    };
+    for (const river of rivers) {
+      const still = SearchDocumentImage.url(river.heroImageUrl, river.thumbnailUrl);
+      if (!still) continue;
+      put(river.id, still);
+      put(river.slug, still);
+      put(`river-${river.slug}`, still);
+      put(river.id.replace(/-[a-z]{2}$/, ""), still);
+      const stem = river.slug.replace(/-river.*$/, "");
+      if (stem) {
+        put(stem, still);
+        put(`river-${stem}`, still);
+      }
+    }
+    return map;
   }
 }
 
@@ -122,7 +170,7 @@ export function assembleSearchDocuments(input: {
     title: g.name,
     subtitle: `${destName(g.destinationId)} — ${(g.specialties ?? []).slice(0, 2).join(", ")}`,
     href: `/guides/${g.slug}`,
-    imageUrl: SearchDocumentImage.url(g.photoUrl),
+    imageUrl: SearchDocumentImage.forGuide(g.photoUrl, g.riverIds, input.rivers),
     keywords: (g.specialties ?? []).join(" "),
   }));
 

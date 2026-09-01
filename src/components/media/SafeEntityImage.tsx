@@ -20,7 +20,7 @@ interface SafeEntityImageProps {
   /** object-contain + padding for illustrations */
   contain?: boolean;
   /** Origin leftover desks pass this; default stays the named plate. */
-  fallback?: "quiet" | "named";
+  fallback?: "quiet" | "named" | "none";
 }
 
 /**
@@ -44,6 +44,7 @@ export default function SafeEntityImage({
   const href = normalizeImageUrl(src);
 
   if (!href || failed) {
+    if (fallback === "none") return null;
     return <PlateFallback title={title} meta={meta} quiet={fallback === "quiet"} />;
   }
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { FOCUS_VISIBLE } from "@/components/layout/nav/links";
 import { formatReadingTime } from "@/lib/utils";
-import type { SearchDocument, SearchType } from "@/lib/search";
+import { SearchDocumentImage, type SearchDocument, type SearchType } from "@/lib/search";
 import { TYPE_LABELS } from "./meta";
 
 interface Props {
@@ -51,17 +51,18 @@ class SearchResultTile {
   }
 
   static media(item: SearchDocument): ReactNode {
+    if (!SearchDocumentImage.url(item.imageUrl)) return null;
     const contain = SearchResultTile.contain(item);
     return (
       <div
         data-search-media
-        className="relative size-16 shrink-0 overflow-hidden rounded-[var(--radius-sm)] bg-[var(--vellum)]"
+        className="relative size-16 shrink-0 overflow-hidden rounded-[var(--radius-sm)] empty:hidden"
       >
         <SafeEntityImage
           src={item.imageUrl}
           alt={item.title}
           title={item.title}
-          fallback="quiet"
+          fallback="none"
           contain={contain}
           className={contain ? "ea-photo object-contain p-1" : "ea-photo object-cover"}
           sizes="64px"
