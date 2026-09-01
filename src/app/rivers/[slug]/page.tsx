@@ -230,10 +230,11 @@ export default async function RiverPage({ params }: Props) {
                         className: "col-span-3",
                         value: (
                           <TokenRow>
-                            {speciesNames.map((speciesName) => {
+                            {speciesNames.map((speciesName, i) => {
                               const matched = riverSpecies.find(
                                 (s) => s.commonName.toLowerCase() === speciesName.toLowerCase(),
                               );
+                              const comma = i < speciesNames.length - 1 ? "," : "";
                               return (
                                 <Token key={speciesName}>
                                   {matched ? (
@@ -246,6 +247,7 @@ export default async function RiverPage({ params }: Props) {
                                   ) : (
                                     speciesName
                                   )}
+                                  {comma}
                                 </Token>
                               );
                             })}

@@ -15,6 +15,10 @@ const home = readFileSync(
   join(process.cwd(), "src/components/home/HomeHydrograph.tsx"),
   "utf8",
 );
+const flow = readFileSync(
+  join(process.cwd(), "src/components/rivers/FlowChart.tsx"),
+  "utf8",
+);
 
 describe("hydrograph well fill", () => {
   it("stretches the plot to the well and keeps axis type in CSS pixels", () => {
@@ -30,5 +34,12 @@ describe("hydrograph well fill", () => {
     assert.match(geometry, /export const HYDRO_FRAME/);
     assert.match(home, /HYDRO_FRAME/);
     assert.equal(home.includes('h-[9.5rem]'), false);
+  });
+
+  it("names the band in plain English and marks a mid date", () => {
+    assert.match(chart, /midIndex/);
+    assert.match(flow, /typical range/);
+    assert.equal(flow.includes("IQR"), false);
+    assert.equal(flow.includes("text-[2rem]"), false);
   });
 });

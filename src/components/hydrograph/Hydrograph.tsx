@@ -42,6 +42,7 @@ export default function Hydrograph({ readings, liveCfs, label, children }: Props
   const baseline = HYDRO.PAD.top + geo.innerH;
   const area = `${line} L ${xAt(lastIndex).toFixed(1)} ${baseline} L ${xAt(0).toFixed(1)} ${baseline} Z`;
   const first = series[0];
+  const midIndex = Math.floor(lastIndex / 2);
   const leftGutter = `${(HYDRO.PAD.left / HYDRO.W) * 100}%`;
   const rightGutter = `${(HYDRO.PAD.right / HYDRO.W) * 100}%`;
 
@@ -155,6 +156,17 @@ export default function Hydrograph({ readings, liveCfs, label, children }: Props
       >
         {formatAxisDay(first.date)}
       </span>
+      {midIndex > 0 && midIndex < lastIndex ? (
+        <span
+          className={`${AXIS} -translate-x-1/2`}
+          style={{
+            left: `${(xAt(midIndex) / HYDRO.W) * 100}%`,
+            bottom: 2,
+          }}
+        >
+          {formatAxisDay(series[midIndex].date)}
+        </span>
+      ) : null}
       <span
         className={`${AXIS} text-right`}
         style={{
