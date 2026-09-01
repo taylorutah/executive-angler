@@ -1,27 +1,34 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DynamicRiversMapView from "@/components/maps/DynamicRiversMapView";
-import EntityListView from "@/components/ui/EntityListView";
-import { FLOW_STATE_LABEL, type FlowState } from "@/lib/browse/flow-state";
-import { haversineKm, NEAR_ME_KM } from "@/lib/browse/geo";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
+import RiversStationTable, { type StationFlow } from "@/components/rivers/RiversStationTable";
+import type { FlowState } from "@/lib/browse/flow-state";
 import type { RiverBrowseItem } from "@/lib/browse/river-items";
-import { riverListConfig } from "@/lib/list-configs";
-import type { EntityListConfig } from "@/types/list-config";
-import { US_STATES } from "@/lib/us-states";
 import type { River } from "@/types/entities";
 
-interface UserLocation {
-  lat: number;
-  lng: number;
-}
+type View = "table" | "photos" | "map";
+
+type StationFilter = "all" | "gauge" | "freestone" | "tailwater" | "west" | "east";
+
+const FILTERS: { key: StationFilter; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "gauge", label: "Gauge" },
+  { key: "freestone", label: "Freestone" },
+  { key: "tailwater", label: "Tailwater" },
+  { key: "west", label: "West" },
+  { key: "east", label: "East" },
+];
 
 interface FlowStateRow {
   siteId: string;
   cfs: number;
   median30: number;
   state: FlowState;
+  deltaCfs: number | null;
 }
 
 interface RiversPageClientProps {
@@ -29,38 +36,15 @@ interface RiversPageClientProps {
   stateOptions: { value: string; label: string }[];
 }
 
-export default function RiversPageClient({ items, stateOptions }: RiversPageClientProps) {
+export default function RiversPageClient({ items }: RiversPageClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-
-  // Closed on a plain visit; a shared filtered link arrives with the panel
-  // open so the active filtering is visible (client ruling 2026-08-28).
-  const [filtersOpen, setFiltersOpen] = useState(() => {
-    const sort = searchParams.get("sort");
-    return (
-      riverListConfig.filters.some((f) => searchParams.get(f.key)) ||
-      Boolean(sort && sort !== riverListConfig.defaultSort)
-    );
-  });
-  const [showMap, setShowMap] = useState(false);
+  const [view, setView] = useState<View>("table");
   const [flows, setFlows] = useState<Record<string, FlowStateRow>>({});
-  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
-  const [nearbyIds, setNearbyIds] = useState<Set<string>>(new Set());
-  const [locating, setLocating] = useState(false);
-  const [geoError, setGeoError] = useState("");
-  const [zipInput, setZipInput] = useState("");
-  const [zipLoading, setZipLoading] = useState(false);
+  const [query, setQuery] = useState(searchParams.get("q") ?? "");
 
-  const config: EntityListConfig = useMemo(
-    () => ({
-      ...riverListConfig,
-      filters: riverListConfig.filters.map((f) =>
-        f.key === "state" ? { ...f, options: stateOptions } : f,
-      ),
-    }),
-    [stateOptions],
-  );
+  const filter = (searchParams.get("f") as StationFilter) || "all";
 
   useEffect(() => {
     let cancelled = false;
@@ -70,235 +54,164 @@ export default function RiversPageClient({ items, stateOptions }: RiversPageClie
         if (!cancelled && data?.rivers) setFlows(data.rivers);
       })
       .catch(() => {
-        /* gauges are optional — cards stay filterable on everything else */
+        /* gauges are optional */
       });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  const applyLocation = (lat: number, lng: number) => {
-    setUserLocation({ lat, lng });
-    setGeoError("");
-    const near = new Set<string>();
-    for (const item of items) {
-      if (!item.latitude || !item.longitude) continue;
-      if (haversineKm(lat, lng, item.latitude, item.longitude) <= NEAR_ME_KM) {
-        near.add(item.riverId);
-      }
-    }
-    setNearbyIds(near);
+  const setFilter = (next: StationFilter) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("near", "1");
-    params.set("sort", "distance");
+    if (next === "all") params.delete("f");
+    else params.set("f", next);
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const handleNearMe = () => {
-    if (!navigator.geolocation) {
-      setGeoError("Geolocation is not available. Enter a ZIP code.");
-      setFiltersOpen(true);
-      return;
-    }
-    setLocating(true);
-    setGeoError("");
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        applyLocation(pos.coords.latitude, pos.coords.longitude);
-        setLocating(false);
-      },
-      (err) => {
-        setLocating(false);
-        setFiltersOpen(true);
-        if (err.code === 1) {
-          setGeoError(
-            "Location access denied. Enter a ZIP code, or allow location in the browser.",
-          );
-        } else if (err.code === 2) {
-          setGeoError("Location unavailable. Try a ZIP code.");
-        } else {
-          setGeoError("Location timed out. Try a ZIP code.");
-        }
-      },
-      { timeout: 10000, maximumAge: 60000 },
-    );
-  };
-
-  const handleZipSearch = async () => {
-    const zip = zipInput.trim();
-    if (!zip) return;
-    setZipLoading(true);
-    setGeoError("");
-    try {
-      const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-      if (!token) {
-        setGeoError("ZIP lookup needs a Mapbox token in this environment.");
-        return;
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return items.filter((item) => {
+      if (q && !item.title.toLowerCase().includes(q) && !(item.kicker ?? "").toLowerCase().includes(q)) {
+        return false;
       }
-      const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(zip)}.json?country=US&types=postcode&access_token=${token}`,
-      );
-      const data = await res.json();
-      if (data.features?.length > 0) {
-        const [lng, lat] = data.features[0].center;
-        applyLocation(lat, lng);
-      } else {
-        setGeoError("ZIP code not found.");
-      }
-    } catch {
-      setGeoError("ZIP lookup failed. Try again.");
-    } finally {
-      setZipLoading(false);
-    }
-  };
-
-  const decoratedItems = useMemo(() => {
-    return items.map((item) => {
-      const flow = flows[item.riverId];
-      const dist =
-        userLocation && item.latitude && item.longitude
-          ? haversineKm(userLocation.lat, userLocation.lng, item.latitude, item.longitude)
-          : undefined;
-      const flowLabel = flow ? FLOW_STATE_LABEL[flow.state] : undefined;
-      const liveChip =
-        flow && Number.isFinite(flow.cfs)
-          ? {
-              label: "Flow",
-              value: `${Math.round(flow.cfs).toLocaleString("en-US")} cfs`,
-            }
-          : null;
-      const chips = [
-        ...(item.hoverPanel?.chips ?? []),
-        ...(liveChip ? [liveChip] : []),
-      ];
-      return {
-        ...item,
-        badges: flowLabel ? [flowLabel] : undefined,
-        meta: [item.meta, flowLabel].filter(Boolean).join(" · "),
-        hoverPanel: item.hoverPanel
-          ? { ...item.hoverPanel, chips }
-          : undefined,
-        _filterValues: {
-          ...(item._filterValues ?? {}),
-          flow: flow?.state ?? "",
-          near: nearbyIds.has(item.riverId) ? "1" : "0",
-        } as Record<string, string | number>,
-        _sortDistance: dist,
-      };
+      const water = String(item._filterValues?.waterType ?? "");
+      const region = String(item._filterValues?.region ?? "");
+      const gauged = String(item._filterValues?.gauge ?? "0") === "1";
+      if (filter === "gauge") return gauged;
+      if (filter === "freestone") return water === "freestone";
+      if (filter === "tailwater") return water === "tailwater";
+      if (filter === "west") return region === "west";
+      if (filter === "east") return region === "east";
+      return true;
     });
-  }, [items, flows, nearbyIds, userLocation]);
+  }, [items, query, filter]);
 
-  const liveValues = useMemo(() => {
-    const out: Record<string, Record<string, string>> = {};
-    for (const item of decoratedItems) {
-      out[item.href] = {
-        flow: String(item._filterValues?.flow ?? ""),
-        near: String(item._filterValues?.near ?? "0"),
-      };
+  const stationFlows: Record<string, StationFlow> = useMemo(() => {
+    const out: Record<string, StationFlow> = {};
+    for (const [id, row] of Object.entries(flows)) {
+      out[id] = { cfs: row.cfs, state: row.state, deltaCfs: row.deltaCfs ?? null };
     }
     return out;
-  }, [decoratedItems]);
-
-  const selectedStateName = searchParams.get("state") ?? "";
-  const selectedStateObj = US_STATES.find((s) => s.name === selectedStateName) ?? null;
+  }, [flows]);
 
   const mapRivers: River[] = useMemo(() => {
-    return decoratedItems
-      .filter((item) => {
-        if (searchParams.get("near") === "1" && !nearbyIds.has(item.riverId)) return false;
-        if (selectedStateName && item._filterValues?.state !== selectedStateName) return false;
-        return true;
-      })
-      .map((item) => ({
-        id: item.riverId,
-        slug: item.href.replace("/rivers/", ""),
-        name: item.title,
-        destinationId: "",
-        description: item.description ?? "",
-        heroImageUrl: item.imageUrl,
-        flowType: String(item._filterValues?.waterType ?? ""),
-        difficulty: (item._filterValues?.difficulty as River["difficulty"]) ?? "intermediate",
-        wadingType: "wade",
-        primarySpecies: item.tags ?? [],
-        accessPoints: [],
-        bestMonths: [],
-        latitude: item.latitude,
-        longitude: item.longitude,
-        featured: Boolean(item.featured),
-      }));
-  }, [decoratedItems, nearbyIds, searchParams, selectedStateName]);
+    return filtered.map((item) => ({
+      id: item.riverId,
+      slug: item.href.replace("/rivers/", ""),
+      name: item.title,
+      destinationId: "",
+      description: item.description ?? "",
+      heroImageUrl: item.imageUrl,
+      flowType: String(item._filterValues?.waterType ?? ""),
+      difficulty: (item._filterValues?.difficulty as River["difficulty"]) ?? "intermediate",
+      wadingType: "wade",
+      primarySpecies: item.tags ?? [],
+      accessPoints: [],
+      bestMonths: [],
+      latitude: item.latitude,
+      longitude: item.longitude,
+      featured: Boolean(item.featured),
+    }));
+  }, [filtered]);
 
   return (
-    <EntityListView
-      items={decoratedItems}
-      config={config}
-      storageKey="rivers"
-      liveValues={liveValues}
-      filtersOpen={filtersOpen}
-      onFiltersOpenChange={setFiltersOpen}
-      toolbarExtra={
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="ea-overline w-20 shrink-0">
-            Near me
-          </span>
-          <button
-            type="button"
-            onClick={handleNearMe}
-            disabled={locating}
-            className="ea-btn ea-btn-sm ea-btn-primary disabled:opacity-50"
-          >
-            {locating ? "Locating…" : "Use location"}
-          </button>
+    <div>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <label className="block min-w-0 flex-1">
+          <span className="sr-only">Search rivers</span>
           <input
-            type="text"
-            inputMode="numeric"
-            value={zipInput}
-            onChange={(e) => setZipInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleZipSearch()}
-            placeholder="ZIP"
-            maxLength={5}
-            aria-label="ZIP code"
-            className="h-8 w-24 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:outline-none focus:shadow-[var(--signal-ring)]"
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search a river"
+            className="ea-search-underline"
           />
-          <button
-            type="button"
-            onClick={handleZipSearch}
-            disabled={zipLoading || !zipInput.trim()}
-            className="ea-btn ea-btn-sm ea-btn-secondary disabled:opacity-40"
-          >
-            {zipLoading ? "…" : "Go"}
-          </button>
-          <button
-            type="button"
-            aria-pressed={showMap}
-            onClick={() => setShowMap((v) => !v)}
-            className={`ea-btn ea-btn-sm ${
-              showMap ? "ea-btn-primary" : "ea-btn-secondary"
-            }`}
-          >
-            Map
-          </button>
-          {geoError && <p className="w-full text-sm text-[var(--danger)]">{geoError}</p>}
+        </label>
+        <div className="flex flex-wrap gap-x-4 gap-y-2 font-ui text-[12px] uppercase tracking-[0.12em]">
+          {FILTERS.map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              onClick={() => setFilter(f.key)}
+              className={
+                filter === f.key
+                  ? "text-[var(--ink)] underline decoration-[var(--ink)] underline-offset-4"
+                  : "text-[var(--text-3)] hover:text-[var(--ink)]"
+              }
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
-      }
-      resultsOverride={
-        showMap ? (
-          <div>
-            <div className="h-[350px] md:h-[520px] overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)]">
-              <DynamicRiversMapView
-                rivers={mapRivers}
-                selectedState={selectedStateObj}
-                userLocation={userLocation}
-                className="h-full w-full overflow-hidden"
-              />
-            </div>
-            <p className="mt-3 text-sm text-[var(--text-2)]">
-              {mapRivers.length} river{mapRivers.length === 1 ? "" : "s"} on the map
-              {nearbyIds.size > 0 ? " · within about 200 miles" : ""}
-            </p>
+      </div>
+
+      <div className="mb-4 flex flex-wrap gap-x-4 gap-y-2 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">
+        <button
+          type="button"
+          onClick={() => setView("table")}
+          className={view === "table" ? "text-[var(--ink)] underline underline-offset-4" : "hover:text-[var(--ink)]"}
+        >
+          Table
+        </button>
+        <button
+          type="button"
+          onClick={() => setView("photos")}
+          className={view === "photos" ? "text-[var(--ink)] underline underline-offset-4" : "hover:text-[var(--ink)]"}
+        >
+          Pictures
+        </button>
+        <button
+          type="button"
+          onClick={() => setView("map")}
+          className={view === "map" ? "text-[var(--ink)] underline underline-offset-4" : "hover:text-[var(--ink)]"}
+        >
+          Map
+        </button>
+        <span className="num ml-auto">{filtered.length}</span>
+      </div>
+
+      {view === "table" && <RiversStationTable items={filtered} flows={stationFlows} />}
+
+      {view === "photos" && (
+        <ul className="grid grid-cols-2 border-t border-l border-[var(--border)] sm:grid-cols-3">
+          {filtered.map((item) => (
+            <li key={item.riverId} className="border-b border-r border-[var(--border)]">
+              <Link href={item.href} className="block p-3">
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--paper-deep)]">
+                  {item.imageUrl ? (
+                    <SafeEntityImage
+                      src={item.imageUrl}
+                      alt={item.imageAlt || item.title}
+                      title={item.title}
+                      className="object-cover"
+                      sizes="33vw"
+                    />
+                  ) : null}
+                </div>
+                <p className="mt-2 font-display text-[16px] font-semibold text-[var(--ink)]">
+                  {item.title}
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {view === "map" && (
+        <div>
+          <div className="h-[350px] overflow-hidden border border-[var(--border)] md:h-[520px]">
+            <DynamicRiversMapView
+              rivers={mapRivers}
+              selectedState={null}
+              userLocation={null}
+              className="h-full w-full overflow-hidden"
+            />
           </div>
-        ) : undefined
-      }
-    />
+          <p className="mt-3 font-ui text-[13px] text-[var(--text-3)]">
+            {mapRivers.length} river{mapRivers.length === 1 ? "" : "s"} on the map
+          </p>
+        </div>
+      )}
+    </div>
   );
 }

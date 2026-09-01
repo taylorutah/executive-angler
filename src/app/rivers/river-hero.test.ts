@@ -8,16 +8,13 @@ const page = readFileSync(
   "utf8",
 );
 
-describe("river hero paper band", () => {
-  it("prints destination · water type once — not again as reversed meta", () => {
-    assert.match(page, /const heroSubtitle = \[destinationLabel/);
+describe("river station report", () => {
+  it("prints place · water · miles as the overline, not a trip brochure", () => {
+    assert.match(page, /const heroSubtitle = \[/);
     assert.match(page, /subtitle=\{heroSubtitle \|\| undefined\}/);
-    assert.equal(page.includes("dest?.state"), false);
-    assert.equal(
-      page.includes("[river.flowType, river.difficulty, river.wadingType"),
-      false,
-    );
-    assert.match(page, /meta=\{river\.lengthMiles \? `\$\{river\.lengthMiles\} miles` : undefined\}/);
+    assert.match(page, /river\.lengthMiles \? `\$\{river\.lengthMiles\} miles`/);
+    assert.equal(page.includes("Trip brief"), false);
+    assert.equal(page.includes("Taylor Warnick"), false);
   });
 
   it("prints difficulty and access as labeled facts, not enum chips", () => {
@@ -34,15 +31,7 @@ describe("river hero paper band", () => {
     assert.equal(page.includes("sm:grid-cols-4"), false);
     assert.equal(page.includes("lead={i > 0}"), false);
     assert.equal(page.includes("lead="), false);
-    assert.equal(
-      page.includes("lg:grid-cols-[minmax(0,1fr)_minmax(18rem,36rem)]"),
-      false,
-    );
     assert.equal(page.includes("EntityChrome"), false);
-    assert.equal(
-      page.includes("[river.difficulty, river.wadingType, ...(river.primarySpecies ?? [])]"),
-      false,
-    );
     assert.equal(page.includes('className="ea-chip"'), false);
   });
 
@@ -53,7 +42,7 @@ describe("river hero paper band", () => {
     assert.match(page, /TokenRow/);
     assert.equal(page.includes("entity-tags"), false);
     assert.equal(page.includes('variant="river"'), false);
-    assert.equal(page.includes('import Badge'), false);
+    assert.equal(page.includes("import Badge"), false);
   });
 
   it("labels nearby river water type instead of printing the raw enum", () => {
@@ -61,10 +50,10 @@ describe("river hero paper band", () => {
     assert.equal(page.includes("subtitle={near.flowType}"), false);
   });
 
-  it("paints lodge stills and stays quiet when the frame is empty", () => {
-    assert.match(page, /imageUrl=\{lodge\.heroImageUrl\}/);
-    assert.match(page, /imageFallback="quiet"/);
-    assert.equal(page.includes("hostedStillUrl(lodge.heroImageUrl)"), false);
+  it("keeps a journal CTA and one field-note link on Madison", () => {
+    assert.match(page, /Keep a journal on this river/);
+    assert.match(page, /best-flies-for-the-madison-river-2026/);
+    assert.equal(page.includes("Planning a Madison trip"), false);
   });
 });
 

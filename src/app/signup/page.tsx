@@ -10,6 +10,7 @@ import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
 import { CheckCircle } from "@/icons";
 import { safeInternalPath } from "@/lib/auth-paths";
+import HeronMark from "@/components/brand/HeronMark";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -196,14 +197,22 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center px-4">
+    <div className="desk-sheet min-h-[70vh] bg-[var(--paper)] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="font-display text-3xl font-semibold text-[var(--accent)]">
-            {SITE_NAME}
+        <div className="mb-8">
+          <Link href="/" className="inline-flex items-center gap-2.5" aria-label={SITE_NAME}>
+            <HeronMark className="h-[30px] w-[22px] text-[var(--copper)]" />
+            <span className="ea-wordmark">
+              Executive
+              <br />
+              Angler
+            </span>
           </Link>
-          <p className="mt-2 text-[var(--text-2)]">
-            Create a free account to save favorites and log your sessions.
+          <h1 className="mt-6 font-display text-3xl font-semibold text-[var(--ink)]">
+            Create account
+          </h1>
+          <p className="ea-dek mt-2">
+            Keep a journal. It costs nothing.
           </p>
         </div>
 

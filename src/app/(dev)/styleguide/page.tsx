@@ -4,13 +4,11 @@ import {
   PAPER,
   VELLUM,
   CARD,
-  RULE,
   INK,
   GRAPHITE,
   SLATE,
   COPPER_700,
   TEAL_700,
-  RISE_700,
   CUT_700,
 } from "@/lib/palette";
 
@@ -55,16 +53,14 @@ function contrast(fg: string, bg: string): number {
 
 const DAYLIGHT: Swatch[] = [
   { name: "paper", hex: PAPER, role: "page", against: "ink", againstHex: INK, min: 4.5 },
-  { name: "vellum", hex: VELLUM, role: "raised", against: "ink", againstHex: INK, min: 4.5 },
-  { name: "card", hex: CARD, role: "card", against: "ink", againstHex: INK, min: 4.5 },
-  { name: "rule", hex: RULE, role: "border (non-text)", against: "paper", againstHex: PAPER, min: 3 },
+  { name: "paper-deep", hex: VELLUM, role: "raised", against: "ink", againstHex: INK, min: 4.5 },
+  { name: "plate", hex: CARD, role: "specimen plate", against: "ink", againstHex: INK, min: 4.5 },
   { name: "ink", hex: INK, role: "headings", against: "paper", againstHex: PAPER, min: 4.5 },
-  { name: "graphite", hex: GRAPHITE, role: "body", against: "paper", againstHex: PAPER, min: 4.5 },
-  { name: "slate", hex: SLATE, role: "meta / 13px captions", against: "vellum", againstHex: VELLUM, min: 4.5 },
-  { name: "copper-700", hex: COPPER_700, role: "ACTION only", against: "vellum", againstHex: VELLUM, min: 4.5 },
-  { name: "teal-700", hex: TEAL_700, role: "LIVE DATA only", against: "vellum", againstHex: VELLUM, min: 4.5 },
-  { name: "rise-700", hex: RISE_700, role: "positive", against: "paper", againstHex: PAPER, min: 4.5 },
-  { name: "cut-700", hex: CUT_700, role: "negative", against: "paper", againstHex: PAPER, min: 4.5 },
+  { name: "ink-2", hex: GRAPHITE, role: "body", against: "paper", againstHex: PAPER, min: 4.5 },
+  { name: "slate", hex: SLATE, role: "meta / chrome", against: "vellum", againstHex: VELLUM, min: 4.5 },
+  { name: "willow", hex: COPPER_700, role: "ACTION only", against: "vellum", againstHex: VELLUM, min: 4.5 },
+  { name: "water-live", hex: TEAL_700, role: "LIVE DATA only", against: "vellum", againstHex: VELLUM, min: 4.5 },
+  { name: "gauge-red", hex: CUT_700, role: "dropping / alert", against: "paper", againstHex: PAPER, min: 4.5 },
 ];
 
 const SPINE = [
@@ -136,7 +132,7 @@ function TypeSpecimen() {
       </div>
       <div>
         <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: "var(--font-ui)", color: "var(--text-meta)" }}>
-          Body — Fraunces (text optical size)
+          Body — Source Serif 4
         </p>
         <p className="max-w-[68ch] text-[19px] leading-[1.7]" style={{ fontFamily: "var(--font-body)", color: "var(--text-body)" }}>
           A river page is a document, not a dashboard. Live readings sit in a
@@ -146,7 +142,7 @@ function TypeSpecimen() {
       </div>
       <div>
         <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: "var(--font-ui)", color: "var(--text-meta)" }}>
-          UI — Archivo · .num tabular
+          UI — IBM Plex Sans Condensed · .num tabular
         </p>
         <p className="text-sm" style={{ fontFamily: "var(--font-ui)" }}>
           Search · Rivers · Flies
@@ -175,8 +171,8 @@ export default function StyleguidePage() {
           </p>
           <h1 className="font-heading text-4xl mt-2">Styleguide</h1>
           <p className="mt-2 max-w-[68ch]" style={{ fontFamily: "var(--font-body)", color: "var(--text-body)" }}>
-            Tokens, type, and components. Daylight is the only register;
-            deep river green is the action colour and nothing else.
+            Tokens, type, and components. Gazette is the Daylight register.
+            Willow is the action colour. Copper is the heron and focus only.
           </p>
         </header>
 

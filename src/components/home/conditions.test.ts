@@ -253,7 +253,7 @@ describe("hero copy follows the number", () => {
     try {
       assert.equal(formatHeroEyebrow(740).includes("AUGUST 24"), true);
       assert.equal(formatHeroEyebrow(740).includes("740 CFS"), true);
-      assert.equal(formatHeroCaption(740).includes("Aug 24"), true);
+      assert.equal(formatHeroCaption(740).includes("AUGUST 24"), true);
     } finally {
       if (prev === undefined) delete process.env.EA_USGS_FIXTURE;
       else process.env.EA_USGS_FIXTURE = prev;

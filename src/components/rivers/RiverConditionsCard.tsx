@@ -336,24 +336,32 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
   }
 
   if (layout === "band") {
+    const cfs = active.discharge?.value;
+    const temp = active.waterTemp?.valueFahrenheit;
     return (
       <div>
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-            On the water
-          </h2>
-          <span className="ea-chip text-[var(--accent)]">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-            Live
-          </span>
+        <p className="ea-overline">
+          <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-[var(--water-live)]" aria-hidden />
+          Live
+        </p>
+        <div className="mt-4 flex flex-wrap items-end gap-x-10 gap-y-4">
+          {cfs != null && (
+            <p className="num text-[48px] font-semibold leading-none text-[var(--water-live)]">
+              {cfs.toLocaleString("en-US")}
+              <span className="ml-2 font-ui text-[13px] font-medium tracking-[0.08em] text-[var(--text-3)]">
+                CFS
+              </span>
+            </p>
+          )}
+          {temp != null && (
+            <p className="num text-[28px] font-semibold leading-none text-[var(--ink)]">
+              {temp}
+              <span className="ml-1 font-ui text-[13px] font-medium text-[var(--text-3)]">°F</span>
+            </p>
+          )}
         </div>
-
         {hasMultipleSections && (
-          <div
-            className="mb-4 flex min-w-0 max-w-full flex-wrap gap-1.5"
-            role="tablist"
-            aria-label="River section"
-          >
+          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-ui text-[12px] uppercase tracking-[0.12em]" role="tablist" aria-label="River section">
             {gauges.map((g, idx) => (
               <button
                 key={g.siteId}
@@ -361,70 +369,21 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
                 role="tab"
                 aria-selected={idx === selectedIdx}
                 onClick={() => setSection(g.siteId)}
-                className={`min-h-11 rounded-[var(--radius-md)] border px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={
                   idx === selectedIdx
-                    ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--on-action)]"
-                    : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:border-[var(--border-strong)] hover:text-[var(--text-1)]"
-                }`}
+                    ? "text-[var(--ink)] underline underline-offset-4"
+                    : "text-[var(--text-3)] hover:text-[var(--ink)]"
+                }
               >
                 {g.section || g.siteName}
               </button>
             ))}
           </div>
         )}
-
-        {active.stale && (
-          <div className="mb-4 flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-2 text-xs text-[var(--warning)]">
-            <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-            <span>Reading may be delayed — last update {formatTimestamp(active.timestamp)}</span>
-          </div>
-        )}
-
-        <div className="grid min-w-0 auto-rows-fr grid-cols-2 gap-3 lg:grid-cols-4">
-          {active.discharge && (
-            <Metric
-              icon={<Waves className="h-4 w-4 text-[var(--accent)]" />}
-              label="Streamflow"
-              value={`${active.discharge.value.toLocaleString()}`}
-              unit="cfs"
-              badge={flow?.label}
-              badgeClass={flow?.color}
-            />
-          )}
-          {active.gageHeight && (
-            <Metric
-              icon={<ArrowUpDown className="h-4 w-4 text-[var(--accent)]" />}
-              label="Gage height"
-              value={`${active.gageHeight.value}`}
-              unit="ft"
-            />
-          )}
-          {active.waterTemp && (
-            <Metric
-              icon={<Thermometer className="h-4 w-4 text-[var(--accent)]" />}
-              label="Water temp"
-              value={`${active.waterTemp.valueFahrenheit}`}
-              unit="°F"
-            />
-          )}
-          {weather && (
-            <Metric
-              icon={<Wind className="h-4 w-4 text-[var(--accent)]" />}
-              label={weather.weatherLabel}
-              value={`${weather.tempF}`}
-              unit={`°F · ${weather.windMph} mph ${weather.windDirectionLabel}`}
-            />
-          )}
-        </div>
-
-        <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--text-3)]">
-          <span className="inline-flex items-center gap-1.5">
-            <Clock className="h-3.5 w-3.5" />
-            {formatTimestamp(active.timestamp)} · USGS {active.siteId}
-          </span>
-          {weather ? (
-            <span>Weather {formatTime(weather.fetchedAt)} · Open-Meteo</span>
-          ) : null}
+        <p className="mt-4 font-ui text-[12px] uppercase tracking-[0.1em] text-[var(--text-3)]">
+          {formatTimestamp(active.timestamp)} · USGS {active.siteId}
+          {active.stale ? " · last seen" : ""}
+          {flow?.label ? ` · ${flow.label}` : ""}
         </p>
       </div>
     );

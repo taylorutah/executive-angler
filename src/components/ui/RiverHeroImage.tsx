@@ -26,6 +26,7 @@ interface RiverHeroImageProps {
   toolbar?: React.ReactNode;
   /** Spec facts — full-width rail under the name so the band is not a left stack. */
   spec?: React.ReactNode;
+  caption?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -49,6 +50,7 @@ export default function RiverHeroImage({
   meta,
   toolbar,
   spec,
+  caption,
   children,
 }: RiverHeroImageProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -73,7 +75,7 @@ export default function RiverHeroImage({
   return (
     <>
       <section className="w-full">
-        <div className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
+        <div className="relative h-[50vh] min-h-[280px] w-full overflow-hidden sm:h-[52vh]">
           {showPhoto ? (
             <Image
               src={heroSrc}
@@ -105,6 +107,7 @@ export default function RiverHeroImage({
           {children && (
             <div className="absolute top-3 right-3 z-20">{children}</div>
           )}
+          {caption}
         </div>
 
         {showPhoto && credit ? (

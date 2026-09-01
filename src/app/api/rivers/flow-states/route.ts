@@ -10,6 +10,8 @@ export interface FlowStateRow {
   cfs: number;
   median30: number;
   state: FlowState;
+  /** Last two daily means — 24h-ish change. Null when the series is too short. */
+  deltaCfs: number | null;
 }
 
 /**
@@ -61,7 +63,10 @@ export async function GET(request: NextRequest) {
     if (cfs == null || median30 == null) continue;
     const state = classifyFlowState(cfs, median30);
     if (!state) continue;
-    const row: FlowStateRow = { siteId, cfs, median30, state };
+    const series = history.get(siteId) ?? [];
+    const deltaCfs =
+      series.length >= 2 ? Math.round(series[series.length - 1] - series[series.length - 2]) : null;
+    const row: FlowStateRow = { siteId, cfs, median30, state, deltaCfs };
     for (const id of riverIds) byRiver[id] = row;
   }
 

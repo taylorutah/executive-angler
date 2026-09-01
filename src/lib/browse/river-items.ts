@@ -3,6 +3,7 @@ import { currentHatchMonth } from "@/lib/flies/fishing-now";
 import { normalizeImageUrl } from "@/lib/media/image-url";
 import { excerptBrief, formatBestMonthsLine } from "./hover-panel";
 import { speciesTokens } from "./species-tokens";
+import { RiverRegion } from "@/lib/rivers/region";
 import type { River } from "@/types/entities";
 import type { CardData } from "@/types/list-config";
 
@@ -34,6 +35,7 @@ export type RiverBrowseItem = CardData & {
   latitude: number;
   longitude: number;
   usgsGaugeId?: string | null;
+  whatsOn?: string;
 };
 
 export function statesForRiver(river: Pick<River, "destinationId" | "additionalDestinationIds">): string[] {
@@ -129,6 +131,7 @@ export function toRiverBrowseItem(
     latitude: Number(river.latitude) || 0,
     longitude: Number(river.longitude) || 0,
     usgsGaugeId: river.usgsGaugeId,
+    whatsOn: hatch || undefined,
     _filterValues: {
       state: states[0] ?? "",
       waterType: water,
@@ -136,6 +139,8 @@ export function toRiverBrowseItem(
       difficulty: river.difficulty,
       flow: "",
       near: "0",
+      region: RiverRegion.of(state),
+      gauge: river.usgsGaugeId ? "1" : "0",
     },
   };
 }

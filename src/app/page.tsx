@@ -8,17 +8,15 @@ import {
 } from "@/lib/db";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { brandedTitle } from "@/lib/seo";
-import type { Article, CanonicalFly, Destination } from "@/types/entities";
+import type { Article, CanonicalFly } from "@/types/entities";
 import CategoryIndex from "@/components/home/CategoryIndex";
 import FlyPlate from "@/components/home/FlyPlate";
 import JournalBand from "@/components/home/JournalBand";
 import ThisWeeksRead from "@/components/home/ThisWeeksRead";
 import WhatWeDontDo from "@/components/home/WhatWeDontDo";
-import WhereToGo from "@/components/home/WhereToGo";
 import { selectFlagshipRivers } from "@/components/home/conditions";
 import { loadFlagshipGaugePayload } from "@/components/home/flagship-cache";
 import {
-  LiveConditionsRail,
   LiveHomeHero,
   LiveOnTheWaterNow,
 } from "@/components/home/LiveHomeGauges";
@@ -92,7 +90,7 @@ function pickPlate(
   const seen = new Set<string>();
   const plate: CanonicalFly[] = [];
   for (const fly of [...featured, ...all]) {
-    if (plate.length === 12) break;
+    if (plate.length === 6) break;
     if (!fly.heroImageUrl || seen.has(fly.id)) continue;
     if (!imageAvailable(fly.heroImageUrl, used)) continue;
     seen.add(fly.id);
@@ -100,26 +98,6 @@ function pickPlate(
     plate.push(fly);
   }
   return plate;
-}
-
-function pickPlaces(
-  destinations: Destination[],
-  month: string,
-  used: Set<string>,
-): Destination[] {
-  const withImage = destinations.filter((d) => imageAvailable(d.heroImageUrl, used));
-  const featured = withImage.filter((d) => d.featured);
-  const inSeason = featured.filter((d) => d.bestMonths?.includes(month));
-  const ordered = [
-    ...inSeason,
-    ...featured.filter((d) => !inSeason.includes(d)),
-    ...withImage.filter((d) => !d.featured),
-  ];
-  const picked = ordered.slice(0, 3);
-  for (const destination of picked) {
-    claimImageUrl(destination.heroImageUrl, used);
-  }
-  return picked;
 }
 
 export default async function HomePage() {
@@ -148,15 +126,10 @@ export default async function HomePage() {
   claimImageUrl(HERO_IMAGE.src, usedImages);
 
   const plate = pickPlate(featuredFlies, allFlies, usedImages);
-  const places = pickPlaces(destinations, month, usedImages);
   const read = pickRead(articles, usedImages);
 
   return (
     <>
-      <div data-lane="resource">
-        <LiveConditionsRail rivers={flagshipRivers} initial={gauges} />
-      </div>
-
       <LiveHomeHero headline={headline} madisonId={madison?.id} initial={gauges} />
 
       <CategoryIndex
@@ -168,13 +141,14 @@ export default async function HomePage() {
 
       <LiveOnTheWaterNow rivers={flagshipRivers} month={month} initial={gauges} />
 
-      {read && <ThisWeeksRead lead={read.lead} rest={read.rest} />}
-
       <FlyPlate flies={plate} flyCount={allFlies.length} />
 
-      <WhereToGo destinations={places} month={month} />
-
-      <JournalBand />
+      <div className="border-b border-[var(--border)] bg-[var(--paper)]">
+        <div className="mx-auto grid max-w-[var(--container)] gap-0 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16">
+          {read ? <ThisWeeksRead lead={read.lead} rest={read.rest} /> : <div />}
+          <JournalBand />
+        </div>
+      </div>
 
       <WhatWeDontDo />
     </>

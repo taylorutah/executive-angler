@@ -10,17 +10,15 @@ export default function WhatWeDontDo() {
     <section
       id="what-we-dont-do"
       data-lane="ethic"
-      className="border-y border-[var(--border)] bg-[var(--paper-deep)]"
+      className="border-b border-[var(--border)] bg-[var(--paper)]"
     >
-      <div className="mx-auto w-full max-w-[var(--container)] px-4 py-14 sm:px-6 sm:py-24">
-        <h2 className="ea-overline">
-          What we don&apos;t do
-        </h2>
-        <ul className="mt-8 space-y-4">
+      <div className="mx-auto w-full max-w-[var(--container)] px-4 py-12 sm:px-6 sm:py-16">
+        <h2 className="ea-overline">What we don&apos;t do</h2>
+        <ul className="mt-6 space-y-3">
           {LINES.map((line) => (
             <li
               key={line}
-              className="font-display text-3xl font-semibold leading-[1.15] text-[var(--text-1)] sm:text-5xl"
+              className="font-display text-2xl font-semibold leading-[1.2] text-[var(--ink)] sm:text-4xl"
             >
               {line}
             </li>

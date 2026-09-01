@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { SITE_NAME } from "@/lib/constants";
@@ -9,6 +9,7 @@ import OAuthButtons from "@/components/ui/OAuthButtons";
 import TurnstileWidget from "@/components/ui/TurnstileWidget";
 import { Button } from "@/components/ui/Button";
 import { POST_LOGIN_PATH, safeInternalPath } from "@/lib/auth-paths";
+import HeronMark from "@/components/brand/HeronMark";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAAACzmkL0lBFlfTsxp";
 
@@ -20,7 +21,6 @@ function LoginForm() {
   const [captchaToken, setCaptchaToken] = useState("");
   // See signup/page.tsx for the fail-open rationale.
   const [captchaResolved, setCaptchaResolved] = useState(false);
-  const router = useRouter();
   const searchParams = useSearchParams();
   // `next` is the canonical name (matches auth/callback); `redirect` kept as
   // a legacy fallback so existing links don't break.
@@ -55,13 +55,19 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center px-4">
+    <div className="desk-sheet min-h-[70vh] bg-[var(--paper)] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="font-display text-3xl font-semibold text-[var(--accent)]">
-            {SITE_NAME}
+        <div className="mb-8">
+          <Link href="/" className="inline-flex items-center gap-2.5" aria-label={SITE_NAME}>
+            <HeronMark className="h-[30px] w-[22px] text-[var(--copper)]" />
+            <span className="ea-wordmark">
+              Executive
+              <br />
+              Angler
+            </span>
           </Link>
-          <p className="mt-2 text-[var(--text-2)]">Sign in to your account.</p>
+          <h1 className="mt-6 font-display text-3xl font-semibold text-[var(--ink)]">Sign in</h1>
+          <p className="ea-dek mt-2">Keep a journal. The water will not keep it for you.</p>
         </div>
 
         <div className="ea-card space-y-5">

@@ -3,7 +3,6 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SITE_NAME } from "@/lib/constants";
-import { Send, AlertCircle } from "@/icons";
 
 const SUBJECT_OPTIONS = [
   "General inquiry",
@@ -70,7 +69,7 @@ function ContactPageInner() {
 
   return (
     <>
-      <div className="py-14 sm:py-24">
+      <div className="desk-sheet bg-[var(--paper)] py-14 sm:py-24">
         <div className="mx-auto max-w-[var(--prose)] px-4 sm:px-6">
           <p className="ea-overline">Company</p>
           <h1 className="mt-3 font-display text-4xl font-semibold text-[var(--text-1)] sm:text-5xl">
@@ -169,10 +168,7 @@ function ContactPageInner() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-3 rounded-surface border border-[var(--danger)] bg-[var(--surface)] px-4 py-3">
-                  <AlertCircle size={20} className="mt-0.5 shrink-0 text-[var(--danger)]" />
-                  <p className="text-sm text-[var(--danger)]">{error}</p>
-                </div>
+                <p className="text-sm text-[var(--danger)]">{error}</p>
               )}
 
               <div>
@@ -181,8 +177,7 @@ function ContactPageInner() {
                   disabled={sending}
                   className="ea-btn ea-btn-primary ea-btn-lg"
                 >
-                  <Send size={16} />
-                  {sending ? "Sending..." : "Send Message"}
+                  {sending ? "Sending…" : "Send message"}
                 </button>
               </div>
             </form>

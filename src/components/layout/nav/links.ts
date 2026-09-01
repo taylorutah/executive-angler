@@ -16,25 +16,25 @@ export type NavItem = {
 
 export const SEARCH_PLACEHOLDER = "River, fly, hatch, destination";
 
-/** Visible ring at every keyboard stop — 2px --accent, 2px offset (DESIGN.md §7). */
+/** Visible ring at every keyboard stop — oxidized copper, not willow. */
 export const FOCUS_VISIBLE =
-  "focus-visible:outline-2 focus-visible:outline-[var(--accent)] focus-visible:outline-offset-[2px]";
+  "focus-visible:outline-2 focus-visible:outline-[var(--copper)] focus-visible:outline-offset-[2px]";
 
 /** Drop transitions/transforms when the user asked for less motion. */
 export const MOTION_SAFE =
   "motion-reduce:transition-none motion-reduce:transform-none";
 
-/** Logged-out primary row. Flies points at the public catalogue, not the workspace. */
+/** Logged-out primary row. Gazette: Rivers · Flies · Places · Field Notes · Journal */
 export const PUBLIC_NOUNS: NavItem[] = [
   {
     label: "Rivers",
     href: "/rivers",
     section: "/rivers",
-    descriptor: "Live water and hatches",
+    descriptor: "Access, hatches, and live flow",
   },
   {
     label: "Flies",
-    href: "/flies/library",
+    href: "/flies",
     section: "/flies",
     descriptor: "Patterns, recipes, and materials",
   },
@@ -49,6 +49,12 @@ export const PUBLIC_NOUNS: NavItem[] = [
     href: "/articles",
     section: "/articles",
     descriptor: "Reading water, gear, and craft",
+  },
+  {
+    label: "Journal",
+    href: "/journal",
+    section: "/journal",
+    descriptor: "Sessions, flies, and the days you fished",
   },
 ];
 
@@ -67,19 +73,8 @@ export const MY_FLIES_LINK: NavItem = {
   descriptor: "Your boxes and patterns",
 };
 
-/** Logged-in primary row. Flies is the public catalogue, same as logged-out. */
-export const MEMBER_NOUNS: NavItem[] = [
-  { label: "Today", href: "/today", section: "/today" },
-  { label: "Journal", href: "/journal", section: "/journal" },
-  { label: "Rivers", href: "/rivers", section: "/rivers" },
-  {
-    label: "Flies",
-    href: "/flies/library",
-    section: "/flies",
-    descriptor: "Patterns, recipes, and materials",
-  },
-  MY_FLIES_LINK,
-];
+/** Logged-in primary row matches the gazette nouns. Today / My Flies live in utilities. */
+export const MEMBER_NOUNS: NavItem[] = PUBLIC_NOUNS;
 
 /** The one dropdown in the bar: utility routes for signed-in anglers. */
 export const EXPLORE_ITEMS: NavItem[] = [

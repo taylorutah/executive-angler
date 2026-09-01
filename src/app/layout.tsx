@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, IBM_Plex_Sans_Condensed, Source_Serif_4 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import SiteTicker from "@/components/layout/SiteTicker";
 import MobileTabBar from "@/components/layout/MobileTabBar";
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/layout/nav/SkipLink";
 import CommandPalette from "@/components/CommandPalette";
@@ -13,19 +14,28 @@ import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 import { organizationJsonLd } from "@/lib/seo";
 import "./globals.css";
 
-/* Two faces only (DESIGN.md): Fraunces 500/600 for display, Inter 400/500/600 for UI.
-   Pinned weights only — a stray 700 anywhere resolves to 600, which self-enforces the law. */
+/* Gazette faces: Fraunces display, Source Serif 4 body, IBM Plex Sans Condensed UI.
+   Inter is forbidden on this branch. */
 const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-fraunces",
   weight: ["500", "600"],
+  style: ["normal"],
 });
 
-const inter = Inter({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-source",
+  weight: ["400", "600"],
+  style: ["normal", "italic"],
+});
+
+const plex = IBM_Plex_Sans_Condensed({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-plex",
   weight: ["400", "500", "600"],
 });
 
@@ -107,7 +117,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${inter.variable}`}
+      className={`${fraunces.variable} ${sourceSerif.variable} ${plex.variable}`}
     >
       <head>
         <meta name="apple-itunes-app" content="app-id=6760311036" />
@@ -140,10 +150,11 @@ export default function RootLayout({
         <SkipLink />
         <AuthProvider>
           <Header />
+          <SiteTicker />
           <main
             id={MAIN_CONTENT_ID}
             tabIndex={-1}
-            className="flex-1 pt-[var(--header-h)] pb-14 lg:pb-0"
+            className="flex-1 pt-[calc(var(--header-h)+var(--ticker-h))] pb-14 lg:pb-0"
           >
             {children}
           </main>

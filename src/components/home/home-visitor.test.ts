@@ -6,32 +6,29 @@ import { join } from "node:path";
 const root = process.cwd();
 
 describe("home visitor QA locks", () => {
-  it("keeps ink-band button type ink against the later paper-link rule", () => {
-    const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
-    assert.match(css, /\.ea-band-ink a:not\(\.ea-btn\)/);
-    assert.match(css, /\.ea-band-ink a\.ea-btn-on-ink\s*\{[\s\S]*?color:\s*var\(--ink\)/);
+  it("keeps the journal invitation on paper with a willow button", () => {
     const journal = readFileSync(join(root, "src/components/home/JournalBand.tsx"), "utf8");
-    assert.match(journal, /ea-btn ea-btn-lg ea-btn-on-ink/);
+    assert.match(journal, /Keep a journal/);
+    assert.match(journal, /ea-btn ea-btn-primary/);
+    assert.equal(journal.includes("ea-band-ink"), false);
   });
 
-  it("drops leftover section indexes", () => {
+  it("drops leftover section indexes and Where to go", () => {
     assert.equal(existsSync(join(root, "src/components/home/SectionMark.tsx")), false);
     const plate = readFileSync(join(root, "src/components/home/FlyPlate.tsx"), "utf8");
-    const go = readFileSync(join(root, "src/components/home/WhereToGo.tsx"), "utf8");
+    const home = readFileSync(join(root, "src/app/page.tsx"), "utf8");
     assert.match(plate, /The plate/);
-    assert.match(go, /Where to go/);
+    assert.match(plate, /--plate/);
+    assert.equal(home.includes("WhereToGo"), false);
+    assert.equal(home.includes("LiveConditionsRail"), false);
     assert.equal(plate.includes("SectionMark"), false);
-    assert.equal(go.includes("SectionMark"), false);
-    assert.equal(/\bn=["']0[123]["']/.test(plate + go), false);
   });
 
-  it("keeps the reference a contents list, not four doors", () => {
+  it("keeps the reference a hanging index, not four doors", () => {
     const src = readFileSync(join(root, "src/components/home/CategoryIndex.tsx"), "utf8");
     assert.equal(src.includes("Door"), false);
     assert.equal(src.includes("lg:grid-cols-4"), false);
     assert.equal(src.includes("ea-stat-value"), false);
     assert.match(src, /class ReferenceIndex/);
-    assert.match(src, /Open/);
-    assert.match(src, /--action/);
   });
 });

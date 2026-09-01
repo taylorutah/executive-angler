@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
 import { isHouseByline } from "@/lib/authors";
+import { GazetteClock } from "@/lib/gazette/date";
 import type { Article } from "@/types/entities";
 import { photoAlt } from "./homepage-images";
 
@@ -11,82 +12,59 @@ interface Props {
 
 function byline(article: Article): { author: string | null; date: string | null } {
   const date = new Date(article.publishedAt);
-  const formatted = Number.isNaN(date.getTime())
-    ? null
-    : date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-  // The house byline carries no visible attribution (client ruling 2026-08-28).
+  const formatted = Number.isNaN(date.getTime()) ? null : GazetteClock.chrome(date);
   return { author: isHouseByline(article.author) ? null : article.author, date: formatted };
 }
 
-/** One feature at magazine scale plus three smaller. Byline on each. Not four equal tiles. */
+/** One field note. Authors belong here. */
 export default function ThisWeeksRead({ lead, rest }: Props) {
   const leadBy = byline(lead);
   const leadMeta = [leadBy.author ? `By ${leadBy.author}` : null, leadBy.date].filter(Boolean).join(" · ");
 
   return (
-    <section data-lane="resource" className="bg-[var(--paper)] py-14 sm:py-24">
-      <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
-        <p className="ea-overline">
-          Field note
-        </p>
-        <h2 className="mt-2 font-display text-3xl font-semibold text-[var(--text-1)]">
-          This week&apos;s read
-        </h2>
-
-        <Link
-          href={`/articles/${lead.slug}`}
-          className="group mt-8 grid items-center gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
-        >
-          <div className="photo-card relative aspect-[3/2] w-full overflow-hidden rounded-surface border border-[var(--border)]">
+    <section data-lane="resource" className="border-b border-[var(--border)] bg-[var(--paper)] py-10 sm:py-12">
+      <p className="ea-overline">Field note</p>
+      <Link href={`/articles/${lead.slug}`} className="group mt-4 block">
+        {lead.heroImageUrl ? (
+          <div className="photo-card relative mb-5 aspect-[3/2] w-full overflow-hidden">
             <SafeEntityImage
               src={lead.heroImageUrl}
               alt={photoAlt(lead.heroImageAlt, lead.title)}
               title={lead.title}
               className="ea-photo"
-              sizes="(max-width: 1024px) 100vw, 55vw"
+              sizes="(max-width: 1024px) 100vw, 40vw"
             />
           </div>
-          <div>
-            <p className="ea-overline">
-              {lead.category}
-            </p>
-            <h3 className="mt-2 font-display text-2xl font-semibold leading-tight text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
-              {lead.title}
-            </h3>
-            <p className="mt-4 text-[var(--text-2)]">
-              {lead.excerpt}
-            </p>
-            {leadMeta && <p className="ea-overline mt-5">{leadMeta}</p>}
-          </div>
-        </Link>
+        ) : null}
+        <h2 className="font-display text-2xl font-semibold leading-tight text-[var(--ink)] group-hover:text-[var(--accent)]">
+          {lead.title}
+        </h2>
+        <p className="mt-3 text-[17px] leading-relaxed text-[var(--text-2)]">
+          {lead.excerpt}
+        </p>
+        {leadMeta && <p className="ea-overline mt-4">{leadMeta}</p>}
+      </Link>
 
-        {rest.length > 0 && (
-          <ul className="mt-8 border-t border-[var(--border)] pt-6">
-            {rest.map((article) => {
-              const line = byline(article);
-              const meta = [line.author ? `By ${line.author}` : null, line.date]
-                .filter(Boolean)
-                .join(" · ");
-              return (
-                <li
-                  key={article.id}
-                  className="border-b border-[var(--border)] py-4 first:pt-0 last:border-b-0"
-                >
-                  <Link
-                    href={`/articles/${article.slug}`}
-                    className="group flex flex-wrap items-baseline justify-between gap-3"
-                  >
-                    <h3 className="font-display text-xl font-semibold text-[var(--text-1)] transition-colors group-hover:text-[var(--accent)]">
-                      {article.title}
-                    </h3>
-                    {meta && <p className="ea-overline">{meta}</p>}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+      {rest.length > 0 && (
+        <ul className="mt-6 border-t border-[var(--border)]">
+          {rest.map((article) => {
+            const line = byline(article);
+            const meta = [line.author ? `By ${line.author}` : null, line.date]
+              .filter(Boolean)
+              .join(" · ");
+            return (
+              <li key={article.id} className="border-b border-[var(--border)] py-3">
+                <Link href={`/articles/${article.slug}`} className="group flex flex-wrap items-baseline justify-between gap-3">
+                  <h3 className="font-display text-lg font-semibold text-[var(--ink)] group-hover:text-[var(--accent)]">
+                    {article.title}
+                  </h3>
+                  {meta && <p className="ea-overline">{meta}</p>}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </section>
   );
 }

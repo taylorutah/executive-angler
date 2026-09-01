@@ -5,7 +5,6 @@
  * is no Dusk switch. Editorial header, filter bar, results, load-more.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { getAllRivers } from "@/lib/db";
 import RiversPageClient from "./RiversPageClient";
@@ -33,7 +32,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RiversPage() {
   const rivers = await getAllRivers();
   const items = rivers.map((river) => toRiverBrowseItem(river));
-  const featured = rivers.filter((river) => river.featured);
   const stateOptions = [...new Set(rivers.flatMap((r) => statesForRiver(r)))]
     .sort((a, b) => a.localeCompare(b))
     .map((name) => ({ value: name, label: name }));
@@ -43,26 +41,8 @@ export default async function RiversPage() {
       <EntityListHeader
         overline="The reference"
         title={`${rivers.length} rivers, documented`}
-        dek="Access points, hatch charts, and live flow when a gauge exists. Filter by state, water, species, difficulty, and flow."
-      >
-        {featured.length > 0 && (
-          <div className="mt-6">
-            <p className="ea-overline">Start here</p>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {featured.map((river) => (
-                <li key={river.id}>
-                  <Link
-                    href={`/rivers/${river.slug}`}
-                    className="ea-chip border border-[var(--border)] bg-[var(--surface)] transition-colors hover:border-[var(--border-strong)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-                  >
-                    {river.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </EntityListHeader>
+        dek="Access, hatches, and live flow when a gauge exists. Ungauged water is an em dash — never a guessed number."
+      />
 
       <section className="bg-[var(--paper)] pb-16 sm:pb-24">
         <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">

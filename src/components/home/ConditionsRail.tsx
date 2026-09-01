@@ -21,9 +21,13 @@ function lastSeenLabel(snapshot: GaugeSnapshot): string {
   return "last seen";
 }
 
+function cfsLabel(cfs: number): string {
+  return `${cfs.toLocaleString("en-US")} CFS`;
+}
+
 /**
- * Band 1 — sticky instrument rail. Six named rivers with their current gauge
- * reading. A quiet gauge is a known state (last reading + when), not a failure.
+ * Ticker under the header. Live flagship CFS as type links.
+ * Reuses the flagship gauge payload — do not rewrite fishing logic.
  */
 export default function ConditionsRail({ rivers, snapshots }: Props) {
   if (rivers.length === 0) return null;
@@ -31,11 +35,11 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
   return (
     <div
       data-home-rail
-      className="sticky top-[56px] z-40 h-10 bg-[var(--paper)] border-b border-[var(--border)]"
+      className="fixed top-[var(--header-h)] left-0 right-0 z-40 h-[var(--ticker-h)] border-b border-[var(--border)] bg-[var(--paper)]"
     >
-      <div className="mx-auto flex h-full max-w-[var(--container)] items-center gap-4 overflow-x-auto px-4 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <span className="ea-overline hidden shrink-0 lg:inline">
-          On the water
+      <div className="mx-auto flex h-full max-w-[var(--container)] items-center gap-5 overflow-x-auto px-4 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <span className="ea-overline shrink-0 text-[var(--water-live)]">
+          • On the water
         </span>
         {rivers.map((river) => {
           const snapshot = snapshots.get(river.id);
@@ -48,22 +52,21 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
             <Link
               key={river.id}
               href={`/rivers/${river.slug}`}
-              className="group flex shrink-0 items-center gap-2 whitespace-nowrap text-xs text-[var(--text-2)] transition-colors hover:text-[var(--text-1)]"
+              className="group flex shrink-0 items-baseline gap-2 whitespace-nowrap font-ui text-[12px] tracking-[0.04em] text-[var(--text-2)] hover:text-[var(--ink)]"
             >
               {live && (
                 <span
                   aria-hidden
-                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]"
+                  className="mb-px h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--water-live)]"
                 />
               )}
-              <span className="font-medium text-[var(--text-1)] group-hover:text-[var(--accent)]">
+              <span className="uppercase tracking-[0.1em] text-[var(--ink)]">
                 {river.label}
               </span>
               {live ? (
                 <>
-                  <span className="num text-[var(--accent)]">
-                    {snapshot.cfs!.toLocaleString("en-US")}
-                    <span className="ml-0.5 text-[var(--text-3)]">cfs</span>
+                  <span className="num text-[var(--water-live)]">
+                    {cfsLabel(snapshot.cfs!)}
                   </span>
                   {delta && <span className="num text-[var(--text-3)]">{delta}</span>}
                   {observed && (
@@ -74,15 +77,14 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
                 </>
               ) : lastSeen ? (
                 <span className="num text-[var(--text-3)]" data-live>
-                  {snapshot.cfs!.toLocaleString("en-US")}
-                  <span className="ml-0.5">cfs</span>
+                  {cfsLabel(snapshot.cfs!)}
                   <span className="ea-overline ml-1.5">
                     {lastSeenLabel(snapshot)}
                   </span>
                 </span>
               ) : (
-                <span className="ea-overline">
-                  no reading
+                <span className="text-[var(--text-3)]" aria-hidden>
+                  —
                 </span>
               )}
             </Link>

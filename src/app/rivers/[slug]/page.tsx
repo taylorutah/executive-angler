@@ -4,14 +4,16 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import RiverHeroImage from "@/components/ui/RiverHeroImage";
+import RiverPhotoCaption from "@/components/rivers/RiverPhotoCaption";
+import { GazetteClock } from "@/lib/gazette/date";
 import ReportButton from "@/components/ui/ReportButton";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import FactList from "@/components/ui/FactList";
 import TokenRow, { Token } from "@/components/ui/TokenRow";
-import EntityCard from "@/components/ui/EntityCard";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import JsonLd from "@/components/seo/JsonLd";
+import SafeEntityImage from "@/components/media/SafeEntityImage";
 import LazyMapView from "@/components/maps/LazyMapView";
 import RiverPhotoStrip from "@/components/ui/RiverPhotoStrip";
 import PersonalFlowOverlay from "@/components/rivers/PersonalFlowOverlay";
@@ -23,7 +25,6 @@ import SignedOutRiverInsights from "@/components/rivers/SignedOutRiverInsights";
 import HatchSeasonGrid from "@/components/rivers/HatchSeasonGrid";
 import YourRecordHere from "@/components/rivers/YourRecordHere";
 import AdminHeroEditor from "@/components/admin/AdminHeroEditor";
-import ContributeStrip from "@/components/desk/ContributeStrip";
 import { accessLabel, difficultyLabel, formatBestMonthsLine, waterTypeLabel } from "@/lib/browse/river-items";
 import { SITE_URL } from "@/lib/constants";
 import {
@@ -39,7 +40,6 @@ import {
   getApprovedPhotosByEntity,
   getRiversByDestination,
 } from "@/lib/db";
-import { hostedStillUrl } from "@/lib/media/image-url";
 import { regulationSource } from "@/lib/rivers/regulations";
 import { groupAccessPoints } from "@/lib/rivers/access-groups";
 
@@ -101,11 +101,6 @@ export default async function RiverPage({ params }: Props) {
 
   const flyByName = new Map(allFlies.map((f) => [f.name.toLowerCase(), f]));
 
-  const allDests = [dest, ...(additionalDests ?? [])].filter(Boolean) as NonNullable<typeof dest>[];
-  const destinationLabel = allDests.length > 0
-    ? allDests.map((d) => d!.name).join(" · ")
-    : null;
-
   const nearbyLodges = riverLodges.length > 0 ? riverLodges : destLodges.slice(0, 4);
   const nearbyRivers = destRivers.filter((r) => r.id !== river.id).slice(0, 6);
 
@@ -126,16 +121,23 @@ export default async function RiverPage({ params }: Props) {
     (m) => m.month.toLowerCase() === monthNow.toLowerCase(),
   )?.hatches ?? [];
 
-  const heroSubtitle = [destinationLabel, (river.flowType ?? "").replace(/-/g, " ")]
+  const destState = dest ? dest.state : undefined;
+  const destCountry = dest ? dest.country : undefined;
+  const destSlug = dest ? dest.slug : undefined;
+  const place = destState || dest?.name || destCountry || "";
+  const water = (river.flowType ?? "").replace(/-/g, " ");
+  const heroSubtitle = [
+    place,
+    water,
+    river.lengthMiles ? `${river.lengthMiles} miles` : "",
+  ]
     .filter(Boolean)
-    .join(" · ");
+    .join(" · ")
+    .toUpperCase();
   const difficulty = difficultyLabel(river.difficulty);
   const access = accessLabel(river.wadingType);
   const season = formatBestMonthsLine(river.bestMonths || []);
   const speciesNames = river.primarySpecies ?? [];
-  const destState = dest ? dest.state : undefined;
-  const destCountry = dest ? dest.country : undefined;
-  const destSlug = dest ? dest.slug : undefined;
   const regsSource = regulationSource({
     riverSlug: river.slug,
     destinationSlug: destSlug,
@@ -188,7 +190,7 @@ export default async function RiverPage({ params }: Props) {
         galleryPhotos={galleryPhotos}
         title={river.name}
         subtitle={heroSubtitle || undefined}
-        meta={river.lengthMiles ? `${river.lengthMiles} miles` : undefined}
+        meta={undefined}
         toolbar={
           <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
             <Breadcrumbs
@@ -205,15 +207,22 @@ export default async function RiverPage({ params }: Props) {
             />
             <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 sm:justify-end">
               <Link
-                href={`/plan/${river.slug}`}
-                className="inline-flex min-h-11 items-center font-ui text-sm font-medium text-[var(--accent)] underline-offset-4 hover:underline"
+                href={`/journal/new?river=${river.slug}`}
+                className="ea-btn ea-btn-primary ea-btn-sm"
               >
-                Trip brief →
+                Keep a journal
               </Link>
               <ReportButton entityType="river" entityId={river.id} />
               <FavoriteButton entityType="river" entityId={river.id} />
             </div>
           </div>
+        }
+        caption={
+          <RiverPhotoCaption
+            riverId={river.id}
+            place={place || river.name}
+            date={GazetteClock.photoDay()}
+          />
         }
         spec={
           difficulty || access || season || speciesNames.length > 0 ? (
@@ -315,35 +324,44 @@ export default async function RiverPage({ params }: Props) {
             <ScrollAnimation>
               <div>
                 <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                  Flies fishing now
+                  Fish this now
                 </h2>
                 <p className="mb-5 text-sm text-[var(--text-2)]">
-                  {monthNow} on the hatch chart — names and sizes, not a catch report.
+                  {monthNow} on the hatch chart — tied plates, not a catch report.
                 </p>
-                <ul className="border-t border-[var(--border)]">
+                <ul className="grid grid-cols-2 border-t border-l border-[var(--border)] sm:grid-cols-3">
                   {fishingNow.map((hatch, i) => {
                     const matchedFly = flyByName.get(hatch.pattern?.toLowerCase() ?? "");
-                    return (
-                      <li
-                        key={`${hatch.insect}-${hatch.pattern}-${i}`}
-                        className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-[var(--border)] py-3"
-                      >
-                        <span className="font-medium text-[var(--text-1)]">{hatch.insect}</span>
-                        {hatch.size ? (
-                          <span className="num text-xs text-[var(--text-3)]">{hatch.size}</span>
-                        ) : null}
-                        {hatch.pattern ? (
-                          matchedFly ? (
-                            <Link
-                              href={`/flies/${matchedFly.slug}`}
-                              className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
-                            >
-                              {hatch.pattern}
-                            </Link>
+                    const href = matchedFly ? `/flies/${matchedFly.slug}` : undefined;
+                    const inner = (
+                      <>
+                        <div className="relative flex aspect-square w-full items-center justify-center bg-[var(--plate)]">
+                          {matchedFly?.heroImageUrl ? (
+                            <SafeEntityImage
+                              src={matchedFly.heroImageUrl}
+                              alt={hatch.pattern || hatch.insect}
+                              title={hatch.pattern || hatch.insect}
+                              contain
+                              className="object-contain"
+                              sizes="33vw"
+                            />
                           ) : (
-                            <span className="text-[var(--text-2)]">{hatch.pattern}</span>
-                          )
-                        ) : null}
+                            <span className="px-2 text-center font-ui text-[11px] uppercase tracking-[0.1em] text-[var(--text-3)]">
+                              {hatch.pattern || hatch.insect}
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-2 font-display text-sm font-semibold text-[var(--ink)]">
+                          {hatch.pattern || hatch.insect}
+                        </p>
+                        <p className="mt-0.5 font-ui text-[11px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                          {[hatch.insect, hatch.size].filter(Boolean).join(" · ")}
+                        </p>
+                      </>
+                    );
+                    return (
+                      <li key={`${hatch.insect}-${hatch.pattern}-${i}`} className="border-b border-r border-[var(--border)] p-3">
+                        {href ? <Link href={href} className="block">{inner}</Link> : inner}
                       </li>
                     );
                   })}
@@ -392,16 +410,7 @@ export default async function RiverPage({ params }: Props) {
                   No access points are listed for this river yet.
                 </p>
               )}
-              <LazyMapView
-                latitude={river.latitude}
-                longitude={river.longitude}
-                zoom={9}
-                markers={mapMarkers}
-                bounds={river.mapBounds}
-                tone="desk"
-                className="h-[450px] w-full overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)]"
-              />
-              <div className="mt-6 space-y-8 border-t border-[var(--border)]">
+              <div className="space-y-6 border-t border-[var(--border)]">
                 {groupAccessPoints(river.slug, river.accessPoints).map((group) => (
                   <div key={group.label ?? "access"}>
                     {group.label && (
@@ -412,35 +421,32 @@ export default async function RiverPage({ params }: Props) {
                     {group.points.map((ap, i) => (
                       <div
                         key={`${group.label ?? "access"}-${i}`}
-                        className="flex items-start gap-3 border-b border-[var(--border)] py-4"
+                        className="border-b border-[var(--border)] py-3"
                       >
-                        <div className="num flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--paper-deep)] text-sm font-semibold text-[var(--text-1)]">
-                          {i + 1}
-                        </div>
-                        <div>
-                          <h3 className="font-ui text-base font-medium text-[var(--text-1)]">{ap.name}</h3>
-                          {ap.description && (
-                            <p className="mt-0.5 text-sm text-[var(--text-2)]">{ap.description}</p>
-                          )}
-                          <div className="mt-1.5 flex items-center gap-3 text-xs text-[var(--text-3)]">
-                            <span className="flex items-center gap-1">
-                              <Icon name="map" className="h-3.5 w-3.5" />
-                              <span className="num">
-                                {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
-                              </span>
-                            </span>
-                            {ap.parking && (
-                              <span className="font-medium text-[var(--text-1)]">
-                                Parking available
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                        <h3 className="font-display text-base font-semibold text-[var(--ink)]">{ap.name}</h3>
+                        {ap.description && (
+                          <p className="mt-0.5 text-sm text-[var(--text-2)]">{ap.description}</p>
+                        )}
+                        <p className="mt-1 font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                          <span className="num">
+                            {ap.latitude.toFixed(4)}, {ap.longitude.toFixed(4)}
+                          </span>
+                          {ap.parking ? " · Parking" : ""}
+                        </p>
                       </div>
                     ))}
                   </div>
                 ))}
               </div>
+              <LazyMapView
+                latitude={river.latitude}
+                longitude={river.longitude}
+                zoom={9}
+                markers={mapMarkers}
+                bounds={river.mapBounds}
+                tone="desk"
+                className="mt-6 h-[280px] w-full overflow-hidden border border-[var(--border)]"
+              />
             </div>
           </ScrollAnimation>
 
@@ -448,29 +454,24 @@ export default async function RiverPage({ params }: Props) {
 
           {river.regulations && (
             <ScrollAnimation>
-              <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6">
-                <div className="flex items-start gap-3">
-                  <Icon name="warning" className="mt-0.5 h-5 w-5 shrink-0 text-[var(--warning)]" />
-                  <div>
-                    <h2 className="mb-2 font-heading text-lg font-semibold text-[var(--text-1)]">
-                      Regulations
-                    </h2>
-                    <p className="text-sm leading-relaxed text-[var(--text-2)]">
-                      {river.regulations}
-                    </p>
-                    <p className="mt-3 text-xs leading-relaxed text-[var(--text-3)]">
-                      Verify with{" "}
-                      <a
-                        href={regsSource.url}
-                        className="text-[var(--accent)] underline underline-offset-4 hover:decoration-2"
-                        rel="noopener noreferrer"
-                      >
-                        {regsSource.label}
-                      </a>
-                      . Retrieved {regsSource.retrievedOn}. Seasons and gear rules change.
-                    </p>
-                  </div>
-                </div>
+              <div className="border-t border-[var(--border)] pt-8">
+                <h2 className="mb-3 font-heading text-2xl font-semibold text-[var(--ink)]">
+                  Regulations
+                </h2>
+                <p className="max-w-[var(--prose)] text-[17px] leading-relaxed text-[var(--text-2)]">
+                  {river.regulations}
+                </p>
+                <p className="mt-3 font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                  Verify with{" "}
+                  <a
+                    href={regsSource.url}
+                    className="text-[var(--accent)] underline underline-offset-4"
+                    rel="noopener noreferrer"
+                  >
+                    {regsSource.label}
+                  </a>
+                  . Retrieved {regsSource.retrievedOn}.
+                </p>
               </div>
             </ScrollAnimation>
           )}
@@ -478,78 +479,52 @@ export default async function RiverPage({ params }: Props) {
           {(nearbyLodges.length > 0 || nearbyGuides.length > 0 || destFlyShops.length > 0) && (
             <ScrollAnimation>
               <div>
-                <h2 className="mb-6 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                <h2 className="mb-4 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   On this river
                 </h2>
-                <div className="space-y-10">
+                <div className="space-y-6">
                   {nearbyLodges.length > 0 && (
-                    <div>
-                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-1)]">
-                        {riverLodges.length > 0
-                          ? "Lodges"
-                          : `Lodges in ${destinationLabel ?? "this area"}`}
-                      </h3>
-                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div className="border-t border-[var(--border)]">
+                      <h3 className="ea-overline pt-4">Lodges</h3>
+                      <ul>
                         {nearbyLodges.slice(0, 6).map((lodge) => (
-                          <EntityCard
-                            key={lodge.id}
-                            href={`/lodges/${lodge.slug}`}
-                            imageUrl={lodge.heroImageUrl}
-                            imageAlt={lodge.name}
-                            title={lodge.name}
-                            subtitle={lodge.priceRange}
-                            meta={lodge.seasonStart && lodge.seasonEnd ? `${lodge.seasonStart}–${lodge.seasonEnd}` : undefined}
-                            imageFallback="quiet"
-                          />
+                          <li key={lodge.id} className="border-b border-[var(--border)] py-2">
+                            <Link href={`/lodges/${lodge.slug}`} className="font-display text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--accent)]">
+                              {lodge.name}
+                            </Link>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   )}
 
                   {nearbyGuides.length > 0 && (
-                    <div>
-                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-1)]">
-                        Guides
-                      </h3>
-                      <div className="space-y-3">
+                    <div className="border-t border-[var(--border)]">
+                      <h3 className="ea-overline pt-4">Guides</h3>
+                      <ul>
                         {nearbyGuides.map((guide) => (
-                          <Link
-                            key={guide.id}
-                            href={`/guides/${guide.slug}`}
-                            className="block rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors hover:border-[var(--border-strong)]"
-                          >
-                            <p className="text-sm font-medium text-[var(--text-1)]">{guide.name}</p>
-                            {guide.dailyRate ? (
-                              <p className="mt-0.5 text-xs text-[var(--text-2)]">{guide.dailyRate}</p>
-                            ) : null}
-                          </Link>
+                          <li key={guide.id} className="border-b border-[var(--border)] py-2">
+                            <Link href={`/guides/${guide.slug}`} className="font-display text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--accent)]">
+                              {guide.name}
+                            </Link>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   )}
 
                   {destFlyShops.length > 0 && (
-                    <div>
-                      <h3 className="mb-4 font-heading text-lg font-semibold text-[var(--text-1)]">
-                        Fly shops
-                      </h3>
-                      <div className="space-y-3">
+                    <div className="border-t border-[var(--border)]">
+                      <h3 className="ea-overline pt-4">Fly shops</h3>
+                      <ul>
                         {destFlyShops.slice(0, 4).map((shop) => (
-                          <Link
-                            key={shop.id}
-                            href={`/fly-shops/${shop.slug}`}
-                            className="flex items-center gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors hover:border-[var(--border-strong)]"
-                          >
-                            <Icon name="current" className="h-5 w-5 shrink-0 text-[var(--accent)]" />
-                            <div>
-                              <h4 className="font-heading text-base font-semibold text-[var(--text-1)]">
-                                {shop.name}
-                              </h4>
-                              <p className="mt-0.5 text-sm text-[var(--text-2)]">{shop.address}</p>
-                            </div>
-                          </Link>
+                          <li key={shop.id} className="border-b border-[var(--border)] py-2">
+                            <Link href={`/fly-shops/${shop.slug}`} className="font-display text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--accent)]">
+                              {shop.name}
+                            </Link>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   )}
                 </div>
@@ -559,30 +534,14 @@ export default async function RiverPage({ params }: Props) {
 
           {river.slug === "madison-river" && (
             <ScrollAnimation>
-              <div>
-                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
-                  Planning a Madison trip in 2026
-                </h2>
-                <div className="prose">
-                  <p>
-                    The Madison is two fisheries that share a name. Above Ennis Lake you are covering broad riffle-and-run meadow water. Below the lake the wade game opens up and caddis and PMDs do more work than the salmonfly posters suggest. Build the trip around the{" "}
-                    <Link href={`/flies/for/${river.slug}`} className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      hatch-chart fly list
-                    </Link>
-                    , the USGS gauge on this page, and Montana&apos;s season dates. We do not publish other anglers&apos; catches or GPS.
-                  </p>
-                  <p>
-                    If this is your first week on the Madison, fish the wade water first. A first float is worth a guide. Walk-up access is real on both the upper and the below-lake stretches if you already nymph. Pair this guide with the{" "}
-                    <Link href="/destinations/montana" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      Montana destination page
-                    </Link>{" "}
-                    for lodges, shops, and neighboring rivers. For a 2026 fly box, read{" "}
-                    <Link href="/articles/best-flies-for-the-madison-river-2026" className="text-[var(--text-1)] underline decoration-[var(--border)] underline-offset-2 hover:text-[var(--accent)] hover:decoration-[var(--accent)]">
-                      Best Flies for the Madison River in 2026
-                    </Link>
-                    .
-                  </p>
-                </div>
+              <div className="border-t border-[var(--border)] pt-8">
+                <p className="ea-overline">Field note</p>
+                <Link
+                  href="/articles/best-flies-for-the-madison-river-2026"
+                  className="mt-2 inline-block font-display text-xl font-semibold text-[var(--ink)] hover:text-[var(--accent)]"
+                >
+                  Best Flies for the Madison River in 2026
+                </Link>
               </div>
             </ScrollAnimation>
           )}
@@ -678,32 +637,35 @@ export default async function RiverPage({ params }: Props) {
 
           {nearbyRivers.length > 0 && (
             <ScrollAnimation>
-              <div>
-                <h2 className="mb-5 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+              <div className="border-t border-[var(--border)] pt-8">
+                <h2 className="mb-3 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
                   Nearby rivers
                 </h2>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <ul>
                   {nearbyRivers.map((near) => (
-                    <EntityCard
-                      key={near.id}
-                      href={`/rivers/${near.slug}`}
-                      imageUrl={hostedStillUrl(near.heroImageUrl ?? near.thumbnailUrl)}
-                      imageAlt={near.name}
-                      title={near.name}
-                      subtitle={waterTypeLabel(near.flowType)}
-                      meta={(near.primarySpecies || []).slice(0, 3).join(" · ") || undefined}
-                      imageFallback="quiet"
-                    />
+                    <li key={near.id} className="border-b border-[var(--border)] py-2">
+                      <Link href={`/rivers/${near.slug}`} className="font-display text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--accent)]">
+                        {near.name}
+                      </Link>
+                      <span className="ml-3 font-ui text-[12px] uppercase tracking-[0.08em] text-[var(--text-3)]">
+                        {waterTypeLabel(near.flowType) ?? ""}
+                      </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             </ScrollAnimation>
           )}
 
-          <ContributeStrip
-            href={`/contribute/river?for=${river.slug}`}
-            buttonLabel="Contribute to this river"
-          />
+          <div className="border-t border-[var(--border)] py-10">
+            <p className="ea-overline">The journal</p>
+            <h2 className="mt-2 font-display text-2xl font-semibold text-[var(--ink)]">
+              Keep a journal on this river
+            </h2>
+            <Link href={`/journal/new?river=${river.slug}`} className="ea-btn ea-btn-primary mt-5">
+              Keep a journal
+            </Link>
+          </div>
         </div>
       </section>
     </>
