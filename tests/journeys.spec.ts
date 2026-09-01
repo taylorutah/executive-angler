@@ -7,7 +7,7 @@ test.describe("journey smoke", () => {
     await expect(page.getByRole("heading", { name: /madison river/i }).first()).toBeVisible();
     await expect(page.locator("body")).toContainText(/\d[\d,]*\s*cfs/i, { timeout: 15_000 });
     await expect(page.getByText(/on the water/i).first()).toBeVisible();
-    await expect(page.locator("body")).toContainText(/hatch/i);
+    await expect(page.getByRole("heading", { name: /fish this now/i })).toBeVisible();
     await expect(page.locator("body")).toContainText(/access/i);
   });
 
