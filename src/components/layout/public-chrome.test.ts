@@ -26,8 +26,8 @@ describe("gazette chrome locks", () => {
     assert.match(header, /ea-lockup-heron/);
     assert.match(header, /md:h-\[4\.75rem\]/);
     const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
-    assert.match(css, /\.ea-lockup-heron \{[\s\S]*height: 56px;/);
-    assert.match(css, /\.ea-lockup-heron \{[\s\S]*height: 76px;/);
+    assert.match(css, /\.ea-lockup-heron \{[\s\S]*height: 56px/);
+    assert.match(css, /\.ea-lockup-heron \{[\s\S]*height: 76px/);
     assert.equal(header.includes("h-[30px] w-[22px]"), false);
     assert.equal(header.includes("isLoading"), false);
     assert.equal(header.includes("h-8 w-28"), false);
@@ -52,19 +52,21 @@ describe("gazette chrome locks", () => {
     const rail = readFileSync(join(root, "src/components/home/ConditionsRail.tsx"), "utf8");
     assert.match(rail, /TICKER_LIMIT = 3/);
     assert.match(rail, /On the water/);
-    assert.match(rail, /flex-wrap/);
+    assert.match(rail, /ea-ticker-row/);
+    assert.equal(rail.includes("flex-wrap"), false, "390 ticker must stay one row");
     assert.equal(rail.includes("LiveDot"), false);
   });
 
-  it("keeps the public nouns as the still-3 masthead", () => {
+  it("keeps the public nouns as the T7O4R five", () => {
     const links = readFileSync(join(root, "src/components/layout/nav/links.ts"), "utf8");
-    assert.match(links, /label: "Rivers"/);
-    assert.match(links, /label: "Hatches"/);
-    assert.match(links, /label: "Gauges"/);
-    assert.match(links, /label: "Maps"/);
-    assert.match(links, /label: "Gear"/);
-    assert.match(links, /label: "Journal"/);
-    assert.match(links, /label: "About"/);
+    const block = links.slice(
+      links.indexOf("export const PUBLIC_NOUNS"),
+      links.indexOf("export const LEARN_LINK"),
+    );
+    const nouns = [...block.matchAll(/label: "([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(nouns, ["Rivers", "Flies", "Places", "Field Notes", "Journal"]);
+    assert.equal(links.includes('label: "Hatches"'), false);
+    assert.equal(links.includes('label: "Gauges"'), false);
   });
 
   it("treats sb-*-auth-token as a chrome hint only", () => {
@@ -83,6 +85,10 @@ describe("gazette chrome locks", () => {
     assert.match(layout, /<Footer \/>/);
     assert.match(layout, /SiteTicker/);
     assert.match(layout, /gazette-sheet/);
+    assert.equal(layout.includes("flex-1 pb-14"), false, "main must not jail the sheet");
+    const sheet = readFileSync(join(root, "src/app/globals.css"), "utf8");
+    assert.match(sheet, /\.page-ground \{\n  background-color: var\(--paper\);\n  min-height: 100dvh;/);
+    assert.equal(sheet.includes("\n  height: 100dvh;"), false);
   });
 
   it("keeps house and login headings ink Fraunces, not copper fills", () => {
@@ -108,6 +114,13 @@ describe("gazette chrome locks", () => {
     );
     assert.equal(login.includes("HeronMark"), false, "login must not repeat the masthead");
     assert.equal(signup.includes("HeronMark"), false, "signup must not repeat the masthead");
+    assert.match(login, /variant="pill"/, "email action is willow, not a filled slab");
+    assert.match(signup, /variant="pill"/);
+    const oauth = readFileSync(join(root, "src/components/ui/OAuthButtons.tsx"), "utf8");
+    assert.equal(oauth.includes("bg-black"), false, "Apple is not an app slab");
+    assert.match(oauth, /accent-soft/);
+    assert.equal(login.includes("min-h-screen"), false);
+    assert.equal(signup.includes("min-h-screen"), false);
     assert.equal(login.includes("min-h-[70vh]"), false);
     assert.equal(signup.includes("min-h-[70vh]"), false);
     assert.equal(turnstile.includes("Having trouble"), false);

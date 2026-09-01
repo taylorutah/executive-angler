@@ -171,7 +171,7 @@ function SignupForm() {
   if (success) {
     const firstName = fullName.trim().split(" ")[0];
     return (
-      <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center px-4">
+      <div className="bg-[var(--paper)] px-4 py-10">
         <div className="w-full max-w-md text-center">
           <div className="ea-card">
             <div className="mx-auto w-14 h-14 rounded-[var(--radius-card)] bg-[var(--accent-soft)] flex items-center justify-center mb-4">
@@ -184,7 +184,7 @@ function SignupForm() {
               Your account is ready. Start logging sessions, exploring rivers, and building your fly box.
             </p>
             <div className="mt-6">
-              <Button href="/journal" variant="solid" size="lg">
+              <Button href="/journal" variant="pill" size="lg">
                 Go to Your Journal
               </Button>
             </div>
@@ -349,7 +349,7 @@ function SignupForm() {
             <Button
               type="submit"
               disabled={!canSubmit}
-              variant="solid"
+              variant="pill"
               size="lg"
               fullWidth
               loading={loading}
@@ -378,7 +378,7 @@ export default function SignupPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center">
+        <div className="bg-[var(--paper)] px-4 py-10">
           <div className="animate-pulse text-[var(--accent)]">Loading…</div>
         </div>
       }

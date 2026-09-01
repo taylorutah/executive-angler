@@ -50,8 +50,7 @@ function RiverItems({
 }
 
 /**
- * T7O4R ticker: centered type row, not a dark chip or live-dot rail.
- * At 390 the three names wrap onto a second type line — never clip mid-word.
+ * T7O4R ticker: one centered type row, not a dark chip or a wrapped second line.
  */
 export default function ConditionsRail({ rivers, snapshots }: Props) {
   const ticker = rivers.slice(0, TICKER_LIMIT);
@@ -62,15 +61,11 @@ export default function ConditionsRail({ rivers, snapshots }: Props) {
       data-home-rail
       className="sticky top-[var(--header-h)] z-40 min-h-[var(--ticker-h)] border-b border-[var(--border)] bg-[var(--paper)]"
     >
-      <p className="mx-auto hidden h-[var(--ticker-h)] max-w-[72rem] items-center px-8 font-ui text-[12px] uppercase tracking-[0.14em] text-[var(--ink)] md:flex">
+      <p className="ea-ticker-row mx-auto max-w-[72rem] justify-center px-4 font-ui text-[11px] uppercase tracking-[0.1em] text-[var(--ink)] md:px-8 md:text-[12px] md:tracking-[0.14em]">
         <span className="shrink-0">On the water</span>
-        <span className="ml-2 flex flex-1 items-center justify-center gap-x-2">
+        <span className="ml-2 flex flex-nowrap items-center justify-center gap-x-2">
           <RiverItems rivers={ticker} snapshots={snapshots} />
         </span>
-      </p>
-      <p className="flex flex-wrap content-center items-center gap-x-2 gap-y-0.5 px-4 py-1.5 font-ui text-[11px] uppercase tracking-[0.1em] text-[var(--ink)] md:hidden">
-        <span className="shrink-0">On the water</span>
-        <RiverItems rivers={ticker} snapshots={snapshots} />
       </p>
     </div>
   );

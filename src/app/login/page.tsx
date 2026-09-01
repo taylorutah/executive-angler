@@ -116,7 +116,7 @@ function LoginForm() {
             <Button
               type="submit"
               disabled={loading || !captchaResolved}
-              variant="solid"
+              variant="pill"
               size="lg"
               fullWidth
               loading={loading}
@@ -143,7 +143,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[var(--paper)] flex items-center justify-center"><div className="animate-pulse text-[var(--accent)]">Loading…</div></div>}>
+    <Suspense fallback={<div className="bg-[var(--paper)] px-4 py-10"><div className="animate-pulse text-[var(--accent)]">Loading…</div></div>}>
       <LoginForm />
     </Suspense>
   );

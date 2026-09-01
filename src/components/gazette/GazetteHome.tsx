@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import HeronMark from "@/components/brand/HeronMark";
 import GazettePlate from "./GazettePlate";
@@ -6,6 +7,7 @@ import {
   type FlagshipRiver,
   type GaugeSnapshot,
 } from "@/components/home/conditions";
+import { HERO_IMAGE, formatHeroCaption } from "@/components/home/hero-copy";
 import { shortInsect } from "@/lib/browse/river-items";
 import type { Article, CanonicalFly } from "@/types/entities";
 
@@ -52,10 +54,12 @@ function hatchLine(river: FlagshipRiver, month: string): string {
 }
 
 /**
- * Still 4 — ON THE WATER NOW / RIVERS REPORT, THE PLATE, FIELD NOTE + JOURNAL.
- * No brochure hero. No ecomm fly cutouts.
+ * T7O4R + AWna3 — inset Three Dollar Bridge (caption under the photo),
+ * then ON THE WATER NOW / RIVERS REPORT, THE PLATE, FIELD NOTE + JOURNAL.
+ * No 50vh brochure bleed. No ecomm fly cutouts.
  */
 export default function GazetteHome({
+  madisonCfs,
   rivers,
   snapshots,
   month,
@@ -65,6 +69,24 @@ export default function GazetteHome({
 }: Props) {
   return (
     <div className="bg-[var(--paper)]">
+      <figure className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8">
+        <div className="relative aspect-[16/7] w-full overflow-hidden bg-[var(--paper-deep)]">
+          <Image
+            src={HERO_IMAGE.src}
+            alt={HERO_IMAGE.alt}
+            fill
+            priority
+            fetchPriority="high"
+            unoptimized
+            sizes="(max-width: 1440px) 92vw, 1152px"
+            className="object-cover object-[center_68%] [filter:var(--photo-grade)]"
+          />
+        </div>
+        <figcaption className="mt-3 font-ui text-[11px] uppercase tracking-[0.14em] text-[var(--text-3)]">
+          {formatHeroCaption(madisonCfs)}
+        </figcaption>
+      </figure>
+
       <section className="mx-auto grid max-w-[72rem] gap-10 px-4 pb-4 pt-8 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:pt-12">
         <div>
           <p className="font-ui text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]">

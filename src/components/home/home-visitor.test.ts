@@ -29,7 +29,10 @@ describe("home visitor QA locks", () => {
     assert.match(gazette, /Keep the record the water can/);
     assert.equal(gazette.includes("h-[50vh]"), false);
     assert.equal(gazette.includes("and Hatches"), false);
-    assert.equal(gazette.includes("HERO_IMAGE"), false);
+    assert.match(gazette, /HERO_IMAGE/, "T7O4R inset Three Dollar Bridge");
+    assert.match(gazette, /formatHeroCaption/);
+    assert.match(gazette, /<figcaption/);
+    assert.equal(gazette.includes("absolute bottom-0"), false, "caption sits under the photo");
   });
 
   it("keeps the journal invitation on paper with a double-rule box", () => {

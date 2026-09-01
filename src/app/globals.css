@@ -1384,8 +1384,8 @@ select:focus {
 
 .page-ground {
   background-color: var(--paper);
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
+  overflow: visible;
   padding: 8px;
   box-sizing: border-box;
 }
@@ -1394,15 +1394,18 @@ select:focus {
   .page-ground {
     padding: 12px;
   }
+  .gazette-sheet {
+    min-height: calc(100dvh - 24px);
+  }
 }
 
-/* Double-rule gazette sheet — stills 3 and 4. Content scrolls inside. */
+/* Double-rule gazette sheet — grows with the page. The window scrolls. */
 .gazette-sheet {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow: auto;
+  min-height: calc(100dvh - 16px);
+  overflow: visible;
   background: var(--paper);
   border: 1px solid var(--ink);
   box-shadow:
@@ -1747,10 +1750,24 @@ input.ea-focus-ring:focus-visible,
    are excepted — their rows and labels carry the target. Non-layered so
    the floor beats @layer components and utilities without !important.
    ================================================================= */
+.ea-ticker-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: var(--ticker-h);
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.ea-ticker-row::-webkit-scrollbar {
+  display: none;
+}
+
 @media (max-width: 767px) {
   :root {
     --header-h: 68px;
-    --ticker-h: 52px;
+    --ticker-h: 36px;
   }
 
   a,

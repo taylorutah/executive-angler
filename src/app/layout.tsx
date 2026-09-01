@@ -155,7 +155,7 @@ export default function RootLayout({
             <main
               id={MAIN_CONTENT_ID}
               tabIndex={-1}
-              className="flex-1 pb-14 lg:pb-0"
+              className="pb-14 lg:pb-0"
             >
               {children}
             </main>

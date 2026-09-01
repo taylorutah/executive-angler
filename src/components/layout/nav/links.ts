@@ -24,7 +24,7 @@ export const FOCUS_VISIBLE =
 export const MOTION_SAFE =
   "motion-reduce:transition-none motion-reduce:transform-none";
 
-/** Logged-out primary row. Still 3 masthead nouns, mapped to working routes. */
+/** T7O4R logged-out row: five nouns + one willow Create account. */
 export const PUBLIC_NOUNS: NavItem[] = [
   {
     label: "Rivers",
@@ -33,40 +33,28 @@ export const PUBLIC_NOUNS: NavItem[] = [
     descriptor: "Access, hatches, and live flow",
   },
   {
-    label: "Hatches",
+    label: "Flies",
     href: "/flies",
     section: "/flies",
     descriptor: "Patterns, recipes, and materials",
   },
   {
-    label: "Gauges",
-    href: "/rivers?f=gauge",
-    section: "/rivers?f=gauge",
-    descriptor: "Live flow when a station exists",
-  },
-  {
-    label: "Maps",
+    label: "Places",
     href: "/destinations",
     section: "/destinations",
     descriptor: "Where to go, month by month",
   },
   {
-    label: "Gear",
-    href: "/gear",
-    section: "/gear",
-    descriptor: "Rods, reels, and lines",
+    label: "Field Notes",
+    href: "/articles",
+    section: "/articles",
+    descriptor: "Reading water, gear, and craft",
   },
   {
     label: "Journal",
     href: "/journal",
     section: "/journal",
     descriptor: "Sessions, flies, and the days you fished",
-  },
-  {
-    label: "About",
-    href: "/about",
-    section: "/about",
-    descriptor: "The gazette",
   },
 ];
 
