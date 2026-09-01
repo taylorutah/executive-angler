@@ -48,6 +48,7 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
         type="button"
         onClick={() => signInWith("google")}
         disabled={!!loading}
+        aria-label="Continue with Google"
         className={`${FOCUS_VISIBLE} ${action}`}
       >
         {loading === "google" ? "Google…" : "Google"}
@@ -57,6 +58,7 @@ export default function OAuthButtons({ redirectTo = "/" }: Props) {
         type="button"
         onClick={() => signInWith("apple")}
         disabled={!!loading}
+        aria-label="Continue with Apple"
         className={`${FOCUS_VISIBLE} ${action}`}
       >
         {loading === "apple" ? "Apple…" : "Apple"}

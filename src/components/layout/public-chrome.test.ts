@@ -128,6 +128,8 @@ describe("gazette chrome locks", () => {
     assert.equal(oauth.includes("w-full"), false, "OAuth is willow type, not a slab");
     assert.equal(oauth.includes("bg-[var(--accent-soft)]"), false, "OAuth is type, not a filled chip");
     assert.match(oauth, /text-\[var\(--accent\)\]/);
+    assert.match(oauth, /Continue with Google/);
+    assert.match(oauth, /Continue with Apple/);
     assert.equal(login.includes("min-h-screen"), false);
     assert.equal(signup.includes("min-h-screen"), false);
     assert.equal(login.includes("min-h-[70vh]"), false);
