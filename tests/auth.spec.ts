@@ -38,7 +38,12 @@ test.describe("auth", () => {
     await expect(page.getByLabel(/email/i).first()).toBeVisible();
     await expect(page.getByLabel(/password/i).first()).toBeVisible();
     await page.goto("/verify-email");
-    await expect(page.getByText(/verif/i).first()).toBeVisible();
+    // Unsigned visitors are sent to login. Do not treat leftover Turnstile
+    // copy as proof the verify page rendered.
+    await expect(page).toHaveURL(/\/(login|verify-email)/);
+    await expect(
+      page.getByRole("heading", { name: /sign in|confirm your email/i }),
+    ).toBeVisible();
   });
 
   test("password reset form is labeled and is not submitted", async ({ page }) => {

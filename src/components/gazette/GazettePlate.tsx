@@ -10,7 +10,6 @@ interface Props {
 export default function GazettePlate({ name, line, href }: Props) {
   const inner = (
     <>
-      <div className="ea-plate-well" aria-hidden />
       <p className="ea-plate-name">{name}</p>
       {line ? <p className="ea-plate-line">{line}</p> : null}
     </>

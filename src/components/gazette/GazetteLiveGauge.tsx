@@ -156,16 +156,16 @@ export default function GazetteLiveGauge({
             }`}
           >
             {cfs != null ? `${cfs.toLocaleString("en-US")} CFS` : "—"}
+            {trend ? (
+              <span
+                className={`mt-2 block font-ui text-[12px] uppercase tracking-[0.08em] ${
+                  dropping ? "text-[var(--danger)]" : "text-[var(--copper)]"
+                }`}
+              >
+                {trend}
+              </span>
+            ) : null}
           </dd>
-          {trend ? (
-            <p
-              className={`mt-2 font-ui text-[12px] uppercase tracking-[0.08em] ${
-                dropping ? "text-[var(--danger)]" : "text-[var(--copper)]"
-              }`}
-            >
-              {trend}
-            </p>
-          ) : null}
         </div>
         <div className="sm:border-r sm:border-[var(--border)] sm:px-6">
           <dt className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
@@ -181,10 +181,10 @@ export default function GazetteLiveGauge({
           </dt>
           <dd className="mt-2 font-display text-[clamp(36px,5vw,52px)] font-semibold leading-none text-[var(--ink)]">
             {updated ?? "—"}
+            <span className="mt-2 block font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">
+              USGS
+            </span>
           </dd>
-          <p className="mt-2 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">
-            USGS
-          </p>
         </div>
       </dl>
       <div className="mt-8">
