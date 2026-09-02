@@ -22,7 +22,9 @@ describe("home visitor QA locks", () => {
     const plate = readFileSync(join(root, "src/components/gazette/GazettePlate.tsx"), "utf8");
     assert.match(plate, /ea-plate-ink/, "still 1 keeps the notched cream plate");
     assert.match(plate, /plateImageUrl/, "stills only through the hosted-plate helper");
+    assert.match(plate, /ea-plate-photo/, "hosted stills sit in flow, not a fill well");
     assert.match(plate, /ea-plate--type/, "missing stills drop the reserved square");
+    assert.equal(plate.includes("fill"), false, "fill escaped the plate and hid the fly");
     assert.equal(plate.includes("ea-plate-well"), false, "empty photo wells must be omitted");
     assert.equal(plate.includes("ea-plate-etch"), false, "desk icons are not plate artwork");
     assert.equal(plate.includes("PlateFallback"), false);

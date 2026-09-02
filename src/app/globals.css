@@ -1487,8 +1487,8 @@ select:focus {
   text-align: center;
   aspect-ratio: 1;
   min-height: 8.5rem;
-  padding: 12px 8px 12px;
-  background: var(--paper-deep);
+  padding: 12px 8px 10px;
+  background: var(--plate);
   clip-path: polygon(
     10px 0,
     calc(100% - 10px) 0,
@@ -1506,14 +1506,17 @@ select:focus {
   min-height: 0;
   justify-content: center;
   padding: 14px 10px;
+  background: var(--paper-deep);
 }
 
-.ea-plate-still {
-  position: relative;
+.ea-plate-photo {
   display: block;
-  width: 78%;
-  aspect-ratio: 1;
-  margin: 6px auto 8px;
+  width: 82%;
+  height: auto;
+  max-height: 7.75rem;
+  margin: 4px auto 6px;
+  object-fit: contain;
+  background: transparent;
 }
 
 .ea-plate-name {
@@ -1530,13 +1533,26 @@ select:focus {
 
 .ea-now-plates {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
+  align-items: start;
+}
+
+.ea-now-plates .ea-plate {
+  aspect-ratio: auto;
+  min-height: 0;
+}
+
+.ea-now-plates .ea-plate-photo {
+  max-height: 6.5rem;
 }
 
 @media (min-width: 640px) {
   .ea-now-plates {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .ea-now-plates .ea-plate {
+    aspect-ratio: 1;
   }
 }
 

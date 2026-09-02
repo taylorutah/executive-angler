@@ -24,16 +24,15 @@ export default function GazettePlate({ name, line, href, imageUrl }: Props) {
   const inner = (
     <>
       {photo ? (
-        <span className="ea-plate-still ea-fly-well">
-          <Image
-            src={still}
-            alt={name}
-            fill
-            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 30vw, 12vw"
-            className="object-contain p-1.5"
-            onError={() => setShowStill(false)}
-          />
-        </span>
+        <Image
+          src={still}
+          alt={name}
+          width={480}
+          height={480}
+          sizes="(max-width: 640px) 42vw, (max-width: 1024px) 22vw, 12vw"
+          className="ea-plate-photo"
+          onError={() => setShowStill(false)}
+        />
       ) : null}
       <p className="ea-plate-name">{name}</p>
       {line ? <p className="ea-plate-line">{line}</p> : null}
