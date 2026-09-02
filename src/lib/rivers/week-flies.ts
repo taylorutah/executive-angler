@@ -1,5 +1,6 @@
 import { shortInsect } from "@/lib/browse/river-items";
 import { scorePatternOnHatch } from "@/lib/flies/fishing-now";
+import { plateImageUrl } from "@/lib/media/image-url";
 import type { CanonicalFly, HatchEntry } from "@/types/entities";
 
 export type WeekFlyChip = {
@@ -48,14 +49,14 @@ export type HatchPlate = {
  * tied-fly photograph. Never invents a plate when the library has no still.
  */
 export function matchHatchPlate(hatch: HatchEntry, flies: CanonicalFly[]): HatchPlate {
-  const withPhoto = flies.filter((f) => Boolean(f.heroImageUrl));
+  const withPhoto = flies.filter((f) => Boolean(plateImageUrl(f.heroImageUrl)));
   for (const part of patternParts(hatch.pattern)) {
     const hit = withPhoto.find((f) => scorePatternOnHatch(f.name, part) >= 6);
     if (hit) {
       return {
         name: hit.name,
         href: `/flies/${hit.slug}`,
-        imageUrl: hit.heroImageUrl,
+        imageUrl: plateImageUrl(hit.heroImageUrl),
         insect: hatch.insect,
         size: hatch.size || undefined,
       };
@@ -66,7 +67,7 @@ export function matchHatchPlate(hatch: HatchEntry, flies: CanonicalFly[]): Hatch
   return {
     name: fly?.name || fallback,
     href: fly ? `/flies/${fly.slug}` : undefined,
-    imageUrl: fly?.heroImageUrl || undefined,
+    imageUrl: plateImageUrl(fly?.heroImageUrl),
     insect: hatch.insect,
     size: hatch.size || undefined,
   };

@@ -42,6 +42,7 @@ describe("hydrograph well fill", () => {
     assert.match(gazette, /linearGradient/);
     assert.match(gazette, /preserveAspectRatio="none"/);
     assert.match(gazette, /Last 30 days/);
+    assert.match(gazette, /typical range/);
     assert.equal(gazette.includes("IQR"), false);
   });
 

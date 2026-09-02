@@ -19,9 +19,9 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("fly-mark"), false);
     assert.equal(header.includes("HeaderSearch"), false);
     assert.equal(header.includes("ExploreMenu"), false);
-    assert.equal(header.includes("Create account"), false, "stills have no willow Create account");
+    assert.match(header, /Create account/, "willow Create account stays on the 1440 bar");
     assert.match(header, /aria-label="Menu"/);
-    assert.match(header, /name="menu"/);
+    assert.match(header, />\s*Menu\s*</);
     assert.match(header, /ea-lockup-heron/);
     assert.match(header, /station report/);
     assert.match(header, /Est\. 1987/);
@@ -62,16 +62,16 @@ describe("gazette chrome locks", () => {
     assert.match(css, /\.ea-ticker-row a \{\n  display: inline;\n  min-height: 0;/);
   });
 
-  it("keeps the public nouns as Rivers · Hatches · Gauges · Maps · Gear · Journal · About", () => {
+  it("keeps the public nouns as Rivers · Flies · Places · Field Notes · Journal", () => {
     const links = readFileSync(join(root, "src/components/layout/nav/links.ts"), "utf8");
     const block = links.slice(
       links.indexOf("export const PUBLIC_NOUNS"),
       links.indexOf("export const LEARN_LINK"),
     );
     const nouns = [...block.matchAll(/label: "([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(nouns, ["Rivers", "Hatches", "Gauges", "Maps", "Gear", "Journal", "About"]);
-    assert.equal(block.includes('label: "Places"'), false);
-    assert.equal(block.includes('label: "Flies"'), false);
+    assert.deepEqual(nouns, ["Rivers", "Flies", "Places", "Field Notes", "Journal"]);
+    assert.equal(block.includes('label: "Hatches"'), false);
+    assert.equal(block.includes('label: "Gauges"'), false);
   });
 
   it("treats sb-*-auth-token as a chrome hint only", () => {

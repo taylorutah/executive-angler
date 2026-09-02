@@ -87,6 +87,15 @@ describe("matchHatchPlate", () => {
     assert.equal(plate.name, "Sofa Pillow");
     assert.equal(plate.imageUrl, undefined);
   });
+
+  it("rejects fly-icon paths so plates never show a letter tile or desk icon", () => {
+    const plate = matchHatchPlate(
+      { insect: "Mayfly", pattern: "Sofa Pillow" },
+      [{ ...fly("Sofa Pillow", "sofa-pillow"), heroImageUrl: "/images/fly-icons/nymph.svg" }],
+    );
+    assert.equal(plate.name, "Sofa Pillow");
+    assert.equal(plate.imageUrl, undefined);
+  });
 });
 
 describe("hatchRailFromChart", () => {

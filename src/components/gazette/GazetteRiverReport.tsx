@@ -15,7 +15,6 @@ interface Plate {
   imageUrl?: string;
   insect: string;
   size?: string;
-  etch?: CanonicalFly["category"];
 }
 
 interface Props {
@@ -111,13 +110,13 @@ export default function GazetteRiverReport({
               <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
                 Fish this now
               </h2>
-              <ul className="mt-4 grid grid-cols-3 gap-3">
+              <ul className="ea-now-plates mt-4">
                 {plates.slice(0, 3).map((plate) => (
                   <li key={plate.key}>
                     <GazettePlate
                       name={[plate.name, plate.size].filter(Boolean).join(" ")}
                       href={plate.href}
-                      etch={plate.etch}
+                      imageUrl={plate.imageUrl}
                     />
                   </li>
                 ))}
@@ -222,7 +221,6 @@ export function platesFromHatches(
 ): Plate[] {
   return hatches.slice(0, 3).map((hatch, i) => {
     const plate = matchHatchPlate(hatch, flies);
-    const matched = flies.find((fly) => fly.slug && plate.href?.endsWith(fly.slug));
     return {
       key: `${hatch.insect}-${hatch.pattern}-${i}`,
       name: plate.name,
@@ -230,7 +228,6 @@ export function platesFromHatches(
       imageUrl: plate.imageUrl,
       insect: hatch.insect,
       size: hatch.size,
-      etch: matched?.category,
     };
   });
 }

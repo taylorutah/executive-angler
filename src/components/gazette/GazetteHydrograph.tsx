@@ -83,7 +83,7 @@ export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: 
   return (
     <div>
       <p className="mb-2 font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
-        Last 30 days · Discharge (CFS)
+        Last 30 days · Discharge (CFS) · typical range
       </p>
       <div className={`${HYDRO_FRAME} !h-[12rem] lg:!h-[14rem]`}>
         <svg

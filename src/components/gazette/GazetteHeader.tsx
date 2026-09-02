@@ -89,9 +89,9 @@ export default function GazetteHeader() {
                 aria-expanded={mobileOpen}
                 aria-haspopup="dialog"
                 aria-label="Menu"
-                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-11 w-11 items-center justify-center text-[var(--copper)] md:hidden`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-11 items-center px-2 font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--copper)] md:hidden`}
               >
-                <Icon name="menu" className="h-5 w-5" />
+                Menu
               </button>
             </div>
           </div>
@@ -189,7 +189,14 @@ export default function GazetteHeader() {
                     )}
                   </div>
                 </div>
-              ) : null}
+              ) : (
+                <Link
+                  href="/signup"
+                  className="hidden bg-[var(--accent-soft)] px-3.5 py-2 font-ui text-[12px] font-medium uppercase tracking-[0.12em] text-[var(--accent)] md:inline-flex"
+                >
+                  Create account
+                </Link>
+              )}
 
               <button
                 ref={menuButtonRef}
@@ -197,9 +204,9 @@ export default function GazetteHeader() {
                 aria-expanded={mobileOpen}
                 aria-haspopup="dialog"
                 aria-label="Menu"
-                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-11 w-11 items-center justify-center text-[var(--copper)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-11 items-center px-2 font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--copper)] md:hidden`}
               >
-                <Icon name="menu" className="h-5 w-5" />
+                Menu
               </button>
             </div>
           </div>

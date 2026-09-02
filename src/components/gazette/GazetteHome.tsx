@@ -1,11 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
 import HeronMark from "@/components/brand/HeronMark";
-import GazettePlate, { type PlateEtch } from "./GazettePlate";
+import GazettePlate from "./GazettePlate";
 import {
   hatchesForMonth,
   type FlagshipRiver,
   type GaugeSnapshot,
 } from "@/components/home/conditions";
+import { HERO_IMAGE, formatHeroCaption } from "@/components/home/hero-copy";
 import { shortInsect } from "@/lib/browse/river-items";
 import type { Article, CanonicalFly } from "@/types/entities";
 
@@ -20,11 +22,13 @@ interface PlateFly {
   id: string;
   slug: string;
   name: string;
+  heroImageUrl?: string;
   category: CanonicalFly["category"];
   sizes: string[];
 }
 
 interface Props {
+  madisonCfs: number | null;
   counts: GazetteHomeCounts;
   rivers: FlagshipRiver[];
   snapshots: Map<string, GaugeSnapshot>;
@@ -76,7 +80,7 @@ function hatchLine(river: FlagshipRiver, month: string): string {
   const hatches = hatchesForMonth(river.hatchChart, month)
     .map(shortInsect)
     .filter(Boolean)
-    .slice(0, 3);
+    .slice(0, 2);
   return hatches.length > 0 ? hatches.join(" · ") : "—";
 }
 
@@ -93,10 +97,12 @@ function fieldDek(note: Article): string {
 }
 
 /**
- * Still 1 — cream gazette sheet. No photograph hero.
- * ON THE WATER NOW / RIVERS REPORT, 02 THE PLATE, FIELD NOTE + JOURNAL.
+ * T7O4R above the fold: inset Three Dollar Bridge, caption under the photo
+ * (never a bar on it, never a 50vh bleed). Then ON THE WATER NOW /
+ * RIVERS REPORT, 02 THE PLATE, FIELD NOTE + JOURNAL.
  */
 export default function GazetteHome({
+  madisonCfs,
   rivers,
   snapshots,
   month,
@@ -106,7 +112,25 @@ export default function GazetteHome({
 }: Props) {
   return (
     <div className="bg-[var(--paper)]">
-      <section className="mx-auto grid max-w-[72rem] gap-8 border-b border-[var(--border)] px-4 pb-6 pt-6 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:pt-8">
+      <figure className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8">
+        <div className="relative aspect-[16/7] w-full overflow-hidden bg-[var(--paper-deep)]">
+          <Image
+            src={HERO_IMAGE.src}
+            alt={HERO_IMAGE.alt}
+            fill
+            priority
+            fetchPriority="high"
+            unoptimized
+            sizes="(max-width: 1440px) 92vw, 1152px"
+            className="object-cover object-[center_68%] [filter:var(--photo-grade)]"
+          />
+        </div>
+        <figcaption className="mt-3 font-ui text-[11px] uppercase tracking-[0.14em] text-[var(--text-3)]">
+          {formatHeroCaption(madisonCfs)}
+        </figcaption>
+      </figure>
+
+      <section className="mx-auto grid max-w-[72rem] gap-8 border-b border-[var(--border)] px-4 pb-6 pt-8 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:pt-10">
         <div>
           <p className="font-ui text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]">
             On the water now
@@ -125,7 +149,6 @@ export default function GazetteHome({
               const snapshot = snapshots.get(river.id);
               const live = snapshot?.cfs != null && !snapshot.stale;
               const stShort = stateAbbrev(river.state);
-              const name = stShort ? `${river.label}, ${stShort}` : river.label;
               return (
                 <tr key={river.id} className="relative border-b border-[var(--border)]">
                   <td className="py-2 pr-4">
@@ -135,8 +158,11 @@ export default function GazetteHome({
                       aria-label={river.name}
                     />
                     <span className="relative font-body text-[16px] italic text-[var(--ink)]">
-                      {name}
+                      {river.label}
                     </span>
+                  </td>
+                  <td className="relative py-2 pr-4 font-ui text-[12px] uppercase tracking-[0.1em] text-[var(--text-3)]">
+                    {stShort || "·"}
                   </td>
                   <td
                     className={`relative num py-2 pr-4 text-[14px] ${
@@ -144,7 +170,6 @@ export default function GazetteHome({
                     }`}
                   >
                     {live ? `${snapshot!.cfs!.toLocaleString("en-US")} cfs` : "—"}
-                    {live ? <span className="ea-live-dot" aria-hidden /> : null}
                   </td>
                   <td className="relative py-2 font-ui text-[13px] text-[var(--text-2)]">
                     {hatchLine(river, month)}
@@ -169,7 +194,7 @@ export default function GazetteHome({
                 name={fly.name}
                 line={sizeLabel(fly.sizes) ?? undefined}
                 href={`/flies/${fly.slug}`}
-                etch={fly.category as PlateEtch}
+                imageUrl={fly.heroImageUrl}
               />
             </li>
           ))}

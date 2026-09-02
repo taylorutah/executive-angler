@@ -13,6 +13,7 @@ import { selectFlagshipRivers } from "@/components/home/conditions";
 import { loadFlagshipGaugePayload } from "@/components/home/flagship-cache";
 import { HERO_IMAGE } from "@/components/home/hero-copy";
 import GazetteLiveHome from "@/components/gazette/GazetteLiveHome";
+import { plateImageUrl } from "@/lib/media/image-url";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [rivers, allFlies] = await Promise.all([
@@ -73,6 +74,19 @@ function pickRead(articles: Article[]): Article | null {
   return [...featured, ...sorted.filter((a) => !a.featured)][0] ?? null;
 }
 
+function withPlateStill(fly: CanonicalFly, all: CanonicalFly[]): CanonicalFly {
+  if (plateImageUrl(fly.heroImageUrl)) return fly;
+  const stem = fly.slug.replace(/-nymph$/, "");
+  const sibling = all.find(
+    (other) =>
+      other.id !== fly.id &&
+      Boolean(plateImageUrl(other.heroImageUrl)) &&
+      (other.slug === `${stem}-nymph` || other.slug.startsWith(`${stem}-`)),
+  );
+  if (!sibling) return fly;
+  return { ...fly, heroImageUrl: plateImageUrl(sibling.heroImageUrl) };
+}
+
 function pickPlate(featured: CanonicalFly[], all: CanonicalFly[]): CanonicalFly[] {
   const bySlug = new Map(all.map((fly) => [fly.slug, fly]));
   const seen = new Set<string>();
@@ -81,11 +95,12 @@ function pickPlate(featured: CanonicalFly[], all: CanonicalFly[]): CanonicalFly[
     const fly = bySlug.get(slug);
     if (!fly || seen.has(fly.id)) continue;
     seen.add(fly.id);
-    plate.push(fly);
+    plate.push(withPlateStill(fly, all));
   }
   for (const fly of [...featured, ...all]) {
     if (plate.length === 6) break;
     if (seen.has(fly.id)) continue;
+    if (!plateImageUrl(fly.heroImageUrl)) continue;
     seen.add(fly.id);
     plate.push(fly);
   }

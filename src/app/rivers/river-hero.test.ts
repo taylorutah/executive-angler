@@ -26,9 +26,10 @@ describe("river station report", () => {
     assert.match(gauge, /Water temp/);
     assert.match(gauge, /formatTwentyFourHourLine/);
     assert.match(gauge, /formatSeriesTrendLine/);
-    assert.match(gauge, /24H/);
+    assert.equal(gauge.includes("24H"), false);
     assert.match(report, /GazetteLiveGauge/);
     assert.match(report, /Fish this now/);
+    assert.match(report, /ea-now-plates/, "390 wraps FISH THIS NOW instead of clipping");
     assert.match(report, /Keep a journal on this river/);
     assert.match(report, /formatLonLat/);
     assert.match(report, /lg:grid-cols-3/, "access hangs left of the etching and journal");

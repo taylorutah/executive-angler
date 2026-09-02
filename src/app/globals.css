@@ -1501,56 +1501,19 @@ select:focus {
   );
 }
 
-.ea-plate-well {
-  width: 100%;
-  aspect-ratio: 1;
-  background: transparent;
+.ea-plate--type {
+  aspect-ratio: auto;
+  min-height: 0;
+  justify-content: center;
+  padding: 14px 10px;
 }
 
-.ea-plate-etch {
-  width: 58%;
+.ea-plate-still {
+  position: relative;
+  display: block;
+  width: 78%;
   aspect-ratio: 1;
-  margin: 4px auto 10px;
-  background-color: var(--ink);
-  opacity: 0.78;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-}
-.ea-plate-etch[data-etch="dry"] {
-  -webkit-mask-image: url("/images/fly-icons/dry.svg");
-  mask-image: url("/images/fly-icons/dry.svg");
-}
-.ea-plate-etch[data-etch="nymph"] {
-  -webkit-mask-image: url("/images/fly-icons/nymph.svg");
-  mask-image: url("/images/fly-icons/nymph.svg");
-}
-.ea-plate-etch[data-etch="streamer"] {
-  -webkit-mask-image: url("/images/fly-icons/streamer.svg");
-  mask-image: url("/images/fly-icons/streamer.svg");
-}
-.ea-plate-etch[data-etch="emerger"] {
-  -webkit-mask-image: url("/images/fly-icons/emerger.svg");
-  mask-image: url("/images/fly-icons/emerger.svg");
-}
-.ea-plate-etch[data-etch="wet"] {
-  -webkit-mask-image: url("/images/fly-icons/wet.svg");
-  mask-image: url("/images/fly-icons/wet.svg");
-}
-.ea-plate-etch[data-etch="terrestrial"] {
-  -webkit-mask-image: url("/images/fly-icons/terrestrial.svg");
-  mask-image: url("/images/fly-icons/terrestrial.svg");
-}
-.ea-plate-etch[data-etch="egg"] {
-  -webkit-mask-image: url("/images/fly-icons/egg.svg");
-  mask-image: url("/images/fly-icons/egg.svg");
-}
-.ea-plate-etch[data-etch="midge"] {
-  -webkit-mask-image: url("/images/fly-icons/midge.svg");
-  mask-image: url("/images/fly-icons/midge.svg");
+  margin: 6px auto 8px;
 }
 
 .ea-plate-name {
@@ -1561,6 +1524,20 @@ select:focus {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.ea-now-plates {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .ea-now-plates {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .ea-plate-line {

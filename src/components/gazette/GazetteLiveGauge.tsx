@@ -54,7 +54,7 @@ function stillTrend(copy: { text: string; dropping: boolean } | null): string | 
   const num = copy.text.match(/[+\-−]?\d[\d,]*/);
   const arrow = copy.dropping ? "▼" : "▲";
   if (!num) return `TREND: ${copy.text}`;
-  return `TREND: ${num[0]} CFS ${arrow} 24H`;
+  return `TREND: ${num[0]} CFS ${arrow}`;
 }
 
 export default function GazetteLiveGauge({
