@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import SiteTicker from "@/components/layout/SiteTicker";
 import MobileTabBar from "@/components/layout/MobileTabBar";
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/layout/nav/SkipLink";
 import CommandPalette from "@/components/CommandPalette";
@@ -150,6 +151,7 @@ export default function RootLayout({
         <AuthProvider>
           <div className="gazette-sheet">
             <Header />
+            <SiteTicker />
             <main
               id={MAIN_CONTENT_ID}
               tabIndex={-1}

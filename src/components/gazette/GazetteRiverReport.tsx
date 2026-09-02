@@ -68,6 +68,8 @@ export default function GazetteRiverReport({
   initialSnapshot = null,
   initialHistory,
 }: Props) {
+  const species = (river.primarySpecies ?? []).map((name) => name.trim()).filter(Boolean);
+
   return (
     <article className="bg-[var(--paper)]">
       <div className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8">
@@ -94,6 +96,16 @@ export default function GazetteRiverReport({
           </p>
         ) : null}
         <div className="mt-5 h-px bg-[var(--border)]" aria-hidden />
+        {species.length > 0 ? (
+          <section className="py-5">
+            <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+              Fish
+            </h2>
+            <p className="mt-2 font-body text-[18px] leading-snug text-[var(--ink)]">
+              {species.join(", ")}
+            </p>
+          </section>
+        ) : null}
       </div>
 
       <GazetteLiveGauge

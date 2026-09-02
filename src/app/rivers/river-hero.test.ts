@@ -33,7 +33,8 @@ describe("river station report", () => {
     assert.match(report, /Keep a journal on this river/);
     assert.match(report, /formatLonLat/);
     assert.match(report, /lg:grid-cols-3/, "access hangs left of the etching and journal");
-    assert.equal(/>\s*Fish\s*</.test(report), false);
+    assert.match(report, />\s*Fish\s*</);
+    assert.match(report, /species\.join\(", "\)/, "FISH is a comma-separated species line");
   });
 
   it("prints place · water · miles as type, not a brochure overline", () => {
