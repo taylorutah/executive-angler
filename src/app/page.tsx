@@ -63,12 +63,14 @@ function isPublicRead(article: Article): boolean {
 }
 
 function pickRead(articles: Article[]): Article | null {
-  const sorted = [...articles].sort(
+  const eligible = articles.filter(isPublicRead);
+  const tier = eligible.find((a) => a.slug === "fly-box-tier-system");
+  if (tier) return tier;
+  const sorted = [...eligible].sort(
     (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
   );
-  const eligible = sorted.filter(isPublicRead);
-  const featured = eligible.filter((a) => a.featured);
-  return [...featured, ...eligible.filter((a) => !a.featured)][0] ?? null;
+  const featured = sorted.filter((a) => a.featured);
+  return [...featured, ...sorted.filter((a) => !a.featured)][0] ?? null;
 }
 
 function pickPlate(featured: CanonicalFly[], all: CanonicalFly[]): CanonicalFly[] {

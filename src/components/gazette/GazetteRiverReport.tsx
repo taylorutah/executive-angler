@@ -15,6 +15,7 @@ interface Plate {
   imageUrl?: string;
   insect: string;
   size?: string;
+  etch?: CanonicalFly["category"];
 }
 
 interface Props {
@@ -48,8 +49,9 @@ function regulationLines(text: string): string[] {
 }
 
 /**
- * Still 2 — station report. Live gauge as type. FISH THIS NOW plates.
- * ACCESS hanging type. Regulations as type. No brochure hero.
+ * Still 3 — station report. Masthead lives in the header.
+ * Live gauge as type. Hydrograph beside FISH THIS NOW + REGULATIONS.
+ * ACCESS hanging left of the evidence etching and the journal box.
  */
 export default function GazetteRiverReport({
   river,
@@ -67,7 +69,6 @@ export default function GazetteRiverReport({
   initialSnapshot = null,
   initialHistory,
 }: Props) {
-  const species = (river.primarySpecies ?? []).map((name) => name.trim()).filter(Boolean);
   return (
     <article className="bg-[var(--paper)]">
       <div className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8">
@@ -94,16 +95,6 @@ export default function GazetteRiverReport({
           </p>
         ) : null}
         <div className="mt-5 h-px bg-[var(--border)]" aria-hidden />
-        {species.length > 0 ? (
-          <section className="py-5">
-            <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-              Fish
-            </h2>
-            <p className="mt-2 font-body text-[18px] leading-snug text-[var(--ink)]">
-              {species.join(", ")}
-            </p>
-          </section>
-        ) : null}
       </div>
 
       <GazetteLiveGauge
@@ -113,63 +104,29 @@ export default function GazetteRiverReport({
         place={place}
         initialSnapshot={initialSnapshot}
         initialHistory={initialHistory}
-      />
-
-      <div className="mx-auto max-w-[72rem] px-4 py-8 sm:px-8">
-        {plates.length > 0 ? (
-          <section>
-            <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-              Fish this now
-            </h2>
-            <ul className="mt-4 grid grid-cols-3 gap-3">
-              {plates.slice(0, 3).map((plate) => (
-                <li key={plate.key}>
-                  <GazettePlate
-                    name={[plate.name, plate.size].filter(Boolean).join(" ")}
-                    href={plate.href}
-                  />
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-
-        <div
-          className={`grid gap-10 lg:grid-cols-2 lg:items-start ${
-            plates.length > 0 ? "mt-10 border-t border-[var(--border)] pt-10" : ""
-          }`}
-        >
-          <section>
-            <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
-              Access
-            </h2>
-            {accessPoints.length > 0 ? (
-              <ul className="ea-diamond-list mt-4">
-                {accessPoints.map((ap, i) => (
-                  <li key={`${ap.name}-${i}`} className="pb-3">
-                    <p className="font-body text-[16px] font-semibold text-[var(--ink)]">
-                      {ap.name}
-                      {Number.isFinite(ap.latitude) && Number.isFinite(ap.longitude)
-                        ? ` · ${formatLonLat(ap.latitude, ap.longitude)}`
-                        : ""}
-                    </p>
-                    {ap.description ? (
-                      <p className="mt-0.5 font-body text-[15px] text-[var(--text-2)]">
-                        {ap.description}
-                      </p>
-                    ) : null}
+      >
+        <div>
+          {plates.length > 0 ? (
+            <section>
+              <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+                Fish this now
+              </h2>
+              <ul className="mt-4 grid grid-cols-3 gap-3">
+                {plates.slice(0, 3).map((plate) => (
+                  <li key={plate.key}>
+                    <GazettePlate
+                      name={[plate.name, plate.size].filter(Boolean).join(" ")}
+                      href={plate.href}
+                      etch={plate.etch}
+                    />
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p className="mt-3 text-[15px] text-[var(--text-3)]">
-                No access points are listed yet.
-              </p>
-            )}
-          </section>
+            </section>
+          ) : null}
 
           {regulations ? (
-            <section>
+            <section className={plates.length > 0 ? "mt-8" : ""}>
               <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
                 Regulations ({regsSource.label})
               </h2>
@@ -179,40 +136,63 @@ export default function GazetteRiverReport({
                 ))}
               </ul>
               <p className="mt-3 font-body text-[15px] italic text-[var(--text-3)]">
-                Regulations change. Verify before you fish.{" "}
-                <a
-                  href={regsSource.url}
-                  className="text-[var(--ink)] underline underline-offset-4"
-                  rel="noopener noreferrer"
-                >
-                  {regsSource.label}
-                </a>
-                . Retrieved {regsSource.retrievedOn}.
+                Regulations change. Verify before you fish.
               </p>
             </section>
           ) : null}
         </div>
-      </div>
+      </GazetteLiveGauge>
 
-      {evidencePhoto ? (
-        <figure className="mx-auto max-w-[72rem] px-4 py-6 sm:px-8">
-          <div className="relative aspect-[16/7] w-full overflow-hidden bg-[var(--paper-deep)]">
-            <Image
-              src={evidencePhoto.src}
-              alt={evidencePhoto.alt}
-              fill
-              unoptimized
-              sizes="(max-width: 1440px) 92vw, 1152px"
-              className="ea-evidence object-cover"
-            />
-          </div>
-          <figcaption className="mt-3 font-body text-[14px] italic text-[var(--text-3)]">
-            {evidencePhoto.caption}
-          </figcaption>
-        </figure>
-      ) : null}
+      <div className="mx-auto grid max-w-[72rem] gap-8 border-t border-[var(--border)] px-4 py-8 sm:px-8 lg:grid-cols-3 lg:items-start">
+        <section>
+          <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
+            Access
+          </h2>
+          {accessPoints.length > 0 ? (
+            <ul className="ea-diamond-list mt-4">
+              {accessPoints.map((ap, i) => (
+                <li key={`${ap.name}-${i}`} className="pb-3">
+                  <p className="font-body text-[16px] font-semibold text-[var(--ink)]">
+                    {ap.name}
+                    {Number.isFinite(ap.latitude) && Number.isFinite(ap.longitude)
+                      ? ` · ${formatLonLat(ap.latitude, ap.longitude)}`
+                      : ""}
+                  </p>
+                  {ap.description ? (
+                    <p className="mt-0.5 font-body text-[15px] text-[var(--text-2)]">
+                      {ap.description}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-3 text-[15px] text-[var(--text-3)]">
+              No access points are listed yet.
+            </p>
+          )}
+        </section>
 
-      <div className="mx-auto grid max-w-[72rem] gap-8 border-t border-[var(--border)] px-4 py-8 sm:px-8 lg:grid-cols-2">
+        {evidencePhoto ? (
+          <figure>
+            <div className="relative aspect-[16/7] w-full overflow-hidden bg-[var(--paper-deep)]">
+              <Image
+                src={evidencePhoto.src}
+                alt={evidencePhoto.alt}
+                fill
+                unoptimized
+                sizes="(max-width: 1440px) 92vw, 1152px"
+                className="ea-evidence object-cover"
+              />
+            </div>
+            <figcaption className="mt-3 font-body text-[14px] italic text-[var(--text-3)]">
+              {evidencePhoto.caption}
+            </figcaption>
+          </figure>
+        ) : (
+          <div />
+        )}
+
         <div>
           {fieldNote ? (
             <Link href={`/articles/${fieldNote.slug}`} className="group block">
@@ -227,9 +207,7 @@ export default function GazetteRiverReport({
               </p>
             </Link>
           ) : null}
-        </div>
-        <div>
-          <Link href={`/journal/new?river=${river.slug}`} className="ea-journal-box">
+          <Link href={`/journal/new?river=${river.slug}`} className="ea-journal-box mt-6">
             Keep a journal on this river
           </Link>
         </div>
@@ -244,6 +222,7 @@ export function platesFromHatches(
 ): Plate[] {
   return hatches.slice(0, 3).map((hatch, i) => {
     const plate = matchHatchPlate(hatch, flies);
+    const matched = flies.find((fly) => fly.slug && plate.href?.endsWith(fly.slug));
     return {
       key: `${hatch.insect}-${hatch.pattern}-${i}`,
       name: plate.name,
@@ -251,6 +230,7 @@ export function platesFromHatches(
       imageUrl: plate.imageUrl,
       insect: hatch.insect,
       size: hatch.size,
+      etch: matched?.category,
     };
   });
 }

@@ -24,7 +24,7 @@ export const FOCUS_VISIBLE =
 export const MOTION_SAFE =
   "motion-reduce:transition-none motion-reduce:transform-none";
 
-/** T7O4R logged-out row: five nouns + one willow Create account. */
+/** Still 2 header: Rivers · Hatches · Gauges · Maps · Gear · Journal · About. */
 export const PUBLIC_NOUNS: NavItem[] = [
   {
     label: "Rivers",
@@ -33,28 +33,40 @@ export const PUBLIC_NOUNS: NavItem[] = [
     descriptor: "Access, hatches, and live flow",
   },
   {
-    label: "Flies",
-    href: "/flies",
-    section: "/flies",
-    descriptor: "Patterns, recipes, and materials",
+    label: "Hatches",
+    href: "/rivers?f=hatch",
+    section: "/hatches",
+    descriptor: "What is on, river by river",
   },
   {
-    label: "Places",
+    label: "Gauges",
+    href: "/rivers?f=gauge",
+    section: "/gauges",
+    descriptor: "Live flow when a gauge exists",
+  },
+  {
+    label: "Maps",
     href: "/destinations",
     section: "/destinations",
-    descriptor: "Where to go, month by month",
+    descriptor: "Where the water sits",
   },
   {
-    label: "Field Notes",
-    href: "/articles",
-    section: "/articles",
-    descriptor: "Reading water, gear, and craft",
+    label: "Gear",
+    href: "/gear",
+    section: "/gear",
+    descriptor: "Rods, reels, and lines",
   },
   {
     label: "Journal",
     href: "/journal",
     section: "/journal",
     descriptor: "Sessions, flies, and the days you fished",
+  },
+  {
+    label: "About",
+    href: "/about",
+    section: "/about",
+    descriptor: "A fly-fishing gazette",
   },
 ];
 

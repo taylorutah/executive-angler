@@ -26,15 +26,13 @@ describe("river station report", () => {
     assert.match(gauge, /Water temp/);
     assert.match(gauge, /formatTwentyFourHourLine/);
     assert.match(gauge, /formatSeriesTrendLine/);
-    assert.equal(gauge.includes("24H"), false);
+    assert.match(gauge, /24H/);
     assert.match(report, /GazetteLiveGauge/);
-    assert.match(report, /primarySpecies/);
-    assert.match(report, /join\(", "\)/);
-    assert.match(report, />\s*Fish\s*</);
     assert.match(report, /Fish this now/);
     assert.match(report, /Keep a journal on this river/);
     assert.match(report, /formatLonLat/);
-    assert.match(report, /lg:grid-cols-2/, "access hangs left of regulations");
+    assert.match(report, /lg:grid-cols-3/, "access hangs left of the etching and journal");
+    assert.equal(/>\s*Fish\s*</.test(report), false);
   });
 
   it("prints place · water · miles as type, not a brochure overline", () => {

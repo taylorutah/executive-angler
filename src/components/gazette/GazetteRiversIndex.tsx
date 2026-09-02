@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Icon } from "@/components/ui/Icon";
 import RiversStationTable, { type StationFlow } from "@/components/rivers/RiversStationTable";
 import type { FlowState } from "@/lib/browse/flow-state";
 import type { RiverBrowseItem } from "@/lib/browse/river-items";
@@ -123,14 +124,17 @@ export default function GazetteRiversIndex({ items, riverCount }: Props) {
         <p className="mt-3 font-body text-[17px] italic text-[var(--text-2)]">
           Access, hatches, and live flow when a gauge exists.
         </p>
-        <label className="mt-8 block max-w-xl">
+        <label className="relative mt-8 block max-w-xl">
           <span className="sr-only">Search rivers</span>
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-3)]" aria-hidden>
+            <Icon name="search" className="h-4 w-4" />
+          </span>
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search rivers…"
-            className="ea-search-underline"
+            placeholder="Search rivers..."
+            className="ea-search-box"
           />
         </label>
         <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-ui text-[12px] uppercase tracking-[0.12em] text-[var(--text-3)]">

@@ -135,7 +135,10 @@ export default async function RiverPage({ params }: Props) {
           (river.slug === "madison-river"
             ? HERO_IMAGE.alt
             : `${river.name} fly fishing`),
-        caption: [place || river.name, GazetteClock.photoDay()].filter(Boolean).join("  ·  "),
+        caption:
+          river.slug === "madison-river"
+            ? "Madison River below Varney, looking upstream. June 2026."
+            : [place || river.name, GazetteClock.photoDay()].filter(Boolean).join("  ·  "),
       }
     : undefined;
 

@@ -19,11 +19,12 @@ describe("gazette chrome locks", () => {
     assert.equal(header.includes("fly-mark"), false);
     assert.equal(header.includes("HeaderSearch"), false);
     assert.equal(header.includes("ExploreMenu"), false);
-    assert.match(header, /Create account/);
-    assert.match(header, /hidden[^\n]*md:inline-flex/);
-    assert.match(header, /bg-\[var\(--accent-soft\)\]/);
-    assert.match(header, /text-\[var\(--accent\)\][^\n]*md:inline-flex/);
+    assert.equal(header.includes("Create account"), false, "stills have no willow Create account");
+    assert.match(header, /aria-label="Menu"/);
+    assert.match(header, /name="menu"/);
     assert.match(header, /ea-lockup-heron/);
+    assert.match(header, /station report/);
+    assert.match(header, /Est\. 1987/);
     assert.match(header, /md:h-\[4\.75rem\]/);
     const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
     assert.match(css, /\.ea-lockup-heron \{[\s\S]*height: 56px/);
@@ -42,10 +43,10 @@ describe("gazette chrome locks", () => {
     assert.match(rivers, /label: "Water"/);
     assert.match(rivers, /label: "Hatch"/);
     assert.match(rivers, /label: "Gauge"/);
-    assert.match(rivers, /ea-search-underline/);
+    assert.match(rivers, /ea-search-box/);
     assert.match(rivers, /flex flex-wrap/);
     assert.match(rivers, /<em className="italic">documented\.<\/em>/);
-    assert.equal(rivers.includes("rounded-full"), false, "search must be type, not a boxed pill");
+    assert.equal(rivers.includes("rounded-full"), false);
     assert.equal(rivers.includes("ea-search-pill"), false);
   });
 
@@ -61,16 +62,16 @@ describe("gazette chrome locks", () => {
     assert.match(css, /\.ea-ticker-row a \{\n  display: inline;\n  min-height: 0;/);
   });
 
-  it("keeps the public nouns as Rivers · Flies · Places · Field Notes · Journal", () => {
+  it("keeps the public nouns as Rivers · Hatches · Gauges · Maps · Gear · Journal · About", () => {
     const links = readFileSync(join(root, "src/components/layout/nav/links.ts"), "utf8");
     const block = links.slice(
       links.indexOf("export const PUBLIC_NOUNS"),
       links.indexOf("export const LEARN_LINK"),
     );
     const nouns = [...block.matchAll(/label: "([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(nouns, ["Rivers", "Flies", "Places", "Field Notes", "Journal"]);
-    assert.equal(links.includes('label: "Hatches"'), false);
-    assert.equal(links.includes('label: "Gauges"'), false);
+    assert.deepEqual(nouns, ["Rivers", "Hatches", "Gauges", "Maps", "Gear", "Journal", "About"]);
+    assert.equal(block.includes('label: "Places"'), false);
+    assert.equal(block.includes('label: "Flies"'), false);
   });
 
   it("treats sb-*-auth-token as a chrome hint only", () => {
@@ -87,7 +88,7 @@ describe("gazette chrome locks", () => {
     assert.match(footer, /No spots\. No counts\. No leaderboard\./);
     const layout = readFileSync(join(root, "src/app/layout.tsx"), "utf8");
     assert.match(layout, /<Footer \/>/);
-    assert.match(layout, /SiteTicker/);
+    assert.equal(layout.includes("SiteTicker"), false, "stills have no ON THE WATER ticker");
     assert.match(layout, /gazette-sheet/);
     assert.equal(layout.includes("flex-1 pb-14"), false, "main must not jail the sheet");
     const sheet = readFileSync(join(root, "src/app/globals.css"), "utf8");

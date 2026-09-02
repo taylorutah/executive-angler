@@ -84,11 +84,10 @@ describe("photoAlt", () => {
 });
 
 describe("HomeHero photograph", () => {
-  it("insets Three Dollar Bridge on the gazette home with the caption under the photo", () => {
-    assert.match(homeHero, /HERO_IMAGE/);
-    assert.match(homeHero, /<figcaption/);
+  it("does not put Three Dollar Bridge on the gazette home", () => {
+    assert.equal(homeHero.includes("HERO_IMAGE"), false);
+    assert.equal(homeHero.includes("<figcaption"), false);
     assert.equal(homeHero.includes("h-[50vh]"), false);
-    assert.equal(homeHero.includes("absolute bottom-0"), false);
     assert.match(homePage, /GazetteLiveHome/);
   });
 });

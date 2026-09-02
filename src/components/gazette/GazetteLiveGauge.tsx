@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import GazetteHydrograph from "./GazetteHydrograph";
 import type { GaugeSnapshot } from "@/components/home/conditions";
 import {
@@ -19,6 +19,8 @@ interface Props {
   place: string;
   initialSnapshot?: GaugeSnapshot | null;
   initialHistory?: HydroReading[];
+  showChart?: boolean;
+  children?: ReactNode;
 }
 
 type ConditionsJson = {
@@ -52,7 +54,7 @@ function stillTrend(copy: { text: string; dropping: boolean } | null): string | 
   const num = copy.text.match(/[+\-−]?\d[\d,]*/);
   const arrow = copy.dropping ? "▼" : "▲";
   if (!num) return `TREND: ${copy.text}`;
-  return `TREND: ${num[0]} CFS ${arrow}`;
+  return `TREND: ${num[0]} CFS ${arrow} 24H`;
 }
 
 export default function GazetteLiveGauge({
@@ -62,6 +64,8 @@ export default function GazetteLiveGauge({
   place: _place,
   initialSnapshot = null,
   initialHistory,
+  showChart = true,
+  children,
 }: Props) {
   const [snapshot, setSnapshot] = useState<GaugeSnapshot | null>(initialSnapshot);
   const [history, setHistory] = useState<HydroReading[] | null>(
@@ -205,14 +209,25 @@ export default function GazetteLiveGauge({
           </dd>
         </div>
       </dl>
-      <div className="mt-8">
-        <GazetteHydrograph
-          riverId={riverId}
-          siteId={siteId}
-          liveCfs={cfs}
-          readings={history ?? undefined}
-        />
-      </div>
+      {showChart || children ? (
+        <div
+          className={`mt-8 ${
+            children
+              ? "grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start"
+              : ""
+          }`}
+        >
+          {showChart ? (
+            <GazetteHydrograph
+              riverId={riverId}
+              siteId={siteId}
+              liveCfs={cfs}
+              readings={history ?? undefined}
+            />
+          ) : null}
+          {children}
+        </div>
+      ) : null}
     </section>
   );
 }

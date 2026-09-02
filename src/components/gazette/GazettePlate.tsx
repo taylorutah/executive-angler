@@ -1,15 +1,27 @@
 import Link from "next/link";
 
+export type PlateEtch =
+  | "dry"
+  | "nymph"
+  | "streamer"
+  | "emerger"
+  | "wet"
+  | "terrestrial"
+  | "egg"
+  | "midge";
+
 interface Props {
   name: string;
   line?: string;
   href?: string;
+  etch?: PlateEtch;
 }
 
-/** Notched cream plate. Type only — never a reserved square, never an AI insect. */
-export default function GazettePlate({ name, line, href }: Props) {
+/** Notched cream plate. Type + ink etch from the desk fly icons — never a photo. */
+export default function GazettePlate({ name, line, href, etch }: Props) {
   const inner = (
     <>
+      {etch ? <span className="ea-plate-etch" data-etch={etch} aria-hidden /> : null}
       <p className="ea-plate-name">{name}</p>
       {line ? <p className="ea-plate-line">{line}</p> : null}
     </>
