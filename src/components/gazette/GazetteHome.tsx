@@ -106,13 +106,13 @@ export default function GazetteHome({
 }: Props) {
   return (
     <div className="bg-[var(--paper)]">
-      <section className="mx-auto grid max-w-[72rem] gap-10 border-b border-[var(--border)] px-4 pb-10 pt-8 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:pt-12">
+      <section className="mx-auto grid max-w-[72rem] gap-8 border-b border-[var(--border)] px-4 pb-6 pt-6 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:pt-8">
         <div>
           <p className="font-ui text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]">
             On the water now
           </p>
           <div className="mt-2 h-px w-16 bg-[var(--ink)]" aria-hidden />
-          <h1 className="mt-5 font-display text-[clamp(40px,7vw,72px)] font-semibold uppercase leading-[0.9] tracking-[-0.02em] text-[var(--ink)]">
+          <h1 className="mt-4 font-display text-[clamp(36px,6.4vw,64px)] font-semibold uppercase leading-[0.9] tracking-[-0.02em] text-[var(--ink)]">
             Rivers
             <br />
             Report
@@ -128,25 +128,25 @@ export default function GazetteHome({
               const name = stShort ? `${river.label}, ${stShort}` : river.label;
               return (
                 <tr key={river.id} className="relative border-b border-[var(--border)]">
-                  <td className="py-2.5 pr-4">
+                  <td className="py-2 pr-4">
                     <Link
                       href={`/rivers/${river.slug}`}
                       className="absolute inset-0"
                       aria-label={river.name}
                     />
-                    <span className="relative font-body text-[17px] italic text-[var(--ink)]">
+                    <span className="relative font-body text-[16px] italic text-[var(--ink)]">
                       {name}
                     </span>
                   </td>
                   <td
-                    className={`relative num py-2.5 pr-4 text-[14px] ${
+                    className={`relative num py-2 pr-4 text-[14px] ${
                       live ? "text-[var(--ink)]" : "text-[var(--text-3)]"
                     }`}
                   >
                     {live ? `${snapshot!.cfs!.toLocaleString("en-US")} cfs` : "—"}
                     {live ? <span className="ea-live-dot" aria-hidden /> : null}
                   </td>
-                  <td className="relative py-2.5 font-ui text-[13px] text-[var(--text-2)]">
+                  <td className="relative py-2 font-ui text-[13px] text-[var(--text-2)]">
                     {hatchLine(river, month)}
                   </td>
                 </tr>
@@ -156,7 +156,7 @@ export default function GazetteHome({
         </table>
       </section>
 
-      <section className="mx-auto max-w-[72rem] border-b border-[var(--border)] px-4 py-10 sm:px-8">
+      <section className="mx-auto max-w-[72rem] border-b border-[var(--border)] px-4 py-6 sm:px-8">
         <h2 className="font-ui text-[12px] uppercase tracking-[0.16em] text-[var(--copper)]">
           02 The plate
         </h2>
@@ -181,7 +181,7 @@ export default function GazetteHome({
         </p>
       </section>
 
-      <section className="mx-auto grid max-w-[72rem] gap-10 px-4 py-10 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-end">
+      <section className="mx-auto grid max-w-[72rem] gap-8 px-4 py-6 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-end">
         <div>
           <p className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--copper)]">
             Field note

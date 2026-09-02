@@ -114,7 +114,7 @@ export default function GazetteRiversIndex({ items, riverCount }: Props) {
 
   return (
     <div className="bg-[var(--paper)]">
-      <header className="mx-auto max-w-[72rem] px-4 pt-8 sm:px-8">
+      <header className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8">
         <p className="font-ui text-[11px] uppercase tracking-[0.18em] text-[var(--copper)]">
           The reference
         </p>

@@ -89,7 +89,7 @@ export default function GazetteHeader() {
                 aria-expanded={mobileOpen}
                 aria-haspopup="dialog"
                 aria-label="Menu"
-                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-11 w-11 items-center justify-center text-[var(--copper)]`}
+                className={`ea-focus-ring ${FOCUS_VISIBLE} inline-flex h-11 w-11 items-center justify-center text-[var(--copper)] md:hidden`}
               >
                 <Icon name="menu" className="h-5 w-5" />
               </button>

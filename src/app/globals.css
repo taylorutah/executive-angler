@@ -72,7 +72,7 @@
   --prose: 66ch;
   --article-media: 960px;
   --gutter: 16px;
-  --header-h: 80px;
+  --header-h: 72px;
   --ticker-h: 36px;
 
   /* ── Imagery: the one consistent photo grade ─────────────────── */
@@ -1486,8 +1486,8 @@ select:focus {
   justify-content: flex-end;
   text-align: center;
   aspect-ratio: 1;
-  min-height: 10.5rem;
-  padding: 18px 10px 16px;
+  min-height: 8.5rem;
+  padding: 12px 8px 12px;
   background: var(--paper-deep);
   clip-path: polygon(
     10px 0,

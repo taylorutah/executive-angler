@@ -55,7 +55,7 @@ export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: 
   }
 
   if (readings == null) {
-    return <div className={`${HYDRO_FRAME} bg-[var(--paper-deep)]`} aria-hidden />;
+    return <div className={`${HYDRO_FRAME} !h-[12rem] bg-[var(--paper-deep)] lg:!h-[14rem]`} aria-hidden />;
   }
 
   if (readings.length < 2) {
@@ -85,7 +85,7 @@ export default function GazetteHydrograph({ riverId, siteId, liveCfs, readings: 
       <p className="mb-2 font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--text-3)]">
         Last 30 days · Discharge (CFS)
       </p>
-      <div className={HYDRO_FRAME}>
+      <div className={`${HYDRO_FRAME} !h-[12rem] lg:!h-[14rem]`}>
         <svg
           viewBox={`0 0 ${HYDRO.W} ${HYDRO.H}`}
           preserveAspectRatio="none"
