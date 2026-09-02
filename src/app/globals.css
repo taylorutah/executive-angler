@@ -1509,6 +1509,19 @@ select:focus {
   background: var(--paper-deep);
 }
 
+.ea-plate-type-link {
+  display: block;
+}
+
+.ea-plate-type {
+  display: block;
+}
+
+.ea-plate-type .ea-plate-name {
+  margin-top: 0;
+  text-align: left;
+}
+
 .ea-plate-photo {
   display: block;
   width: 82%;
@@ -1543,6 +1556,12 @@ select:focus {
   min-height: 0;
 }
 
+.ea-now-plates .ea-plate--type,
+.ea-now-plates .ea-plate-type {
+  aspect-ratio: auto;
+  min-height: 0;
+}
+
 .ea-now-plates .ea-plate-photo {
   max-height: 6.5rem;
 }
@@ -1553,6 +1572,10 @@ select:focus {
   }
   .ea-now-plates .ea-plate {
     aspect-ratio: 1;
+  }
+  .ea-now-plates .ea-plate--type {
+    aspect-ratio: auto;
+    min-height: 0;
   }
 }
 

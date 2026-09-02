@@ -143,7 +143,7 @@ export default function GazetteHome({
           </h1>
         </div>
 
-        <table data-home-rail className="w-full text-left">
+        <table className="w-full text-left">
           <tbody>
             {rivers.map((river) => {
               const snapshot = snapshots.get(river.id);

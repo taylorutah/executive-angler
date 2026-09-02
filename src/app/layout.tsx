@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SiteTicker from "@/components/layout/SiteTicker";
+import TickerGate from "@/components/layout/TickerGate";
 import MobileTabBar from "@/components/layout/MobileTabBar";
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/layout/nav/SkipLink";
 import CommandPalette from "@/components/CommandPalette";
@@ -151,7 +152,7 @@ export default function RootLayout({
         <AuthProvider>
           <div className="gazette-sheet">
             <Header />
-            <SiteTicker />
+            <TickerGate ticker={<SiteTicker />} />
             <main
               id={MAIN_CONTENT_ID}
               tabIndex={-1}

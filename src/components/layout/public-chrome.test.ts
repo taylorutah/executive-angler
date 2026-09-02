@@ -89,6 +89,13 @@ describe("gazette chrome locks", () => {
     const layout = readFileSync(join(root, "src/app/layout.tsx"), "utf8");
     assert.match(layout, /<Footer \/>/);
     assert.match(layout, /SiteTicker/, "one-row ON THE WATER ticker stays in the sheet");
+    assert.match(layout, /TickerGate/, "ticker stays off login and Water Desk");
+    const gate = readFileSync(join(root, "src/components/layout/TickerGate.tsx"), "utf8");
+    assert.match(gate, /\/login/);
+    assert.match(gate, /\/journal/);
+    assert.match(gate, /\/today/);
+    assert.match(gate, /\/styleguide/);
+    assert.equal(gate.includes("/rivers"), false, "ticker stays on rivers and home");
     assert.match(layout, /gazette-sheet/);
     assert.equal(layout.includes("flex-1 pb-14"), false, "main must not jail the sheet");
     const sheet = readFileSync(join(root, "src/app/globals.css"), "utf8");

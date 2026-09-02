@@ -23,7 +23,8 @@ describe("home visitor QA locks", () => {
     assert.match(plate, /ea-plate-ink/, "still 1 keeps the notched cream plate");
     assert.match(plate, /plateImageUrl/, "stills only through the hosted-plate helper");
     assert.match(plate, /ea-plate-photo/, "hosted stills sit in flow, not a fill well");
-    assert.match(plate, /ea-plate--type/, "missing stills drop the reserved square");
+    assert.match(plate, /ea-plate-type/, "missing stills drop the reserved square");
+    assert.equal(plate.includes("ea-plate--type"), false, "type-only must not keep the notched well");
     assert.equal(plate.includes("fill"), false, "fill escaped the plate and hid the fly");
     assert.equal(plate.includes("ea-plate-well"), false, "empty photo wells must be omitted");
     assert.equal(plate.includes("ea-plate-etch"), false, "desk icons are not plate artwork");
@@ -37,6 +38,11 @@ describe("home visitor QA locks", () => {
     assert.match(gazette, /formatHeroCaption/);
     assert.match(gazette, /<figcaption/);
     assert.equal(gazette.includes("ea-live-dot"), false, "cfs numbers do not carry unexplained dots");
+    assert.equal(
+      gazette.includes("data-home-rail"),
+      false,
+      "home table is not a second rail; the ticker owns data-home-rail",
+    );
     assert.match(gazette, /facing="right"/, "journal heron faces right, as the still");
     assert.match(gazette, /montana: "MT"/, "hanging index uses USPS, not MO for Montana");
   });

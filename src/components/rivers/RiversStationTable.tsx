@@ -82,7 +82,6 @@ export default function RiversStationTable({ items, flows }: Props) {
                 {gauged ? (
                   <>
                     <span className="num text-[var(--ink)]">{cfsCell(flow)}</span>
-                    <span className="ea-live-dot" aria-hidden />
                     <span className="text-[var(--text-3)]"> · </span>
                     <TrendMark flow={flow} />
                   </>
@@ -132,7 +131,6 @@ export default function RiversStationTable({ items, flows }: Props) {
                     {live ? (
                       <span className="num text-[var(--ink)]">
                         {Math.round(flow.cfs).toLocaleString("en-US")}
-                        <span className="ea-live-dot" aria-hidden />
                       </span>
                     ) : (
                       <span className="text-[var(--text-3)]">{UNGAUGED}</span>

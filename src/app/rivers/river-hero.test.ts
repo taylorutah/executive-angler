@@ -35,6 +35,13 @@ describe("river station report", () => {
     assert.match(report, /lg:grid-cols-3/, "access hangs left of the etching and journal");
     assert.match(report, />\s*Fish\s*</);
     assert.match(report, /species\.join\(", "\)/, "FISH is a comma-separated species line");
+    assert.match(report, /data-river-fish/, "FISH stays in the hero at every width");
+    assert.match(report, /plateImageUrl\(plate\.imageUrl\)/, "FISH THIS NOW omits empty squares");
+    assert.doesNotMatch(
+      report,
+      /data-river-fish[^>]*(?:hidden|md:block|sm:hidden)/,
+      "FISH is not a desktop-only line",
+    );
   });
 
   it("prints place · water · miles as type, not a brochure overline", () => {

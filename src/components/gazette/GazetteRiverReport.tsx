@@ -5,6 +5,7 @@ import GazetteLiveGauge from "./GazetteLiveGauge";
 import type { GaugeSnapshot } from "@/components/home/conditions";
 import type { HydroReading } from "@/components/hydrograph/geometry";
 import type { AccessPoint, Article, CanonicalFly, HatchEntry, River } from "@/types/entities";
+import { plateImageUrl } from "@/lib/media/image-url";
 import { matchHatchPlate } from "@/lib/rivers/week-flies";
 import type { RegulationSource } from "@/lib/rivers/regulations";
 
@@ -97,7 +98,7 @@ export default function GazetteRiverReport({
         ) : null}
         <div className="mt-5 h-px bg-[var(--border)]" aria-hidden />
         {species.length > 0 ? (
-          <section className="py-5">
+          <section className="py-5" data-river-fish>
             <h2 className="font-ui text-[11px] uppercase tracking-[0.16em] text-[var(--ink)]">
               Fish
             </h2>
@@ -231,15 +232,19 @@ export function platesFromHatches(
   hatches: HatchEntry[],
   flies: CanonicalFly[],
 ): Plate[] {
-  return hatches.slice(0, 3).map((hatch, i) => {
+  const out: Plate[] = [];
+  for (const [i, hatch] of hatches.entries()) {
+    if (out.length >= 3) break;
     const plate = matchHatchPlate(hatch, flies);
-    return {
+    if (!plateImageUrl(plate.imageUrl)) continue;
+    out.push({
       key: `${hatch.insect}-${hatch.pattern}-${i}`,
       name: plate.name,
       href: plate.href,
       imageUrl: plate.imageUrl,
       insect: hatch.insect,
       size: hatch.size,
-    };
-  });
+    });
+  }
+  return out;
 }
