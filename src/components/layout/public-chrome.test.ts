@@ -96,6 +96,9 @@ describe("gazette chrome locks", () => {
     assert.match(gate, /\/today/);
     assert.match(gate, /\/styleguide/);
     assert.equal(gate.includes("/rivers"), false, "ticker stays on rivers and home");
+    assert.match(layout, /dataset.eaPath/, "first paint can hide the ticker on login");
+    const css = readFileSync(join(root, "src/app/globals.css"), "utf8");
+    assert.match(css, /data-ea-path\^="\/login"/);
     assert.match(layout, /gazette-sheet/);
     assert.equal(layout.includes("flex-1 pb-14"), false, "main must not jail the sheet");
     const sheet = readFileSync(join(root, "src/app/globals.css"), "utf8");

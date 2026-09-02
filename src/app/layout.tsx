@@ -134,6 +134,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.dataset.eaPath=location.pathname`,
+          }}
+        />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           strategy="afterInteractive"

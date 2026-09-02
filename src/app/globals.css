@@ -1859,6 +1859,16 @@ input.ea-focus-ring:focus-visible,
   white-space: nowrap;
 }
 
+/* First paint: hide the ticker on login / desk before TickerGate hydrates. */
+html[data-ea-path^="/login"] [data-home-rail],
+html[data-ea-path^="/signup"] [data-home-rail],
+html[data-ea-path^="/journal"] [data-home-rail],
+html[data-ea-path^="/today"] [data-home-rail],
+html[data-ea-path^="/styleguide"] [data-home-rail],
+html[data-ea-path^="/account"] [data-home-rail] {
+  display: none;
+}
+
 @media (max-width: 767px) {
   :root {
     --header-h: 68px;
