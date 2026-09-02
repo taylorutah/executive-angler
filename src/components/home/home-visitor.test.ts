@@ -34,9 +34,12 @@ describe("home visitor QA locks", () => {
     assert.match(gazette, /Keep the record the water can/);
     assert.equal(gazette.includes("h-[50vh]"), false);
     assert.equal(gazette.includes("and Hatches"), false);
-    assert.match(gazette, /HERO_IMAGE/, "inset Three Dollar Bridge stays above the fold");
-    assert.match(gazette, /formatHeroCaption/);
-    assert.match(gazette, /<figcaption/);
+    assert.equal(gazette.includes("HERO_IMAGE"), false, "still 04 has no photograph on home");
+    assert.equal(gazette.includes("formatHeroCaption"), false);
+    assert.equal(gazette.includes("<figure"), false);
+    assert.equal(gazette.includes("<figcaption"), false);
+    assert.match(gazette, /data-home-report/);
+    assert.match(gazette, /On the water now/);
     assert.equal(gazette.includes("ea-live-dot"), false, "cfs numbers do not carry unexplained dots");
     assert.equal(
       gazette.includes("data-home-rail"),

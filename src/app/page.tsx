@@ -122,7 +122,6 @@ export default async function HomePage() {
     ...river,
     state: destById.get(river.destinationId)?.state ?? destById.get(river.destinationId)?.name,
   }));
-  const madison = flagshipRivers.find((r) => r.slug === "madison-river") ?? flagshipRivers[0];
   const gauges = await loadFlagshipGaugePayload(flagshipRivers).catch(() => ({
     snapshots: {},
     histories: {},
@@ -133,7 +132,6 @@ export default async function HomePage() {
 
   return (
     <GazetteLiveHome
-      madisonId={madison?.id}
       initial={gauges}
       counts={{
         rivers: rivers.length,

@@ -83,11 +83,13 @@ describe("photoAlt", () => {
   });
 });
 
-describe("HomeHero photograph", () => {
-  it("keeps the inset Three Dollar Bridge with a caption under the photo", () => {
-    assert.match(homeHero, /HERO_IMAGE/);
-    assert.match(homeHero, /<figcaption/);
-    assert.equal(homeHero.includes("h-[50vh]"), false);
+describe("home still 04", () => {
+  it("has no photograph — Rivers Report is the first object", () => {
+    assert.equal(homeHero.includes("HERO_IMAGE"), false);
+    assert.equal(homeHero.includes("<figure"), false);
+    assert.equal(homeHero.includes("<figcaption"), false);
+    assert.match(homeHero, /On the water now/);
+    assert.match(homeHero, /data-home-report/);
     assert.match(homePage, /GazetteLiveHome/);
   });
 });

@@ -28,7 +28,6 @@ function loadFlagshipGauges(): Promise<Payload | null> {
 }
 
 interface Props {
-  madisonId?: string;
   initial?: Payload | null;
   counts: GazetteHomeCounts;
   rivers: FlagshipRiver[];
@@ -39,7 +38,6 @@ interface Props {
 }
 
 export default function GazetteLiveHome({
-  madisonId,
   initial,
   counts,
   rivers,
@@ -61,11 +59,9 @@ export default function GazetteLiveHome({
   }, []);
 
   const snapshots = new Map(Object.entries(data?.snapshots ?? {}));
-  const madisonCfs = madisonId ? snapshots.get(madisonId)?.cfs ?? null : null;
 
   return (
     <GazetteHome
-      madisonCfs={madisonCfs}
       counts={counts}
       rivers={rivers}
       snapshots={snapshots}

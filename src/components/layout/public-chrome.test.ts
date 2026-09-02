@@ -104,6 +104,16 @@ describe("gazette chrome locks", () => {
     const sheet = readFileSync(join(root, "src/app/globals.css"), "utf8");
     assert.match(sheet, /\.page-ground \{\n  background-color: var\(--paper\);\n  min-height: 100dvh;/);
     assert.equal(sheet.includes("\n  height: 100dvh;"), false);
+    assert.match(
+      sheet,
+      /\.gazette-sheet:has\(\[data-home-report\]\)/,
+      "still 04 home sheet is a double copper rule",
+    );
+    assert.match(
+      sheet,
+      /\[data-home-report\] \.ea-plate-photo/,
+      "home plates mat to cream, not white ecomm",
+    );
   });
 
   it("keeps house and login headings ink Fraunces, not copper fills", () => {

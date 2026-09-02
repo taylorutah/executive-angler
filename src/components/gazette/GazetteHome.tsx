@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import HeronMark from "@/components/brand/HeronMark";
 import GazettePlate from "./GazettePlate";
@@ -7,7 +6,6 @@ import {
   type FlagshipRiver,
   type GaugeSnapshot,
 } from "@/components/home/conditions";
-import { HERO_IMAGE, formatHeroCaption } from "@/components/home/hero-copy";
 import { shortInsect } from "@/lib/browse/river-items";
 import type { Article, CanonicalFly } from "@/types/entities";
 
@@ -28,7 +26,6 @@ interface PlateFly {
 }
 
 interface Props {
-  madisonCfs: number | null;
   counts: GazetteHomeCounts;
   rivers: FlagshipRiver[];
   snapshots: Map<string, GaugeSnapshot>;
@@ -97,12 +94,10 @@ function fieldDek(note: Article): string {
 }
 
 /**
- * T7O4R above the fold: inset Three Dollar Bridge, caption under the photo
- * (never a bar on it, never a 50vh bleed). Then ON THE WATER NOW /
- * RIVERS REPORT, 02 THE PLATE, FIELD NOTE + JOURNAL.
+ * Still 04: no photograph on home. First object after the ticker is
+ * ON THE WATER NOW / RIVERS REPORT, then 02 THE PLATE, FIELD NOTE + JOURNAL.
  */
 export default function GazetteHome({
-  madisonCfs,
   rivers,
   snapshots,
   month,
@@ -111,25 +106,7 @@ export default function GazetteHome({
   fieldNote,
 }: Props) {
   return (
-    <div className="bg-[var(--paper)]">
-      <figure className="mx-auto max-w-[72rem] px-4 pt-6 sm:px-8">
-        <div className="relative aspect-[16/7] w-full overflow-hidden bg-[var(--paper-deep)]">
-          <Image
-            src={HERO_IMAGE.src}
-            alt={HERO_IMAGE.alt}
-            fill
-            priority
-            fetchPriority="high"
-            unoptimized
-            sizes="(max-width: 1440px) 92vw, 1152px"
-            className="object-cover object-[center_68%] [filter:var(--photo-grade)]"
-          />
-        </div>
-        <figcaption className="mt-3 font-ui text-[11px] uppercase tracking-[0.14em] text-[var(--text-3)]">
-          {formatHeroCaption(madisonCfs)}
-        </figcaption>
-      </figure>
-
+    <div className="bg-[var(--paper)]" data-home-report>
       <section className="mx-auto grid max-w-[72rem] gap-8 border-b border-[var(--border)] px-4 pb-6 pt-8 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:pt-10">
         <div>
           <p className="font-ui text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]">
