@@ -26,6 +26,8 @@ interface RiverHeroImageProps {
   toolbar?: React.ReactNode;
   /** Spec facts — full-width rail under the name so the band is not a left stack. */
   spec?: React.ReactNode;
+  /** Answer-first lede under the H1, above the spec rail. */
+  lede?: string;
   children?: React.ReactNode;
 }
 
@@ -49,6 +51,7 @@ export default function RiverHeroImage({
   meta,
   toolbar,
   spec,
+  lede,
   children,
 }: RiverHeroImageProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -130,7 +133,13 @@ export default function RiverHeroImage({
           title={title}
           meta={meta}
           spec={spec}
-        />
+        >
+          {lede ? (
+            <p className="mt-3 max-w-[var(--prose)] text-[var(--text-16)] leading-relaxed text-[var(--text-2)]">
+              {lede}
+            </p>
+          ) : null}
+        </EntityIdentityBand>
       </section>
 
       {lightboxOpen && allPhotos.length > 0 && (

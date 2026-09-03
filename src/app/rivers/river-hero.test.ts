@@ -61,6 +61,20 @@ describe("river hero paper band", () => {
     assert.equal(page.includes("subtitle={near.flowType}"), false);
   });
 
+  it("scopes Madison SEO lede, season H2, and neighbor slugs to that river only", () => {
+    assert.match(page, /lede=\{river\.slug === "madison-river" \? MADISON_LEDE : undefined\}/);
+    assert.match(page, /When is the best time to fly fish the Madison River\?/);
+    assert.match(page, /"gallatin-river"/);
+    assert.match(page, /"yellowstone-river"/);
+    assert.match(page, /"jefferson-river-montana"/);
+    assert.match(page, /"missouri-river"/);
+    assert.match(page, /"big-hole-river"/);
+    assert.match(page, /"beaverhead-river-montana"/);
+    assert.match(page, /nearbyRiversForPage/);
+    assert.equal(page.includes("/plan/madison-river"), false);
+    assert.match(page, /if \(river\.slug !== "madison-river"\)/);
+  });
+
   it("paints lodge stills and stays quiet when the frame is empty", () => {
     assert.match(page, /imageUrl=\{lodge\.heroImageUrl\}/);
     assert.match(page, /imageFallback="quiet"/);
@@ -77,5 +91,11 @@ describe("river hero credit is not a byline", () => {
   it("keeps photographer credit off the identity band under the H1", () => {
     assert.match(hero, /labeledPhotoCredit/);
     assert.equal(hero.includes("credit={"), false);
+  });
+
+  it("renders an optional lede on the identity band above the spec rail", () => {
+    assert.match(hero, /lede\?: string/);
+    assert.match(hero, /\{lede \? \(/);
+    assert.match(hero, /max-w-\[var\(--prose\)\]/);
   });
 });
