@@ -42,6 +42,44 @@ import {
 import { hostedStillUrl } from "@/lib/media/image-url";
 import { regulationSource } from "@/lib/rivers/regulations";
 import { groupAccessPoints } from "@/lib/rivers/access-groups";
+import type { River } from "@/types/entities";
+
+const MADISON_TITLE = "Madison River Fly Fishing Guide | Executive Angler";
+const MADISON_META_DESCRIPTION =
+  "Fly fish Montana's Madison River: 9 public access points, a month-by-month hatch chart, best flies, and a June to October season built on the upper and lower river.";
+const MADISON_LEDE =
+  "The Madison River runs 183 miles from Yellowstone National Park to Three Forks, Montana, and fishes best June through October. Above Ennis Lake it is broad riffle-and-run meadow water you can wade; below the lake and through Beartrap Canyon it turns into bigger, quieter brown trout water. Nine public access points are mapped below, from Raynolds' Pass and Three Dollar Bridge on the upper river down to Valley Garden and Ennis Bridge.";
+const MADISON_BEST_TIME =
+  "June through October is the Madison's window. Salmonflies come off in late May and early June and pull big trout to the surface, which is also the most crowded stretch of the season. July and August belong to hoppers, PMDs, and caddis, with the wade water below Ennis Lake doing more work than the salmonfly posters suggest. September and October are the quiet months: blue-winged olives in sizes 16 to 20, October caddis in 6 to 10, and mahogany duns in 14 to 16, plus streamers for pre-spawn browns. Check Montana FWP for current section rules before you go, and note the stretch inside Yellowstone National Park needs a separate park permit.";
+const MADISON_NEARBY_SLUGS = [
+  "gallatin-river",
+  "yellowstone-river",
+  "jefferson-river-montana",
+  "missouri-river",
+  "big-hole-river",
+  "beaverhead-river-montana",
+] as const;
+
+async function nearbyRiversForPage(
+  river: River,
+  destRivers: River[],
+): Promise<River[]> {
+  if (river.slug !== "madison-river") {
+    return destRivers.filter((r) => r.id !== river.id).slice(0, 6);
+  }
+  const bySlug = new Map(destRivers.map((r) => [r.slug, r]));
+  const missing = MADISON_NEARBY_SLUGS.filter((slug) => !bySlug.has(slug));
+  if (missing.length > 0) {
+    const extras = await Promise.all(missing.map((slug) => getRiverBySlug(slug)));
+    for (const extra of extras) {
+      if (extra) bySlug.set(extra.slug, extra);
+    }
+  }
+  return MADISON_NEARBY_SLUGS.flatMap((slug) => {
+    const found = bySlug.get(slug);
+    return found ? [found] : [];
+  });
+}
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -62,9 +100,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDesc = `${river.name}: ${river.lengthMiles ? river.lengthMiles + " miles, " : ""}${river.difficulty || "all-level"} ${river.flowType || ""} water.${speciesList ? ` Target ${speciesList}.` : ""}${accessCount > 0 ? ` ${accessCount} access points.` : ""} Hatch charts, guides & trip planning.`;
 
   return {
-    title: { absolute: river.metaTitle || fallbackTitle },
+    title: { absolute: slug === "madison-river" ? MADISON_TITLE : river.metaTitle || fallbackTitle },
     description:
-      river.metaDescription || fallbackDesc,
+      slug === "madison-river" ? MADISON_META_DESCRIPTION : river.metaDescription || fallbackDesc,
     openGraph: {
       title: river.metaTitle || `${river.name} Fly Fishing Guide`,
       description: river.metaDescription || river.description.substring(0, 160),
@@ -107,7 +145,7 @@ export default async function RiverPage({ params }: Props) {
     : null;
 
   const nearbyLodges = riverLodges.length > 0 ? riverLodges : destLodges.slice(0, 4);
-  const nearbyRivers = destRivers.filter((r) => r.id !== river.id).slice(0, 6);
+  const nearbyRivers = await nearbyRiversForPage(river, destRivers);
 
   const mapMarkers = [
     ...(river.accessPoints || []).map((ap) => ({
@@ -189,6 +227,7 @@ export default async function RiverPage({ params }: Props) {
         title={river.name}
         subtitle={heroSubtitle || undefined}
         meta={river.lengthMiles ? `${river.lengthMiles} miles` : undefined}
+        lede={river.slug === "madison-river" ? MADISON_LEDE : undefined}
         toolbar={
           <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
             <Breadcrumbs
@@ -348,6 +387,19 @@ export default async function RiverPage({ params }: Props) {
                     );
                   })}
                 </ul>
+              </div>
+            </ScrollAnimation>
+          )}
+
+          {river.slug === "madison-river" && (
+            <ScrollAnimation>
+              <div>
+                <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  When is the best time to fly fish the Madison River?
+                </h2>
+                <p className="max-w-[var(--prose)] text-[var(--text-16)] leading-relaxed text-[var(--text-2)]">
+                  {MADISON_BEST_TIME}
+                </p>
               </div>
             </ScrollAnimation>
           )}
