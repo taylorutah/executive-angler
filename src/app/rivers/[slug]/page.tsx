@@ -59,23 +59,44 @@ const MADISON_NEARBY_SLUGS = [
   "big-hole-river",
   "beaverhead-river-montana",
 ] as const;
+const GALLATIN_TITLE = "Gallatin River Fly Fishing Guide | Executive Angler";
+const GALLATIN_META_DESCRIPTION =
+  "Fly fish Montana's Gallatin River: 120 miles of canyon wade water and valley browns, 3 public access points, June to October season, near Big Sky and Bozeman.";
+const GALLATIN_LEDE =
+  "The Gallatin River runs 120 miles from Gallatin Lake in Yellowstone National Park northwest through Gallatin Canyon and into the Gallatin Valley near Bozeman, Montana. The canyon is intermediate wade water with pocket pools and riffles; below the canyon the river widens and holds larger brown trout. Season on this page is June through October. Three public access points are mapped below: Greek Creek Campground, Moose Creek Flat, and Storm Castle Creek Bridge.";
+const GALLATIN_BEST_TIME =
+  "June through October is the Gallatin window listed on this page. The canyon section is almost exclusively wade water and fishes as dry-fly pocket water, with patterns like Elk Hair Caddis and Stimulator called out in the river overview. Below the canyon, toward Bozeman, the river slows and widens; larger brown trout there are targeted with nymphs and streamers, especially in the fall. Check Montana FWP for current section rules, and note that water inside Yellowstone National Park needs a separate park fishing permit.";
+const GALLATIN_NEARBY_SLUGS = [
+  "madison-river",
+  "yellowstone-river",
+  "jefferson-river-montana",
+  "missouri-river",
+  "big-hole-river",
+  "beaverhead-river-montana",
+] as const;
 
 async function nearbyRiversForPage(
   river: River,
   destRivers: River[],
 ): Promise<River[]> {
-  if (river.slug !== "madison-river") {
+  const nearbySlugs =
+    river.slug === "madison-river"
+      ? MADISON_NEARBY_SLUGS
+      : river.slug === "gallatin-river"
+        ? GALLATIN_NEARBY_SLUGS
+        : null;
+  if (!nearbySlugs) {
     return destRivers.filter((r) => r.id !== river.id).slice(0, 6);
   }
   const bySlug = new Map(destRivers.map((r) => [r.slug, r]));
-  const missing = MADISON_NEARBY_SLUGS.filter((slug) => !bySlug.has(slug));
+  const missing = nearbySlugs.filter((slug) => !bySlug.has(slug));
   if (missing.length > 0) {
     const extras = await Promise.all(missing.map((slug) => getRiverBySlug(slug)));
     for (const extra of extras) {
       if (extra) bySlug.set(extra.slug, extra);
     }
   }
-  return MADISON_NEARBY_SLUGS.flatMap((slug) => {
+  return nearbySlugs.flatMap((slug) => {
     const found = bySlug.get(slug);
     return found ? [found] : [];
   });
@@ -100,9 +121,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallbackDesc = `${river.name}: ${river.lengthMiles ? river.lengthMiles + " miles, " : ""}${river.difficulty || "all-level"} ${river.flowType || ""} water.${speciesList ? ` Target ${speciesList}.` : ""}${accessCount > 0 ? ` ${accessCount} access points.` : ""} Hatch charts, guides & trip planning.`;
 
   return {
-    title: { absolute: slug === "madison-river" ? MADISON_TITLE : river.metaTitle || fallbackTitle },
+    title: {
+      absolute:
+        slug === "madison-river"
+          ? MADISON_TITLE
+          : slug === "gallatin-river"
+            ? GALLATIN_TITLE
+            : river.metaTitle || fallbackTitle,
+    },
     description:
-      slug === "madison-river" ? MADISON_META_DESCRIPTION : river.metaDescription || fallbackDesc,
+      slug === "madison-river"
+        ? MADISON_META_DESCRIPTION
+        : slug === "gallatin-river"
+          ? GALLATIN_META_DESCRIPTION
+          : river.metaDescription || fallbackDesc,
     openGraph: {
       title: river.metaTitle || `${river.name} Fly Fishing Guide`,
       description: river.metaDescription || river.description.substring(0, 160),
@@ -227,7 +259,13 @@ export default async function RiverPage({ params }: Props) {
         title={river.name}
         subtitle={heroSubtitle || undefined}
         meta={river.lengthMiles ? `${river.lengthMiles} miles` : undefined}
-        lede={river.slug === "madison-river" ? MADISON_LEDE : undefined}
+        lede={
+          river.slug === "madison-river"
+            ? MADISON_LEDE
+            : river.slug === "gallatin-river"
+              ? GALLATIN_LEDE
+              : undefined
+        }
         toolbar={
           <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
             <Breadcrumbs
@@ -410,6 +448,19 @@ export default async function RiverPage({ params }: Props) {
                 hatchChart={river.hatchChart}
                 bestMonths={river.bestMonths || []}
               />
+            </ScrollAnimation>
+          )}
+
+          {river.slug === "gallatin-river" && (
+            <ScrollAnimation>
+              <div>
+                <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  When is the best time to fly fish the Gallatin River?
+                </h2>
+                <p className="max-w-[var(--prose)] text-[var(--text-16)] leading-relaxed text-[var(--text-2)]">
+                  {GALLATIN_BEST_TIME}
+                </p>
+              </div>
             </ScrollAnimation>
           )}
 

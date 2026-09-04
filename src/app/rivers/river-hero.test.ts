@@ -62,8 +62,9 @@ describe("river hero paper band", () => {
   });
 
   it("scopes Madison SEO lede, season H2, and neighbor slugs to that river only", () => {
-    assert.match(page, /lede=\{river\.slug === "madison-river" \? MADISON_LEDE : undefined\}/);
+    assert.match(page, /river\.slug === "madison-river"\s*\n\s*\? MADISON_LEDE/);
     assert.match(page, /When is the best time to fly fish the Madison River\?/);
+    assert.match(page, /MADISON_NEARBY_SLUGS/);
     assert.match(page, /"gallatin-river"/);
     assert.match(page, /"yellowstone-river"/);
     assert.match(page, /"jefferson-river-montana"/);
@@ -72,7 +73,22 @@ describe("river hero paper band", () => {
     assert.match(page, /"beaverhead-river-montana"/);
     assert.match(page, /nearbyRiversForPage/);
     assert.equal(page.includes("/plan/madison-river"), false);
-    assert.match(page, /if \(river\.slug !== "madison-river"\)/);
+    assert.match(page, /river\.slug === "madison-river"\s*\n\s*\? MADISON_NEARBY_SLUGS/);
+    assert.equal(page.includes("if (river.slug !== \"madison-river\")"), false);
+  });
+
+  it("scopes Gallatin SEO lede, season H2, and neighbor slugs to that river only", () => {
+    assert.match(page, /river\.slug === "gallatin-river"\s*\n\s*\? GALLATIN_LEDE/);
+    assert.match(page, /When is the best time to fly fish the Gallatin River\?/);
+    assert.match(
+      page,
+      /GALLATIN_BEST_TIME[\s\S]*Best flies for \{river\.name\}/,
+    );
+    assert.match(page, /GALLATIN_NEARBY_SLUGS = \[\s*"madison-river"/);
+    assert.match(page, /river\.slug === "gallatin-river"\s*\n\s*\? GALLATIN_NEARBY_SLUGS/);
+    assert.match(page, /slug === "gallatin-river"\s*\n\s*\? GALLATIN_TITLE/);
+    assert.match(page, /slug === "gallatin-river"\s*\n\s*\? GALLATIN_META_DESCRIPTION/);
+    assert.equal(page.includes("/plan/gallatin-river"), false);
   });
 
   it("paints lodge stills and stays quiet when the frame is empty", () => {
