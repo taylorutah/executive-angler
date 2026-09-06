@@ -17,6 +17,21 @@ describe("normalizeImageUrl", () => {
     assert.equal(normalizeImageUrl("  "), undefined);
   });
 
+  it("remaps the stale BWO Comparadun storage URL onto the hosted still", () => {
+    assert.equal(
+      normalizeImageUrl(
+        "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/fly-pattern-images/blue-winged-olive-comparadun.jpg",
+      ),
+      "/images/flies/blue-winged-olive-comparadun.jpg",
+    );
+    assert.equal(
+      normalizeImageUrl(
+        "https://api.executiveangler.com/storage/v1/object/public/fly-pattern-images/blue-winged-olive-comparadun.jpg",
+      ),
+      "/images/flies/blue-winged-olive-comparadun.jpg",
+    );
+  });
+
   it("keeps plate cards off icon and submission paths", () => {
     assert.equal(plateImageUrl("/fly-icons/pt.svg"), undefined);
     assert.equal(

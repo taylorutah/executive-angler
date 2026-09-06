@@ -4,6 +4,14 @@ const RETIRED_STILLS: Record<string, string> = {
     "/images/home/madison-three-dollar-bridge.jpg",
 };
 
+/** Stale storage URLs replaced by in-repo stills. */
+const HOSTED_FLY_STILLS: Record<string, string> = {
+  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/fly-pattern-images/blue-winged-olive-comparadun.jpg":
+    "/images/flies/blue-winged-olive-comparadun.jpg",
+  "https://api.executiveangler.com/storage/v1/object/public/fly-pattern-images/blue-winged-olive-comparadun.jpg":
+    "/images/flies/blue-winged-olive-comparadun.jpg",
+};
+
 /** Treat null, blank, and whitespace-only as missing. */
 export function normalizeImageUrl(
   value: string | null | undefined,
@@ -11,7 +19,7 @@ export function normalizeImageUrl(
   if (typeof value !== "string") return undefined;
   const trimmed = value.trim();
   if (trimmed.length === 0) return undefined;
-  return RETIRED_STILLS[trimmed] ?? trimmed;
+  return HOSTED_FLY_STILLS[trimmed] ?? RETIRED_STILLS[trimmed] ?? trimmed;
 }
 
 export function isUsableImageUrl(
