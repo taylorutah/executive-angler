@@ -7,6 +7,7 @@
  */
 import { createClient } from "@/lib/supabase/server";
 import { createStaticClient } from "@/lib/supabase/static";
+import { withHostedFlyHero } from "@/lib/flies/hosted-hero";
 import type {
   Fly,
   FlyConfiguration,
@@ -34,7 +35,7 @@ export async function listApprovedFlies(): Promise<Fly[]> {
     console.error("[listApprovedFlies]", error);
     return [];
   }
-  return (data ?? []) as Fly[];
+  return ((data ?? []) as Fly[]).map(withHostedFlyHero);
 }
 
 /** Approved fly by slug. Falls back to slug-redirects and submitter pending.
@@ -48,7 +49,7 @@ export async function getFlyBySlug(slug: string): Promise<Fly | null> {
     .eq("status", "approved")
     .is("deleted_at", null)
     .maybeSingle();
-  if (data) return data as Fly;
+  if (data) return withHostedFlyHero(data as Fly);
 
   // Slug redirect (e.g. walt-s-worm → walts-worm).
   const { data: redirect } = await supabase
@@ -64,7 +65,7 @@ export async function getFlyBySlug(slug: string): Promise<Fly | null> {
       .eq("status", "approved")
       .is("deleted_at", null)
       .maybeSingle();
-    if (redirected) return redirected as Fly;
+    if (redirected) return withHostedFlyHero(redirected as Fly);
   }
 
   // Submitter peek: pending/private rows visible to their owner via RLS.
@@ -76,7 +77,7 @@ export async function getFlyBySlug(slug: string): Promise<Fly | null> {
     .eq("slug", slug)
     .is("deleted_at", null)
     .maybeSingle();
-  return (own ?? null) as Fly | null;
+  return own ? withHostedFlyHero(own as Fly) : null;
 }
 
 /** Fly by ID (any status — RLS gates visibility). Soft-deleted rows excluded. */
@@ -88,7 +89,7 @@ export async function getFlyById(id: string): Promise<Fly | null> {
     .eq("id", id)
     .is("deleted_at", null)
     .maybeSingle();
-  return (data ?? null) as Fly | null;
+  return data ? withHostedFlyHero(data as Fly) : null;
 }
 
 /** Lookup a slug-rename redirect target. */

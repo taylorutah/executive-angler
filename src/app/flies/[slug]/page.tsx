@@ -14,6 +14,7 @@ import {
 } from "@/lib/db/fly-model";
 import { SITE_URL } from "@/lib/constants";
 import { publicImageCredit } from "@/lib/authors";
+import { flyHeroSrc } from "@/lib/flies/hosted-hero";
 import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
@@ -43,6 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${fly.name} — ${fly.category ?? "Fly Pattern"}`;
   const description =
     fly.description?.slice(0, 160) ?? `${fly.name}: tying recipe, options, fishing notes.`;
+  const hero = flyHeroSrc(fly);
   return {
     title,
     description,
@@ -50,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url: `${SITE_URL}/flies/${fly.slug}`,
-      images: fly.hero_image_url ? [{ url: fly.hero_image_url, alt: fly.name }] : undefined,
+      images: hero ? [{ url: hero, alt: fly.name }] : undefined,
     },
     alternates: { canonical: `${SITE_URL}/flies/${fly.slug}` },
   };
@@ -108,6 +110,7 @@ export default async function FlyDetail({ params }: Props) {
   const sizes = sizeSpec(fly.option_envelope?.sizes);
   const imitation = (fly.imitates ?? []).filter(Boolean).join(" · ");
   const originCredit = publicImageCredit(fly.origin_credit);
+  const hero = flyHeroSrc(fly);
   const pendingBanner =
     fly.status === "pending"
       ? "This fly is pending review — only you can see it."
@@ -123,7 +126,7 @@ export default async function FlyDetail({ params }: Props) {
           "@type": "Article",
           headline: fly.name,
           description: fly.description ?? undefined,
-          image: fly.hero_image_url ?? undefined,
+          image: hero ?? undefined,
           url: `${SITE_URL}/flies/${fly.slug}`,
           author: originCredit
             ? { "@type": "Person", name: originCredit }
@@ -153,7 +156,7 @@ export default async function FlyDetail({ params }: Props) {
         <div className="desk-sheet-grid">
           <div className="desk-sheet-photo">
             <SafeEntityImage
-              src={fly.hero_image_url}
+              src={hero}
               alt={fly.name}
               title={fly.name}
               meta={[fly.category, sizes].filter(Boolean).join(" · ") || undefined}
