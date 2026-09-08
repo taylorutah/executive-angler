@@ -91,6 +91,25 @@ describe("river hero paper band", () => {
     assert.equal(page.includes("/plan/gallatin-river"), false);
   });
 
+  it("scopes Yellowstone SEO lede, season H2, and neighbor slugs to that river only", () => {
+    assert.match(page, /river\.slug === "yellowstone-river"\s*\n\s*\? YELLOWSTONE_LEDE/);
+    assert.match(page, /When is the best time to fly fish the Yellowstone River\?/);
+    assert.match(
+      page,
+      /YELLOWSTONE_BEST_TIME[\s\S]*Best flies for \{river\.name\}/,
+    );
+    assert.match(page, /YELLOWSTONE_NEARBY_SLUGS = \[\s*"madison-river"/);
+    assert.match(page, /"gallatin-river"/);
+    assert.match(page, /"firehole-river"/);
+    assert.match(page, /"boulder-river-montana"/);
+    assert.match(page, /"jefferson-river-montana"/);
+    assert.match(page, /"missouri-river"/);
+    assert.match(page, /river\.slug === "yellowstone-river"\s*\n\s*\? YELLOWSTONE_NEARBY_SLUGS/);
+    assert.match(page, /slug === "yellowstone-river"\s*\n\s*\? YELLOWSTONE_TITLE/);
+    assert.match(page, /slug === "yellowstone-river"\s*\n\s*\? YELLOWSTONE_META_DESCRIPTION/);
+    assert.equal(page.includes("/plan/yellowstone-river"), false);
+  });
+
   it("paints lodge stills and stays quiet when the frame is empty", () => {
     assert.match(page, /imageUrl=\{lodge\.heroImageUrl\}/);
     assert.match(page, /imageFallback="quiet"/);
