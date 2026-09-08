@@ -74,6 +74,21 @@ const GALLATIN_NEARBY_SLUGS = [
   "big-hole-river",
   "beaverhead-river-montana",
 ] as const;
+const YELLOWSTONE_TITLE = "Yellowstone River Fly Fishing Guide | Executive Angler";
+const YELLOWSTONE_META_DESCRIPTION =
+  "Fly fish Montana's Yellowstone River: Paradise Valley float and wade water, 3 FAS access points, July to October season, cutthroat rainbow and brown trout.";
+const YELLOWSTONE_LEDE =
+  "The Yellowstone River is the longest undammed river in the contiguous United States, flowing 692 miles from the Absaroka Range through Yellowstone National Park and Paradise Valley past Livingston before joining the Missouri near North Dakota. The Paradise Valley stretch between Gardiner and Livingston is the prized fly water on this page, holding cutthroat, rainbow, and brown trout. Season listed here is July through October. Three public access points are mapped below: Carbella FAS, Mallard's Rest FAS, and Loch Leven FAS near Emigrant.";
+const YELLOWSTONE_BEST_TIME =
+  "July through October is the Yellowstone window listed on this page. High-elevation Yellowstone Park snowpack usually keeps runoff later than other Montana freestones, so prime dry-fly fishing often waits until mid-July. Once it clears, Paradise Valley rewards hopper fishing through August and September, then fall streamer fishing as larger browns move upstream. That Paradise Valley section is primarily a float fishery between FAS sites, with wade water at bridges and side channels. Check Montana FWP for current section rules, and note that water inside Yellowstone National Park needs a separate park fishing permit.";
+const YELLOWSTONE_NEARBY_SLUGS = [
+  "madison-river",
+  "gallatin-river",
+  "firehole-river",
+  "boulder-river-montana",
+  "jefferson-river-montana",
+  "missouri-river",
+] as const;
 
 async function nearbyRiversForPage(
   river: River,
@@ -84,7 +99,9 @@ async function nearbyRiversForPage(
       ? MADISON_NEARBY_SLUGS
       : river.slug === "gallatin-river"
         ? GALLATIN_NEARBY_SLUGS
-        : null;
+        : river.slug === "yellowstone-river"
+          ? YELLOWSTONE_NEARBY_SLUGS
+          : null;
   if (!nearbySlugs) {
     return destRivers.filter((r) => r.id !== river.id).slice(0, 6);
   }
@@ -127,14 +144,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           ? MADISON_TITLE
           : slug === "gallatin-river"
             ? GALLATIN_TITLE
-            : river.metaTitle || fallbackTitle,
+            : slug === "yellowstone-river"
+              ? YELLOWSTONE_TITLE
+              : river.metaTitle || fallbackTitle,
     },
     description:
       slug === "madison-river"
         ? MADISON_META_DESCRIPTION
         : slug === "gallatin-river"
           ? GALLATIN_META_DESCRIPTION
-          : river.metaDescription || fallbackDesc,
+          : slug === "yellowstone-river"
+            ? YELLOWSTONE_META_DESCRIPTION
+            : river.metaDescription || fallbackDesc,
     openGraph: {
       title: river.metaTitle || `${river.name} Fly Fishing Guide`,
       description: river.metaDescription || river.description.substring(0, 160),
@@ -264,7 +285,9 @@ export default async function RiverPage({ params }: Props) {
             ? MADISON_LEDE
             : river.slug === "gallatin-river"
               ? GALLATIN_LEDE
-              : undefined
+              : river.slug === "yellowstone-river"
+                ? YELLOWSTONE_LEDE
+                : undefined
         }
         toolbar={
           <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
@@ -459,6 +482,19 @@ export default async function RiverPage({ params }: Props) {
                 </h2>
                 <p className="max-w-[var(--prose)] text-[var(--text-16)] leading-relaxed text-[var(--text-2)]">
                   {GALLATIN_BEST_TIME}
+                </p>
+              </div>
+            </ScrollAnimation>
+          )}
+
+          {river.slug === "yellowstone-river" && (
+            <ScrollAnimation>
+              <div>
+                <h2 className="mb-2 font-heading text-2xl font-semibold leading-tight text-[var(--text-1)]">
+                  When is the best time to fly fish the Yellowstone River?
+                </h2>
+                <p className="max-w-[var(--prose)] text-[var(--text-16)] leading-relaxed text-[var(--text-2)]">
+                  {YELLOWSTONE_BEST_TIME}
                 </p>
               </div>
             </ScrollAnimation>
