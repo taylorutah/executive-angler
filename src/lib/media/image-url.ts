@@ -5,12 +5,42 @@ const RETIRED_STILLS: Record<string, string> = {
 };
 
 /** Stale storage URLs replaced by in-repo stills. */
-const HOSTED_FLY_STILLS: Record<string, string> = {
-  "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/fly-pattern-images/blue-winged-olive-comparadun.jpg":
-    "/images/flies/blue-winged-olive-comparadun.jpg",
-  "https://api.executiveangler.com/storage/v1/object/public/fly-pattern-images/blue-winged-olive-comparadun.jpg":
-    "/images/flies/blue-winged-olive-comparadun.jpg",
-};
+const HOSTED_FLY_SLUGS = [
+  "barrs-emerger",
+  "blue-winged-olive-comparadun",
+  "bwo-loop-wing-emerger",
+  "bwo-parachute",
+  "bwo-sparkle-dun",
+  "callibaetis-cripple",
+  "cdc-emerger",
+  "comparadun",
+  "daves-hopper",
+  "flying-ant",
+  "humpy",
+  "matthews-sparkle-emerger",
+  "parachute-hopper",
+  "pmd-emerger",
+  "snowshoe-emerger",
+  "thread-midge",
+  "top-secret-midge",
+  "x-caddis",
+] as const;
+
+const HOSTED_FLY_STILLS: Record<string, string> = Object.fromEntries(
+  HOSTED_FLY_SLUGS.flatMap((slug) => {
+    const hosted = `/images/flies/${slug}.jpg`;
+    return [
+      [
+        `https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/fly-pattern-images/${slug}.jpg`,
+        hosted,
+      ],
+      [
+        `https://api.executiveangler.com/storage/v1/object/public/fly-pattern-images/${slug}.jpg`,
+        hosted,
+      ],
+    ];
+  }),
+);
 
 /** Treat null, blank, and whitespace-only as missing. */
 export function normalizeImageUrl(

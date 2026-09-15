@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   flyHeroSrc,
+  HOSTED_FLY_HERO_BY_SLUG,
   hostedFlyHeroUrl,
   withHostedFlyHero,
 } from "./hosted-hero";
@@ -13,13 +14,15 @@ const STALE =
   "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/fly-pattern-images/blue-winged-olive-comparadun.jpg";
 
 describe("hosted fly heroes", () => {
-  it("keeps the BWO Comparadun JPEG in public/", () => {
-    const path = join(process.cwd(), "public", ASSET.slice(1));
-    assert.equal(existsSync(path), true);
-    const bytes = readFileSync(path);
-    assert.equal(bytes[0], 0xff);
-    assert.equal(bytes[1], 0xd8);
-    assert.ok(bytes.length > 10_000);
+  it("keeps each hosted JPEG in public/", () => {
+    for (const [slug, asset] of Object.entries(HOSTED_FLY_HERO_BY_SLUG)) {
+      const path = join(process.cwd(), "public", asset.slice(1));
+      assert.equal(existsSync(path), true, `${slug} missing ${asset}`);
+      const bytes = readFileSync(path);
+      assert.equal(bytes[0], 0xff, `${slug} is not a JPEG`);
+      assert.equal(bytes[1], 0xd8, `${slug} is not a JPEG`);
+      assert.ok(bytes.length > 10_000, `${slug} is too small`);
+    }
   });
 
   it("prefers the hosted still for the BWO Comparadun slug", () => {

@@ -34,6 +34,7 @@ describe("fly desk sheet", () => {
     assert.match(recipe, /desk-recipe/);
     assert.match(recipe, /desk-recipe-label/);
     assert.match(recipe, /uniqueRecipeRows/);
+    assert.match(recipe, /Tie it in other colors to match the hatch/);
     assert.equal(recipe.includes("max-w-7xl"), false);
     assert.match(css, /grid-template-columns: 7em minmax\(0, 1fr\)/);
   });
