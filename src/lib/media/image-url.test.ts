@@ -30,6 +30,12 @@ describe("normalizeImageUrl", () => {
       ),
       "/images/flies/blue-winged-olive-comparadun.jpg",
     );
+    assert.equal(
+      normalizeImageUrl(
+        "https://qlasxtfbodyxbcuchvxz.supabase.co/storage/v1/object/public/fly-pattern-images/pmd-emerger.jpg",
+      ),
+      "/images/flies/pmd-emerger.jpg",
+    );
   });
 
   it("keeps plate cards off icon and submission paths", () => {

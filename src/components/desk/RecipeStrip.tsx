@@ -33,6 +33,10 @@ export default function RecipeStrip({ materials, notes }: Props) {
   return (
     <section aria-labelledby="recipe-strip-heading" className="desk-recipe">
       <h2 id="recipe-strip-heading">Recipe</h2>
+      <p className="mt-2 max-w-[var(--prose)] text-[14px] text-[var(--text-2)]">
+        This is one dressing. Tie it in other colors to match the hatch in front
+        of you.
+      </p>
       {rows.length > 0 ? (
         <ul className="desk-rule-list mt-4 divide-y divide-[var(--border)] border-y border-[var(--border)]">
           {rows.map((m, i) => {
