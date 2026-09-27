@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CardActionSlot from "@/components/flies/CardActionSlot";
 import type { CardData } from "@/types/list-config";
 import DeskPhotoCard from "./DeskPhotoCard";
 
@@ -67,6 +68,7 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
               title={item.title}
               meta={item.meta}
               density="plate"
+              actionSlot={item.actionSlot}
             />
           </li>
         ))}
@@ -87,10 +89,10 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
                   <p className="ea-overline mb-3">{col.label}</p>
                   <ul className="space-y-2">
                     {rows.map((item) => (
-                      <li key={item.href}>
+                      <li key={item.href} className="flex items-baseline gap-2">
                         <Link
                           href={item.href}
-                          className="card-hover ea-focus-ring group flex items-baseline justify-between gap-3"
+                          className="card-hover ea-focus-ring group flex min-w-0 flex-1 items-baseline justify-between gap-3"
                         >
                           <span className="text-[14px] text-[var(--text-1)] group-hover:text-[var(--accent)]">
                             {item.title}
@@ -101,6 +103,13 @@ export default function DeskFlyIndex({ items }: { items: CardData[] }) {
                             </span>
                           ) : null}
                         </Link>
+                        {item.actionSlot?.kind === "add-to-fly-box" ? (
+                          <CardActionSlot
+                            canonicalFlyId={item.actionSlot.canonicalFlyId}
+                            flyName={item.actionSlot.flyName}
+                            placement="inline"
+                          />
+                        ) : null}
                       </li>
                     ))}
                   </ul>

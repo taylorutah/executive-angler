@@ -27,6 +27,7 @@ import { publicVariantRows } from "@/lib/flies/variant-rows";
 import { formatHookSize } from "@/lib/flies/variant-format";
 
 export const revalidate = 3600;
+export const dynamicParams = true;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function sizeSpec(sizes: number[] | undefined): string | null {
-  if (!sizes?.length) return null;
+  if (!Array.isArray(sizes) || sizes.length === 0) return null;
   if (sizes.length === 1) return formatHookSize(sizes[0]);
   return `${formatHookSize(sizes[0])}–${formatHookSize(sizes[sizes.length - 1])}`;
 }
@@ -101,14 +102,22 @@ export default async function FlyDetail({ params }: Props) {
     redirect(`/flies/${fly.slug}`);
   }
 
+  const materials = Array.isArray(fly.materials_list) ? fly.materials_list : [];
+  const envelope =
+    fly.option_envelope &&
+    typeof fly.option_envelope === "object" &&
+    !Array.isArray(fly.option_envelope)
+      ? fly.option_envelope
+      : {};
+  const imitates = Array.isArray(fly.imitates) ? fly.imitates : [];
   const [linkedMaterials, fishingNow] = await Promise.all([
-    linkRecipeMaterials(fly.materials_list ?? []),
+    linkRecipeMaterials(materials),
     getFishingNowRivers(fly.name),
   ]);
   const videoEmbed = toYouTubeEmbedUrl(fly.video_url);
-  const variantRows = publicVariantRows(fly.option_envelope);
-  const sizes = sizeSpec(fly.option_envelope?.sizes);
-  const imitation = (fly.imitates ?? []).filter(Boolean).join(" · ");
+  const variantRows = publicVariantRows(envelope);
+  const sizes = sizeSpec(envelope.sizes);
+  const imitation = imitates.filter(Boolean).join(" · ");
   const originCredit = publicImageCredit(fly.origin_credit);
   const hero = flyHeroSrc(fly);
   const pendingBanner =

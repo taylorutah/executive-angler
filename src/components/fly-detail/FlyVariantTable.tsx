@@ -8,17 +8,18 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
+import QuickAddToBoxSheet from "@/components/flies/QuickAddToBoxSheet";
 import type { FlyConfigurationWithBoxes } from "@/types/flies";
 import {
   normalizeSizeKey,
   type PublicVariantRow,
 } from "@/lib/flies/variant-rows";
 
-type BoxOption = { id: string; name: string; tier: string; is_default?: boolean };
-
 type RowState = PublicVariantRow & {
   configurationId: string | null;
   stock: number | null;
+  tied: number | null;
+  bought: number | null;
   target: number | null;
 };
 
@@ -39,6 +40,8 @@ function mergeRows(
       ...row,
       configurationId: match?.id ?? null,
       stock: match ? stockOf(match) : null,
+      tied: match?.tied_count ?? null,
+      bought: match?.bought_count ?? null,
       target: match?.target_count ?? null,
     };
   });
@@ -53,6 +56,8 @@ function mergeRows(
       body: "—",
       configurationId: c.id,
       stock: stockOf(c),
+      tied: c.tied_count ?? 0,
+      bought: c.bought_count ?? 0,
       target: c.target_count,
     });
   }
@@ -69,9 +74,16 @@ interface Props {
 export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }: Props) {
   const { user } = useAuth();
   const [rows, setRows] = useState<RowState[]>(() =>
-    publicRows.map((r) => ({ ...r, configurationId: null, stock: null, target: null })),
+    publicRows.map((r) => ({
+      ...r,
+      configurationId: null,
+      stock: null,
+      tied: null,
+      bought: null,
+      target: null,
+    })),
   );
-  const [picker, setPicker] = useState<{ size: string; boxes: BoxOption[] } | null>(null);
+  const [quickAddSize, setQuickAddSize] = useState<string | null>(null);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -104,52 +116,26 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
     };
   }, [user, flyId, applyConfigs]);
 
-  async function addSize(size: string, boxId?: string) {
-    setBusyKey(size);
-    setError(null);
-    try {
-      const res = await fetch("/api/fishing/fly-configurations/quick-add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fly_id: flyId,
-          size: size === "—" ? null : size.replace(/^#/, ""),
-          box_id: boxId,
-        }),
-      });
-      if (res.status === 401) {
-        window.location.href = loginHref;
-        return;
-      }
-      const json = await res.json();
-      if (res.status === 409 && json.needsBoxPicker) {
-        setPicker({ size, boxes: json.boxes ?? [] });
-        return;
-      }
-      if (!res.ok) {
-        setError(typeof json.error === "string" ? json.error : "Could not add to box");
-        return;
-      }
-      setPicker(null);
-      const refresh = await fetch(
-        `/api/fishing/fly-configurations?fly_id=${encodeURIComponent(flyId)}`,
-      );
-      if (refresh.ok) {
-        const body = (await refresh.json()) as { configurations?: FlyConfigurationWithBoxes[] };
-        applyConfigs(body.configurations ?? []);
-      }
-    } catch {
-      setError("Network error");
-    } finally {
-      setBusyKey(null);
+  async function refreshConfigs() {
+    const refresh = await fetch(
+      `/api/fishing/fly-configurations?fly_id=${encodeURIComponent(flyId)}`,
+    );
+    if (refresh.ok) {
+      const body = (await refresh.json()) as { configurations?: FlyConfigurationWithBoxes[] };
+      applyConfigs(body.configurations ?? []);
     }
   }
 
   async function setTied(row: RowState, nextTied: number) {
     if (!row.configurationId) return;
-    const prev = row.stock;
+    const tied = Math.max(0, nextTied);
+    const bought = row.bought ?? 0;
+    const prevTied = row.tied;
+    const prevStock = row.stock;
     setRows((cur) =>
-      cur.map((r) => (r.key === row.key ? { ...r, stock: Math.max(0, nextTied) } : r)),
+      cur.map((r) =>
+        r.key === row.key ? { ...r, tied, stock: tied + bought } : r,
+      ),
     );
     setBusyKey(row.key);
     setError(null);
@@ -157,11 +143,15 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
       const res = await fetch("/api/fishing/fly-configurations", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: row.configurationId, tied_count: Math.max(0, nextTied) }),
+        body: JSON.stringify({ id: row.configurationId, tied_count: tied }),
       });
       if (!res.ok) throw new Error("Failed");
     } catch {
-      setRows((cur) => cur.map((r) => (r.key === row.key ? { ...r, stock: prev } : r)));
+      setRows((cur) =>
+        cur.map((r) =>
+          r.key === row.key ? { ...r, tied: prevTied, stock: prevStock } : r,
+        ),
+      );
       setError("Could not update count");
     } finally {
       setBusyKey(null);
@@ -224,9 +214,9 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                     <span className="inline-flex items-center justify-end gap-1">
                       <button
                         type="button"
-                        disabled={busyKey === row.key || row.stock === 0}
-                        onClick={() => setTied(row, (row.stock ?? 0) - 1)}
-                        aria-label={`Remove one ${flyName} ${row.size}`}
+                        disabled={busyKey === row.key || (row.tied ?? 0) === 0}
+                        onClick={() => setTied(row, (row.tied ?? 0) - 1)}
+                        aria-label={`Remove one tied ${flyName} ${row.size}`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50"
                       >
                         −
@@ -237,8 +227,8 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                       <button
                         type="button"
                         disabled={busyKey === row.key}
-                        onClick={() => setTied(row, (row.stock ?? 0) + 1)}
-                        aria-label={`Add one ${flyName} ${row.size}`}
+                        onClick={() => setTied(row, (row.tied ?? 0) + 1)}
+                        aria-label={`Add one tied ${flyName} ${row.size}`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] text-[var(--text-1)] hover:border-[var(--accent)] disabled:opacity-50"
                       >
                         +
@@ -248,10 +238,10 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
                     <button
                       type="button"
                       disabled={!!busyKey}
-                      onClick={() => addSize(row.size)}
+                      onClick={() => setQuickAddSize(row.size)}
                       className="ea-btn ea-btn-sm ea-btn-primary"
                     >
-                      {busyKey === row.size ? "Adding…" : "Add"}
+                      Add
                     </button>
                   )}
                 </td>
@@ -267,46 +257,19 @@ export default function FlyVariantTable({ flyId, flySlug, flyName, publicRows }:
         </p>
       )}
 
-      {picker && (
-        <div
-          className="ea-modal-overlay z-50 flex items-end justify-center sm:items-center"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="variant-box-picker"
-          onClick={() => setPicker(null)}
-        >
-          <div
-            className="ea-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 id="variant-box-picker">Which box?</h3>
-            <p className="mt-1 text-[13px] text-[var(--text-3)]">
-              Add {flyName} {picker.size} to one of your boxes.
-            </p>
-            <ul className="mt-4 space-y-1">
-              {picker.boxes.map((b) => (
-                <li key={b.id}>
-                  <button
-                    type="button"
-                    onClick={() => addSize(picker.size, b.id)}
-                    className="flex w-full items-center justify-between rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-2 text-left text-[13px] hover:border-[var(--accent)]"
-                  >
-                    <span>{b.name}</span>
-                    {b.tier ? <span className="ea-overline">{b.tier}</span> : null}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              onClick={() => setPicker(null)}
-              className="mt-4 w-full rounded-[var(--radius-md)] border border-[var(--border)] px-3 py-2 text-[14px] font-medium text-[var(--text-2)] hover:border-[var(--accent)]"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+      <QuickAddToBoxSheet
+        open={quickAddSize != null}
+        fly={{ id: flyId, name: flyName, slug: flySlug }}
+        defaultQtySource="tied"
+        initialSizes={
+          quickAddSize && quickAddSize !== "—" ? [quickAddSize] : undefined
+        }
+        onClose={() => setQuickAddSize(null)}
+        onSaved={() => {
+          setQuickAddSize(null);
+          void refreshConfigs();
+        }}
+      />
     </section>
   );
 }

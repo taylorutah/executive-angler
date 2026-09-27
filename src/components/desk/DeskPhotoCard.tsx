@@ -1,5 +1,7 @@
 import Link from "next/link";
+import CardActionSlot from "@/components/flies/CardActionSlot";
 import SafeEntityImage from "@/components/media/SafeEntityImage";
+import type { CardData } from "@/types/list-config";
 
 interface Props {
   href: string;
@@ -12,6 +14,7 @@ interface Props {
   liveHint?: string;
   /** plate = Inter 12px captions. river = Fraunces titles. */
   density?: "river" | "plate";
+  actionSlot?: CardData["actionSlot"];
 }
 
 /** Pictures-first specimen card. No lift, no copper, tokens from DESIGN.md. */
@@ -25,10 +28,17 @@ export default function DeskPhotoCard({
   featured,
   liveHint,
   density = "river",
+  actionSlot,
 }: Props) {
   const plate = density === "plate";
   return (
-    <Link href={href} className="card-hover group block">
+    <Link href={href} className="card-hover group relative block">
+      {actionSlot?.kind === "add-to-fly-box" && (
+        <CardActionSlot
+          canonicalFlyId={actionSlot.canonicalFlyId}
+          flyName={actionSlot.flyName}
+        />
+      )}
       <div
         className={`relative w-full bg-[var(--paper)] ${
           plate ? "aspect-square" : featured ? "aspect-[832/480]" : "aspect-[416/240]"

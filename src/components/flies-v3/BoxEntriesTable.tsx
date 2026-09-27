@@ -172,6 +172,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
               <th className="text-left">Fly</th>
               <th className="text-left">Version</th>
               <th className="text-right">Tied</th>
+              <th className="text-right">Bought</th>
               <th className="text-right">Target</th>
               <th className="text-right">Δ</th>
               <th className="w-12"></th>
@@ -210,8 +211,9 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                     </Link>
                   </td>
                   <td className="text-[var(--text-2)]">{summarizeVersion(cfg)}</td>
-                  <td className="text-right">{cfg.tied_count}</td>
-                  <td className="text-right">{cfg.target_count}</td>
+                  <td className="text-right">{cfg.tied_count ?? 0}</td>
+                  <td className="text-right">{cfg.bought_count ?? 0}</td>
+                  <td className="text-right">{cfg.target_count ?? 0}</td>
                   <td className={`text-right ${deficit > 0 ? "text-[var(--accent)]" : "text-[var(--text-3)]"}`}>
                     {deficit > 0 ? `+${deficit}` : "—"}
                   </td>

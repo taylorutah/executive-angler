@@ -119,8 +119,28 @@ interface Props {
   /** Catalog cards default Tied; name-first / buyer path defaults Bought. */
   defaultQtySource?: "tied" | "bought";
   initialBoxId?: string;
+  /** Pre-select these hook sizes (e.g. a variants-table row). */
+  initialSizes?: string[];
   onClose: () => void;
   onSaved: (result: SaveResult) => void;
+}
+
+function previewLabelsForSizes(
+  selectedColor: string | null,
+  selectedSizes: string[],
+  personalizations: Personalizations,
+): string[] {
+  const colorAndBead = suggestVariantLabel({
+    preferredColors: selectedColor ? [selectedColor] : [],
+    preferredSizes: [],
+    personalizations,
+  });
+  const sizes = selectedSizes.filter((s) => s.trim());
+  if (sizes.length === 0) return colorAndBead ? [colorAndBead] : [];
+  return sizes.map((size) => {
+    const sizePart = size.startsWith("#") ? size : `#${size}`;
+    return [colorAndBead, sizePart].filter(Boolean).join(" · ");
+  });
 }
 
 export default function QuickAddToBoxSheet({
@@ -128,6 +148,7 @@ export default function QuickAddToBoxSheet({
   fly: flyProp,
   defaultQtySource,
   initialBoxId,
+  initialSizes,
   onClose,
   onSaved,
 }: Props) {
@@ -175,8 +196,7 @@ export default function QuickAddToBoxSheet({
     return /(nymph|euro|jig|attractor|stonefly|caddis pupa)/.test(cat);
   }, [fly.beadOptions, fly.category]);
 
-  // Suggested label updates live as the user picks.
-  const suggestedLabel = useMemo(() => {
+  const previewPersonalizations = useMemo(() => {
     const personalizations: Personalizations = {};
     if (beadMaterial && beadMaterial !== "none") {
       personalizations.bead = {
@@ -185,12 +205,16 @@ export default function QuickAddToBoxSheet({
         model: beadMaterial,
       };
     }
-    return suggestVariantLabel({
-      preferredColors: selectedColor ? [selectedColor] : [],
-      preferredSizes: selectedSizes,
-      personalizations,
-    });
-  }, [beadMaterial, beadWeight, beadColor, selectedColor, selectedSizes]);
+    return personalizations;
+  }, [beadMaterial, beadWeight, beadColor]);
+
+  // One label per selected size — matches persistence (one config row each).
+  const previewLabels = useMemo(
+    () =>
+      previewLabelsForSizes(selectedColor, selectedSizes, previewPersonalizations),
+    [selectedColor, selectedSizes, previewPersonalizations],
+  );
+  const suggestedLabel = previewLabels[0] ?? "";
 
   // Load user's boxes + existing variants when sheet opens. Also hydrate
   // canonical fly fields if the caller only passed sparse data. For personal
@@ -266,6 +290,20 @@ export default function QuickAddToBoxSheet({
           fetchedBoxes[0]?.id;
         if (initial) setSelectedBoxIds([initial]);
 
+        const seeded = (initialSizes ?? [])
+          .map((s) => s.replace(/^#/, "").trim())
+          .filter(Boolean);
+        if (seeded.length > 0) {
+          setSelectedSizes(seeded);
+          setQtyBySize((q) => {
+            const next = { ...q };
+            for (const s of seeded) {
+              if (next[s] == null) next[s] = 0;
+            }
+            return next;
+          });
+        }
+
         if (variantsRes?.ok) {
           const v = (await variantsRes.json()) as ExistingVariant[];
           setExistingVariants(Array.isArray(v) ? v : []);
@@ -321,6 +359,7 @@ export default function QuickAddToBoxSheet({
     isPersonal,
     isNameFirst,
     initialBoxId,
+    initialSizes,
     qtySourceDefault,
   ]);
 
@@ -981,12 +1020,25 @@ export default function QuickAddToBoxSheet({
                 )}
               </div>
 
-              {/* Live label preview */}
-              {suggestedLabel && (
+              {/* Live label preview — one line per size, matching save. */}
+              {previewLabels.length > 0 && (
                 <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-2.5 text-xs text-[var(--text-2)]">
-                  Will save as:{" "}
-                  <span className="text-[var(--text-1)] font-medium">{fly.name}</span>{" "}
-                  <span className="text-[var(--accent)]">· {suggestedLabel}</span>
+                  <p>Will save as:</p>
+                  <ul className="mt-1 space-y-0.5">
+                    {previewLabels.map((label) => (
+                      <li key={label}>
+                        <span className="text-[var(--text-1)] font-medium">
+                          {fly.name || enteredName || "Fly"}
+                        </span>{" "}
+                        <span className="text-[var(--accent)]">· {label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {selectedSizes.length > 1 ? (
+                    <p className="mt-1.5 text-[var(--text-3)]">
+                      Each size is its own stock row.
+                    </p>
+                  ) : null}
                 </div>
               )}
             </>

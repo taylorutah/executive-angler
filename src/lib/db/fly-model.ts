@@ -5,6 +5,7 @@
  * Static reads (library list, fly detail anonymous render) use createStaticClient
  * so pages can statically generate. User-scoped reads use createClient.
  */
+import { unstable_rethrow } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withHostedFlyHero } from "@/lib/flies/hosted-hero";
@@ -14,8 +15,34 @@ import type {
   FlyConfigurationWithBoxes,
   FlyConfigurationInput,
   FlyBoxV2,
+  MaterialSlot,
+  OptionEnvelope,
   SlotOverrides,
 } from "@/types/flies";
+
+/** Sparse private/pending rows omit encyclopedia fields. Never let nulls throw. */
+function normalizeFlyRow(row: Fly): Fly {
+  const materials = Array.isArray(row.materials_list)
+    ? row.materials_list.filter((s): s is MaterialSlot => !!s && typeof s === "object")
+    : [];
+  const envelope =
+    row.option_envelope &&
+    typeof row.option_envelope === "object" &&
+    !Array.isArray(row.option_envelope)
+      ? row.option_envelope
+      : ({} as OptionEnvelope);
+  return withHostedFlyHero({
+    ...row,
+    category: row.category ?? null,
+    description: row.description ?? null,
+    materials_list: materials,
+    option_envelope: envelope,
+    imitates: Array.isArray(row.imitates) ? row.imitates : [],
+    gallery_image_urls: Array.isArray(row.gallery_image_urls)
+      ? row.gallery_image_urls
+      : [],
+  });
+}
 
 // ────────────────────────────────────────────────────────────────────────────
 // Flies (public library)
@@ -49,7 +76,7 @@ export async function getFlyBySlug(slug: string): Promise<Fly | null> {
     .eq("status", "approved")
     .is("deleted_at", null)
     .maybeSingle();
-  if (data) return withHostedFlyHero(data as Fly);
+  if (data) return normalizeFlyRow(data as Fly);
 
   // Slug redirect (e.g. walt-s-worm → walts-worm).
   const { data: redirect } = await supabase
@@ -65,19 +92,26 @@ export async function getFlyBySlug(slug: string): Promise<Fly | null> {
       .eq("status", "approved")
       .is("deleted_at", null)
       .maybeSingle();
-    if (redirected) return withHostedFlyHero(redirected as Fly);
+    if (redirected) return normalizeFlyRow(redirected as Fly);
   }
 
   // Submitter peek: pending/private rows visible to their owner via RLS.
-  // Still filter deleted_at so an archived fly can't be re-opened by slug.
-  const auth = await createClient();
-  const { data: own } = await auth
-    .from("flies")
-    .select("*")
-    .eq("slug", slug)
-    .is("deleted_at", null)
-    .maybeSingle();
-  return own ? withHostedFlyHero(own as Fly) : null;
+  // cookies() on a static/ISR page throws a Next.js dynamic-bailout error.
+  // Rethrow that so this request becomes dynamic; any other failure → null.
+  try {
+    const auth = await createClient();
+    const { data: own } = await auth
+      .from("flies")
+      .select("*")
+      .eq("slug", slug)
+      .is("deleted_at", null)
+      .maybeSingle();
+    return own ? normalizeFlyRow(own as Fly) : null;
+  } catch (err) {
+    unstable_rethrow(err);
+    console.error("[getFlyBySlug] owner peek", err);
+    return null;
+  }
 }
 
 /** Fly by ID (any status — RLS gates visibility). Soft-deleted rows excluded. */

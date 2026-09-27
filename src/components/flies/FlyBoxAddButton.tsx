@@ -71,12 +71,23 @@ export default function FlyBoxAddButton({
     async function check() {
       try {
         const supabase = createClient();
-        const col = fly.kind === "personal" ? "fly_pattern_id" : "canonical_fly_id";
-        const { count } = await supabase
+        const { data: configs, error: cfgErr } = await supabase
+          .from("user_fly_configurations")
+          .select("id")
+          .eq("user_id", user!.id)
+          .eq("fly_id", fly.id);
+        if (cfgErr) throw cfgErr;
+        const ids = (configs ?? []).map((c) => c.id as string);
+        if (ids.length === 0) {
+          if (!cancelled) setVariantCount(0);
+          return;
+        }
+        const { count, error } = await supabase
           .from("fly_box_entries_v3")
           .select("id", { count: "exact", head: true })
           .eq("user_id", user!.id)
-          .eq(col, fly.id);
+          .in("configuration_id", ids);
+        if (error) throw error;
         if (!cancelled) setVariantCount(count ?? 0);
       } catch (e) {
         console.warn("[FlyBoxAddButton] count check failed:", e);
