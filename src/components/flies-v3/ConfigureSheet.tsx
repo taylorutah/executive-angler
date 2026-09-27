@@ -76,6 +76,7 @@ export default function ConfigureSheet({
   const [beadMaterial, setBeadMaterial] = useState(readField((existing?.slot_overrides ?? {}) as SlotOverrides, existing?.size ?? null, "bead_material"));
   const [bodyColor, setBodyColor]   = useState(readField((existing?.slot_overrides ?? {}) as SlotOverrides, existing?.size ?? null, "body_color"));
   const [tied, setTied]             = useState(String(existing?.tied_count ?? 0));
+  const [bought, setBought]         = useState(String(existing?.bought_count ?? 0));
   const [target, setTarget]         = useState(String(existing?.target_count ?? 0));
   const [pickedBoxId, setPickedBoxId] = useState(initialBoxId ?? boxes?.[0]?.id ?? "");
   const [saving, setSaving]         = useState(false);
@@ -126,6 +127,7 @@ export default function ConfigureSheet({
         size: size.trim() || null,
         slot_overrides: buildSlotOverrides(),
         tied_count: Math.max(0, Number(tied) || 0),
+        bought_count: Math.max(0, Number(bought) || 0),
         target_count: Math.max(0, Number(target) || 0),
       };
       let configurationId: string | null = null;
@@ -205,7 +207,7 @@ export default function ConfigureSheet({
           <Row label={FIELD_LABELS.bead_material} value={beadMaterial} onChange={setBeadMaterial} suggestions={suggestions(env, "bead_material")} placeholder="tungsten" />
           <Row label={FIELD_LABELS.body_color}  value={bodyColor}    onChange={setBodyColor}    suggestions={suggestions(env, "body_color")}   placeholder="olive" />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             <label className="block">
               <span className="text-xs font-medium block mb-1">Tied count</span>
               <input
@@ -213,6 +215,16 @@ export default function ConfigureSheet({
                 min={0}
                 value={tied}
                 onChange={(e) => setTied(e.target.value)}
+                className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-transparent px-3 py-2 text-sm"
+              />
+            </label>
+            <label className="block">
+              <span className="text-xs font-medium block mb-1">Bought count</span>
+              <input
+                type="number"
+                min={0}
+                value={bought}
+                onChange={(e) => setBought(e.target.value)}
                 className="w-full rounded-md border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] bg-transparent px-3 py-2 text-sm"
               />
             </label>

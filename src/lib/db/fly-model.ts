@@ -374,6 +374,69 @@ export async function getMyConfigurationById(
   return (data ?? null) as FlyConfiguration | null;
 }
 
+function normalizeBodyColor(overrides?: SlotOverrides | null): string {
+  return String(overrides?.body?.color ?? "").trim().toLowerCase();
+}
+
+/** Existing config for this user + fly + one size + body color. */
+export async function findConfigurationByFlySizeColor(args: {
+  userId: string;
+  flyId: string;
+  size: string | null;
+  bodyColor: string | null;
+}): Promise<FlyConfiguration | null> {
+  const supabase = await createClient();
+  const size = args.size?.trim() || null;
+  let q = supabase
+    .from("user_fly_configurations")
+    .select("*")
+    .eq("user_id", args.userId)
+    .eq("fly_id", args.flyId)
+    .order("created_at", { ascending: true });
+  q = size ? q.eq("size", size) : q.is("size", null);
+  const { data, error } = await q;
+  if (error) {
+    console.error("[findConfigurationByFlySizeColor]", error);
+    return null;
+  }
+  const want = (args.bodyColor ?? "").trim().toLowerCase();
+  const match = ((data ?? []) as FlyConfiguration[]).find(
+    (row) => normalizeBodyColor(row.slot_overrides) === want,
+  );
+  return match ?? null;
+}
+
+/**
+ * Reuse a matching (fly, size, body color) config and add to tied/bought,
+ * or insert a new row. Size must be a single value — never a joined list.
+ */
+export async function findOrIncrementConfiguration(
+  input: FlyConfigurationInput,
+): Promise<FlyConfiguration | null> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  const existing = await findConfigurationByFlySizeColor({
+    userId: user.id,
+    flyId: input.fly_id,
+    size: input.size ?? null,
+    bodyColor:
+      typeof input.slot_overrides?.body?.color === "string"
+        ? input.slot_overrides.body.color
+        : null,
+  });
+  if (existing) {
+    const tiedAdd = input.tied_count ?? 0;
+    const boughtAdd = input.bought_count ?? 0;
+    if (tiedAdd === 0 && boughtAdd === 0) return existing;
+    return updateConfiguration(existing.id, {
+      tied_count: existing.tied_count + tiedAdd,
+      bought_count: existing.bought_count + boughtAdd,
+    });
+  }
+  return createConfiguration(input);
+}
+
 /** Create a configuration for the current user. */
 export async function createConfiguration(
   input: FlyConfigurationInput,

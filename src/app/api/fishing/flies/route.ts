@@ -448,9 +448,10 @@ export async function POST(req: NextRequest) {
 
     // Auto-create a minimal user_fly_configurations row so the new fly is
     // immediately visible in the Patterns hub (which joins through configs).
-    // Non-fatal: if this fails, the fly is still saved and the user can
-    // configure it manually from the detail page.
-    if (data) {
+    // Buyer inventory sends skip_auto_config and creates per-size rows itself.
+    const skipAutoConfig =
+      body.skip_auto_config === true || body.skip_auto_config === "true";
+    if (data && !skipAutoConfig) {
       const { error: cfgError } = await supabase
         .from("user_fly_configurations")
         .insert({

@@ -10,6 +10,7 @@ import { Box, ChevronLeft, Star } from "@/icons";
 import { createClient } from "@/lib/supabase/server";
 import { getBoxById, listMyBoxes } from "@/lib/db/fly-v2";
 import BoxEntriesTable, { type BoxEntryRow } from "@/components/flies-v3/BoxEntriesTable";
+import AddInventoryButton from "@/components/flies/AddInventoryButton";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -101,11 +102,14 @@ export default async function BoxDetailV3({ params }: Props) {
             {box.description && (
               <p className="mt-2 text-sm text-[var(--text-2)] max-w-2xl">{box.description}</p>
             )}
-            <p className="mt-3 text-[13px] text-[var(--text-3)] num">
-              {entries.length} {entries.length === 1 ? "version" : "versions"} ·
-              {box.total_capacity ? ` capacity ${box.total_capacity} · ` : " "}
-              tap any row to open the fly
-            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <p className="text-[13px] text-[var(--text-3)] num">
+                {entries.length} {entries.length === 1 ? "version" : "versions"} ·
+                {box.total_capacity ? ` capacity ${box.total_capacity} · ` : " "}
+                tap any row to open the fly
+              </p>
+              <AddInventoryButton initialBoxId={id} label="Add flies" />
+            </div>
           </div>
           <div className="flex flex-col items-stretch gap-2 sm:items-end sm:max-w-[45%] flex-shrink-0">
             {userBoxes.length > 1 && (
@@ -140,11 +144,11 @@ export default async function BoxDetailV3({ params }: Props) {
         {entries.length === 0 ? (
           <div className="ea-empty rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
             <p>This box is empty.</p>
-            <p className="text-sm text-[var(--text-3)]">
-              Open any fly in the{" "}
-              <Link href="/flies/library" className="text-[var(--accent)] hover:underline">library</Link>{" "}
-              and use the box-picker on a version to add it here.
+            <p className="text-sm text-[var(--text-3)] mb-3">
+              Add by name, or open any fly in the{" "}
+              <Link href="/flies/library" className="text-[var(--accent)] hover:underline">library</Link>.
             </p>
+            <AddInventoryButton initialBoxId={id} label="Add flies" />
           </div>
         ) : (
           <BoxEntriesTable boxId={id} boxName={box.name} entries={entries} />

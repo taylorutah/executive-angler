@@ -12,7 +12,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import {
-  createConfiguration,
+  findOrIncrementConfiguration,
   updateConfiguration,
   deleteConfiguration,
   addConfigurationToBox,
@@ -52,10 +52,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "fly_id is required" }, { status: 400 });
   }
 
-  const created = await createConfiguration({
+  const sizeRaw = typeof body.size === "string" ? body.size.trim() : "";
+  if (sizeRaw.includes(",")) {
+    return NextResponse.json(
+      { error: "size must be a single value, not a comma-separated list" },
+      { status: 400 },
+    );
+  }
+
+  const created = await findOrIncrementConfiguration({
     fly_id: flyId,
     nickname: (body.nickname as string | null) ?? null,
-    size: (body.size as string | null) ?? null,
+    size: sizeRaw || null,
     slot_overrides: (body.slot_overrides as SlotOverrides | undefined) ?? {},
     tied_count: typeof body.tied_count === "number" ? body.tied_count : 0,
     bought_count: typeof body.bought_count === "number" ? body.bought_count : 0,

@@ -9,11 +9,16 @@
  *   2. Pick bead spec — material + weight (mm) + color (only if canonical
  *      has bead_options OR the category implies a beadhead)
  *   3. Pick body color — suggestion chips + free-text (typed value wins)
- *   4. Set quantity tied (stepper)
+ *   4. Set quantity + source (Tied | Bought)
  *   5. Pick destination box(es) — chips grouped by tier (Kill / Support /
  *      Archive / Custom); default box pre-checked; multi-select
  *   6. (Optional) expand "More options" for notes, tie-next target,
  *      custom name
+ *
+ * Name-first mode (no fly.id): resolve an approved catalog name, or POST
+ * /api/fishing/flies as a private fly, then create configs. Default source
+ * is Bought. Each selected size is its own configuration row — size is
+ * never a comma-joined string.
  *
  * Saves via POST /api/fishing/fly-configurations (user_fly_configurations).
  * Body color persists as slot_overrides.body.color; bead color as
@@ -49,6 +54,7 @@ const BEAD_MATERIALS = [
   { id: "none", label: "No bead" },
 ];
 const BEAD_COLORS = ["copper", "gold", "silver", "black", "olive", "red"];
+const FALLBACK_SIZES = ["12", "14", "16", "18", "20", "22"];
 
 const TIER_ORDER = ["kill", "support", "archive", "custom"] as const;
 const TIER_LABELS: Record<string, string> = {
@@ -109,18 +115,33 @@ interface SaveResult {
 
 interface Props {
   open: boolean;
-  fly: QuickAddFly;
+  fly?: QuickAddFly | null;
+  /** Catalog cards default Tied; name-first / buyer path defaults Bought. */
+  defaultQtySource?: "tied" | "bought";
+  initialBoxId?: string;
   onClose: () => void;
   onSaved: (result: SaveResult) => void;
 }
 
-export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSaved }: Props) {
+export default function QuickAddToBoxSheet({
+  open,
+  fly: flyProp,
+  defaultQtySource,
+  initialBoxId,
+  onClose,
+  onSaved,
+}: Props) {
   // Sheet may be opened with sparse data (just id + name from a card click).
   // We hydrate sizes / colors / bead_options / hero from canonical_flies on
   // open so chip pickers populate properly.
-  const [fly, setFly] = useState<QuickAddFly>(flyProp);
+  const isNameFirst = !flyProp?.id;
+  const qtySourceDefault: "tied" | "bought" =
+    defaultQtySource ?? (isNameFirst ? "bought" : "tied");
+  const [fly, setFly] = useState<QuickAddFly>(flyProp ?? { id: "", name: "" });
+  const [enteredName, setEnteredName] = useState(flyProp?.name ?? "");
   useEffect(() => {
-    setFly(flyProp);
+    setFly(flyProp ?? { id: "", name: "" });
+    setEnteredName(flyProp?.name ?? "");
   }, [flyProp]);
 
   const [boxes, setBoxes] = useState<BoxRow[]>([]);
@@ -137,6 +158,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
   const [beadWeight, setBeadWeight] = useState<string | null>(null);
   const [beadColor, setBeadColor] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(0);
+  const [qtyBySize, setQtyBySize] = useState<Record<string, number>>({});
+  const [qtySource, setQtySource] = useState<"tied" | "bought">(qtySourceDefault);
   const [selectedBoxIds, setSelectedBoxIds] = useState<string[]>([]);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [notes, setNotes] = useState("");
@@ -173,7 +196,7 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
   // canonical fly fields if the caller only passed sparse data. For personal
   // patterns we skip canonical hydration entirely — there's no canonical row
   // and the angler types in their own size/bead/color.
-  const isPersonal = flyProp.kind === "personal";
+  const isPersonal = flyProp?.kind === "personal";
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
@@ -181,37 +204,45 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
       setLoading(true);
       setError(null);
       setAuthError(false);
+      setQtySource(qtySourceDefault);
       try {
         const needsHydration =
+          !isNameFirst &&
           !isPersonal &&
+          !!flyProp?.id &&
           (!flyProp.sizes ||
             !flyProp.colors ||
             !flyProp.beadOptions ||
             !flyProp.heroImageUrl ||
             !flyProp.slug);
         const supabase = createClient();
-        const variantsQuery = isPersonal
-          ? `fly_pattern_id=${encodeURIComponent(flyProp.id)}`
-          : `canonical_fly_id=${encodeURIComponent(flyProp.id)}`;
+        const variantsQuery =
+          isNameFirst || !flyProp?.id
+            ? null
+            : isPersonal
+              ? `fly_pattern_id=${encodeURIComponent(flyProp.id)}`
+              : `canonical_fly_id=${encodeURIComponent(flyProp.id)}`;
 
         const [boxesRes, variantsRes, canonicalRes] = await Promise.all([
           fetch("/api/fly-boxes", { credentials: "same-origin" }),
-          fetch(`/api/fly-box?${variantsQuery}`, {
-            credentials: "same-origin",
-          }),
+          variantsQuery
+            ? fetch(`/api/fly-box?${variantsQuery}`, {
+                credentials: "same-origin",
+              })
+            : Promise.resolve(null),
           needsHydration
             ? supabase
                 .from("canonical_flies")
                 .select(
                   "id, slug, name, category, sizes, colors, bead_options, hook_styles, hero_image_url",
                 )
-                .eq("id", flyProp.id)
+                .eq("id", flyProp!.id)
                 .maybeSingle()
             : Promise.resolve({ data: null, error: null }),
         ]);
         if (cancelled) return;
 
-        if (boxesRes.status === 401 || variantsRes.status === 401) {
+        if (boxesRes.status === 401 || variantsRes?.status === 401) {
           setAuthError(true);
           return;
         }
@@ -227,12 +258,15 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
         // Pre-select the default box. If no default, pick the first kill-tier
         // box. If no kill box either, pick whatever's first.
         const initial =
+          (initialBoxId && fetchedBoxes.some((b) => b.id === initialBoxId)
+            ? initialBoxId
+            : null) ??
           fetchedBoxes.find((b) => b.is_default)?.id ??
           fetchedBoxes.find((b) => b.tier === "kill")?.id ??
           fetchedBoxes[0]?.id;
         if (initial) setSelectedBoxIds([initial]);
 
-        if (variantsRes.ok) {
+        if (variantsRes?.ok) {
           const v = (await variantsRes.json()) as ExistingVariant[];
           setExistingVariants(Array.isArray(v) ? v : []);
         }
@@ -278,13 +312,16 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
     };
   }, [
     open,
-    flyProp.id,
-    flyProp.sizes,
-    flyProp.colors,
-    flyProp.beadOptions,
-    flyProp.heroImageUrl,
-    flyProp.slug,
+    flyProp?.id,
+    flyProp?.sizes,
+    flyProp?.colors,
+    flyProp?.beadOptions,
+    flyProp?.heroImageUrl,
+    flyProp?.slug,
     isPersonal,
+    isNameFirst,
+    initialBoxId,
+    qtySourceDefault,
   ]);
 
   // Reset form when sheet closes (so reopening for a different fly starts clean).
@@ -296,12 +333,15 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
     setBeadWeight(null);
     setBeadColor(null);
     setQuantity(0);
+    setQtyBySize({});
+    setQtySource(qtySourceDefault);
+    setEnteredName(flyProp?.name ?? "");
     setAdvancedOpen(false);
     setNotes("");
     setCustomName("");
     setTieNextTarget("");
     setError(null);
-  }, [open]);
+  }, [open, qtySourceDefault, flyProp?.name]);
 
   // Group boxes by tier for the picker.
   const boxesByTier = useMemo(() => {
@@ -317,17 +357,90 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
   }, [boxes]);
 
   function toggleSize(s: string) {
-    setSelectedSizes((prev) =>
-      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
-    );
+    setSelectedSizes((prev) => {
+      if (prev.includes(s)) {
+        setQtyBySize((q) => {
+          const next = { ...q };
+          delete next[s];
+          return next;
+        });
+        return prev.filter((x) => x !== s);
+      }
+      setQtyBySize((q) => ({ ...q, [s]: q[s] ?? (quantity > 0 ? quantity : 0) }));
+      return [...prev, s];
+    });
+  }
+
+  function qtyForSize(size: string): number {
+    return qtyBySize[size] ?? quantity;
+  }
+
+  function setQtyForSize(size: string, next: number) {
+    const n = Math.max(0, next);
+    setQtyBySize((q) => ({ ...q, [size]: n }));
   }
   function toggleBox(id: string) {
     setSelectedBoxIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   }
-  function bumpQty(delta: number) {
-    setQuantity((q) => Math.max(0, q + delta));
+  function addSizes(raw: string[]) {
+    const parts = raw
+      .map((s) => s.replace(/^#/, "").trim())
+      .filter(Boolean);
+    if (parts.length === 0) return;
+    setSelectedSizes((prev) => {
+      const next = [...prev];
+      for (const s of parts) {
+        if (!next.includes(s)) next.push(s);
+      }
+      return next;
+    });
+    setQtyBySize((q) => {
+      const next = { ...q };
+      for (const s of parts) {
+        if (next[s] == null) next[s] = quantity > 0 ? quantity : 0;
+      }
+      return next;
+    });
+  }
+
+  async function resolveFly(): Promise<{ id: string; name: string; slug?: string } | null> {
+    if (fly.id) return { id: fly.id, name: fly.name, slug: fly.slug };
+    const name = enteredName.trim();
+    if (!name) {
+      setError("Enter a fly name.");
+      return null;
+    }
+    const supabase = createClient();
+    const { data: approved } = await supabase
+      .from("flies")
+      .select("id, name, slug")
+      .eq("status", "approved")
+      .is("deleted_at", null)
+      .ilike("name", name)
+      .limit(1)
+      .maybeSingle();
+    if (approved) {
+      return { id: approved.id as string, name: approved.name as string, slug: (approved.slug as string) ?? undefined };
+    }
+    const res = await fetch("/api/fishing/flies", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, skip_auto_config: true }),
+      credentials: "same-origin",
+    });
+    if (!res.ok) {
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      setError(data.error || "Couldn't add that fly.");
+      return null;
+    }
+    const created = (await res.json()) as { id?: string; name?: string; slug?: string };
+    if (!created.id) {
+      setError("Couldn't add that fly.");
+      return null;
+    }
+    return { id: created.id, name: created.name ?? name, slug: created.slug };
   }
 
   async function handleSave() {
@@ -360,67 +473,83 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
       slot_overrides.bead = { material: "none" };
     }
 
+    const sizesToSave: Array<string | null> = selectedSizes.length > 0 ? selectedSizes : [null];
     const labelToSave =
       suggestedLabel ||
       [colorToSave, selectedSizes[0] && `#${selectedSizes[0]}`, beadWeight && `${beadWeight}mm`]
         .filter(Boolean)
         .join(" · ");
 
-    const payload: Record<string, unknown> = {
-      fly_id: fly.id,
-      box_id: selectedBoxIds[0],
-      size: selectedSizes.length ? selectedSizes.join(",") : null,
-      slot_overrides,
-      nickname: customName.trim() || null,
-      personal_notes: notes.trim() || null,
-      tied_count: quantity > 0 ? quantity : 0,
-      target_count:
-        typeof tieNextTarget === "number" && tieNextTarget > 0 ? tieNextTarget : 0,
-      is_tie_next:
-        typeof tieNextTarget === "number" &&
-        tieNextTarget > 0 &&
-        quantity < tieNextTarget,
-    };
-
     try {
-      const res = await fetch("/api/fishing/fly-configurations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        credentials: "same-origin",
-      });
-      if (!res.ok) {
-        const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setError(data.error || "Save failed.");
-        return;
-      }
-      const data = (await res.json()) as { configuration?: { id: string } };
-      const configurationId = data.configuration?.id;
-      if (!configurationId) {
-        setError("Save failed.");
-        return;
-      }
-      for (const boxId of selectedBoxIds.slice(1)) {
-        const boxRes = await fetch("/api/fishing/fly-configurations/box", {
+      const resolved = await resolveFly();
+      if (!resolved) return;
+
+      let firstConfigurationId: string | null = null;
+      for (const size of sizesToSave) {
+        const qty = size ? qtyForSize(size) : quantity;
+        const tied_count = qtySource === "tied" ? qty : 0;
+        const bought_count = qtySource === "bought" ? qty : 0;
+        const payload: Record<string, unknown> = {
+          fly_id: resolved.id,
+          box_id: selectedBoxIds[0],
+          size,
+          slot_overrides,
+          nickname: customName.trim() || null,
+          personal_notes: notes.trim() || null,
+          tied_count,
+          bought_count,
+          target_count:
+            typeof tieNextTarget === "number" && tieNextTarget > 0 ? tieNextTarget : 0,
+          is_tie_next:
+            typeof tieNextTarget === "number" &&
+            tieNextTarget > 0 &&
+            qty < tieNextTarget,
+        };
+
+        const res = await fetch("/api/fishing/fly-configurations", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            configuration_id: configurationId,
-            box_id: boxId,
-          }),
+          body: JSON.stringify(payload),
           credentials: "same-origin",
         });
-        if (!boxRes.ok) {
-          setError("Saved the version, but couldn't add it to every box.");
+        if (!res.ok) {
+          const data = (await res.json().catch(() => ({}))) as { error?: string };
+          setError(data.error || "Save failed.");
           return;
         }
+        const data = (await res.json()) as { configuration?: { id: string } };
+        const configurationId = data.configuration?.id;
+        if (!configurationId) {
+          setError("Save failed.");
+          return;
+        }
+        if (!firstConfigurationId) firstConfigurationId = configurationId;
+        for (const boxId of selectedBoxIds.slice(1)) {
+          const boxRes = await fetch("/api/fishing/fly-configurations/box", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              configuration_id: configurationId,
+              box_id: boxId,
+            }),
+            credentials: "same-origin",
+          });
+          if (!boxRes.ok) {
+            setError("Saved the version, but couldn't add it to every box.");
+            return;
+          }
+        }
+      }
+      if (!firstConfigurationId) {
+        setError("Save failed.");
+        return;
       }
       const boxNames = boxes
         .filter((b) => selectedBoxIds.includes(b.id))
         .map((b) => b.name);
       onSaved({
-        variantId: configurationId,
-        variantLabel: labelToSave || fly.name,
+        variantId: firstConfigurationId,
+        variantLabel: labelToSave || resolved.name,
         boxNames,
         boxIds: selectedBoxIds,
       });
@@ -473,11 +602,25 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
             <p className="ea-overline text-[var(--accent)]">
               Add to fly box
             </p>
-            <h2 id="qa-fly-name" className="font-display text-lg font-semibold text-[var(--text-1)] truncate">
-              {fly.name}
-            </h2>
-            {fly.category && (
-              <p className="text-xs text-[var(--text-3)] capitalize truncate">{fly.category}</p>
+            {isNameFirst ? (
+              <input
+                id="qa-fly-name"
+                type="text"
+                value={enteredName}
+                onChange={(e) => setEnteredName(e.target.value)}
+                placeholder="Fly name, e.g. Steve's Hot Head"
+                className="ea-input mt-1 font-display text-lg font-semibold"
+                aria-label="Fly name"
+              />
+            ) : (
+              <>
+                <h2 id="qa-fly-name" className="font-display text-lg font-semibold text-[var(--text-1)] truncate">
+                  {fly.name}
+                </h2>
+                {fly.category && (
+                  <p className="text-xs text-[var(--text-3)] capitalize truncate">{fly.category}</p>
+                )}
+              </>
             )}
           </div>
           <button
@@ -521,46 +664,41 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                 </div>
               )}
 
-              {/* Sizes */}
-              {fly.sizes && fly.sizes.length > 0 ? (
-                <Section label="Size">
-                  <div className="flex flex-wrap gap-1.5">
-                    {fly.sizes.map((s) => {
-                      const active = selectedSizes.includes(s);
-                      return (
-                        <button
-                          key={s}
-                          type="button"
-                          onClick={() => toggleSize(s)}
-                          className={`${chipBase} num ${active ? chipOn : chipOff}`}
-                        >
-                          {active && <Check className="inline h-3 w-3 mr-0.5" />}#{s}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <p className="ea-field-helper">
-                    Pick one or more. You can also leave blank and add sizes later.
-                  </p>
-                </Section>
-              ) : (
-                // Personal pattern (or canonical with no sizes set yet) — free-text input.
-                <Section label="Sizes (comma-separated)">
+              {/* Sizes — each selected size becomes its own configuration row. */}
+              <Section label="Size">
+                <div className="flex flex-wrap gap-1.5">
+                  {(fly.sizes && fly.sizes.length > 0 ? fly.sizes : FALLBACK_SIZES).map((s) => {
+                    const active = selectedSizes.includes(s);
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => toggleSize(s)}
+                        className={`${chipBase} num ${active ? chipOn : chipOff}`}
+                      >
+                        {active && <Check className="inline h-3 w-3 mr-0.5" />}#{s}
+                      </button>
+                    );
+                  })}
+                </div>
+                {(!fly.sizes || fly.sizes.length === 0) && (
                   <input
                     type="text"
-                    placeholder="e.g. 14, 16, 18"
-                    value={selectedSizes.join(", ")}
-                    onChange={(e) => {
-                      const parts = e.target.value
-                        .split(",")
-                        .map((s) => s.trim())
-                        .filter(Boolean);
-                      setSelectedSizes(parts);
+                    placeholder="Other size, e.g. 10"
+                    className="ea-input mt-2"
+                    aria-label="Other size"
+                    onKeyDown={(e) => {
+                      if (e.key !== "Enter") return;
+                      e.preventDefault();
+                      addSizes((e.currentTarget.value || "").split(/[,\s]+/));
+                      e.currentTarget.value = "";
                     }}
-                    className="ea-input"
                   />
-                </Section>
-              )}
+                )}
+                <p className="ea-field-helper">
+                  Each size is saved as its own stock row. Leave blank to add sizes later.
+                </p>
+              </Section>
 
               {/* Bead */}
               {showBead && (
@@ -670,39 +808,47 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                 />
               </Section>
 
-              {/* Quantity */}
-              <Section label="How many tied?">
-                <div className="inline-flex items-center gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-1.5">
-                  <button
-                    type="button"
-                    onClick={() => bumpQty(-1)}
-                    disabled={quantity === 0}
-                    aria-label="Decrease quantity"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] disabled:opacity-30 transition-colors"
-                  >
-                    −
-                  </button>
-                  <input
-                    type="number"
-                    min={0}
-                    value={quantity}
-                    onChange={(e) => {
-                      const v = parseInt(e.target.value, 10);
-                      setQuantity(Math.max(0, isNaN(v) ? 0 : v));
-                    }}
-                    className="w-14 bg-transparent text-center text-base font-semibold num text-[var(--text-1)] focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => bumpQty(1)}
-                    aria-label="Increase quantity"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors"
-                  >
-                    +
-                  </button>
+              {/* Quantity source + counts */}
+              <Section label="Quantity">
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {(["tied", "bought"] as const).map((src) => (
+                    <button
+                      key={src}
+                      type="button"
+                      onClick={() => setQtySource(src)}
+                      className={`${chipBase} capitalize ${qtySource === src ? chipOn : chipOff}`}
+                    >
+                      {src}
+                    </button>
+                  ))}
                 </div>
+                {selectedSizes.length > 1 ? (
+                  <div className="space-y-2">
+                    {selectedSizes.map((s) => (
+                      <div key={s} className="flex items-center gap-3">
+                        <span className="w-10 num text-sm text-[var(--text-2)]">#{s}</span>
+                        <QtyStepper
+                          value={qtyForSize(s)}
+                          onChange={(n) => setQtyForSize(s, n)}
+                          ariaLabel={`Quantity for size ${s}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <QtyStepper
+                    value={selectedSizes[0] ? qtyForSize(selectedSizes[0]) : quantity}
+                    onChange={(n) => {
+                      setQuantity(n);
+                      if (selectedSizes[0]) setQtyForSize(selectedSizes[0], n);
+                    }}
+                    ariaLabel={qtySource === "bought" ? "How many bought" : "How many tied"}
+                  />
+                )}
                 <p className="ea-field-helper">
-                  Leave at 0 if you don&apos;t have any tied yet — you can still add it to a box.
+                  {qtySource === "bought"
+                    ? "Bought stock. Leave at 0 if you are adding the pattern without inventory yet."
+                    : "Leave at 0 if you don't have any tied yet — you can still add it to a box."}
                 </p>
               </Section>
 
@@ -870,7 +1016,8 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                 loading ||
                 authError ||
                 selectedBoxIds.length === 0 ||
-                boxes.length === 0
+                boxes.length === 0 ||
+                (isNameFirst && !enteredName.trim())
               }
             >
               {saving
@@ -882,6 +1029,49 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function QtyStepper({
+  value,
+  onChange,
+  ariaLabel,
+}: {
+  value: number;
+  onChange: (n: number) => void;
+  ariaLabel: string;
+}) {
+  return (
+    <div className="inline-flex items-center gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-1.5">
+      <button
+        type="button"
+        onClick={() => onChange(Math.max(0, value - 1))}
+        disabled={value === 0}
+        aria-label={`Decrease ${ariaLabel}`}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] disabled:opacity-30 transition-colors"
+      >
+        −
+      </button>
+      <input
+        type="number"
+        min={0}
+        value={value}
+        onChange={(e) => {
+          const v = parseInt(e.target.value, 10);
+          onChange(Math.max(0, isNaN(v) ? 0 : v));
+        }}
+        aria-label={ariaLabel}
+        className="w-14 bg-transparent text-center text-base font-semibold num text-[var(--text-1)] focus:outline-none"
+      />
+      <button
+        type="button"
+        onClick={() => onChange(value + 1)}
+        aria-label={`Increase ${ariaLabel}`}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--paper-deep)] transition-colors"
+      >
+        +
+      </button>
     </div>
   );
 }

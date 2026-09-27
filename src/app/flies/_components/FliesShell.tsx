@@ -11,6 +11,7 @@
  */
 import Link from "next/link";
 import { Plus } from "@/icons";
+import AddInventoryButton from "@/components/flies/AddInventoryButton";
 
 export type FliesSection =
   | "workspace"
@@ -63,6 +64,9 @@ export default function FliesShell({
             >
               Browse Library
             </Link>
+            {(active === "workspace" || active === "boxes") && (
+              <AddInventoryButton />
+            )}
             <Link
               href="/journal/flies/new"
               className="ea-btn ea-btn-primary ea-btn-sm"

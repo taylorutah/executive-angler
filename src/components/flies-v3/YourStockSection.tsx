@@ -189,14 +189,16 @@ function VersionCard({
   const [optimisticFavorite, setOptimisticFavorite] = useState(version.is_favorite);
   const [optimisticTieNext, setOptimisticTieNext] = useState(version.is_tie_next);
   const [optimisticTied, setOptimisticTied] = useState(version.tied_count);
+  const [optimisticBought, setOptimisticBought] = useState(version.bought_count);
 
   // Reconcile optimistic state when fresh server props arrive.
   useEffect(() => { setOptimisticFavorite(version.is_favorite); }, [version.is_favorite]);
   useEffect(() => { setOptimisticTieNext(version.is_tie_next); }, [version.is_tie_next]);
   useEffect(() => { setOptimisticTied(version.tied_count); }, [version.tied_count]);
+  useEffect(() => { setOptimisticBought(version.bought_count); }, [version.bought_count]);
 
   const summary = summarizeVersion(version);
-  const deficit = Math.max(0, version.target_count - optimisticTied - version.bought_count);
+  const deficit = Math.max(0, version.target_count - optimisticTied - optimisticBought);
 
   async function toggle(field: "is_favorite" | "is_tie_next") {
     const prev = field === "is_favorite" ? optimisticFavorite : optimisticTieNext;
@@ -239,6 +241,26 @@ function VersionCard({
       router.refresh();
     } catch {
       setOptimisticTied(prev);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function bumpBought(delta: number) {
+    const prev = optimisticBought;
+    const next = Math.max(0, prev + delta);
+    setOptimisticBought(next);
+    setBusy(true);
+    try {
+      const res = await fetch("/api/fishing/fly-configurations", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: version.id, bought_count: next }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      router.refresh();
+    } catch {
+      setOptimisticBought(prev);
     } finally {
       setBusy(false);
     }
@@ -287,10 +309,35 @@ function VersionCard({
                 In: {version.in_boxes.map((b) => b.box_name).join(", ")}
               </p>
             )}
-            <div className="mt-2 flex items-center gap-3 text-xs">
+            <div className="mt-2 flex items-center gap-3 text-xs flex-wrap">
               <span>
-                Tied <span className="font-semibold">{optimisticTied}</span> / Target{" "}
-                <span className="font-semibold">{version.target_count}</span>
+                Tied <span className="font-semibold">{optimisticTied}</span>
+              </span>
+              <span className="inline-flex items-center gap-1">
+                Bought <span className="font-semibold">{optimisticBought}</span>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => bumpBought(1)}
+                  title={`Bought one more of ${summary}`}
+                  aria-label={`Bought one more of ${summary}`}
+                  className="h-5 w-5 rounded border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] text-[10px] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)]"
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  disabled={busy || optimisticBought === 0}
+                  onClick={() => bumpBought(-1)}
+                  title={`Used one bought ${summary}`}
+                  aria-label={`Used one bought ${summary}`}
+                  className="h-5 w-5 rounded border border-[var(--color-border,#e5e7eb)] dark:border-[var(--border-strong)] text-[10px] hover:bg-[var(--color-surface-hover,#f3f4f6)] dark:hover:bg-[var(--border-rule)] disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  −
+                </button>
+              </span>
+              <span>
+                Target <span className="font-semibold">{version.target_count}</span>
               </span>
               {deficit > 0 && (
                 <span className="text-[var(--action)]">need {deficit} more</span>
