@@ -8,18 +8,17 @@
  *   1. Pick size(s) — multi-select chips from canonical.sizes
  *   2. Pick bead spec — material + weight (mm) + color (only if canonical
  *      has bead_options OR the category implies a beadhead)
- *   3. Pick body color — chips from canonical.colors
+ *   3. Pick body color — suggestion chips + free-text (typed value wins)
  *   4. Set quantity tied (stepper)
  *   5. Pick destination box(es) — chips grouped by tier (Kill / Support /
  *      Archive / Custom); default box pre-checked; multi-select
  *   6. (Optional) expand "More options" for notes, tie-next target,
- *      custom name, free-text slot overrides
+ *      custom name
  *
- * The sheet always creates a NEW variant row (matches POST /api/fly-box
- * semantics post-2026-05-07 multi-variant migration). For full per-slot
- * material overrides (brand, model, denier, etc.), the user still uses the
- * existing PersonalizeSheet on /flies/[slug]; this sheet handles the 90%
- * case where they just want size + bead + color + box.
+ * Saves via POST /api/fishing/fly-configurations (user_fly_configurations).
+ * Body color persists as slot_overrides.body.color; bead color as
+ * slot_overrides.bead.color. Both are free-text. Suggestion chips are
+ * guidance, not an enum.
  */
 
 import { useEffect, useMemo, useState } from "react";
@@ -339,48 +338,52 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
     setSaving(true);
     setError(null);
 
-    // Build personalizations jsonb from bead picks.
-    const personalizations: Personalizations = {};
+    const colorToSave = selectedColor?.trim() || "";
+    const beadColorToSave = beadColor?.trim() || "";
+
+    // Live persist slot (user_fly_configurations.slot_overrides).
+    // preferred_colors / personalizations were the old /api/fly-box payload;
+    // that route and user_fly_box were dropped in the May-15 fly-model reset.
+    const slot_overrides: Record<string, Record<string, unknown>> = {};
+    if (colorToSave) {
+      slot_overrides.body = { color: colorToSave };
+    }
     if (beadMaterial && beadMaterial !== "none") {
-      personalizations.bead = {
-        model: beadMaterial,
-        ...(beadWeight ? { size: `${beadWeight}mm` } : {}),
-        ...(beadColor ? { color: beadColor } : {}),
-      };
+      const bead: Record<string, unknown> = { material: beadMaterial };
+      if (beadWeight) {
+        const n = Number(beadWeight);
+        if (!Number.isNaN(n)) bead.size_mm = n;
+      }
+      if (beadColorToSave) bead.color = beadColorToSave;
+      slot_overrides.bead = bead;
     } else if (beadMaterial === "none") {
-      personalizations.bead = { model: "none" };
+      slot_overrides.bead = { material: "none" };
     }
 
     const labelToSave =
       suggestedLabel ||
-      [selectedColor, selectedSizes[0] && `#${selectedSizes[0]}`, beadWeight && `${beadWeight}mm`]
+      [colorToSave, selectedSizes[0] && `#${selectedSizes[0]}`, beadWeight && `${beadWeight}mm`]
         .filter(Boolean)
         .join(" · ");
 
     const payload: Record<string, unknown> = {
-      ...(isPersonal
-        ? { fly_pattern_id: fly.id }
-        : { canonical_fly_id: fly.id }),
-      preferred_sizes: selectedSizes.length ? selectedSizes : null,
-      preferred_colors: selectedColor ? [selectedColor] : null,
-      personalizations,
-      variant_label: labelToSave || null,
-      custom_name: customName.trim() || null,
+      fly_id: fly.id,
+      box_id: selectedBoxIds[0],
+      size: selectedSizes.length ? selectedSizes.join(",") : null,
+      slot_overrides,
+      nickname: customName.trim() || null,
       personal_notes: notes.trim() || null,
       tied_count: quantity > 0 ? quantity : 0,
-      box_ids: selectedBoxIds,
+      target_count:
+        typeof tieNextTarget === "number" && tieNextTarget > 0 ? tieNextTarget : 0,
+      is_tie_next:
+        typeof tieNextTarget === "number" &&
+        tieNextTarget > 0 &&
+        quantity < tieNextTarget,
     };
-    if (beadMaterial && beadMaterial !== "none") {
-      payload.bead_material = beadMaterial;
-      if (beadWeight) payload.bead_weight_mm = Number(beadWeight);
-    }
-    if (typeof tieNextTarget === "number" && tieNextTarget > 0) {
-      payload.tie_next_target_qty = tieNextTarget;
-      payload.tie_next_status = quantity >= tieNextTarget ? "done" : "wanted";
-    }
 
     try {
-      const res = await fetch("/api/fly-box", {
+      const res = await fetch("/api/fishing/fly-configurations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -391,12 +394,32 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
         setError(data.error || "Save failed.");
         return;
       }
-      const data = (await res.json()) as { id: string };
+      const data = (await res.json()) as { configuration?: { id: string } };
+      const configurationId = data.configuration?.id;
+      if (!configurationId) {
+        setError("Save failed.");
+        return;
+      }
+      for (const boxId of selectedBoxIds.slice(1)) {
+        const boxRes = await fetch("/api/fishing/fly-configurations/box", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            configuration_id: configurationId,
+            box_id: boxId,
+          }),
+          credentials: "same-origin",
+        });
+        if (!boxRes.ok) {
+          setError("Saved the version, but couldn't add it to every box.");
+          return;
+        }
+      }
       const boxNames = boxes
         .filter((b) => selectedBoxIds.includes(b.id))
         .map((b) => b.name);
       onSaved({
-        variantId: data.id,
+        variantId: configurationId,
         variantLabel: labelToSave || fly.name,
         boxNames,
         boxIds: selectedBoxIds,
@@ -586,9 +609,10 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                       <p className="ea-overline mb-1">
                         Color
                       </p>
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-1.5 mb-2">
                         {BEAD_COLORS.map((c) => {
-                          const active = beadColor === c;
+                          const active =
+                            (beadColor ?? "").trim().toLowerCase() === c.toLowerCase();
                           return (
                             <button
                               key={c}
@@ -601,17 +625,27 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                           );
                         })}
                       </div>
+                      <input
+                        type="text"
+                        value={beadColor ?? ""}
+                        onChange={(e) => setBeadColor(e.target.value || null)}
+                        placeholder="UV olive, hot pink, jig pink"
+                        className="ea-input"
+                        aria-label="Bead color"
+                      />
                     </>
                   )}
                 </Section>
               )}
 
-              {/* Body color */}
-              {fly.colors && fly.colors.length > 0 && (
-                <Section label="Color">
-                  <div className="flex flex-wrap gap-1.5">
+              {/* Body color — chips are suggestions; free text always wins. */}
+              <Section label="Color">
+                {fly.colors && fly.colors.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-2">
                     {fly.colors.map((c) => {
-                      const active = selectedColor === c;
+                      const active =
+                        (selectedColor ?? "").trim().toLowerCase() ===
+                        c.trim().toLowerCase();
                       return (
                         <button
                           key={c}
@@ -625,8 +659,16 @@ export default function QuickAddToBoxSheet({ open, fly: flyProp, onClose, onSave
                       );
                     })}
                   </div>
-                </Section>
-              )}
+                )}
+                <input
+                  type="text"
+                  value={selectedColor ?? ""}
+                  onChange={(e) => setSelectedColor(e.target.value || null)}
+                  placeholder="olive, UV olive, pmd"
+                  className="ea-input"
+                  aria-label="Body color"
+                />
+              </Section>
 
               {/* Quantity */}
               <Section label="How many tied?">
