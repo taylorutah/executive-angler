@@ -112,7 +112,9 @@ export default function FlyCard({ row, viewerUsername }: Props) {
             )}
           </div>
 
-          <div className="mt-2 flex items-center gap-3 text-[11px] text-[var(--color-text-muted)]">
+          <div className="mt-2 flex flex-wrap items-center gap-3 text-[11px] text-[var(--color-text-muted)]">
+            <Stat label="Tied" value={row.tied_total} />
+            <Stat label="Bought" value={row.bought_total} />
             <Stat label="In box" value={row.in_box_count} />
             <Stat label="Target" value={row.target_total} />
             <Stat label="Δ" value={row.deficit} warn={row.deficit > 0} />

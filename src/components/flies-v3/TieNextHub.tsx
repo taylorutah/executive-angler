@@ -154,11 +154,10 @@ function Card({
   onAdvance: (to: "wanted" | "at_vise" | "done") => void;
 }) {
   const summary = summarizeVersion(cfg);
-  const targetText = cfg.tie_next_target_qty
-    ? `Target ${cfg.tie_next_target_qty}`
-    : cfg.target_count
-      ? `Target ${cfg.target_count}`
-      : null;
+  const tied = cfg.tied_count ?? 0;
+  const bought = cfg.bought_count ?? 0;
+  const target = cfg.tie_next_target_qty || cfg.target_count || 0;
+  const deficit = target > 0 ? Math.max(0, target - tied - bought) : null;
   return (
     <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-2.5">
       <div className="flex items-start gap-2.5">
@@ -172,11 +171,10 @@ function Card({
             <div className="min-w-0">
               <p className="font-medium text-sm text-[var(--text-1)] group-hover:text-[var(--accent)] truncate">{cfg.fly.name}</p>
               <p className="text-xs text-[var(--text-3)] truncate">{summary}</p>
-              {targetText && (
-                <p className="text-xs num text-[var(--text-3)] mt-0.5">
-                  Tied {cfg.tied_count} / {targetText.replace("Target ", "")}
-                </p>
-              )}
+              <p className="text-xs num text-[var(--text-3)] mt-0.5">
+                Tied {tied} · Bought {bought}
+                {deficit !== null ? ` · Need ${deficit}` : ""}
+              </p>
             </div>
           </div>
         </Link>
