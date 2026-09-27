@@ -59,7 +59,9 @@ describe("leftover public templates inherit Water Desk", () => {
   });
 
   it("keeps fly sheet one left edge and variants on vellum", () => {
-    const fly = read("src/app/flies/[slug]/page.tsx");
+    const fly =
+      read("src/app/flies/[slug]/page.tsx") +
+      read("src/components/fly-detail/FlyDetailBody.tsx");
     const variants = read("src/components/fly-detail/FlyVariantTable.tsx");
     const css = read("src/app/globals.css");
     assert.match(fly, /desk-sheet-stack/);

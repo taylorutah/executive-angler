@@ -4,7 +4,9 @@ import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
-const flyPage = readFileSync(join(root, "src/app/flies/[slug]/page.tsx"), "utf8");
+const flyPage =
+  readFileSync(join(root, "src/app/flies/[slug]/page.tsx"), "utf8") +
+  readFileSync(join(root, "src/components/fly-detail/FlyDetailBody.tsx"), "utf8");
 const recipe = readFileSync(join(root, "src/components/desk/RecipeStrip.tsx"), "utf8");
 const variants = readFileSync(join(root, "src/components/fly-detail/FlyVariantTable.tsx"), "utf8");
 const library = readFileSync(join(root, "src/app/flies/library/FlyLibraryClient.tsx"), "utf8");

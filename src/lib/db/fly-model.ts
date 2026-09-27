@@ -65,9 +65,9 @@ export async function listApprovedFlies(): Promise<Fly[]> {
   return ((data ?? []) as Fly[]).map(withHostedFlyHero);
 }
 
-/** Approved fly by slug. Falls back to slug-redirects and submitter pending.
- *  Soft-deleted rows are excluded across all branches. */
-export async function getFlyBySlug(slug: string): Promise<Fly | null> {
+/** Approved fly by slug, including slug-redirects. Cookie-free — safe for
+ *  generateMetadata and public SSG. Soft-deleted rows excluded. */
+export async function getApprovedFlyBySlug(slug: string): Promise<Fly | null> {
   const supabase = createStaticClient();
   const { data } = await supabase
     .from("flies")
@@ -94,10 +94,17 @@ export async function getFlyBySlug(slug: string): Promise<Fly | null> {
       .maybeSingle();
     if (redirected) return normalizeFlyRow(redirected as Fly);
   }
+  return null;
+}
 
-  // Submitter peek: pending/private rows visible to their owner via RLS.
-  // cookies() on a static/ISR page throws a Next.js dynamic-bailout error.
-  // Rethrow that so this request becomes dynamic; any other failure → null.
+/** Approved fly, then owner peek of pending/private rows via RLS.
+ *  Soft-deleted rows are excluded across all branches. */
+export async function getFlyBySlug(slug: string): Promise<Fly | null> {
+  const approved = await getApprovedFlyBySlug(slug);
+  if (approved) return approved;
+
+  // Owner peek for force-dynamic routes (/flies/own, /flies/[slug]/edit).
+  // Never throw — cookies unavailable → null (404), no 500.
   try {
     const auth = await createClient();
     const { data: own } = await auth

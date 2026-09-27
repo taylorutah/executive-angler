@@ -1,41 +1,26 @@
 /**
- * /flies/[slug] — specimen-first fly pattern (Water Desk structure,
- * DESIGN.md paint). Magazine header: 1:1 macro on paper, Fraunces name,
- * specification block, .prose at --prose. Then RecipeStrip, one variants
- * table, designed empty states. Public HTML stays cookie-free.
- *
- * Private slugs (`*-private-*`) are rewritten in middleware to
- * /flies/own/[slug] (force-dynamic owner peek). This page never calls
- * cookies(), so approved SSG / ISR cannot 500.
+ * Owner peek for private/pending flies. Middleware rewrites
+ * /flies/*-private-* here when a session cookie is present.
+ * Force-dynamic so cookies() can run. Public approved slugs redirect out.
  */
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import {
-  listApprovedFlies,
-  getApprovedFlyBySlug,
-  lookupFlySlugRedirect,
-} from "@/lib/db/fly-model";
+import { getFlyBySlug } from "@/lib/db/fly-model";
 import { SITE_URL } from "@/lib/constants";
 import { flyHeroSrc } from "@/lib/flies/hosted-hero";
 import { getFishingNowRivers } from "@/lib/flies/fishing-now";
 import { linkRecipeMaterials } from "@/lib/flies/link-materials";
 import FlyDetailBody from "@/components/fly-detail/FlyDetailBody";
 
-export const revalidate = 3600;
-export const dynamicParams = true;
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  const flies = await listApprovedFlies();
-  return flies.filter((f) => f.slug).map((f) => ({ slug: f.slug }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const fly = await getApprovedFlyBySlug(slug);
+  const fly = await getFlyBySlug(slug);
   if (!fly) return { title: "Fly Pattern" };
   const title = `${fly.name} — ${fly.category ?? "Fly Pattern"}`;
   const description =
@@ -44,27 +29,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    robots: { index: false, follow: false },
     openGraph: {
       title,
       description,
       url: `${SITE_URL}/flies/${fly.slug}`,
       images: hero ? [{ url: hero, alt: fly.name }] : undefined,
     },
-    alternates: { canonical: `${SITE_URL}/flies/${fly.slug}` },
   };
 }
 
-export default async function FlyDetail({ params }: Props) {
+export default async function OwnerFlyDetail({ params }: Props) {
   const { slug } = await params;
-  const fly = await getApprovedFlyBySlug(slug);
-  if (!fly) {
-    const r = await lookupFlySlugRedirect(slug);
-    if (r?.toSlug && r.toSlug !== slug) {
-      redirect(`/flies/${r.toSlug}`);
-    }
-    notFound();
-  }
-  if (fly.slug !== slug) {
+  const fly = await getFlyBySlug(slug);
+  if (!fly) notFound();
+  if (fly.status === "approved") {
     redirect(`/flies/${fly.slug}`);
   }
 
