@@ -10,59 +10,13 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import QuickAddToBoxSheet from "@/components/flies/QuickAddToBoxSheet";
 import type { FlyConfigurationWithBoxes } from "@/types/flies";
+import type { PublicVariantRow } from "@/lib/flies/variant-rows";
 import {
-  normalizeSizeKey,
-  type PublicVariantRow,
-} from "@/lib/flies/variant-rows";
+  mergeRows,
+  type VariantTableRow,
+} from "@/lib/flies/variant-table-rows";
 
-type RowState = PublicVariantRow & {
-  configurationId: string | null;
-  stock: number | null;
-  tied: number | null;
-  bought: number | null;
-  target: number | null;
-};
-
-function stockOf(c: FlyConfigurationWithBoxes): number {
-  return (c.tied_count ?? 0) + (c.bought_count ?? 0);
-}
-
-function mergeRows(
-  publicRows: PublicVariantRow[],
-  configs: FlyConfigurationWithBoxes[],
-): RowState[] {
-  const used = new Set<string>();
-  const rows: RowState[] = publicRows.map((row) => {
-    const key = normalizeSizeKey(row.size === "—" ? "" : row.size);
-    const match = configs.find((c) => normalizeSizeKey(c.size) === key && key !== "");
-    if (match) used.add(match.id);
-    return {
-      ...row,
-      configurationId: match?.id ?? null,
-      stock: match ? stockOf(match) : null,
-      tied: match?.tied_count ?? null,
-      bought: match?.bought_count ?? null,
-      target: match?.target_count ?? null,
-    };
-  });
-
-  for (const c of configs) {
-    if (used.has(c.id)) continue;
-    const size = c.size?.trim() ? (c.size.startsWith("#") ? c.size : `#${c.size}`) : "—";
-    rows.push({
-      key: `mine-${c.id}`,
-      size,
-      bead: "—",
-      body: "—",
-      configurationId: c.id,
-      stock: stockOf(c),
-      tied: c.tied_count ?? 0,
-      bought: c.bought_count ?? 0,
-      target: c.target_count,
-    });
-  }
-  return rows;
-}
+type RowState = VariantTableRow;
 
 interface Props {
   flyId: string;
