@@ -16,6 +16,7 @@
  * one place that knows both shapes.
  */
 import { createClient } from "@/lib/supabase/server";
+import { pickTargetFlyBoxId } from "@/lib/flies/new-pattern-box";
 import type {
   Pattern,
   Variant,
@@ -500,6 +501,39 @@ export async function getDefaultFlyBoxId(): Promise<string | null> {
     .single();
   if (error) {
     console.error("[getDefaultFlyBoxId] create", error);
+    return null;
+  }
+  return (created?.id ?? null) as string | null;
+}
+
+/**
+ * Box for a new private pattern. Unlike getDefaultFlyBoxId, this does NOT
+ * create "My Fly Box" when the user already has named boxes with no default.
+ * Order: is_default → oldest existing box → create My Fly Box (zero boxes only).
+ */
+export async function resolveNewPatternBoxId(): Promise<string | null> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data: boxes, error } = await supabase
+    .from("fly_boxes")
+    .select("id, is_default, created_at")
+    .eq("user_id", user.id);
+  if (error) {
+    console.error("[resolveNewPatternBoxId]", error);
+    return null;
+  }
+  const picked = pickTargetFlyBoxId(
+    (boxes ?? []) as { id: string; is_default: boolean; created_at: string }[],
+  );
+  if (picked) return picked;
+  const { data: created, error: createErr } = await supabase
+    .from("fly_boxes")
+    .insert({ user_id: user.id, name: "My Fly Box", tier: "custom", is_default: true })
+    .select("id")
+    .single();
+  if (createErr) {
+    console.error("[resolveNewPatternBoxId] create", createErr);
     return null;
   }
   return (created?.id ?? null) as string | null;

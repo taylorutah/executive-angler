@@ -29,6 +29,11 @@ import {
   recipeStepsToIngredientInserts,
 } from "@/lib/flies/recipe-conversion";
 import { formTypeToCanonicalCategory } from "@/lib/flies/fly-type-map";
+import {
+  autoConfigCountsFromSource,
+  firstHookSize,
+} from "@/lib/flies/new-pattern-box";
+import { addVariantsToBox, resolveNewPatternBoxId } from "@/lib/db/fly-v2";
 import type { RecipeStep } from "@/components/flies/RecipeBuilder";
 
 // Service role client (bypasses RLS) — lazy init. Typed `any` because the
@@ -459,19 +464,44 @@ export async function POST(req: NextRequest) {
     const skipAutoConfig =
       body.skip_auto_config === true || body.skip_auto_config === "true";
     if (data && !skipAutoConfig) {
-      const { error: cfgError } = await supabase
+      const size = firstHookSize(body.size);
+      const counts = autoConfigCountsFromSource(body.source);
+      const { data: cfg, error: cfgError } = await supabase
         .from("user_fly_configurations")
         .insert({
           user_id: user.id,
           fly_id: data.id,
-          tied_count: 0,
-          bought_count: 0,
+          tied_count: counts.tied_count,
+          bought_count: counts.bought_count,
           target_count: 0,
           is_favorite: false,
           is_tie_next: false,
-        });
-      if (cfgError)
+          ...(size ? { size } : {}),
+        })
+        .select("id")
+        .single();
+      if (cfgError) {
         console.error("[flies POST] auto-config insert failed:", cfgError);
+      } else if (cfg?.id) {
+        try {
+          const boxId = await resolveNewPatternBoxId();
+          if (boxId) {
+            const added = await addVariantsToBox(boxId, [cfg.id]);
+            if (added === null) {
+              console.error("[flies POST] box membership insert failed", {
+                boxId,
+                configurationId: cfg.id,
+              });
+            }
+          } else {
+            console.error("[flies POST] no target fly box for new pattern", {
+              configurationId: cfg.id,
+            });
+          }
+        } catch (boxErr) {
+          console.error("[flies POST] box membership failed:", boxErr);
+        }
+      }
     }
 
     // Save recipe ingredients if a structured recipe was provided. Writes use

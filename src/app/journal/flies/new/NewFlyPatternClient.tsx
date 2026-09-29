@@ -73,7 +73,7 @@ export default function NewFlyPatternClient() {
         const data = await response.json();
         throw new Error(data.error || "Failed to create fly pattern");
       }
-      router.push("/journal/flies");
+      router.push("/flybox");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       setBusy(false);
