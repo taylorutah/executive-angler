@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
 import NewFlyPatternClient from "./NewFlyPatternClient";
 
 export default async function NewFlyPatternPage() {
@@ -10,5 +9,5 @@ export default async function NewFlyPatternPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/journal/flies/new");
 
-  return <NewFlyPatternClient isAdminUser={isAdmin(user.email)} />;
+  return <NewFlyPatternClient />;
 }

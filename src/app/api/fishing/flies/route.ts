@@ -308,11 +308,18 @@ export async function POST(req: NextRequest) {
       // Submission gate runs BEFORE the file upload so we don't burn storage
       // on rejected requests (turnstile failure, rate limit, etc.).
       const adminSubmitter = isAdmin(user.email);
+      // Same posture as photos/reviews: omit the field when the client did
+      // not send a token (Turnstile fail-open, iOS, API). Passing `null`
+      // marks captcha as required and rejects with "Captcha is required."
+      const rawTurnstile = body.turnstile_token;
+      const turnstileToken =
+        typeof rawTurnstile === "string" && rawTurnstile.length > 0
+          ? rawTurnstile
+          : undefined;
       const gate = await checkSubmissionGate({
         type: "fly_pattern",
         user,
-        turnstileToken:
-          typeof body.turnstile_token === "string" ? body.turnstile_token : null,
+        turnstileToken,
         honeypot: typeof body.website === "string" ? (body.website as string) : null,
         request: req,
         isAdminSubmitter: adminSubmitter,

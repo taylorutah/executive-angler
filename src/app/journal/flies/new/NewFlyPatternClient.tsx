@@ -7,10 +7,6 @@ import FlyPatternForm, {
 } from "@/components/flies/FlyPatternForm";
 import type { RecipeStep } from "@/components/flies/RecipeBuilder";
 
-interface Props {
-  isAdminUser: boolean;
-}
-
 interface CloneSourceResponse {
   sourceName: string;
   sourceSlug: string;
@@ -19,7 +15,7 @@ interface CloneSourceResponse {
   error?: string;
 }
 
-export default function NewFlyPatternClient({ isAdminUser }: Props) {
+export default function NewFlyPatternClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const cloneFromId = searchParams.get("cloneFrom");
@@ -111,7 +107,7 @@ export default function NewFlyPatternClient({ isAdminUser }: Props) {
         busy={busy}
         error={error}
         cancelHref="/journal/flies"
-        requireCaptcha={!isAdminUser}
+        requireCaptcha={false}
       />
     </>
   );

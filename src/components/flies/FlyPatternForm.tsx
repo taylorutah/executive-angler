@@ -74,9 +74,9 @@ export interface FlyPatternFormProps {
   /** Top-right action area on the title bar (Card / Variant on edit). */
   topRight?: ReactNode;
   /**
-   * When true, render Turnstile + honeypot. New-pattern pages set this to
-   * false for admin users so the captcha never blocks Taylor's flow. Default
-   * true for new mode, false for edit mode.
+   * When true, render Turnstile + honeypot. Private new-pattern create
+   * passes false — creating a fly in the user's own box is not a public
+   * library submission. Default true for new mode, false for edit mode.
    */
   requireCaptcha?: boolean;
 }
