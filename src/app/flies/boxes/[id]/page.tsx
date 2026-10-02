@@ -11,6 +11,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getBoxById, listMyBoxes } from "@/lib/db/fly-v2";
 import BoxEntriesTable, { type BoxEntryRow } from "@/components/flies-v3/BoxEntriesTable";
 import AddInventoryButton from "@/components/flies/AddInventoryButton";
+import FlyboxExportButton from "@/components/flies-v3/FlyboxExportButton";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -109,6 +110,10 @@ export default async function BoxDetailV3({ params }: Props) {
                 tap any row to open the fly
               </p>
               <AddInventoryButton initialBoxId={id} label="Add flies" />
+              <FlyboxExportButton
+                boxes={userBoxes.map((b) => ({ id: b.id, name: b.name }))}
+                defaultBoxId={id}
+              />
             </div>
           </div>
           <div className="flex flex-col items-stretch gap-2 sm:items-end sm:max-w-[45%] flex-shrink-0">

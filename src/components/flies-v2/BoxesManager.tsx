@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Box, Plus, MoreVertical, Pencil, Trash2, Star, X, Check } from "@/icons";
 import { Button } from "@/components/ui/Button";
+import FlyboxExportButton from "@/components/flies-v3/FlyboxExportButton";
 import type { FlyBoxV2, BoxStats } from "@/lib/db/fly-v2";
 import {
   DEFAULT_TIER_KEYS,
@@ -360,6 +361,13 @@ export default function BoxesManager({
         <Button variant="outline" size="sm" icon={Plus} onClick={openAddTier}>
           Add Tier
         </Button>
+        <FlyboxExportButton
+          boxes={boxes.map((b) => ({
+            id: b.id,
+            name: b.name,
+            count: stats[b.id]?.total,
+          }))}
+        />
         <Button variant="solid" size="sm" icon={Plus} onClick={openCreate}>
           New Box
         </Button>
