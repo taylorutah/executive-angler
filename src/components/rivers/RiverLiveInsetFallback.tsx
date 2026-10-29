@@ -8,7 +8,7 @@ export default function RiverLiveInsetFallback({ riverName }: { riverName: strin
       Loading live conditions
     </span>
     <InstrumentWellFrame aria-hidden>
-      <InstrumentWell label={`Live conditions — ${riverName}`} className="p-6 sm:p-8">
+      <InstrumentWell label={`Live conditions: ${riverName}`} className="p-6 sm:p-8">
         <div className="min-h-[11rem]">
           <div className="mb-5 h-8 w-48 bg-[var(--border-rule)]/50" />
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">

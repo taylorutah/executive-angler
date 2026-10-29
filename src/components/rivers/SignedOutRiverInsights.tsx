@@ -37,7 +37,7 @@ export default function SignedOutRiverInsights({ riverName }: Props) {
         </Link>
       </div>
       <p className="mt-2 text-xs text-[var(--text-3)]">
-        Free — every feature on Executive Angler costs nothing.
+        Free. Every feature on Executive Angler costs nothing.
       </p>
     </div>
   );
