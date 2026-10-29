@@ -90,7 +90,7 @@ export default function RiverHeroImage({
               onError={() => setFailed(true)}
             />
           ) : (
-            <PlateFallback title="" meta={meta} />
+            <PlateFallback title={title} meta={meta} />
           )}
 
           {totalCount > 1 && (
