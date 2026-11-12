@@ -80,7 +80,7 @@ export interface ResolvedFly {
   tagline?: string;
   description: string;
 
-  /** Hero image — yours if Pro user uploaded one, else canonical. */
+  /** Hero image — yours if you uploaded one, else canonical. */
   heroImageUrl: ResolvedField<string | undefined>;
   /** Display name — yours if user set custom_name, else canonical name. */
   displayName: ResolvedField<string>;

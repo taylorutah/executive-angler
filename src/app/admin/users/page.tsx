@@ -25,7 +25,7 @@ export default async function AdminUsersPage() {
   const { data: profiles } = await supabase
     .from("profiles")
     .select(
-      "user_id, username, display_name, avatar_url, is_banned, ban_reason, banned_at, banned_by, created_at, home_state, home_location, last_login_at, last_login_country, last_login_region, last_login_city"
+      "user_id, username, display_name, avatar_url, is_banned, ban_reason, banned_at, banned_by, created_at, home_state, home_location, last_login_at, last_login_country, last_login_region, last_login_city, last_active_at"
     )
     .order("created_at", { ascending: false })
     .limit(500);
@@ -141,10 +141,29 @@ export default async function AdminUsersPage() {
     }
   }
 
-  const enriched = (profiles || []).map((p) => ({
+  function greatestIso(...values: (string | null | undefined)[]): string | null {
+    let best: string | null = null;
+    let bestMs = 0;
+    for (const v of values) {
+      if (!v) continue;
+      const ms = new Date(v).getTime();
+      if (Number.isFinite(ms) && ms > bestMs) {
+        bestMs = ms;
+        best = v;
+      }
+    }
+    return best;
+  }
+
+  const enriched = (profiles || []).map((p) => {
+    const profileLastActive = (p as { last_active_at?: string | null }).last_active_at ?? null;
+    const lastSignIn = lastSignInMap[p.user_id] ?? null;
+  return {
     ...p,
     email: emailMap[p.user_id] || null,
-    last_sign_in_at: lastSignInMap[p.user_id] ?? null,
+    last_sign_in_at: lastSignIn,
+    last_active_at: profileLastActive,
+    last_active_effective: greatestIso(profileLastActive, lastSignIn),
     last_session_at: lastSessionMap[p.user_id] ?? null,
     session_count: sessionCountMap[p.user_id] || 0,
     catch_count: catchCountMap[p.user_id] || 0,
@@ -154,7 +173,8 @@ export default async function AdminUsersPage() {
     active_promo: promoMap[p.user_id] ?? null,
     provider: providerMap[p.user_id] || "email",
     email_confirmed: emailConfirmedMap[p.user_id] ?? false,
-  }));
+  };
+  });
 
   return <UsersClient users={enriched} adminId={user.id} adminEmail={user.email || ""} />;
 }

@@ -126,6 +126,37 @@ const nextConfig: NextConfig = {
         destination: "/rivers/mine",
         permanent: true,
       },
+      // Retired billing pages (app is fully free).
+      {
+        source: "/pricing",
+        destination: "/today",
+        permanent: true,
+      },
+      {
+        source: "/gift",
+        destination: "/today",
+        permanent: true,
+      },
+      {
+        source: "/gift/:path*",
+        destination: "/today",
+        permanent: true,
+      },
+      {
+        source: "/founding",
+        destination: "/today",
+        permanent: true,
+      },
+      {
+        source: "/redeem",
+        destination: "/signup",
+        permanent: true,
+      },
+      {
+        source: "/refund-policy",
+        destination: "/terms",
+        permanent: true,
+      },
       // Retired gear brand/SKU/category pages. Same targets as today; 308 not 307.
       {
         source: "/gear/category/:slug",

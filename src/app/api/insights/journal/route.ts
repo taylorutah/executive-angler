@@ -90,7 +90,7 @@ export async function POST() {
   const totalFish = sessions.reduce((s, ses) => s + (ses.total_fish || 0), 0);
   const rivers = [...new Set(sessions.map(s => s.river_name).filter(Boolean))];
 
-  const prompt = `You are an expert fly fishing analyst for Executive Angler, a premium fishing journal app. Analyze this angler's recent fishing data and provide a personalized, actionable journal analysis.
+  const prompt = `You are an expert fly fishing analyst for Executive Angler, a fly fishing journal app. Analyze this angler's recent fishing data and provide a personalized, actionable journal analysis.
 
 DATA SUMMARY:
 - ${sessions.length} sessions total, ${totalFish} fish caught

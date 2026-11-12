@@ -1,22 +1,15 @@
 "use client";
 
 /**
- * CustomFlyImageDropzone — Pro-gated personal photo upload for canonical flies.
- *
- * Renders an overlay on the canonical fly hero image when the viewer is in
- * "Yours" mode. Free users see a Pro lockup; Pro users get a button that
- * opens the file picker and uploads via PATCH /api/fly-box (multipart).
- *
- * Reuses the existing fly-pattern-images storage bucket, namespaced under
- * `{userId}/canonical-{flyId}/...`.
+ * Personal photo upload overlay for canonical flies in "Yours" mode.
+ * Uploads via PATCH /api/fly-box (multipart), stored under fly-pattern-images.
  */
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Camera, Loader2, Lock, X } from "@/icons";
+import { Camera, Loader2, X } from "@/icons";
 
 interface Props {
   canonicalFlyId: string;
-  isPro: boolean;
   /** True if a custom photo is already set — switches button label. */
   hasCustomPhoto: boolean;
   /** Called after a successful upload OR removal so the parent can refresh. */
@@ -25,7 +18,6 @@ interface Props {
 
 export default function CustomFlyImageDropzone({
   canonicalFlyId,
-  isPro,
   hasCustomPhoto,
   onChanged,
 }: Props) {
@@ -84,18 +76,6 @@ export default function CustomFlyImageDropzone({
     } finally {
       setBusy(null);
     }
-  }
-
-  if (!isPro) {
-    return (
-      <div
-        className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-black/70 text-white text-[10px] font-semibold py-1.5"
-        title="Pro feature — upload your own fly photo"
-      >
-        <Lock className="h-3 w-3" />
-        Add your photo · Pro
-      </div>
-    );
   }
 
   return (

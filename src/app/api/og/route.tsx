@@ -19,7 +19,7 @@ export const runtime = "edge";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const title = searchParams.get("title") || "Executive Angler";
-  const subtitle = searchParams.get("subtitle") || "Premium Fly Fishing Resource";
+  const subtitle = searchParams.get("subtitle") || "Fly Fishing Resource";
   const type = searchParams.get("type") || "default";
 
   const iconMap: Record<string, string> = {

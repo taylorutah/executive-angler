@@ -341,7 +341,7 @@ export default function InsightsClient({
           Personalized analysis based on {sessions.length} sessions and {catches.length} catches.
         </p>
 
-        <TipCard storageKey="dashboard-insights-intro" title="How these insights work" tone="premium">
+        <TipCard storageKey="dashboard-insights-intro" title="How these insights work">
           <p>Every insight is derived from <strong>your own logged sessions and catches</strong> — water temp buckets, time-of-day patterns, fly effectiveness, weather correlations.</p>
           <p className="text-[var(--text-meta)]">Insights unlock at 3+ sessions. Results sharpen as you log more — aim for 20+ sessions with catch details for the most reliable patterns.</p>
         </TipCard>

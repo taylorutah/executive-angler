@@ -28,6 +28,8 @@ interface UserProfile {
   home_location: string | null;
   email: string | null;
   last_sign_in_at: string | null;
+  last_active_at: string | null;
+  last_active_effective: string | null;
   last_session_at: string | null;
   last_login_at: string | null;
   last_login_country: string | null;
@@ -285,7 +287,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                         <Calendar className="h-3 w-3" /> joined {formatDate(u.created_at)}
                       </span>
                       <span className="inline-flex items-center gap-1">
-                        <LogIn className="h-3 w-3" /> {u.last_sign_in_at ? `last login ${formatRelative(u.last_sign_in_at)}` : "never signed in"}
+                        <LogIn className="h-3 w-3" /> {u.last_active_effective ? `last active ${formatRelative(u.last_active_effective)}` : "no app activity"}
                       </span>
                       {formatLoginLocation(u) && (
                         <span className="inline-flex items-center gap-1">
@@ -323,7 +325,12 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                       </p>
                       <p className="flex items-center gap-1.5">
                         <LogIn className="h-3 w-3 text-[var(--text-3)]" />
-                        Last sign-in {u.last_sign_in_at ? formatDateTime(u.last_sign_in_at) : "never"}
+                        Last active {u.last_active_effective ? formatDateTime(u.last_active_effective) : "never"}
+                        {u.last_sign_in_at && (
+                          <span className="text-[var(--text-3)]">
+                            {" "}(auth sign-in {formatDateTime(u.last_sign_in_at)})
+                          </span>
+                        )}
                       </p>
                       {formatLoginLocation(u) && (
                         <p className="flex items-center gap-1.5">
