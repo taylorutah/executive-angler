@@ -107,7 +107,7 @@ export default function PlaceRiverGrid({ rivers }: PlaceRiverGridProps) {
           >
             Sign in
           </Link>{" "}
-          to mark which of these you&apos;ve fished. Free — every feature on
+          to mark which of these you&apos;ve fished. Free. Every feature on
           Executive Angler costs nothing.
         </p>
       )}

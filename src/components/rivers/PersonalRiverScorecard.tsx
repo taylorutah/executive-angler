@@ -66,7 +66,7 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
         </h3>
       </div>
       <p className="text-xs text-[var(--text-3)] mb-4">
-        From your private journal — visible only to you.
+        From your private journal. Visible only to you.
       </p>
 
       {/* Top stat row */}
@@ -93,14 +93,14 @@ export default function PersonalRiverScorecardCard({ riverId, riverName }: Props
           <Row
             icon={<Sunrise className="h-3.5 w-3.5 text-[var(--accent)]" />}
             label="Best time"
-            value={`${data.bestTimeOfDay.label} — avg ${data.bestTimeOfDay.avgFish}`}
+            value={`${data.bestTimeOfDay.label}: avg ${data.bestTimeOfDay.avgFish}`}
           />
         )}
         {data.bestMonth && (
           <Row
             icon={<Calendar className="h-3.5 w-3.5 text-[var(--accent)]" />}
             label="Best month"
-            value={`${data.bestMonth.month} — avg ${data.bestMonth.avgFish}`}
+            value={`${data.bestMonth.month}: avg ${data.bestMonth.avgFish}`}
           />
         )}
         {data.topGear && (data.topGear.rodBrand || data.topGear.leader || data.topGear.tippet) && (

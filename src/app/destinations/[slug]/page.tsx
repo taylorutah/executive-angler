@@ -302,7 +302,7 @@ export default async function DestinationPage({ params }: Props) {
               Map
             </h2>
             <p className="mb-3 text-sm text-[var(--text-2)]">
-              Rivers and lodges for this place. Vellum land and Teal water — a desk chart, not a satellite.
+              Rivers and lodges for this place. Vellum land and Teal water: a desk chart, not a satellite.
             </p>
             <LazyMapView
               latitude={dest.latitude}

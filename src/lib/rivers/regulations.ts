@@ -1,6 +1,6 @@
 /** Agency link + retrieved-on date. Static catalog copy is not a live regs API. */
 
-export const REGULATIONS_RETRIEVED_ON = "2026-08-31";
+export const REGULATIONS_RETRIEVED_ON = "2026-10-29";
 
 const PARK_RIVER_SLUGS = new Set([
   "firehole-river",
@@ -68,15 +68,22 @@ export function regulationSource(opts: {
       retrievedOn: REGULATIONS_RETRIEVED_ON,
     };
   }
+  if (state.includes("arizona") || dest === "arizona") {
+    return {
+      label: "Arizona Game and Fish Department",
+      url: "https://www.azgfd.com",
+      retrievedOn: REGULATIONS_RETRIEVED_ON,
+    };
+  }
   if (country && !country.includes("united states")) {
     return {
-      label: "Verify with the local licensing agency",
+      label: "your local licensing agency",
       url: "https://www.executiveangler.com/about",
       retrievedOn: REGULATIONS_RETRIEVED_ON,
     };
   }
   return {
-    label: "Verify with the local fish and wildlife agency",
+    label: "your state's fish and wildlife agency",
     url: "https://www.fws.gov/program/national-fish-habitat-partnership",
     retrievedOn: REGULATIONS_RETRIEVED_ON,
   };

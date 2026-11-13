@@ -76,8 +76,8 @@ export default function RiverHeroImage({
   return (
     <>
       <section className="w-full">
-        <div className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
-          {showPhoto ? (
+        {showPhoto ? (
+          <div className="relative h-[60svh] min-h-[360px] w-full overflow-hidden sm:h-[72vh]">
             <Image
               src={heroSrc}
               alt={heroImageAlt}
@@ -89,26 +89,31 @@ export default function RiverHeroImage({
               blurDataURL={SURFACE_RAISED_BLUR_DATA_URL}
               onError={() => setFailed(true)}
             />
-          ) : (
-            <PlateFallback title="" meta={meta} />
-          )}
 
-          {totalCount > 1 && (
-            <button
-              type="button"
-              onClick={() => setLightboxOpen(true)}
-              className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)] hover:opacity-90 transition-opacity"
-              aria-label={`View ${totalCount} photos`}
-            >
-              <Images className="h-3.5 w-3.5" />
-              {totalCount} photographs
-            </button>
-          )}
+            {totalCount > 1 && (
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded bg-[var(--ink)] px-2 py-1 text-[var(--text-12)] font-medium text-[var(--paper)] hover:opacity-90 transition-opacity"
+                aria-label={`View ${totalCount} photos`}
+              >
+                <Images className="h-3.5 w-3.5" />
+                {totalCount} photographs
+              </button>
+            )}
 
-          {children && (
-            <div className="absolute top-3 right-3 z-20">{children}</div>
-          )}
-        </div>
+            {children && (
+              <div className="absolute top-3 right-3 z-20">{children}</div>
+            )}
+          </div>
+        ) : (
+          <div className="relative h-[180px] min-h-[160px] max-h-[220px] w-full overflow-hidden">
+            <PlateFallback title={title} meta={subtitle} />
+            {children && (
+              <div className="absolute top-3 right-3 z-20">{children}</div>
+            )}
+          </div>
+        )}
 
         {showPhoto && credit ? (
           <p className="mx-auto max-w-[var(--container)] px-4 pt-2 text-[var(--text-13)] tracking-wide text-[var(--text-3)] sm:px-6 lg:px-8">
