@@ -9,6 +9,14 @@ import { unstable_rethrow } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withHostedFlyHero } from "@/lib/flies/hosted-hero";
+import {
+  mergeConfigurationStockCounts,
+  stockCountsAfterLastBoxRemoval,
+} from "@/lib/flies/configuration-stock-merge";
+import {
+  resolveBoxMembershipCount,
+  type BoxMembershipCountResult,
+} from "@/lib/flies/box-membership-count";
 import type {
   Fly,
   FlyConfiguration,
@@ -447,6 +455,21 @@ export async function findConfigurationByFlySizeColor(args: {
   return match ?? null;
 }
 
+async function countConfigurationBoxMemberships(
+  configurationId: string,
+): Promise<BoxMembershipCountResult> {
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("fly_box_entries_v3")
+    .select("*", { count: "exact", head: true })
+    .eq("configuration_id", configurationId);
+  const resolved = resolveBoxMembershipCount(count, error);
+  if (!resolved.ok) {
+    console.error("[countConfigurationBoxMemberships]", resolved.error);
+  }
+  return resolved;
+}
+
 /**
  * Reuse a matching (fly, size, body color) config and add to tied/bought,
  * or insert a new row. Size must be a single value — never a joined list.
@@ -470,10 +493,16 @@ export async function findOrIncrementConfiguration(
     const tiedAdd = input.tied_count ?? 0;
     const boughtAdd = input.bought_count ?? 0;
     if (tiedAdd === 0 && boughtAdd === 0) return existing;
-    return updateConfiguration(existing.id, {
-      tied_count: existing.tied_count + tiedAdd,
-      bought_count: existing.bought_count + boughtAdd,
+    const inBox = await countConfigurationBoxMemberships(existing.id);
+    if (!inBox.ok) return null;
+    const merged = mergeConfigurationStockCounts({
+      existingTied: existing.tied_count,
+      existingBought: existing.bought_count,
+      addTied: tiedAdd,
+      addBought: boughtAdd,
+      inBoxCount: inBox.count,
     });
+    return updateConfiguration(existing.id, merged);
   }
   return createConfiguration(input);
 }
@@ -604,7 +633,7 @@ export async function addConfigurationToBox(args: {
 export async function removeConfigurationFromBox(args: {
   configurationId: string;
   boxId: string;
-}): Promise<boolean> {
+}): Promise<{ ok: true } | { ok: false; error: string }> {
   const supabase = await createClient();
   const { error } = await supabase
     .from("fly_box_entries_v3")
@@ -613,9 +642,22 @@ export async function removeConfigurationFromBox(args: {
     .eq("box_id", args.boxId);
   if (error) {
     console.error("[removeConfigurationFromBox]", error);
-    return false;
+    return { ok: false, error: "Failed to remove from box" };
   }
-  return true;
+  const remaining = await countConfigurationBoxMemberships(args.configurationId);
+  if (!remaining.ok) {
+    return { ok: false, error: remaining.error };
+  }
+  if (remaining.count === 0) {
+    const reset = await updateConfiguration(
+      args.configurationId,
+      stockCountsAfterLastBoxRemoval(),
+    );
+    if (!reset) {
+      return { ok: false, error: "Removed from box but could not reset stock counts" };
+    }
+  }
+  return { ok: true };
 }
 
 // ────────────────────────────────────────────────────────────────────────────
