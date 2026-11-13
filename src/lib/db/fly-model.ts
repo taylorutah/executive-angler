@@ -9,6 +9,10 @@ import { unstable_rethrow } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createStaticClient } from "@/lib/supabase/static";
 import { withHostedFlyHero } from "@/lib/flies/hosted-hero";
+import {
+  mergeConfigurationStockCounts,
+  stockCountsAfterLastBoxRemoval,
+} from "@/lib/flies/configuration-stock-merge";
 import type {
   Fly,
   FlyConfiguration,
@@ -447,6 +451,19 @@ export async function findConfigurationByFlySizeColor(args: {
   return match ?? null;
 }
 
+async function countConfigurationBoxMemberships(configurationId: string): Promise<number> {
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("fly_box_entries_v3")
+    .select("*", { count: "exact", head: true })
+    .eq("configuration_id", configurationId);
+  if (error) {
+    console.error("[countConfigurationBoxMemberships]", error);
+    return 0;
+  }
+  return count ?? 0;
+}
+
 /**
  * Reuse a matching (fly, size, body color) config and add to tied/bought,
  * or insert a new row. Size must be a single value — never a joined list.
@@ -470,10 +487,15 @@ export async function findOrIncrementConfiguration(
     const tiedAdd = input.tied_count ?? 0;
     const boughtAdd = input.bought_count ?? 0;
     if (tiedAdd === 0 && boughtAdd === 0) return existing;
-    return updateConfiguration(existing.id, {
-      tied_count: existing.tied_count + tiedAdd,
-      bought_count: existing.bought_count + boughtAdd,
+    const inBoxCount = await countConfigurationBoxMemberships(existing.id);
+    const merged = mergeConfigurationStockCounts({
+      existingTied: existing.tied_count,
+      existingBought: existing.bought_count,
+      addTied: tiedAdd,
+      addBought: boughtAdd,
+      inBoxCount,
     });
+    return updateConfiguration(existing.id, merged);
   }
   return createConfiguration(input);
 }
@@ -614,6 +636,10 @@ export async function removeConfigurationFromBox(args: {
   if (error) {
     console.error("[removeConfigurationFromBox]", error);
     return false;
+  }
+  const remaining = await countConfigurationBoxMemberships(args.configurationId);
+  if (remaining === 0) {
+    await updateConfiguration(args.configurationId, stockCountsAfterLastBoxRemoval());
   }
   return true;
 }

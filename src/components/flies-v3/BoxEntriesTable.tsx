@@ -15,6 +15,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Heart, Trash2, Wrench, X } from "@/icons";
 import { summarizeVersion } from "./summarize-version";
+import BoxEntryStockControl from "./BoxEntryStockControl";
 import type { SlotOverrides } from "@/types/flies";
 
 export interface BoxEntryRow {
@@ -171,8 +172,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
               </th>
               <th className="text-left">Fly</th>
               <th className="text-left">Version</th>
-              <th className="text-right">Tied</th>
-              <th className="text-right">Bought</th>
+              <th className="text-right w-[5.5rem]">Stock</th>
               <th className="text-right">Target</th>
               <th className="text-right">Δ</th>
               <th className="w-12"></th>
@@ -211,8 +211,13 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                     </Link>
                   </td>
                   <td className="text-[var(--text-2)]">{summarizeVersion(cfg)}</td>
-                  <td className="text-right">{cfg.tied_count ?? 0}</td>
-                  <td className="text-right">{cfg.bought_count ?? 0}</td>
+                  <td className="text-right align-top py-2">
+                    <BoxEntryStockControl
+                      configurationId={cfg.id}
+                      tied={cfg.tied_count ?? 0}
+                      bought={cfg.bought_count ?? 0}
+                    />
+                  </td>
                   <td className="text-right">{cfg.target_count ?? 0}</td>
                   <td className={`text-right ${deficit > 0 ? "text-[var(--accent)]" : "text-[var(--text-3)]"}`}>
                     {deficit > 0 ? `+${deficit}` : "—"}
