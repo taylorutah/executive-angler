@@ -66,7 +66,7 @@ export default function WaitlistSection({ initialCount = 0 }: { initialCount?: n
 
         {/* Subheadline */}
         <p className="text-[var(--text-body)] text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-          Executive Angler is heading to the App Store. Join the waitlist and we&apos;ll reach out the moment closed beta opens — spots are limited.
+          Executive Angler is heading to the App Store. Join the waitlist and we&apos;ll reach out the moment closed beta opens.
         </p>
 
         {state === "success" ? (

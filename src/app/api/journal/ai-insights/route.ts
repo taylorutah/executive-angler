@@ -111,7 +111,7 @@ export async function POST() {
   const totalFish = sessions.reduce((s, ses) => s + (ses.total_fish || 0), 0);
   const rivers = [...new Set(sessions.map((s) => s.river_name).filter(Boolean))];
 
-  const systemPrompt = `You are an expert fly fishing analyst for Executive Angler, a premium fishing journal app. Analyze this angler's recent fishing data and provide 3-5 actionable insights about patterns, what's working, and recommendations. Be specific about flies, rivers, and conditions. Keep each insight to 2-3 sentences. Format your response as a JSON array of objects with these fields:
+  const systemPrompt = `You are an expert fly fishing analyst for Executive Angler, a fly fishing journal app. Analyze this angler's recent fishing data and provide 3-5 actionable insights about patterns, what's working, and recommendations. Be specific about flies, rivers, and conditions. Keep each insight to 2-3 sentences. Format your response as a JSON array of objects with these fields:
 - title: short insight title (3-6 words)
 - insight: the 2-3 sentence insight text
 - type: one of "pattern", "recommendation", or "achievement"

@@ -6,12 +6,15 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
  * POST /api/auth/track-login
  *
  * Captures the caller's IP-derived city/region/country from Vercel geo headers
- * and stamps it on profiles.last_login_*. Called by:
+ * and stamps it on profiles.last_login_*. Also records last_active_at via
+ * touch_last_active (iOS may call that RPC directly instead).
+ *
+ * Called by:
  *   - iOS app after sign-in / session restore (Bearer token auth)
  *   - Web middleware (cookie auth) — kept as a fallback path
  *
- * No raw IP is stored. Headers are absent in local dev, so the route is a
- * no-op there.
+ * No raw IP is stored. Headers are absent in local dev, so geo capture is a
+ * no-op there, but touch_last_active still runs when authenticated.
  */
 
 export const dynamic = "force-dynamic";
@@ -23,19 +26,31 @@ function getSupabaseAdmin() {
   );
 }
 
+async function rpcTouchLastActive(accessToken: string) {
+  const userClient = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { global: { headers: { Authorization: `Bearer ${accessToken}` } } }
+  );
+  const { error } = await userClient.rpc("touch_last_active");
+  if (error) console.warn("[TRACK LOGIN] touch_last_active:", error.message);
+}
+
 export async function POST(req: NextRequest) {
   try {
     let userId: string | null = null;
+    let bearerToken: string | null = null;
 
     const authHeader = req.headers.get("authorization");
     if (authHeader?.startsWith("Bearer ")) {
-      const token = authHeader.replace("Bearer ", "");
+      bearerToken = authHeader.replace("Bearer ", "");
       const admin = getSupabaseAdmin();
-      const { data: { user }, error } = await admin.auth.getUser(token);
+      const { data: { user }, error } = await admin.auth.getUser(bearerToken);
       if (error || !user) {
         return NextResponse.json({ error: "Invalid token" }, { status: 401 });
       }
       userId = user.id;
+      await rpcTouchLastActive(bearerToken);
     } else {
       const supabase = await createServerClient();
       const { data: { user } } = await supabase.auth.getUser();
@@ -43,6 +58,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
       userId = user.id;
+      const { error } = await supabase.rpc("touch_last_active");
+      if (error) console.warn("[TRACK LOGIN] touch_last_active:", error.message);
     }
 
     const country = req.headers.get("x-vercel-ip-country") || null;

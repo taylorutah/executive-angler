@@ -28,6 +28,8 @@ interface UserProfile {
   home_location: string | null;
   email: string | null;
   last_sign_in_at: string | null;
+  last_active_at: string | null;
+  last_active_effective: string | null;
   last_session_at: string | null;
   last_login_at: string | null;
   last_login_country: string | null;
@@ -242,13 +244,14 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
           </div>
         </div>
 
-        {/* User rows */}
-        <div className="space-y-2">
+        {/* User cards — Last active is a dedicated column from sm up; the card
+            layout is intended (not a spreadsheet table). */}
+        <div className="space-y-2 overflow-x-hidden">
           {filtered.map(u => {
             const isExpanded = expandedUser === u.user_id;
             return (
               <div key={u.user_id} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
-                <div className="px-5 py-3 flex items-center gap-3 cursor-pointer" onClick={() => setExpandedUser(isExpanded ? null : u.user_id)}>
+                <div className="px-5 py-3 flex items-center gap-3 min-w-0 cursor-pointer" onClick={() => setExpandedUser(isExpanded ? null : u.user_id)}>
                   <div className="w-10 h-10 rounded-full bg-[var(--accent-soft)] flex items-center justify-center shrink-0 overflow-hidden">
                     {u.avatar_url ? (
                       <Image src={u.avatar_url} alt={`${u.display_name || u.username || "User"} avatar`} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
@@ -285,7 +288,7 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                         <Calendar className="h-3 w-3" /> joined {formatDate(u.created_at)}
                       </span>
                       <span className="inline-flex items-center gap-1">
-                        <LogIn className="h-3 w-3" /> {u.last_sign_in_at ? `last login ${formatRelative(u.last_sign_in_at)}` : "never signed in"}
+                        <LogIn className="h-3 w-3" /> {u.last_active_effective ? `last active ${formatRelative(u.last_active_effective)}` : "no app activity"}
                       </span>
                       {formatLoginLocation(u) && (
                         <span className="inline-flex items-center gap-1">
@@ -304,7 +307,13 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                       {u.review_count > 0 && <span> · {u.review_count} reviews</span>}
                     </p>
                   </div>
-                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[var(--text-3)]" /> : <ChevronDown className="h-4 w-4 text-[var(--text-3)]" />}
+                  <div className="hidden sm:block shrink-0 w-[9.5rem] text-right">
+                    <p className="ea-overline">Last active</p>
+                    <p className="text-xs text-[var(--text-2)] mt-0.5 num">
+                      {u.last_active_effective ? formatRelative(u.last_active_effective) : "no app activity"}
+                    </p>
+                  </div>
+                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[var(--text-3)] shrink-0" /> : <ChevronDown className="h-4 w-4 text-[var(--text-3)] shrink-0" />}
                 </div>
 
                 {isExpanded && (
@@ -323,7 +332,12 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                       </p>
                       <p className="flex items-center gap-1.5">
                         <LogIn className="h-3 w-3 text-[var(--text-3)]" />
-                        Last sign-in {u.last_sign_in_at ? formatDateTime(u.last_sign_in_at) : "never"}
+                        Last active {u.last_active_effective ? formatDateTime(u.last_active_effective) : "never"}
+                        {u.last_sign_in_at && (
+                          <span className="text-[var(--text-3)]">
+                            {" "}(auth sign-in {formatDateTime(u.last_sign_in_at)})
+                          </span>
+                        )}
                       </p>
                       {formatLoginLocation(u) && (
                         <p className="flex items-center gap-1.5">

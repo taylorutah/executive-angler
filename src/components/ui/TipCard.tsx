@@ -17,13 +17,11 @@ export default function TipCard({
   storageKey,
   title,
   children,
-  tone = "default",
 }: {
   /** Unique key (persisted to localStorage as `tip:${key}`) */
   storageKey: string;
   title: string;
   children: ReactNode;
-  tone?: "default" | "premium";
 }) {
   const [dismissed, setDismissed] = useState<boolean | null>(null);
 
@@ -36,10 +34,6 @@ export default function TipCard({
   }, [storageKey]);
 
   if (dismissed !== false) return null;
-
-  // Flat tint panel — gradients are banned (DESIGN.md §8). `tone` is kept for
-  // API compatibility; both tones render the same lawful surface.
-  void tone;
 
   return (
     <div

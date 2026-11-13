@@ -114,11 +114,11 @@ export default function AdminClient({
               </div>
               <ChevronRight className="h-4 w-4 text-[var(--text-3)] group-hover:text-[var(--accent)]" />
             </Link>
-            <Link href="/admin/promo-codes" className="card-hover group flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors duration-150 ease-standard">
+            <Link href="/admin/users?filter=promo" className="card-hover group flex items-center gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors duration-150 ease-standard">
               <TicketPercent className="h-5 w-5 text-[var(--accent)]" />
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[var(--text-1)]">Promo Codes</p>
-                <p className="text-xs text-[var(--text-3)]">Track redemptions & active Pro users</p>
+                <p className="text-sm font-semibold text-[var(--text-1)]">Promo entitlements</p>
+                <p className="text-xs text-[var(--text-3)]">Legacy promo rows in user list</p>
               </div>
               <ChevronRight className="h-4 w-4 text-[var(--text-3)] group-hover:text-[var(--accent)]" />
             </Link>

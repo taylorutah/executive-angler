@@ -34,7 +34,7 @@ const GA_MEASUREMENT_ID = "G-RY19PKC2WQ";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Premium Fly Fishing Resource`,
+    default: `${SITE_NAME} — Fly Fishing Resource`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — Premium Fly Fishing Resource`,
+    title: `${SITE_NAME} — Fly Fishing Resource`,
     description: SITE_DESCRIPTION,
     images: [
       {
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — Premium Fly Fishing Resource`,
+    title: `${SITE_NAME} — Fly Fishing Resource`,
     description: SITE_DESCRIPTION,
     images: ["/images/madison-river-three-dollar-bridge.jpg"],
   },

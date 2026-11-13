@@ -53,7 +53,7 @@ export default function InsightsMockup() {
                 className="font-['IBM_Plex_Mono'] uppercase"
                 style={{ color: C.copper, fontSize: 22, letterSpacing: "0.22em", fontWeight: 600 }}
               >
-                Insights · Pro
+                Insights
               </span>
             </div>
             <h1

@@ -77,7 +77,7 @@ export default function LegacyMockup() {
             className="font-['IBM_Plex_Mono'] uppercase"
             style={{ color: C.copper, fontSize: 22, letterSpacing: "0.22em", marginTop: 14, fontWeight: 600 }}
           >
-            Pro · Angler Since 2019
+            Angler Since 2019
           </div>
         </div>
 

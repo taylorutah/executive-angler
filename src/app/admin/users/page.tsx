@@ -22,13 +22,47 @@ export default async function AdminUsersPage() {
 
   const admin = getAdminSupabase();
 
-  const { data: profiles } = await supabase
+  const PROFILE_COLUMNS =
+    "user_id, username, display_name, avatar_url, is_banned, ban_reason, banned_at, banned_by, created_at, home_state, home_location, last_login_at, last_login_country, last_login_region, last_login_city";
+
+  type ProfileRow = {
+    user_id: string;
+    username: string | null;
+    display_name: string | null;
+    avatar_url: string | null;
+    is_banned: boolean | null;
+    ban_reason: string | null;
+    banned_at: string | null;
+    banned_by: string | null;
+    created_at: string;
+    home_state: string | null;
+    home_location: string | null;
+    last_login_at: string | null;
+    last_login_country: string | null;
+    last_login_region: string | null;
+    last_login_city: string | null;
+    last_active_at?: string | null;
+  };
+
+  let profiles: ProfileRow[] | null = null;
+  const withLastActive = await supabase
     .from("profiles")
-    .select(
-      "user_id, username, display_name, avatar_url, is_banned, ban_reason, banned_at, banned_by, created_at, home_state, home_location, last_login_at, last_login_country, last_login_region, last_login_city"
-    )
+    .select(`${PROFILE_COLUMNS}, last_active_at`)
     .order("created_at", { ascending: false })
     .limit(500);
+
+  // last_active_at ships in 20261112_profiles_last_active.sql. Until that
+  // migration is applied, fall back so the users list still renders.
+  if (withLastActive.error && /last_active_at/i.test(withLastActive.error.message ?? "")) {
+    const fallback = await supabase
+      .from("profiles")
+      .select(PROFILE_COLUMNS)
+      .order("created_at", { ascending: false })
+      .limit(500);
+    profiles = (fallback.data ?? []) as ProfileRow[];
+  } else {
+    profiles = (withLastActive.data ?? []) as ProfileRow[];
+  }
 
   // Sessions: count + most recent date per user (engagement signal)
   const sessionCountMap: Record<string, number> = {};
@@ -141,10 +175,29 @@ export default async function AdminUsersPage() {
     }
   }
 
-  const enriched = (profiles || []).map((p) => ({
+  function greatestIso(...values: (string | null | undefined)[]): string | null {
+    let best: string | null = null;
+    let bestMs = 0;
+    for (const v of values) {
+      if (!v) continue;
+      const ms = new Date(v).getTime();
+      if (Number.isFinite(ms) && ms > bestMs) {
+        bestMs = ms;
+        best = v;
+      }
+    }
+    return best;
+  }
+
+  const enriched = (profiles || []).map((p) => {
+    const profileLastActive = (p as { last_active_at?: string | null }).last_active_at ?? null;
+    const lastSignIn = lastSignInMap[p.user_id] ?? null;
+  return {
     ...p,
     email: emailMap[p.user_id] || null,
-    last_sign_in_at: lastSignInMap[p.user_id] ?? null,
+    last_sign_in_at: lastSignIn,
+    last_active_at: profileLastActive,
+    last_active_effective: greatestIso(profileLastActive, lastSignIn),
     last_session_at: lastSessionMap[p.user_id] ?? null,
     session_count: sessionCountMap[p.user_id] || 0,
     catch_count: catchCountMap[p.user_id] || 0,
@@ -154,7 +207,8 @@ export default async function AdminUsersPage() {
     active_promo: promoMap[p.user_id] ?? null,
     provider: providerMap[p.user_id] || "email",
     email_confirmed: emailConfirmedMap[p.user_id] ?? false,
-  }));
+  };
+  });
 
   return <UsersClient users={enriched} adminId={user.id} adminEmail={user.email || ""} />;
 }

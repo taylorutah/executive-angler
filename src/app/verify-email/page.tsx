@@ -39,7 +39,7 @@ export default async function VerifyEmailPage({
             <span className="font-medium text-[var(--text-1)]">{user.email}</span>.
           </p>
           <p className="text-sm text-[var(--text-3)] mb-6">
-            Click the link in that email to unlock your journal, fly box, and feed. Check spam if you don&apos;t see it within a minute.
+            Click the link in that email to open your journal, fly box, and feed. Check spam if you don&apos;t see it within a minute.
           </p>
 
           <ResendButton email={user.email || ""} />

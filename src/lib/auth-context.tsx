@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { touchLastActiveThrottled } from "@/lib/touch-last-active";
 
 export type AuthUser = {
   id: string;
@@ -47,6 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       displayName: profile?.display_name || authUser.user_metadata?.display_name || undefined,
     });
     setIsLoading(false);
+    void touchLastActiveThrottled();
   }, []);
 
   useEffect(() => {
