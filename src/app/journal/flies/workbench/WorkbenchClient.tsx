@@ -497,7 +497,7 @@ export default function WorkbenchClient({
             {([
               { id: 'pickFly' as Tab, label: 'Pick a Pattern', icon: Target, hint: 'Start from a fly you want to tie — we’ll show every material needed and flag what you already own vs. still need to pick up. No inventory required to begin.' },
               { id: 'inventory' as Tab, label: 'My Inventory', icon: Package, hint: 'Track what you own at the vise. Optional — add materials whenever you want, not required before tying your first fly.' },
-              { id: 'whatCanITie' as Tab, label: 'What Can I Tie?', icon: Sparkles, hint: 'Reverse lookup (Pro): crosses your inventory against every fly recipe and ranks them by % of materials you already have.' },
+              { id: 'whatCanITie' as Tab, label: 'What Can I Tie?', icon: Sparkles, hint: 'Reverse lookup: crosses your inventory against every fly recipe and ranks them by % of materials you already have.' },
               { id: 'browse' as Tab, label: 'Browse Materials', icon: Search, hint: 'Search the 500+ material catalog. One click adds it to your inventory.' },
             ]).map(({ id, label, icon: Icon, hint }) => (
               <div key={id} className="flex shrink-0 items-center">

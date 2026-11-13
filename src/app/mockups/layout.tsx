@@ -13,13 +13,13 @@ export default function MockupsLayout({ children }: { children: React.ReactNode 
   return (
     <div
       style={{
-        position: "fixed",
-        inset: 0,
+        width: "100%",
+        maxWidth: "100%",
+        minHeight: "100vh",
         margin: 0,
         padding: 0,
         backgroundColor: "#0D1117",
-        overflow: "auto",
-        zIndex: 9999,
+        overflowX: "hidden",
       }}
     >
       {children}

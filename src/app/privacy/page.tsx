@@ -15,7 +15,7 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="mt-3 text-[var(--text-14)] text-[var(--text-3)]">
-          Last updated: March 31, 2026
+          Last updated: November 13, 2026
         </p>
 
         <div className="prose mt-8 max-w-none space-y-6 text-[var(--text-2)]">
@@ -137,16 +137,10 @@ export default function PrivacyPage() {
               <strong>Google</strong> — OAuth sign-in and business reviews
             </li>
             <li>
-              <strong>Apple</strong> — App distribution, in-app purchases, and
-              crash reporting
+              <strong>Apple</strong> — iOS app distribution and crash reporting
             </li>
             <li>
-              <strong>Google</strong> — Android app distribution and in-app
-              purchases via Google Play
-            </li>
-            <li>
-              <strong>Stripe</strong> — Web payment processing for Pro
-              subscriptions
+              <strong>Google Play</strong> — Android app distribution
             </li>
           </ul>
           <p>

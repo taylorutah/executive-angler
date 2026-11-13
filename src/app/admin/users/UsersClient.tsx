@@ -244,13 +244,14 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
           </div>
         </div>
 
-        {/* User rows */}
-        <div className="space-y-2">
+        {/* User cards — Last active is a dedicated column from sm up; the card
+            layout is intended (not a spreadsheet table). */}
+        <div className="space-y-2 overflow-x-hidden">
           {filtered.map(u => {
             const isExpanded = expandedUser === u.user_id;
             return (
               <div key={u.user_id} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
-                <div className="px-5 py-3 flex items-center gap-3 cursor-pointer" onClick={() => setExpandedUser(isExpanded ? null : u.user_id)}>
+                <div className="px-5 py-3 flex items-center gap-3 min-w-0 cursor-pointer" onClick={() => setExpandedUser(isExpanded ? null : u.user_id)}>
                   <div className="w-10 h-10 rounded-full bg-[var(--accent-soft)] flex items-center justify-center shrink-0 overflow-hidden">
                     {u.avatar_url ? (
                       <Image src={u.avatar_url} alt={`${u.display_name || u.username || "User"} avatar`} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
@@ -306,7 +307,13 @@ export default function UsersClient({ users: initialUsers, adminId, adminEmail }
                       {u.review_count > 0 && <span> · {u.review_count} reviews</span>}
                     </p>
                   </div>
-                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[var(--text-3)]" /> : <ChevronDown className="h-4 w-4 text-[var(--text-3)]" />}
+                  <div className="hidden sm:block shrink-0 w-[9.5rem] text-right">
+                    <p className="ea-overline">Last active</p>
+                    <p className="text-xs text-[var(--text-2)] mt-0.5 num">
+                      {u.last_active_effective ? formatRelative(u.last_active_effective) : "no app activity"}
+                    </p>
+                  </div>
+                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[var(--text-3)] shrink-0" /> : <ChevronDown className="h-4 w-4 text-[var(--text-3)] shrink-0" />}
                 </div>
 
                 {isExpanded && (
