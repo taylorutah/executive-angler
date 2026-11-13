@@ -1,6 +1,8 @@
 /**
  * Dev-only fixture for QA screenshots of BoxEntriesTable stock controls.
+ * Hidden in production (404).
  */
+import { notFound } from "next/navigation";
 import BoxEntriesTable, { type BoxEntryRow } from "@/components/flies-v3/BoxEntriesTable";
 
 const DEMO_ENTRIES: BoxEntryRow[] = [
@@ -28,6 +30,9 @@ const DEMO_ENTRIES: BoxEntryRow[] = [
 ];
 
 export default function BoxStockControlDemoPage() {
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
   return (
     <main className="max-w-5xl mx-auto p-4">
       <h1 className="sr-only">Box stock control demo</h1>

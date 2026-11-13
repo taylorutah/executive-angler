@@ -9,13 +9,14 @@
  *
  * Backed by DELETE /api/fishing/fly-configurations/box.
  */
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Heart, Trash2, Wrench, X } from "@/icons";
 import { summarizeVersion } from "./summarize-version";
 import BoxEntryStockControl from "./BoxEntryStockControl";
+import { boxRemoveBulkConfirm, boxRemoveOneConfirm } from "./box-remove-confirm";
 import type { SlotOverrides } from "@/types/flies";
 
 export interface BoxEntryRow {
@@ -73,7 +74,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
   }
 
   async function removeOne(configId: string) {
-    if (!confirm(`Remove this version from ${boxName}? The version itself stays in your stock.`)) return;
+    if (!confirm(boxRemoveOneConfirm(boxName))) return;
     setBusyIds((prev) => new Set(prev).add(configId));
     setError(null);
     try {
@@ -100,7 +101,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
   async function removeBulk() {
     const ids = [...selected];
     if (ids.length === 0) return;
-    if (!confirm(`Remove ${ids.length} version${ids.length === 1 ? "" : "s"} from ${boxName}? The versions stay in your stock.`)) return;
+    if (!confirm(boxRemoveBulkConfirm(ids.length, boxName))) return;
     setBusyIds(new Set(ids));
     setError(null);
     const results = await Promise.allSettled(
@@ -172,7 +173,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
               </th>
               <th className="text-left">Fly</th>
               <th className="text-left">Version</th>
-              <th className="text-right w-[5.5rem]">Stock</th>
+              <th className="text-right hidden md:table-cell min-w-[8.5rem]">Stock</th>
               <th className="text-right">Target</th>
               <th className="text-right">Δ</th>
               <th className="w-12"></th>
@@ -185,8 +186,8 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
               const isSelected = selected.has(cfg.id);
               const isBusy = busyIds.has(cfg.id);
               return (
+                <Fragment key={e.id}>
                 <tr
-                  key={e.id}
                   className={`${isSelected ? "bg-[var(--accent-soft)]" : ""} ${isBusy ? "opacity-50" : ""}`}
                 >
                   <td>
@@ -211,7 +212,7 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                     </Link>
                   </td>
                   <td className="text-[var(--text-2)]">{summarizeVersion(cfg)}</td>
-                  <td className="text-right align-top py-2">
+                  <td className="text-right align-top py-2 hidden md:table-cell">
                     <BoxEntryStockControl
                       configurationId={cfg.id}
                       tied={cfg.tied_count ?? 0}
@@ -234,6 +235,17 @@ export default function BoxEntriesTable({ boxId, boxName, entries }: Props) {
                     </button>
                   </td>
                 </tr>
+                <tr className={`md:hidden border-b border-[var(--border)] ${isSelected ? "bg-[var(--accent-soft)]" : ""}`}>
+                  <td colSpan={7} className="px-3 pb-3 pt-1">
+                    <BoxEntryStockControl
+                      layout="row"
+                      configurationId={cfg.id}
+                      tied={cfg.tied_count ?? 0}
+                      bought={cfg.bought_count ?? 0}
+                    />
+                  </td>
+                </tr>
+                </Fragment>
               );
             })}
           </tbody>

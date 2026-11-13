@@ -11,6 +11,12 @@ export function clampStockQty(raw: string | number): number {
   return Math.max(0, Math.floor(n));
 }
 
+const STEPPER_BTN =
+  "inline-flex shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-strong)] text-sm font-semibold hover:bg-[var(--paper-deep)] disabled:opacity-40 h-11 w-11 min-h-11 min-w-11 md:h-8 md:w-8 md:min-h-8 md:min-w-8";
+
+const QTY_INPUT =
+  "min-w-0 shrink bg-transparent text-center text-sm font-semibold num text-[var(--text-1)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] rounded-[var(--radius-sm)] h-11 min-h-11 md:h-8 md:min-h-8 w-12 md:w-10";
+
 function MiniQty({
   label,
   value,
@@ -32,45 +38,49 @@ function MiniQty({
   }
 
   return (
-    <span className="inline-flex items-center gap-0.5 min-w-0 max-w-full">
-      <span className="sr-only">{label}</span>
-      <button
-        type="button"
-        disabled={disabled || value <= 0}
-        onClick={() => onCommit(Math.max(0, value - 1))}
-        className="h-6 w-6 shrink-0 rounded-[var(--radius-sm)] border border-[var(--border-strong)] text-[10px] hover:bg-[var(--paper-deep)] disabled:opacity-40"
-        aria-label={`Decrease ${label}`}
-      >
-        −
-      </button>
-      <input
-        type="number"
-        min={0}
-        step={1}
-        inputMode="numeric"
-        value={draft}
-        disabled={disabled}
-        onChange={(e) => setDraft(e.target.value)}
-        onBlur={commitFromDraft}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            commitFromDraft();
-          }
-        }}
-        aria-label={label}
-        className="w-9 min-w-0 shrink bg-transparent text-center text-xs font-semibold num text-[var(--text-1)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] rounded-[var(--radius-sm)]"
-      />
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={() => onCommit(value + 1)}
-        className="h-6 w-6 shrink-0 rounded-[var(--radius-sm)] border border-[var(--border-strong)] text-[10px] hover:bg-[var(--paper-deep)] disabled:opacity-40"
-        aria-label={`Increase ${label}`}
-      >
-        +
-      </button>
-    </span>
+    <div className="flex flex-col gap-1 w-full min-w-0">
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--text-2)]">
+        {label}
+      </span>
+      <div className="inline-flex items-center gap-1 w-full min-w-0 max-w-full">
+        <button
+          type="button"
+          disabled={disabled || value <= 0}
+          onClick={() => onCommit(Math.max(0, value - 1))}
+          className={STEPPER_BTN}
+          aria-label={`Decrease ${label}`}
+        >
+          −
+        </button>
+        <input
+          type="number"
+          min={0}
+          step={1}
+          inputMode="numeric"
+          value={draft}
+          disabled={disabled}
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={commitFromDraft}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              commitFromDraft();
+            }
+          }}
+          aria-label={`${label} quantity`}
+          className={QTY_INPUT}
+        />
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={() => onCommit(value + 1)}
+          className={STEPPER_BTN}
+          aria-label={`Increase ${label}`}
+        >
+          +
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -78,10 +88,13 @@ export default function BoxEntryStockControl({
   configurationId,
   tied,
   bought,
+  layout = "column",
 }: {
   configurationId: string;
   tied: number;
   bought: number;
+  /** `row` = stacked block under the table row on small screens */
+  layout?: "column" | "row";
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -130,18 +143,23 @@ export default function BoxEntryStockControl({
     await patch({ tied_count: 0, bought_count: 0 });
   }
 
+  const wrapClass =
+    layout === "row"
+      ? "flex flex-col gap-3 w-full min-w-0 items-stretch"
+      : "flex flex-col gap-2 w-full min-w-0 md:items-end md:max-w-[11rem]";
+
   return (
-    <div className="flex flex-col items-end gap-1 min-w-0 max-w-[7.5rem] ml-auto">
-      <MiniQty label="Tied count" value={optimisticTied} disabled={busy} onCommit={setTied} />
-      <MiniQty label="Bought count" value={optimisticBought} disabled={busy} onCommit={setBought} />
+    <div className={wrapClass} data-box-stock-control>
+      <MiniQty label="Tied" value={optimisticTied} disabled={busy} onCommit={setTied} />
+      <MiniQty label="Bought" value={optimisticBought} disabled={busy} onCommit={setBought} />
       <button
         type="button"
         disabled={busy || (optimisticTied === 0 && optimisticBought === 0)}
         onClick={resetStock}
         title="Reset tied and bought to zero"
-        className="inline-flex items-center gap-1 text-[10px] text-[var(--text-3)] hover:text-[var(--accent)] disabled:opacity-40 whitespace-nowrap"
+        className="inline-flex items-center justify-center gap-1.5 self-start md:self-end text-xs text-[var(--text-3)] hover:text-[var(--accent)] disabled:opacity-40 min-h-11 md:min-h-8 px-1"
       >
-        <RotateCcw className="h-3 w-3 shrink-0" aria-hidden />
+        <RotateCcw className="h-3.5 w-3.5 shrink-0" aria-hidden />
         Reset
       </button>
     </div>
