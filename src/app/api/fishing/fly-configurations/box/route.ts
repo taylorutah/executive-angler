@@ -44,7 +44,9 @@ export async function DELETE(req: NextRequest) {
   if (!configurationId || !boxId) {
     return NextResponse.json({ error: "configuration_id and box_id are required" }, { status: 400 });
   }
-  const ok = await removeConfigurationFromBox({ configurationId, boxId });
-  if (!ok) return NextResponse.json({ error: "Failed to remove" }, { status: 500 });
+  const result = await removeConfigurationFromBox({ configurationId, boxId });
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: 500 });
+  }
   return NextResponse.json({ ok: true });
 }
