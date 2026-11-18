@@ -39,7 +39,7 @@ function MiniQty({
 
   return (
     <div className="flex flex-col gap-1 w-full min-w-0">
-      <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--text-2)]">
+      <span className="text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--text-meta)] text-left block w-fit">
         {label}
       </span>
       <div className="inline-flex items-center gap-1 w-full min-w-0 max-w-full">
@@ -145,8 +145,8 @@ export default function BoxEntryStockControl({
 
   const wrapClass =
     layout === "row"
-      ? "flex flex-col gap-3 w-full min-w-0 items-stretch"
-      : "flex flex-col gap-2 w-full min-w-0 md:items-end md:max-w-[11rem]";
+      ? "flex flex-col gap-3 w-full min-w-0 items-stretch text-left"
+      : "flex flex-col gap-2 w-fit min-w-0 max-w-full items-start text-left";
 
   return (
     <div className={wrapClass} data-box-stock-control>
@@ -157,7 +157,7 @@ export default function BoxEntryStockControl({
         disabled={busy || (optimisticTied === 0 && optimisticBought === 0)}
         onClick={resetStock}
         title="Reset tied and bought to zero"
-        className="inline-flex items-center justify-center gap-1.5 self-start md:self-end text-xs text-[var(--text-3)] hover:text-[var(--accent)] disabled:opacity-40 min-h-11 md:min-h-8 px-1"
+        className="inline-flex items-center justify-center gap-1.5 self-start text-xs text-[var(--text-3)] hover:text-[var(--accent)] disabled:opacity-40 min-h-11 md:min-h-8 px-1"
       >
         <RotateCcw className="h-3.5 w-3.5 shrink-0" aria-hidden />
         Reset

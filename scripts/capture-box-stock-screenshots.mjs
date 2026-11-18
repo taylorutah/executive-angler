@@ -30,19 +30,33 @@ for (const vp of viewports) {
   const page = await context.newPage();
   await page.goto(`${baseUrl}${pathSuffix}`, { waitUntil: "networkidle" });
   const metrics = await page.evaluate(() => {
+    const wrap = document.querySelector("[data-box-entries-table-wrap]");
     const stock = document.querySelector("[data-box-stock-control]");
-  return {
+    const trash = document.querySelector("tbody button[title^='Remove from']");
+    return {
       scrollWidth: document.documentElement.scrollWidth,
       clientWidth: document.documentElement.clientWidth,
+      tableWrapScrollWidth: wrap?.scrollWidth ?? null,
+      tableWrapClientWidth: wrap?.clientWidth ?? null,
       stockClip: stock
-        ? stock.getBoundingClientRect().right > document.documentElement.clientWidth + 0.5
+        ? stock.getBoundingClientRect().right > (wrap?.getBoundingClientRect().right ?? window.innerWidth) + 0.5
+        : null,
+      trashVisible: trash
+        ? trash.getBoundingClientRect().right <= (wrap?.getBoundingClientRect().right ?? window.innerWidth) + 0.5
         : null,
     };
   });
+  const tableOk =
+    metrics.tableWrapScrollWidth == null ||
+    metrics.tableWrapScrollWidth <= (metrics.tableWrapClientWidth ?? metrics.clientWidth) + 1;
   overflow.push({
     viewport: vp.name,
     ...metrics,
-    pass: metrics.scrollWidth <= metrics.clientWidth && metrics.stockClip !== true,
+    pass:
+      metrics.scrollWidth <= metrics.clientWidth + 1 &&
+      tableOk &&
+      metrics.stockClip !== true &&
+      metrics.trashVisible !== false,
   });
   await page.screenshot({
     path: path.join(outDir, `${vp.name}.png`),
