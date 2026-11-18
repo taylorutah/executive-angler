@@ -376,7 +376,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
         {active.stale && (
           <div className="mb-4 flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-2 text-xs text-[var(--warning)]">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-            <span>Reading may be delayed — last update {formatTimestamp(active.timestamp)}</span>
+            <span>Reading may be delayed. Last update {formatTimestamp(active.timestamp)}</span>
           </div>
         )}
 
@@ -467,7 +467,7 @@ export default function RiverConditionsCard({ riverId, usgsSiteId, riverName, ri
           {active.stale && (
             <div className="flex items-center gap-2 mb-3 p-2 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] text-xs text-[var(--warning)]">
               <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-              <span>Reading may be delayed — last update {formatTimestamp(active.timestamp)}</span>
+              <span>Reading may be delayed. Last update {formatTimestamp(active.timestamp)}</span>
             </div>
           )}
 

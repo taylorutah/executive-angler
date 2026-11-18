@@ -72,7 +72,7 @@ export default function YourRecordHere({ riverId, riverName }: Props) {
             Your record here
           </h2>
           <p className="mt-1 text-xs text-[var(--text-3)]">
-            From your private journal on {riverName} — only you can see this.
+            From your private journal on {riverName}. Only you can see this.
           </p>
         </div>
         <Link

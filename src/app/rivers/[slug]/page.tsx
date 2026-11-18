@@ -134,7 +134,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const speciesList = (river.primarySpecies || []).slice(0, 3).join(", ");
   const flowLabel = river.flowType ? river.flowType.charAt(0).toUpperCase() + river.flowType.slice(1) : "";
   const accessCount = (river.accessPoints || []).length;
-  const fallbackTitle = `${river.name} Fly Fishing — ${flowLabel || "Prime"} Water for ${speciesList || "Trout"} | Executive Angler`;
+  const fallbackTitle = `${river.name} Fly Fishing: ${flowLabel || "Prime"} Water for ${speciesList || "Trout"} | Executive Angler`;
   const fallbackDesc = `${river.name}: ${river.lengthMiles ? river.lengthMiles + " miles, " : ""}${river.difficulty || "all-level"} ${river.flowType || ""} water.${speciesList ? ` Target ${speciesList}.` : ""}${accessCount > 0 ? ` ${accessCount} access points.` : ""} Hatch charts, guides & trip planning.`;
 
   return {
@@ -418,7 +418,7 @@ export default async function RiverPage({ params }: Props) {
                   Flies fishing now
                 </h2>
                 <p className="mb-5 text-sm text-[var(--text-2)]">
-                  {monthNow} on the hatch chart — names and sizes, not a catch report.
+                  {monthNow} on the hatch chart: names and sizes, not a catch report.
                 </p>
                 <ul className="border-t border-[var(--border)]">
                   {fishingNow.map((hatch, i) => {
@@ -506,7 +506,9 @@ export default async function RiverPage({ params }: Props) {
                 Best flies for {river.name}
               </h2>
               <p className="mb-3 text-sm text-[var(--text-2)]">
-                Hatch-chart nymphs, dries, and streamers for this river. Not a crowdsourced catch report.
+                {(river.hatchChart?.length ?? 0) > 0
+                  ? "Hatch-chart nymphs, dries, and streamers for this river. Not a crowdsourced catch report."
+                  : "Nymphs, dries, and streamers suited to this water."}
               </p>
               <Link
                 href={`/flies/for/${river.slug}`}
@@ -524,7 +526,7 @@ export default async function RiverPage({ params }: Props) {
               </h2>
               {(river.accessPoints?.length ?? 0) > 0 ? (
                 <p className="mb-5 text-sm text-[var(--text-2)]">
-                  {river.accessPoints!.length} listed points. Map is Vellum land and Teal water — a desk chart, not a satellite.
+                  {river.accessPoints!.length} listed points. Map is Vellum land and Teal water: a desk chart, not a satellite.
                 </p>
               ) : (
                 <p className="mb-5 text-sm text-[var(--text-2)]">

@@ -30,7 +30,7 @@ export default function RiverLiveInset({
 
   return (
     <InstrumentWellFrame>
-      <InstrumentWell label={`Live conditions — ${riverName}`} className="p-6 sm:p-8">
+      <InstrumentWell label={`Live conditions: ${riverName}`} className="p-6 sm:p-8">
         {siteId ? (
           <>
             <RiverConditionsCard

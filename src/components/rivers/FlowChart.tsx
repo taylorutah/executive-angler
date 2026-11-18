@@ -244,7 +244,7 @@ export default function FlowChart({ usgsGaugeId, riverName, riverId }: Props) {
     return (
       <div className="mt-6 border-t border-[var(--border)] pt-5">
         <h3 className="text-sm font-semibold text-[var(--text-1)]">
-          Thirty-day flow — {riverName}
+          Thirty-day flow: {riverName}
         </h3>
         <p className="mt-2 text-sm text-[var(--text-2)]">
           {error || "This gauge has no daily means for the last 30 days. We do not guess a flow."}
